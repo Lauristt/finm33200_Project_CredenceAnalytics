@@ -182,7 +182,7 @@ class OpenAIJudge(HeuristicJudge):
         try:
             data = self._chat_json(prompt)
             label = SupportLabel(data.get("label", SupportLabel.NOT_ENOUGH_INFO.value))
-            score = clamp(float(data.get("score_0_to_10", 0)) / 10.0)
+            score = _support_score_from_llm_data(data, label)
             return label, score, [f"openai judge: {data.get('reason', '')}".strip()]
         except Exception as exc:
             label, score, notes = super().judge_evidence_support(claim, evidence)
@@ -276,7 +276,7 @@ class AnthropicJudge(HeuristicJudge):
         try:
             data = self._messages_json(prompt)
             label = SupportLabel(data.get("label", SupportLabel.NOT_ENOUGH_INFO.value))
-            score = clamp(float(data.get("score_0_to_10", 0)) / 10.0)
+            score = _support_score_from_llm_data(data, label)
             return label, score, [f"anthropic judge: {data.get('reason', '')}".strip()]
         except Exception as exc:
             label, score, notes = super().judge_evidence_support(claim, evidence)
@@ -420,6 +420,17 @@ def _check_from_llm_data(
         issues=[str(issue) for issue in issues],
         method=method,
     )
+
+
+def _support_score_from_llm_data(data: dict[str, Any], label: SupportLabel) -> float:
+    raw_score = data.get("score_0_to_10")
+    if raw_score is not None:
+        return clamp(float(raw_score) / 10.0)
+    return {
+        SupportLabel.SUPPORTS: 0.75,
+        SupportLabel.CONTRADICTS: 0.75,
+        SupportLabel.NOT_ENOUGH_INFO: 0.25,
+    }[label]
 
 
 def _loads_json_object(content: str) -> dict[str, Any]:

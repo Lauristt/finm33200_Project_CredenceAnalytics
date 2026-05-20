@@ -12,13 +12,21 @@ import json
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 from io import StringIO
 from typing import Any
 
 from .config import ToolkitConfig
 from .models import ArgumentType, SearchResult
 from .net import urlopen_request
+from .price_history import (
+    PricePoint,
+    format_price_history_summary,
+    needs_historical_price_data,
+    parse_lookback_months,
+    parse_stooq_price_csv,
+    summarize_price_history,
+)
 
 
 SEC_CONCEPTS = {
@@ -59,12 +67,14 @@ class FreeDataSourceClient:
         ticker: str,
         argument_type: ArgumentType,
         max_results: int = 8,
+        as_of_date: str | None = None,
     ) -> tuple[list[SearchResult], list[str]]:
         """Query configured providers and return deduplicated search results."""
         results: list[SearchResult] = []
         notes: list[str] = []
 
         providers = [
+            ("historical_prices", lambda: self.historical_prices(ticker, claim, as_of_date)),
             ("sec_company_facts", lambda: self.sec_company_facts(claim, ticker)),
             ("sec_recent_filings", lambda: self.sec_recent_filings(ticker)),
             ("alpha_vantage", lambda: self.alpha_vantage(ticker)),
@@ -81,6 +91,8 @@ class FreeDataSourceClient:
         for name, provider in providers:
             if len(results) >= max_results:
                 break
+            if name == "historical_prices" and not needs_historical_price_data(claim):
+                continue
             try:
                 provider_results = provider()
                 results.extend(provider_results)
@@ -400,6 +412,239 @@ class FreeDataSourceClient:
             )
         ]
 
+    def historical_prices(
+        self,
+        ticker: str,
+        claim: str,
+        as_of_date: str | None = None,
+    ) -> list[SearchResult]:
+        """Return daily historical prices from the first configured provider."""
+        lookback_months, start, as_of = self._price_history_window(claim, as_of_date)
+        providers = [
+            ("alpha_vantage_historical_prices", self.alpha_vantage_historical_prices),
+            ("fmp_historical_prices", self.fmp_historical_prices),
+            ("finnhub_historical_prices", self.finnhub_historical_prices),
+            ("stooq_historical_prices", self.stooq_historical_prices),
+        ]
+        for provider_name, provider in providers:
+            try:
+                points = provider(ticker, start, as_of)
+            except Exception:
+                continue
+            if not points:
+                continue
+            return self._price_history_result(
+                ticker=ticker,
+                lookback_months=lookback_months,
+                provider_name=provider_name,
+                url=self._price_history_url(provider_name, ticker, start, as_of),
+                points=points,
+            )
+        return []
+
+    def alpha_vantage_historical_prices(
+        self,
+        ticker: str,
+        start: date,
+        as_of: date,
+    ) -> list[PricePoint]:
+        """Return Alpha Vantage daily prices within the requested window."""
+        key = self.config.alpha_vantage_api_key
+        if not key:
+            return []
+        url = "https://www.alphavantage.co/query?" + urllib.parse.urlencode(
+            {
+                "function": "TIME_SERIES_DAILY",
+                "symbol": ticker.upper(),
+                "outputsize": "full",
+                "apikey": key,
+            }
+        )
+        data = self._get_json(url)
+        series = data.get("Time Series (Daily)", {}) if isinstance(data, dict) else {}
+        points = []
+        for day, row in series.items():
+            try:
+                day_date = date.fromisoformat(day)
+                if not start <= day_date <= as_of:
+                    continue
+                points.append(
+                    PricePoint(
+                        date=day_date,
+                        open=float(row["1. open"]),
+                        high=float(row["2. high"]),
+                        low=float(row["3. low"]),
+                        close=float(row["4. close"]),
+                        volume=int(row.get("5. volume", 0)),
+                    )
+                )
+            except (KeyError, TypeError, ValueError):
+                continue
+        return sorted(points, key=lambda item: item.date)
+
+    def fmp_historical_prices(
+        self,
+        ticker: str,
+        start: date,
+        as_of: date,
+    ) -> list[PricePoint]:
+        """Return FMP historical end-of-day prices within the requested window."""
+        key = self.config.fmp_api_key
+        if not key:
+            return []
+        url = "https://financialmodelingprep.com/stable/historical-price-eod/full?" + urllib.parse.urlencode(
+            {
+                "symbol": ticker.upper(),
+                "from": start.isoformat(),
+                "to": as_of.isoformat(),
+                "apikey": key,
+            }
+        )
+        data = self._get_json(url)
+        rows = data.get("historical", []) if isinstance(data, dict) else data
+        if not isinstance(rows, list):
+            return []
+        points = []
+        for row in rows:
+            try:
+                day_date = date.fromisoformat(str(row["date"])[:10])
+                if not start <= day_date <= as_of:
+                    continue
+                points.append(
+                    PricePoint(
+                        date=day_date,
+                        open=float(row.get("open") or row.get("adjOpen") or row["close"]),
+                        high=float(row.get("high") or row.get("adjHigh") or row["close"]),
+                        low=float(row.get("low") or row.get("adjLow") or row["close"]),
+                        close=float(row.get("close") or row.get("adjClose")),
+                        volume=int(row.get("volume") or 0),
+                    )
+                )
+            except (KeyError, TypeError, ValueError):
+                continue
+        return sorted(points, key=lambda item: item.date)
+
+    def finnhub_historical_prices(
+        self,
+        ticker: str,
+        start: date,
+        as_of: date,
+    ) -> list[PricePoint]:
+        """Return Finnhub daily candle prices within the requested window."""
+        key = self.config.finnhub_api_key
+        if not key:
+            return []
+        start_ts = int(datetime.combine(start, time.min, tzinfo=timezone.utc).timestamp())
+        end_ts = int(datetime.combine(as_of, time.max, tzinfo=timezone.utc).timestamp())
+        url = "https://finnhub.io/api/v1/stock/candle?" + urllib.parse.urlencode(
+            {
+                "symbol": ticker.upper(),
+                "resolution": "D",
+                "from": start_ts,
+                "to": end_ts,
+                "token": key,
+            }
+        )
+        data = self._get_json(url)
+        if not isinstance(data, dict) or data.get("s") != "ok":
+            return []
+        timestamps = data.get("t", [])
+        points = []
+        for idx, timestamp in enumerate(timestamps):
+            try:
+                points.append(
+                    PricePoint(
+                        date=datetime.fromtimestamp(timestamp, timezone.utc).date(),
+                        open=float(data["o"][idx]),
+                        high=float(data["h"][idx]),
+                        low=float(data["l"][idx]),
+                        close=float(data["c"][idx]),
+                        volume=int(data["v"][idx]),
+                    )
+                )
+            except (IndexError, KeyError, TypeError, ValueError):
+                continue
+        return sorted(points, key=lambda item: item.date)
+
+    def stooq_historical_prices(
+        self,
+        ticker: str,
+        start: date,
+        as_of: date,
+    ) -> list[PricePoint]:
+        """Return Stooq daily historical prices when CSV download is available."""
+        symbol = f"{ticker.lower()}.us"
+        url = (
+            "https://stooq.com/q/d/l/?"
+            + urllib.parse.urlencode(
+                {
+                    "s": symbol,
+                    "d1": start.strftime("%Y%m%d"),
+                    "d2": as_of.strftime("%Y%m%d"),
+                    "i": "d",
+                }
+            )
+        )
+        text = self._get_text(url)
+        if "get your apikey" in text.lower():
+            return []
+        return parse_stooq_price_csv(text)
+
+    def _price_history_result(
+        self,
+        ticker: str,
+        lookback_months: int,
+        provider_name: str,
+        url: str,
+        points: list[PricePoint],
+    ) -> list[SearchResult]:
+        summary = summarize_price_history(points)
+        if summary is None:
+            return []
+        return [
+            SearchResult(
+                title=(
+                    f"{_price_history_source_name(provider_name)} "
+                    f"{lookback_months}-month historical prices for {ticker.upper()}"
+                ),
+                url=url,
+                snippet=format_price_history_summary(ticker, lookback_months, summary),
+                published_at=summary.end_date,
+                source=_price_history_source_name(provider_name),
+                raw={
+                    "provider": provider_name,
+                    "lookback_months": lookback_months,
+                    "summary": summary.__dict__,
+                },
+            )
+        ]
+
+    def _price_history_window(self, claim: str, as_of_date: str | None) -> tuple[int, date, date]:
+        lookback_months = parse_lookback_months(claim)
+        as_of = _parse_iso_date(as_of_date) or date.today()
+        start = as_of - timedelta(days=max(31, int(lookback_months * 31)))
+        return lookback_months, start, as_of
+
+    def _price_history_url(self, provider_name: str, ticker: str, start: date, as_of: date) -> str:
+        if provider_name == "alpha_vantage_historical_prices":
+            return f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker.upper()}"
+        if provider_name == "fmp_historical_prices":
+            return f"https://financialmodelingprep.com/stable/historical-price-eod/full?symbol={ticker.upper()}"
+        if provider_name == "finnhub_historical_prices":
+            return f"https://finnhub.io/api/v1/stock/candle?symbol={ticker.upper()}&resolution=D"
+        symbol = f"{ticker.lower()}.us"
+        return (
+            "https://stooq.com/q/d/l/?"
+            + urllib.parse.urlencode(
+                {
+                    "s": symbol,
+                    "d1": start.strftime("%Y%m%d"),
+                    "d2": as_of.strftime("%Y%m%d"),
+                    "i": "d",
+                }
+            )
+        )
+
     def yahoo_chart(self, ticker: str) -> list[SearchResult]:
         """Return unofficial Yahoo chart data when fallback is enabled."""
         url = f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(ticker.upper())}?range=5d&interval=1d"
@@ -484,3 +729,21 @@ def _dedupe(results: list[SearchResult]) -> list[SearchResult]:
         seen.add(result.url)
         deduped.append(result)
     return deduped
+
+
+def _parse_iso_date(value: str | None) -> date | None:
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(value[:10])
+    except ValueError:
+        return None
+
+
+def _price_history_source_name(provider_name: str) -> str:
+    return {
+        "alpha_vantage_historical_prices": "Alpha Vantage",
+        "fmp_historical_prices": "Financial Modeling Prep",
+        "finnhub_historical_prices": "Finnhub",
+        "stooq_historical_prices": "Stooq",
+    }.get(provider_name, provider_name)

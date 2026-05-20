@@ -36,6 +36,7 @@ agent_build/
       agentic.py         # Default exploratory wrapper.
       strict.py          # Thin strict-mode wrapper.
     net.py               # urllib helper with cert handling.
+    price_history.py     # Historical price extraction and oscillation features.
     rubrics.py           # Argument-type scoring weights.
     search.py            # Structured retrieval plus optional Serper.
     sources.py           # Source authority, recency, numeric scoring.
@@ -258,6 +259,9 @@ reached. Provider methods return `SearchResult` objects, not final evidence.
 
 Implemented providers:
 
+- `historical_prices(ticker, claim, as_of_date)`: daily historical prices from
+  Alpha Vantage, FMP, Finnhub, or Stooq fallback for price-pattern claims such
+  as oscillating, volatile, range-bound, or trending over a lookback window.
 - `sec_company_facts(claim, ticker)`: SEC XBRL company facts.
 - `sec_recent_filings(ticker)`: recent SEC 10-K, 10-Q, and 8-K filings.
 - `alpha_vantage(ticker)`: company overview and earnings.
@@ -294,6 +298,34 @@ Extraction assigns:
 
 If `CREDIBILITY_LIVE_EXTRACTION=true`, extractor uses Jina Reader to fetch page
 text; otherwise it uses snippets from retrieval providers.
+
+### Historical Price Extractor
+
+`price_history.py`
+
+Price-pattern claims need time-series evidence rather than only fundamentals.
+For claims such as "NVDA's stock price seems to be oscillating over 10 months",
+the retrieval layer calls `historical_prices(...)`, which uses configured daily
+price providers and formats a compact evidence snippet with:
+
+- start/end close
+- min/max close
+- total return
+- price range percentage
+- annualized volatility
+- daily and monthly direction changes
+- `oscillation_signal` as `weak`, `moderate`, or `strong`
+
+Main helper functions:
+
+- `needs_historical_price_data(claim)`: detects price-pattern claims.
+- `parse_lookback_months(claim)`: converts "10 months", "40 weeks", or "1 year"
+  into an approximate month window.
+- `parse_stooq_price_csv(text)`: parses Stooq CSV into daily `PricePoint` rows.
+- `summarize_price_history(points)`: computes volatility/range/direction-change
+  features.
+- `format_price_history_summary(ticker, lookback_months, summary)`: creates the
+  dense snippet passed downstream to the judge.
 
 ### 5. Semantic Judges
 
@@ -340,7 +372,9 @@ Weights live in `rubrics.py` and differ by argument type.
 `verification.py`
 
 - `verify_numeric_claim(claim, evidence, judge)`: fuzzy local numeric matching
-  first; LLM fallback only when no local match is found.
+  first; LLM fallback only when no local match is found. Temporal lookback
+  durations such as "10 months" are ignored so they do not falsely verify a
+  price-pattern claim.
 - `verify_logic_claim(claim, evidence, argument_type, judge)`: asks the configured
   semantic judge whether the inference or reasoning is supported.
 - `verify_sources(evidence, breakdown)`: source-quality confidence from authority,

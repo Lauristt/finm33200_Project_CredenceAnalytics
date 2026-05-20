@@ -30,6 +30,7 @@ class SearchClient:
         ticker: str,
         argument_type: ArgumentType,
         max_sources: int = 8,
+        as_of_date: str | None = None,
         prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
     ) -> tuple[list[SearchResult], list[str]]:
         """Retrieve candidate sources for one claim.
@@ -51,6 +52,7 @@ class SearchClient:
                 ticker=ticker,
                 argument_type=argument_type,
                 max_results=max_sources,
+                as_of_date=as_of_date,
             )
             notes.extend(structured_notes)
             for result in structured_results:

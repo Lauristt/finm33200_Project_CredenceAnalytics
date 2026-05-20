@@ -76,6 +76,7 @@ class FinancialCredibilityToolkit:
             ticker=ticker,
             argument_type=classification.argument_type,
             max_sources=max_sources,
+            as_of_date=as_of,
             prefetched_results=prefetched_results,
         )
         if not results:

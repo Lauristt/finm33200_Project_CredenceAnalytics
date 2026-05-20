@@ -37,6 +37,8 @@ PATTERNS: dict[ArgumentType, list[tuple[str, str]]] = {
         ("valuation opinion", r"\b(overvalued|undervalued|cheap|expensive|fairly valued)\b"),
         ("investment stance", r"\b(bullish|bearish|neutral|buy|sell|hold|attractive|risky)\b"),
         ("business judgment", r"\b(moat|competitive advantage|risk|quality|weak|strong)\b"),
+        ("price action pattern", r"\b(oscillat\w*|fluctuat\w*|volatile|volatility|range[- ]?bound|choppy|sideways|swing\w*|trend\w*)\b"),
+        ("tentative interpretation", r"\b(seems|appears|looks like|suggests)\b"),
     ],
 }
 

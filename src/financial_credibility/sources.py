@@ -146,9 +146,19 @@ def extract_numbers(text: str) -> list[str]:
     return values
 
 
+def extract_substantive_numbers(text: str) -> list[str]:
+    """Extract numbers that look like financial facts, not lookback durations."""
+    values = []
+    for match in NUMBER_RE.finditer(text):
+        value = re.sub(r"\s+", " ", match.group(0).strip().lower())
+        if value and (_has_financial_numeric_unit(value) or not _is_temporal_duration(text, match.end())):
+            values.append(value)
+    return values
+
+
 def score_numeric_consistency(claim: str, evidence_text: str) -> tuple[float, list[str]]:
     """Score whether claim numbers appear in the evidence text."""
-    claim_numbers = extract_numbers(claim)
+    claim_numbers = extract_substantive_numbers(claim)
     if not claim_numbers:
         return 0.60, ["claim has no explicit numeric value"]
 
@@ -172,3 +182,17 @@ def score_numeric_consistency(claim: str, evidence_text: str) -> tuple[float, li
 def _normalize_number(value: str) -> str:
     """Normalize punctuation and percent wording for rough equality checks."""
     return re.sub(r"[\s,$]", "", value.lower()).replace("percent", "%")
+
+
+def _is_temporal_duration(text: str, number_end: int) -> bool:
+    trailing = text[number_end : number_end + 24].lower()
+    return bool(
+        re.match(
+            r"\s*(?:d|day|days|w|week|weeks|mo|month|months|y|year|years)\b",
+            trailing,
+        )
+    )
+
+
+def _has_financial_numeric_unit(value: str) -> bool:
+    return bool(re.search(r"(%|percent|bps|billion|million|trillion|bn|mn|\$)", value, re.IGNORECASE))

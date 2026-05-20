@@ -19,12 +19,12 @@ from .models import (
     clamp,
 )
 from .rubrics import FACTUAL_TYPES
-from .sources import extract_numbers
+from .sources import extract_numbers, extract_substantive_numbers
 
 
 def verify_numeric_claim(claim: str, evidence: list[Evidence], judge=None) -> VerificationCheck:
     """Verify numeric claims with fuzzy local matching first, then optional LLM fallback."""
-    claim_numbers = extract_numbers(claim)
+    claim_numbers = extract_substantive_numbers(claim)
     if not claim_numbers:
         return VerificationCheck(
             check_type="numeric_check",
@@ -256,6 +256,7 @@ def _rank_evidence_for_verification(evidence: list[Evidence]) -> list[Evidence]:
     return sorted(
         evidence,
         key=lambda item: (
+            _price_history_priority(item),
             item.numeric_consistency_score,
             item.support_score,
             item.relevance_score,
@@ -264,6 +265,15 @@ def _rank_evidence_for_verification(evidence: list[Evidence]) -> list[Evidence]:
         ),
         reverse=True,
     )
+
+
+def _price_history_priority(item: Evidence) -> float:
+    text = f"{item.title}\n{item.text}".lower()
+    if "historical prices" in text or "historical daily close prices" in text:
+        return 1.0
+    if "oscillation_signal" in text:
+        return 1.0
+    return 0.0
 
 
 def _overall_summary(
