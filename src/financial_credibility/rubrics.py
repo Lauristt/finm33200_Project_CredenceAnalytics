@@ -1,3 +1,5 @@
+"""Argument-type-specific weights for deterministic aggregation."""
+
 from __future__ import annotations
 
 from .models import ArgumentType

@@ -1,3 +1,5 @@
+"""Small network helper shared by urllib-based provider clients."""
+
 from __future__ import annotations
 
 import ssl
@@ -10,6 +12,7 @@ def urlopen_request(
     timeout: float,
     allow_insecure_ssl_fallback: bool = False,
 ):
+    """Open a request with certifi CA roots when available."""
     context = _verified_context()
     try:
         return urllib.request.urlopen(request, timeout=timeout, context=context)

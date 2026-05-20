@@ -1,4 +1,8 @@
-"""Financial credibility tools for US equity claims."""
+"""Financial credibility tools for US equity claims.
+
+The public package surface intentionally exports the main toolkit, config, and
+JSON-serializable model types used by downstream agent/tool integrations.
+"""
 
 from .config import ToolkitConfig
 from .models import (

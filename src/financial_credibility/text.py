@@ -1,3 +1,5 @@
+"""Text utility functions used by retrieval scoring and heuristic judging."""
+
 from __future__ import annotations
 
 import re
@@ -32,6 +34,7 @@ STOPWORDS = {
 
 
 def tokenize(text: str) -> set[str]:
+    """Tokenize text into a small stopword-filtered set."""
     return {
         token
         for token in re.findall(r"[a-zA-Z0-9][a-zA-Z0-9\-\.]*", text.lower())
@@ -40,6 +43,7 @@ def tokenize(text: str) -> set[str]:
 
 
 def token_overlap(a: str, b: str) -> float:
+    """Return the fraction of tokens from `a` that also appear in `b`."""
     a_tokens = tokenize(a)
     b_tokens = tokenize(b)
     if not a_tokens or not b_tokens:

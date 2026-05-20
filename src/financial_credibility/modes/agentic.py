@@ -1,3 +1,9 @@
+"""Agentic-mode wrapper.
+
+This mode expands the search plan but still uses the same deterministic
+retrieval, extraction, judging, and verification pipeline.
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -23,6 +29,7 @@ class AgenticCredibilityRunner:
         max_sources: int = 8,
         prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
     ) -> EvidencePack:
+        """Run the toolkit with an expanded search plan and annotated metadata."""
         classification = classify_argument_type(claim)
         plan = self._make_search_plan(claim, ticker, classification.argument_type)
         pack = self.toolkit.build_evidence_pack(
@@ -57,6 +64,7 @@ class AgenticCredibilityRunner:
         )
 
     def _make_search_plan(self, claim: str, ticker: str, argument_type) -> list[str]:
+        """Create normal plus counter-evidence-oriented queries."""
         base_queries = build_queries(claim, ticker, argument_type)
         counter_queries = [
             f"{ticker} {claim} correction restatement contradiction",

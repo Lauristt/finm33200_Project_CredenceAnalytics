@@ -1,3 +1,5 @@
+"""Command-line wrapper around `FinancialCredibilityToolkit`."""
+
 from __future__ import annotations
 
 import argparse
@@ -10,6 +12,7 @@ from .toolkit import FinancialCredibilityToolkit
 
 
 def main() -> None:
+    """Parse CLI args, run strict or agentic mode, and print JSON output."""
     parser = argparse.ArgumentParser(description="Build a financial credibility evidence pack.")
     parser.add_argument("claim", help="Financial claim to assess.")
     parser.add_argument("--ticker", required=True, help="US equity ticker, e.g. AAPL.")

@@ -1,3 +1,5 @@
+"""Strict-mode helper that bypasses agentic query expansion."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -14,6 +16,7 @@ def run_strict(
     max_sources: int = 8,
     prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
 ) -> EvidencePack:
+    """Run the core toolkit pipeline with `mode='strict'` metadata."""
     return toolkit.build_evidence_pack(
         claim=claim,
         ticker=ticker,

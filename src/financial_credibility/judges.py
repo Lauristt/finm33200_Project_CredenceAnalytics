@@ -1,3 +1,10 @@
+"""Semantic judge implementations.
+
+Judges answer narrow questions that are hard to encode deterministically:
+evidence support, source independence, reasoning quality, numeric fallback, and
+logic verification. They never produce the final global score directly.
+"""
+
 from __future__ import annotations
 
 import json
@@ -15,20 +22,26 @@ from .text import token_overlap
 
 
 class SemanticJudge(ABC):
+    """Interface shared by local and LLM-backed judges."""
+
     @abstractmethod
     def judge_evidence_support(self, claim: str, evidence: Evidence) -> tuple[SupportLabel, float, list[str]]:
+        """Judge whether one evidence item supports or contradicts the claim."""
         raise NotImplementedError
 
     @abstractmethod
     def judge_independence(self, first: Evidence, second: Evidence) -> tuple[float, list[str]]:
+        """Judge whether two evidence items are likely independent."""
         raise NotImplementedError
 
     @abstractmethod
     def judge_reasoning_quality(self, claim: str, evidence: Evidence, argument_type: ArgumentType) -> tuple[float, list[str]]:
+        """Judge whether an evidence item contains useful reasoning."""
         raise NotImplementedError
 
     @abstractmethod
     def judge_numeric_claim(self, claim: str, evidence: list[Evidence]) -> VerificationCheck:
+        """Verify numeric claims when local fuzzy matching cannot decide."""
         raise NotImplementedError
 
     @abstractmethod
@@ -38,10 +51,13 @@ class SemanticJudge(ABC):
         evidence: list[Evidence],
         argument_type: ArgumentType,
     ) -> VerificationCheck:
+        """Verify the semantic logic or inference in a claim."""
         raise NotImplementedError
 
 
 class HeuristicJudge(SemanticJudge):
+    """No-key fallback judge based on token overlap and simple markers."""
+
     def judge_evidence_support(self, claim: str, evidence: Evidence) -> tuple[SupportLabel, float, list[str]]:
         combined = f"{evidence.title}\n{evidence.text}"
         overlap = token_overlap(claim, combined)
@@ -140,6 +156,8 @@ class HeuristicJudge(SemanticJudge):
 
 
 class OpenAIJudge(HeuristicJudge):
+    """OpenAI-backed JSON judge with heuristic fallback on any API/parse error."""
+
     def __init__(
         self,
         api_key: str,
@@ -199,6 +217,7 @@ class OpenAIJudge(HeuristicJudge):
             return _append_issue(check, f"openai fallback: {exc}")
 
     def _chat_json(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """Call OpenAI chat completions and parse a JSON object response."""
         body = {
             "model": self.model,
             "messages": [
@@ -231,6 +250,8 @@ class OpenAIJudge(HeuristicJudge):
 
 
 class AnthropicJudge(HeuristicJudge):
+    """Anthropic-backed JSON judge with heuristic fallback on any API/parse error."""
+
     def __init__(
         self,
         api_key: str,
@@ -290,6 +311,7 @@ class AnthropicJudge(HeuristicJudge):
             return _append_issue(check, f"anthropic fallback: {exc}")
 
     def _messages_json(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """Call Anthropic messages and parse a JSON object response."""
         body = {
             "model": self.model,
             "max_tokens": 400,
@@ -326,6 +348,7 @@ class AnthropicJudge(HeuristicJudge):
 
 
 def create_judge(config: ToolkitConfig) -> SemanticJudge:
+    """Choose OpenAI, Anthropic, or heuristic judging from `ToolkitConfig`."""
     provider = config.llm_provider.lower()
     if provider in {"auto", "openai"} and config.openai_api_key and config.openai_model:
         return OpenAIJudge(
@@ -350,6 +373,7 @@ def _verification_prompt(
     evidence: list[Evidence],
     extra: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    """Build the small JSON task sent to LLM-backed verification judges."""
     return {
         "task": task,
         "claim": claim,
@@ -378,6 +402,7 @@ def _check_from_llm_data(
     evidence: list[Evidence],
     method: str,
 ) -> VerificationCheck:
+    """Normalize raw LLM JSON into a `VerificationCheck`."""
     verdict = str(data.get("verdict", VerificationVerdict.INSUFFICIENT.value))
     allowed = {item.value for item in VerificationVerdict}
     if verdict not in allowed:
@@ -398,6 +423,7 @@ def _check_from_llm_data(
 
 
 def _loads_json_object(content: str) -> dict[str, Any]:
+    """Parse a JSON object even if a model wraps it in markdown or prose."""
     text = content.strip()
     if not text:
         raise ValueError("empty JSON response")
@@ -429,6 +455,7 @@ def _loads_json_object(content: str) -> dict[str, Any]:
 
 
 def _append_issue(check: VerificationCheck, issue: str) -> VerificationCheck:
+    """Return a copy of a check with one additional issue."""
     return VerificationCheck(
         check_type=check.check_type,
         verdict=check.verdict,

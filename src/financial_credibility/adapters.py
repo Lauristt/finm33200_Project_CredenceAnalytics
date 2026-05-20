@@ -1,9 +1,12 @@
+"""Provider-neutral tool schema adapters for LLM tool calling."""
+
 from __future__ import annotations
 
 from .models import ToolSpec
 
 
 def build_evidence_pack_tool() -> ToolSpec:
+    """Return the tool spec for `FinancialCredibilityToolkit.build_evidence_pack`."""
     return ToolSpec(
         name="build_evidence_pack",
         description=(
@@ -64,4 +67,5 @@ def build_evidence_pack_tool() -> ToolSpec:
 
 
 def all_tool_specs() -> list[ToolSpec]:
+    """Return all tool specs exported by this package."""
     return [build_evidence_pack_tool()]
