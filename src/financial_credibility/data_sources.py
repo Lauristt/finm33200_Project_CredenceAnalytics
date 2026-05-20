@@ -1,3 +1,10 @@
+"""Structured free/free-tier financial data retrieval.
+
+Provider methods return `SearchResult` objects so the rest of the pipeline can
+score all sources through the same extraction and judging path. API keys are
+read from `ToolkitConfig`; missing keys simply disable that provider.
+"""
+
 from __future__ import annotations
 
 import csv
@@ -42,6 +49,8 @@ FRED_SERIES = {
 
 @dataclass
 class FreeDataSourceClient:
+    """Client for structured data sources that are useful for US equity claims."""
+
     config: ToolkitConfig
 
     def query(
@@ -51,6 +60,7 @@ class FreeDataSourceClient:
         argument_type: ArgumentType,
         max_results: int = 8,
     ) -> tuple[list[SearchResult], list[str]]:
+        """Query configured providers and return deduplicated search results."""
         results: list[SearchResult] = []
         notes: list[str] = []
 
@@ -82,6 +92,7 @@ class FreeDataSourceClient:
         return _dedupe(results)[:max_results], notes
 
     def sec_company_facts(self, claim: str, ticker: str) -> list[SearchResult]:
+        """Return recent SEC XBRL facts for concepts implied by the claim."""
         cik = self._ticker_to_cik(ticker)
         if cik is None:
             return []
@@ -126,6 +137,7 @@ class FreeDataSourceClient:
         ]
 
     def sec_recent_filings(self, ticker: str) -> list[SearchResult]:
+        """Return recent SEC 10-K, 10-Q, and 8-K filings for the ticker."""
         cik = self._ticker_to_cik(ticker)
         if cik is None:
             return []
@@ -162,6 +174,7 @@ class FreeDataSourceClient:
         return results
 
     def alpha_vantage(self, ticker: str) -> list[SearchResult]:
+        """Return Alpha Vantage overview and annual earnings snippets."""
         key = self.config.alpha_vantage_api_key
         if not key:
             return []
@@ -202,6 +215,7 @@ class FreeDataSourceClient:
         return results
 
     def finnhub(self, ticker: str) -> list[SearchResult]:
+        """Return Finnhub profile and basic financial metric snippets."""
         key = self.config.finnhub_api_key
         if not key:
             return []
@@ -241,6 +255,7 @@ class FreeDataSourceClient:
         return results
 
     def fmp(self, ticker: str) -> list[SearchResult]:
+        """Return FMP profile and income statement snippets."""
         key = self.config.fmp_api_key
         if not key:
             return []
@@ -282,6 +297,7 @@ class FreeDataSourceClient:
         return results
 
     def fred(self, claim: str) -> list[SearchResult]:
+        """Return a FRED macro series when the claim contains a known keyword."""
         key = self.config.fred_api_key
         if not key:
             return []
@@ -314,6 +330,7 @@ class FreeDataSourceClient:
         ]
 
     def marketstack(self, ticker: str) -> list[SearchResult]:
+        """Return Marketstack latest end-of-day quote data."""
         key = self.config.marketstack_api_key
         if not key:
             return []
@@ -337,6 +354,7 @@ class FreeDataSourceClient:
         ]
 
     def tiingo(self, ticker: str) -> list[SearchResult]:
+        """Return Tiingo recent daily price data."""
         key = self.config.tiingo_api_key
         if not key:
             return []
@@ -361,6 +379,7 @@ class FreeDataSourceClient:
         ]
 
     def stooq(self, ticker: str) -> list[SearchResult]:
+        """Return Stooq latest quote data; no API key is required."""
         symbol = f"{ticker.lower()}.us"
         url = f"https://stooq.com/q/l/?s={urllib.parse.quote(symbol)}&f=sd2t2ohlcv&h&e=csv"
         text = self._get_text(url)
@@ -382,6 +401,7 @@ class FreeDataSourceClient:
         ]
 
     def yahoo_chart(self, ticker: str) -> list[SearchResult]:
+        """Return unofficial Yahoo chart data when fallback is enabled."""
         url = f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(ticker.upper())}?range=5d&interval=1d"
         data = self._get_json(url)
         result = data.get("chart", {}).get("result", []) if isinstance(data, dict) else []
@@ -403,6 +423,7 @@ class FreeDataSourceClient:
         ]
 
     def _ticker_to_cik(self, ticker: str) -> int | None:
+        """Resolve an equity ticker to a SEC CIK using the SEC ticker map."""
         data = self._get_json("https://www.sec.gov/files/company_tickers.json", sec=True)
         target = ticker.upper()
         for item in data.values():
@@ -411,6 +432,7 @@ class FreeDataSourceClient:
         return None
 
     def _concepts_for_claim(self, claim: str) -> list[str]:
+        """Map claim keywords to a small set of SEC us-gaap concepts."""
         lower = claim.lower()
         concepts: list[str] = []
         for keyword, mapped in SEC_CONCEPTS.items():
@@ -426,6 +448,7 @@ class FreeDataSourceClient:
         return list(dict.fromkeys(concepts))
 
     def _fred_series_for_claim(self, claim: str) -> str | None:
+        """Map macro claim keywords to a FRED series id."""
         lower = claim.lower()
         for keyword, series_id in FRED_SERIES.items():
             if keyword in lower:
@@ -433,10 +456,12 @@ class FreeDataSourceClient:
         return None
 
     def _get_json(self, url: str, sec: bool = False) -> Any:
+        """GET a URL and parse the response as JSON."""
         text = self._get_text(url, sec=sec)
         return json.loads(text)
 
     def _get_text(self, url: str, sec: bool = False) -> str:
+        """GET a URL as text, adding SEC headers when needed."""
         headers = {"Accept": "application/json,text/csv,text/plain,*/*"}
         if sec:
             headers["User-Agent"] = self.config.sec_user_agent or "financial-credibility-toolkit/0.1 contact@example.com"
@@ -450,6 +475,7 @@ class FreeDataSourceClient:
 
 
 def _dedupe(results: list[SearchResult]) -> list[SearchResult]:
+    """Preserve provider order while dropping duplicate or empty URLs."""
     seen = set()
     deduped = []
     for result in results:

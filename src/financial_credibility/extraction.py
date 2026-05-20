@@ -1,3 +1,5 @@
+"""Convert retrieval results into scored evidence objects."""
+
 from __future__ import annotations
 
 import urllib.parse
@@ -30,6 +32,8 @@ COMPANY_ALIASES = {
 
 @dataclass
 class EvidenceExtractor:
+    """Build `Evidence` records from normalized search results."""
+
     config: ToolkitConfig
 
     def extract(
@@ -40,6 +44,7 @@ class EvidenceExtractor:
         as_of_date: str,
         max_sources: int = 8,
     ) -> tuple[list[Evidence], list[str]]:
+        """Score source, recency, relevance, entity match, and numeric signals."""
         evidence: list[Evidence] = []
         notes: list[str] = []
 
@@ -79,6 +84,7 @@ class EvidenceExtractor:
         return evidence, notes
 
     def _read_with_jina(self, url: str) -> str:
+        """Fetch readable page text through Jina Reader, returning empty on error."""
         jina_url = "https://r.jina.ai/" + urllib.parse.quote(url, safe=":/?&=%")
         headers = {}
         if self.config.jina_api_key:
@@ -96,18 +102,21 @@ class EvidenceExtractor:
 
 
 def score_relevance(claim: str, ticker: str, title: str, text: str, url: str) -> float:
+    """Score lexical relevance with an entity/ticker bonus."""
     overlap = token_overlap(claim, f"{title}\n{text}")
     ticker_bonus = 0.20 if _contains_entity(ticker, title, text, url) else 0.0
     return round(clamp(0.20 + overlap * 0.85 + ticker_bonus), 3)
 
 
 def score_entity_match(ticker: str, title: str, text: str, url: str) -> float:
+    """Return a high score when the source appears to refer to the ticker."""
     if _contains_entity(ticker, title, text, url):
         return 0.90
     return 0.45
 
 
 def _contains_entity(ticker: str, title: str, text: str, url: str) -> bool:
+    """Match ticker or a small built-in set of common company aliases."""
     haystack = f"{title} {text} {url}".lower()
     normalized = ticker.upper()
     if normalized.lower() in haystack:

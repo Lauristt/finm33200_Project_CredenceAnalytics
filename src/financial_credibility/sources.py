@@ -1,3 +1,5 @@
+"""Source authority, recency, and numeric consistency scoring utilities."""
+
 from __future__ import annotations
 
 import math
@@ -42,6 +44,7 @@ DOMAIN_AUTHORITY: list[tuple[str, SourceType, SourceTier, float, str]] = [
 
 
 def canonical_domain(url: str) -> str:
+    """Normalize a URL or host into a comparable domain."""
     parsed = urlparse(url if "://" in url else f"https://{url}")
     host = (parsed.netloc or parsed.path).lower().split("@")[-1].split(":")[0]
     if host.startswith("www."):
@@ -50,6 +53,7 @@ def canonical_domain(url: str) -> str:
 
 
 def assess_source(url: str, title: str = "") -> SourceAssessment:
+    """Classify source type/tier and assign a conservative authority score."""
     domain = canonical_domain(url)
     lower_url = url.lower()
     lower_title = title.lower()
@@ -86,6 +90,7 @@ def assess_source(url: str, title: str = "") -> SourceAssessment:
 
 
 def score_recency(published_at: str | None, as_of_date: str | None = None) -> tuple[float, list[str]]:
+    """Score recency with exponential decay relative to `as_of_date`."""
     if not published_at:
         return 0.45, ["missing publication date"]
 
@@ -106,6 +111,7 @@ def score_recency(published_at: str | None, as_of_date: str | None = None) -> tu
 
 
 def parse_date(value: str | None) -> date | None:
+    """Parse the date formats commonly returned by search/data providers."""
     if not value:
         return None
     cleaned = value.strip()
@@ -131,6 +137,7 @@ NUMBER_RE = re.compile(
 
 
 def extract_numbers(text: str) -> list[str]:
+    """Extract simple financial numeric strings from text."""
     values = []
     for match in NUMBER_RE.finditer(text):
         value = re.sub(r"\s+", " ", match.group(0).strip().lower())
@@ -140,6 +147,7 @@ def extract_numbers(text: str) -> list[str]:
 
 
 def score_numeric_consistency(claim: str, evidence_text: str) -> tuple[float, list[str]]:
+    """Score whether claim numbers appear in the evidence text."""
     claim_numbers = extract_numbers(claim)
     if not claim_numbers:
         return 0.60, ["claim has no explicit numeric value"]
@@ -162,4 +170,5 @@ def score_numeric_consistency(claim: str, evidence_text: str) -> tuple[float, li
 
 
 def _normalize_number(value: str) -> str:
+    """Normalize punctuation and percent wording for rough equality checks."""
     return re.sub(r"[\s,$]", "", value.lower()).replace("percent", "%")

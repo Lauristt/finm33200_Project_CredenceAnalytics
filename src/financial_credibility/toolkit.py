@@ -1,3 +1,11 @@
+"""Top-level orchestration API for the credibility toolkit.
+
+This module owns the main pipeline boundary. Everything below this layer is a
+smaller component: argument classification, retrieval, extraction, semantic
+judging, aggregation, and explicit verification. Developers integrating the
+package should usually start with `FinancialCredibilityToolkit`.
+"""
+
 from __future__ import annotations
 
 from itertools import combinations
@@ -19,6 +27,13 @@ from .verification import (
 
 
 class FinancialCredibilityToolkit:
+    """Main programmatic entry point.
+
+    A toolkit instance holds immutable configuration and one semantic judge.
+    The judge may be local heuristic, OpenAI-backed, or Anthropic-backed
+    depending on `ToolkitConfig`.
+    """
+
     def __init__(
         self,
         config: ToolkitConfig | None = None,
@@ -29,6 +44,7 @@ class FinancialCredibilityToolkit:
 
     @classmethod
     def from_env(cls, env_file: str | None = None) -> "FinancialCredibilityToolkit":
+        """Create a toolkit using `.env` or an explicitly provided env file."""
         return cls(ToolkitConfig.from_env(env_file))
 
     def build_evidence_pack(
@@ -41,6 +57,15 @@ class FinancialCredibilityToolkit:
         mode: str = "agentic",
         extra_queries: list[str] | None = None,
     ) -> EvidencePack:
+        """Build a complete credibility assessment for one equity claim.
+
+        This is the function exposed through the CLI and tool schema adapters.
+        It returns an `EvidencePack`, which includes both the legacy weighted
+        score and the newer numeric/logic/source/overall confidence checks.
+
+        `prefetched_results` is the best hook for tests or demos where network
+        retrieval should be skipped.
+        """
         as_of = as_of_date or today_iso()
         classification = classify_argument_type(claim)
         risk_flags: list[str] = []
@@ -109,6 +134,7 @@ class FinancialCredibilityToolkit:
         )
 
     def _judge_evidence(self, claim: str, argument_type, evidence: list) -> None:
+        """Mutate each evidence item with support and reasoning judgments."""
         for item in evidence:
             label, support_score, support_notes = self.judge.judge_evidence_support(claim, item)
             reasoning_score, reasoning_notes = self.judge.judge_reasoning_quality(
@@ -122,6 +148,7 @@ class FinancialCredibilityToolkit:
             item.notes.extend(support_notes + reasoning_notes)
 
     def _score_independence(self, evidence: list) -> None:
+        """Score whether evidence items appear independent from each other."""
         if not evidence:
             return
         if len(evidence) == 1:

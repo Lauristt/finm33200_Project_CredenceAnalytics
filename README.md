@@ -1,49 +1,99 @@
 # Financial Credibility Toolkit
 
-Provider-neutral credibility tools for US equity financial claims.
+Provider-neutral credibility tools for US equity financial claims. The project is
+designed to be called by an LLM agent as a tool package, while keeping retrieval,
+evidence construction, verification, and scoring inspectable for developers.
 
-The package exposes a shared retrieval/evidence/scoring system with two modes:
+The default mode is useful-first rather than strictly reproducible:
 
-- `agentic` default: exploratory wrapper that expands search strategy, but still uses the same verifier.
-- `strict`: fixed pipeline for controlled experiments.
+- Retrieve structured financial evidence from free/free-tier data sources.
+- Extract evidence objects with source authority, recency, relevance, and numeric
+  consistency scores.
+- Use local fuzzy numeric matching before any LLM call.
+- Use OpenAI or Anthropic for narrow semantic checks when configured.
+- Return numeric confidence, logic confidence, source confidence, and an English
+  overall label.
 
-The main entry point is `build_evidence_pack(claim, ticker, ...)`. The output includes:
+## Repository Layout
 
-- `numeric_check`: whether numbers/periods/units are verified.
-- `logic_check`: whether the reasoning or inference is supported.
-- `source_check`: whether evidence quality is strong enough.
-- `overall_conclusion`: English overall label and confidence.
-
-## Quick Start
-
-```bash
-cd agent_build
-PYTHONPATH=src python -m financial_credibility "Apple revenue grew 6% year over year in the latest quarter." --ticker AAPL
+```text
+agent_build/
+  pyproject.toml
+  README.md
+  .env.example
+  examples/
+  src/financial_credibility/
+    adapters.py          # OpenAI/Anthropic tool schema adapters.
+    aggregation.py       # Deterministic weighted credibility score.
+    argument.py          # Claim type classifier.
+    cli.py               # CLI entry point.
+    config.py            # Env/config loading.
+    data_sources.py      # SEC, Alpha Vantage, Finnhub, FMP, FRED, etc.
+    extraction.py        # SearchResult -> Evidence conversion.
+    judges.py            # Heuristic/OpenAI/Anthropic semantic judges.
+    models.py            # Dataclasses and enums shared across the package.
+    modes/
+      agentic.py         # Default exploratory wrapper.
+      strict.py          # Thin strict-mode wrapper.
+    net.py               # urllib helper with cert handling.
+    rubrics.py           # Argument-type scoring weights.
+    search.py            # Structured retrieval plus optional Serper.
+    sources.py           # Source authority, recency, numeric scoring.
+    text.py              # Token overlap utilities.
+    toolkit.py           # Main orchestration API.
+    verification.py      # Numeric, logic, source, and overall checks.
+  tests/
 ```
 
-Without API keys, pass pre-fetched search results:
+## Installation And Build
+
+The package currently has no required third-party Python dependencies.
+
+Editable install for local development:
 
 ```bash
-PYTHONPATH=src python -m financial_credibility \
+cd /Users/laurisli/Desktop/FINM33200/final_project/agent_build
+python3 -m pip install -e .
+```
+
+Run from source without installing:
+
+```bash
+PYTHONPATH=src python3 -m financial_credibility \
   "Apple revenue grew 6% year over year in the latest quarter." \
   --ticker AAPL \
-  --prefetched-json examples/prefetched_aapl.json
+  --pretty
 ```
 
-Or install locally:
+Run tests:
 
 ```bash
-python -m pip install -e .
-financial-credibility "Apple revenue grew 6% year over year in the latest quarter." --ticker AAPL
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+```
+
+Compile check:
+
+```bash
+PYTHONPATH=src python3 -m compileall src tests
+```
+
+Build a wheel/sdist if the `build` package is installed:
+
+```bash
+python3 -m build
 ```
 
 ## Configuration
 
-Copy `.env.example` to `.env` and fill only the keys you need.
+Copy `.env.example` to `.env`. `.env` is intentionally ignored by git.
 
 ```text
 OPENAI_API_KEY=
+OPENAI_MODEL=
 ANTHROPIC_API_KEY=
+ANTHROPIC_MODEL=
+CREDIBILITY_LLM_PROVIDER=auto
+
 SERPER_API_KEY=
 JINA_API_KEY=
 FINNHUB_API_KEY=
@@ -55,51 +105,52 @@ TIINGO_API_KEY=
 SEC_USER_AGENT=
 ```
 
-The default judge mode is `auto`: it uses OpenAI or Anthropic when both the API key
-and model name are configured, otherwise it falls back to the local heuristic judge.
+Important flags:
 
-```text
-CREDIBILITY_LLM_PROVIDER=auto
-OPENAI_API_KEY=
-OPENAI_MODEL=
-ANTHROPIC_API_KEY=
-ANTHROPIC_MODEL=
-```
+- `CREDIBILITY_LLM_PROVIDER=auto|openai|anthropic`: choose semantic judge.
+- `CREDIBILITY_STRUCTURED_SOURCES=true|false`: enable free structured sources.
+- `CREDIBILITY_LIVE_EXTRACTION=true|false`: fetch article/page text through Jina
+  Reader instead of using snippets only.
+- `CREDIBILITY_YAHOO_FALLBACK=true|false`: enable unofficial Yahoo chart fallback.
+- `CREDIBILITY_REQUEST_TIMEOUT=25`: network timeout in seconds.
 
-Numeric verification first uses local fuzzy matching. If a number is matched directly,
-the numeric check passes without an LLM call. If no number matches, the toolkit asks
-the configured LLM judge to verify the numeric claim.
+If no LLM key/model is configured, the package falls back to `HeuristicJudge`.
 
-## Free Data Sources
+## Main Developer API
 
-The retrieval layer can query multiple free or free-tier sources:
+### `FinancialCredibilityToolkit`
 
-- SEC EDGAR company facts and recent filings: no key; set `SEC_USER_AGENT`.
-- Stooq latest quote: no key.
-- Alpha Vantage: `ALPHA_VANTAGE_API_KEY`.
-- Finnhub: `FINNHUB_API_KEY`.
-- Financial Modeling Prep: `FMP_API_KEY`.
-- FRED macro data: `FRED_API_KEY`.
-- Marketstack: `MARKETSTACK_API_KEY`.
-- Tiingo: `TIINGO_API_KEY`.
-- Yahoo chart fallback: no key, unofficial, disabled unless `CREDIBILITY_YAHOO_FALLBACK=true`.
-
-Set `CREDIBILITY_STRUCTURED_SOURCES=false` to disable structured source queries.
-
-## Tests
-
-```bash
-PYTHONPATH=src python -m unittest discover -s tests -v
-```
-
-## Python API
+Located in `src/financial_credibility/toolkit.py`.
 
 ```python
 from financial_credibility import FinancialCredibilityToolkit
 
 toolkit = FinancialCredibilityToolkit.from_env()
 pack = toolkit.build_evidence_pack(
-    claim="Apple revenue grew 6% year over year in the latest quarter.",
+    claim="Apple reported revenue of 416161000000 in fiscal 2025.",
+    ticker="AAPL",
+    as_of_date="2026-05-19",
+    max_sources=10,
+)
+print(pack.to_dict())
+```
+
+`build_evidence_pack(...)` is the main orchestration function. It performs:
+
+1. Argument classification with `classify_argument_type`.
+2. Retrieval with `SearchClient.search_financial_sources`.
+3. Evidence extraction with `EvidenceExtractor.extract`.
+4. Per-source semantic judging with `SemanticJudge`.
+5. Source independence scoring.
+6. Weighted scoring with `aggregate_scores`.
+7. Explicit numeric, logic, source, and overall verification.
+8. Returns an `EvidencePack`.
+
+Use `prefetched_results` for deterministic tests or demos without network calls:
+
+```python
+pack = toolkit.build_evidence_pack(
+    claim="Apple revenue grew 6% year over year.",
     ticker="AAPL",
     prefetched_results=[
         {
@@ -110,11 +161,200 @@ pack = toolkit.build_evidence_pack(
         }
     ],
 )
-
-print(pack.to_dict())
 ```
 
+### Agentic Mode
+
+`modes/agentic.py` contains `AgenticCredibilityRunner`. It does not create
+autonomous sub-agents. It adds extra search-plan queries, including contradiction
+and official-source queries, then calls the same underlying toolkit pipeline.
+
+CLI default:
+
+```bash
+PYTHONPATH=src python3 -m financial_credibility \
+  "Apple reported revenue of 416161000000 in fiscal 2025." \
+  --ticker AAPL \
+  --mode agentic
+```
+
+Strict mode:
+
+```bash
+PYTHONPATH=src python3 -m financial_credibility \
+  "Apple reported revenue of 416161000000 in fiscal 2025." \
+  --ticker AAPL \
+  --mode strict
+```
+
+## Core Data Model
+
+All shared types are in `models.py`.
+
+- `SearchResult`: raw retrieval item from an API, search engine, or prefetched
+  JSON.
+- `Evidence`: normalized source-level evidence with scores and notes.
+- `ScoreBreakdown`: deterministic weighted scoring dimensions.
+- `VerificationCheck`: explicit check result for numeric, logic, or source
+  confidence.
+- `OverallConclusion`: user-facing label and confidence summary.
+- `EvidencePack`: final output object returned by the toolkit.
+- `ToolSpec`: provider-agnostic tool definition that can be exported to OpenAI
+  or Anthropic schemas.
+
+Typical output shape:
+
+```json
+{
+  "claim": "...",
+  "ticker": "AAPL",
+  "argument_type": "metric_fact",
+  "credibility_score": 0.778,
+  "numeric_check": {"verdict": "verified", "method": "fuzzy_local"},
+  "logic_check": {"verdict": "partially_verified", "method": "anthropic"},
+  "source_check": {"verdict": "partially_verified", "method": "scoring"},
+  "overall_conclusion": {"overall_label": "High"}
+}
+```
+
+## Pipeline Details
+
+### 1. Argument Classification
+
+`argument.py`
+
+- `classify_argument_type(claim)`: rule-based classifier for:
+  - `metric_fact`
+  - `event_fact`
+  - `attribution_fact`
+  - `opinion_analysis`
+  - `forecast`
+- `_needs_decomposition(claim)`: marks long or multi-part claims.
+
+The argument type selects rubric weights. For example, metric facts emphasize
+numeric consistency; forecasts emphasize reasoning quality and independence.
+
+### 2. Retrieval
+
+`search.py`
+
+- `SearchClient.search_financial_sources(...)`: top-level retrieval method.
+- `build_queries(...)`: creates argument-type-specific web-search queries.
+- `_normalize_result(...)`: converts dicts and existing `SearchResult` objects
+  into the same internal shape.
+
+Retrieval order:
+
+1. Use `prefetched_results` when provided.
+2. Query structured free/free-tier sources via `FreeDataSourceClient`.
+3. If configured, query Serper web search.
+
+### 3. Structured Data Sources
+
+`data_sources.py`
+
+`FreeDataSourceClient.query(...)` calls providers in order until `max_results` is
+reached. Provider methods return `SearchResult` objects, not final evidence.
+
+Implemented providers:
+
+- `sec_company_facts(claim, ticker)`: SEC XBRL company facts.
+- `sec_recent_filings(ticker)`: recent SEC 10-K, 10-Q, and 8-K filings.
+- `alpha_vantage(ticker)`: company overview and earnings.
+- `finnhub(ticker)`: profile and basic financial metrics.
+- `fmp(ticker)`: profile and income statement.
+- `fred(claim)`: macro series selected from claim keywords.
+- `marketstack(ticker)`: latest EOD quote.
+- `tiingo(ticker)`: recent EOD price.
+- `stooq(ticker)`: latest free quote, no key needed.
+- `yahoo_chart(ticker)`: unofficial chart fallback, disabled by default.
+
+To add a new provider:
+
+1. Add a method returning `list[SearchResult]`.
+2. Add it to the `providers` list in `FreeDataSourceClient.query`.
+3. Add a source authority mapping in `sources.DOMAIN_AUTHORITY`.
+4. Add a focused unit test using mocked or prefetched data.
+
+### 4. Evidence Extraction
+
+`extraction.py`
+
+- `EvidenceExtractor.extract(...)`: converts `SearchResult` into scored
+  `Evidence`.
+- `score_relevance(...)`: lexical overlap plus entity/ticker bonus.
+- `score_entity_match(...)`: detects ticker or known company aliases.
+
+Extraction assigns:
+
+- source type and authority from `assess_source`
+- recency from `score_recency`
+- numeric consistency from `score_numeric_consistency`
+- relevance and entity match scores
+
+If `CREDIBILITY_LIVE_EXTRACTION=true`, extractor uses Jina Reader to fetch page
+text; otherwise it uses snippets from retrieval providers.
+
+### 5. Semantic Judges
+
+`judges.py`
+
+- `SemanticJudge`: abstract interface.
+- `HeuristicJudge`: local no-key fallback.
+- `OpenAIJudge`: narrow JSON judge through OpenAI chat completions.
+- `AnthropicJudge`: narrow JSON judge through Anthropic messages.
+- `create_judge(config)`: chooses a judge from env/config.
+
+Judge methods:
+
+- `judge_evidence_support(claim, evidence)`: supports/contradicts/not enough info.
+- `judge_independence(first, second)`: source independence score.
+- `judge_reasoning_quality(claim, evidence, argument_type)`: quality of reasoning.
+- `judge_numeric_claim(claim, evidence)`: LLM fallback for numeric verification.
+- `judge_logic_claim(claim, evidence, argument_type)`: semantic logic check.
+
+The LLM judge is deliberately narrow: each call asks for one small JSON judgment
+instead of a global credibility score.
+
+### 6. Aggregation
+
+`aggregation.py`
+
+- `aggregate_scores(argument_type, evidence, risk_flags)`: computes the legacy
+  deterministic credibility score and label.
+
+Score dimensions:
+
+- source authority
+- recency
+- evidence support
+- numeric consistency
+- independence
+- reasoning quality
+- penalties
+
+Weights live in `rubrics.py` and differ by argument type.
+
+### 7. Explicit Verification
+
+`verification.py`
+
+- `verify_numeric_claim(claim, evidence, judge)`: fuzzy local numeric matching
+  first; LLM fallback only when no local match is found.
+- `verify_logic_claim(claim, evidence, argument_type, judge)`: asks the configured
+  semantic judge whether the inference or reasoning is supported.
+- `verify_sources(evidence, breakdown)`: source-quality confidence from authority,
+  independence, and recency.
+- `build_overall_conclusion(...)`: combines numeric, logic, and source confidence
+  into `Very High`, `High`, `Medium`, `Low`, or `Contradicted`.
+
+`_rank_evidence_for_verification(...)` prioritizes evidence with numeric matches
+and strong support before sending snippets to the LLM, so the judge sees the most
+relevant sources within the token budget.
+
 ## Tool Schema Adapters
+
+`adapters.py`
 
 ```python
 from financial_credibility.adapters import build_evidence_pack_tool
@@ -124,23 +364,48 @@ openai_tool = spec.to_openai_tool_schema()
 anthropic_tool = spec.to_anthropic_tool_schema()
 ```
 
-## Design
+Use `openai_tool` in an OpenAI tool/function registration flow and
+`anthropic_tool` in an Anthropic tool-use flow. The actual execution endpoint
+should call:
 
-The final score is deterministic:
-
-```text
-final_score =
-  weight(source_authority) * source_authority
-+ weight(recency) * recency
-+ weight(evidence_support) * evidence_support
-+ weight(numeric_consistency) * numeric_consistency
-+ weight(independence) * independence
-+ weight(reasoning_quality) * reasoning_quality
-- penalties
+```python
+FinancialCredibilityToolkit.from_env().build_evidence_pack(**tool_args)
 ```
 
-Weights vary by argument type: `metric_fact`, `event_fact`,
-`attribution_fact`, `opinion_analysis`, and `forecast`.
+## CLI
 
-The more useful course-demo output is `overall_conclusion`, which combines numeric,
-logic, and source confidence into an English label such as `High` or `Medium`.
+The CLI is defined in `cli.py`.
+
+```bash
+financial-credibility "Claim text" --ticker AAPL --pretty
+```
+
+Useful flags:
+
+- `--ticker AAPL`
+- `--as-of-date 2026-05-19`
+- `--max-sources 10`
+- `--mode strict|agentic`
+- `--env-file path/to/.env`
+- `--prefetched-json examples/prefetched_aapl.json`
+- `--pretty`
+
+## Development Notes
+
+- Keep `.env` out of git; put only placeholders in `.env.example`.
+- Prefer adding providers as `SearchResult` producers, not direct `Evidence`
+  producers. This keeps extraction and scoring centralized.
+- Keep LLM tasks narrow and JSON-shaped. The aggregator should not rely on a
+  free-form global LLM credibility score.
+- Use `prefetched_results` in tests when possible to avoid flaky network calls.
+- When adding a new score field, update `models.ScoreBreakdown`, `rubrics.py`,
+  `aggregation.py`, and tests together.
+
+## Current Limitations
+
+- Source extraction is snippet-first unless Jina Reader is enabled.
+- Yahoo Finance support is unofficial and disabled by default.
+- SEC company facts are concept-mapped by simple keywords, not a full XBRL query
+  planner.
+- The system focuses on US equities; macro support exists only through limited
+  FRED keyword matching.

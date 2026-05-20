@@ -1,3 +1,5 @@
+"""Shared enums and dataclasses used across the credibility pipeline."""
+
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field, is_dataclass
@@ -106,6 +108,12 @@ class SourceAssessment:
 
 @dataclass
 class Evidence:
+    """Normalized evidence item with all source, relevance, and judge scores.
+
+    Retrieval providers return `SearchResult`; extraction converts each result
+    into `Evidence`. Later pipeline stages mutate the score fields in place.
+    """
+
     url: str
     title: str
     text: str
@@ -140,6 +148,8 @@ class ScoreBreakdown:
 
 @dataclass(frozen=True)
 class VerificationCheck:
+    """One explicit check result, such as numeric, logic, or source confidence."""
+
     check_type: str
     verdict: str
     confidence: float
@@ -151,6 +161,8 @@ class VerificationCheck:
 
 @dataclass(frozen=True)
 class OverallConclusion:
+    """Course-demo friendly confidence summary with an English label."""
+
     overall_label: str
     final_confidence: float
     numeric_confidence: float
@@ -161,6 +173,13 @@ class OverallConclusion:
 
 @dataclass(frozen=True)
 class EvidencePack:
+    """Final output returned by `FinancialCredibilityToolkit`.
+
+    `credibility_score` and `score_breakdown` are deterministic weighted scores.
+    The explicit `numeric_check`, `logic_check`, `source_check`, and
+    `overall_conclusion` fields are the more useful agent-facing outputs.
+    """
+
     claim: str
     ticker: str
     as_of_date: str
@@ -180,17 +199,21 @@ class EvidencePack:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        """Convert nested dataclasses and enums to plain JSON-compatible values."""
         return to_plain(self)
 
 
 @dataclass(frozen=True)
 class ToolSpec:
+    """Provider-neutral tool description with OpenAI/Anthropic export helpers."""
+
     name: str
     description: str
     input_schema: dict[str, Any]
     output_schema: dict[str, Any] | None = None
 
     def to_openai_tool_schema(self) -> dict[str, Any]:
+        """Return an OpenAI-compatible function tool schema."""
         return {
             "type": "function",
             "function": {
@@ -201,6 +224,7 @@ class ToolSpec:
         }
 
     def to_anthropic_tool_schema(self) -> dict[str, Any]:
+        """Return an Anthropic-compatible tool schema."""
         return {
             "name": self.name,
             "description": self.description,

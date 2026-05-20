@@ -1,3 +1,10 @@
+"""Rule-based claim classifier used to choose scoring rubrics.
+
+This classifier is intentionally lightweight and deterministic. It does not try
+to fully understand the claim; it only routes the claim to the right rubric and
+records signals that explain the routing decision.
+"""
+
 from __future__ import annotations
 
 import re
@@ -43,6 +50,7 @@ BASE_PRIORITY = {
 
 
 def classify_argument_type(claim: str) -> Classification:
+    """Classify a claim into the argument type used by retrieval and scoring."""
     text = claim.strip().lower()
     scores: dict[ArgumentType, float] = defaultdict(float)
     signals: dict[ArgumentType, list[str]] = defaultdict(list)
@@ -86,6 +94,7 @@ def classify_argument_type(claim: str) -> Classification:
 
 
 def _needs_decomposition(claim: str) -> bool:
+    """Detect claims that probably contain multiple subclaims."""
     text = claim.strip()
     if len(text) > 220:
         return True

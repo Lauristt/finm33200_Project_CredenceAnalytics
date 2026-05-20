@@ -1,3 +1,9 @@
+"""Retrieval layer for evidence candidates.
+
+This module returns `SearchResult` objects only. It does not score sources or
+judge claims; that work is centralized in extraction, judging, and aggregation.
+"""
+
 from __future__ import annotations
 
 import json
@@ -13,6 +19,8 @@ from .net import urlopen_request
 
 @dataclass
 class SearchClient:
+    """Search facade combining prefetched results, structured APIs, and Serper."""
+
     config: ToolkitConfig
     extra_queries: list[str] = field(default_factory=list)
 
@@ -24,6 +32,12 @@ class SearchClient:
         max_sources: int = 8,
         prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
     ) -> tuple[list[SearchResult], list[str]]:
+        """Retrieve candidate sources for one claim.
+
+        Retrieval order is deliberate: tests/demos can pass `prefetched_results`;
+        otherwise structured sources are tried before optional web search.
+        The returned notes are surfaced in `EvidencePack.metadata`.
+        """
         if prefetched_results is not None:
             return [_normalize_result(item) for item in prefetched_results][:max_sources], ["used prefetched results"]
 
@@ -69,6 +83,7 @@ class SearchClient:
         return results, notes
 
     def _serper_search(self, query: str, num_results: int) -> list[SearchResult]:
+        """Call Serper and normalize organic results into `SearchResult`."""
         body = {"q": query, "num": num_results}
         request = urllib.request.Request(
             "https://google.serper.dev/search",
@@ -102,6 +117,7 @@ class SearchClient:
 
 
 def build_queries(claim: str, ticker: str, argument_type: ArgumentType) -> list[str]:
+    """Create search queries tailored to the claim's argument type."""
     base = f'{ticker} "{claim}"'
     if argument_type == ArgumentType.METRIC_FACT:
         return [
@@ -135,6 +151,7 @@ def build_queries(claim: str, ticker: str, argument_type: ArgumentType) -> list[
 
 
 def _normalize_result(item: dict[str, Any] | SearchResult) -> SearchResult:
+    """Accept either dict fixtures or already-normalized search results."""
     if isinstance(item, SearchResult):
         return item
     return SearchResult(

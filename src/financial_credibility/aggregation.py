@@ -1,3 +1,10 @@
+"""Deterministic weighted score aggregation.
+
+This score is the glass-box component of the toolkit. The newer
+`overall_conclusion` uses explicit numeric/logic/source checks, but this module
+still provides a stable rubric-backed score for comparison and reporting.
+"""
+
 from __future__ import annotations
 
 from statistics import mean
@@ -19,6 +26,7 @@ def aggregate_scores(
     evidence: list[Evidence],
     risk_flags: list[str] | None = None,
 ) -> tuple[ScoreBreakdown, Verdict, CredibilityLabel, list[str]]:
+    """Aggregate evidence-level scores into a final score, verdict, and label."""
     flags = list(risk_flags or [])
     weights = RUBRIC_WEIGHTS[argument_type]
 

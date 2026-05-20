@@ -1,3 +1,9 @@
+"""Explicit numeric, logic, source, and overall verification checks.
+
+These checks are the main agent-facing outputs. They complement the deterministic
+score in `aggregation.py` by separating the question into interpretable parts.
+"""
+
 from __future__ import annotations
 
 import re
@@ -71,6 +77,7 @@ def verify_logic_claim(
     argument_type: ArgumentType,
     judge=None,
 ) -> VerificationCheck:
+    """Verify whether the claim's reasoning/inference is supported by evidence."""
     if not evidence:
         return VerificationCheck(
             check_type="logic_check",
@@ -110,6 +117,7 @@ def verify_logic_claim(
 
 
 def verify_sources(evidence: list[Evidence], breakdown: ScoreBreakdown) -> VerificationCheck:
+    """Summarize source quality using authority, independence, and recency."""
     if not evidence:
         return VerificationCheck(
             check_type="source_check",
@@ -148,6 +156,7 @@ def build_overall_conclusion(
     logic_check: VerificationCheck,
     source_check: VerificationCheck,
 ) -> OverallConclusion:
+    """Combine explicit checks into the final English confidence label."""
     numeric_applicable = numeric_check.verdict != VerificationVerdict.NOT_APPLICABLE.value
     if numeric_check.verdict == VerificationVerdict.CONTRADICTED.value and argument_type in FACTUAL_TYPES:
         return OverallConclusion(
@@ -192,6 +201,7 @@ def build_overall_conclusion(
 
 
 def source_confidence_from_breakdown(breakdown: ScoreBreakdown) -> float:
+    """Derive source-only confidence from the deterministic score breakdown."""
     return round(
         clamp(
             0.50 * breakdown.source_authority
@@ -203,6 +213,7 @@ def source_confidence_from_breakdown(breakdown: ScoreBreakdown) -> float:
 
 
 def _fuzzy_numeric_matches(claim_numbers: list[str], evidence: list[Evidence]) -> list[tuple[str, str, str]]:
+    """Return claim/evidence number pairs that match after light normalization."""
     matches = []
     evidence_numbers: list[tuple[str, str]] = []
     for item in evidence:
@@ -219,6 +230,7 @@ def _fuzzy_numeric_matches(claim_numbers: list[str], evidence: list[Evidence]) -
 
 
 def _numeric_forms(value: str) -> set[str]:
+    """Generate rough comparable forms for numeric strings and units."""
     raw = value.lower().strip()
     compact = re.sub(r"[\s,$,]", "", raw).replace("percent", "%")
     no_unit = re.sub(r"(billion|million|trillion|bn|mn|bps|%)$", "", compact)
@@ -240,6 +252,7 @@ def _source_issues(evidence: list[Evidence]) -> list[str]:
 
 
 def _rank_evidence_for_verification(evidence: list[Evidence]) -> list[Evidence]:
+    """Put likely relevant evidence first before sending snippets to a judge."""
     return sorted(
         evidence,
         key=lambda item: (

@@ -1,3 +1,10 @@
+"""Configuration loading for local development, CLI, and tool execution.
+
+The package intentionally avoids a hard dependency on `python-dotenv`; this file
+implements the tiny subset needed for `.env` based demos. Environment variables
+already set by the caller are not overwritten.
+"""
+
 from __future__ import annotations
 
 import os
@@ -6,6 +13,7 @@ from pathlib import Path
 
 
 def load_dotenv(path: str | Path = ".env") -> None:
+    """Load simple KEY=VALUE lines into `os.environ` if they are not set."""
     env_path = Path(path)
     if not env_path.exists():
         return
@@ -22,6 +30,8 @@ def load_dotenv(path: str | Path = ".env") -> None:
 
 @dataclass(frozen=True)
 class ToolkitConfig:
+    """Runtime configuration shared by retrieval, extraction, and judges."""
+
     openai_api_key: str | None = None
     anthropic_api_key: str | None = None
     serper_api_key: str | None = None
@@ -44,6 +54,7 @@ class ToolkitConfig:
 
     @classmethod
     def from_env(cls, env_file: str | Path | None = None) -> "ToolkitConfig":
+        """Build config from process env plus an optional `.env` file."""
         if env_file:
             load_dotenv(env_file)
         else:
