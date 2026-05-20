@@ -8,6 +8,7 @@ from typing import Any
 from .config import ToolkitConfig
 from .data_sources import FreeDataSourceClient
 from .models import ArgumentType, SearchResult
+from .net import urlopen_request
 
 
 @dataclass
@@ -78,7 +79,11 @@ class SearchClient:
             },
             method="POST",
         )
-        with urllib.request.urlopen(request, timeout=self.config.request_timeout) as response:
+        with urlopen_request(
+            request,
+            timeout=self.config.request_timeout,
+            allow_insecure_ssl_fallback=self.config.allow_insecure_ssl_fallback,
+        ) as response:
             data = json.loads(response.read().decode("utf-8"))
 
         results = []

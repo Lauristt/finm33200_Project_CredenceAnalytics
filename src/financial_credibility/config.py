@@ -40,6 +40,7 @@ class ToolkitConfig:
     enable_live_extraction: bool = False
     enable_structured_sources: bool = True
     enable_yahoo_fallback: bool = False
+    allow_insecure_ssl_fallback: bool = False
 
     @classmethod
     def from_env(cls, env_file: str | Path | None = None) -> "ToolkitConfig":
@@ -69,5 +70,9 @@ class ToolkitConfig:
             enable_structured_sources=os.getenv("CREDIBILITY_STRUCTURED_SOURCES", "true").lower()
             in {"1", "true", "yes"},
             enable_yahoo_fallback=os.getenv("CREDIBILITY_YAHOO_FALLBACK", "").lower()
+            in {"1", "true", "yes"},
+            allow_insecure_ssl_fallback=os.getenv(
+                "CREDIBILITY_ALLOW_INSECURE_SSL_FALLBACK", ""
+            ).lower()
             in {"1", "true", "yes"},
         )

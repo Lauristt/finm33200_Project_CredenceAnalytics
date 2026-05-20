@@ -11,6 +11,7 @@ from typing import Any
 
 from .config import ToolkitConfig
 from .models import ArgumentType, SearchResult
+from .net import urlopen_request
 
 
 SEC_CONCEPTS = {
@@ -244,27 +245,31 @@ class FreeDataSourceClient:
         if not key:
             return []
         results = []
-        profile = self._get_json(f"https://financialmodelingprep.com/api/v3/profile/{ticker.upper()}?apikey={key}")
+        profile = self._get_json(
+            "https://financialmodelingprep.com/stable/profile?"
+            + urllib.parse.urlencode({"symbol": ticker.upper(), "apikey": key})
+        )
         if isinstance(profile, list) and profile:
             item = profile[0]
             results.append(
                 SearchResult(
                     title=f"FMP profile for {ticker.upper()}",
-                    url=f"https://financialmodelingprep.com/api/v3/profile/{ticker.upper()}",
+                    url=f"https://financialmodelingprep.com/stable/profile?symbol={ticker.upper()}",
                     snippet=f"{item.get('companyName')} price {item.get('price')} market cap {item.get('mktCap')} sector {item.get('sector')}",
                     source="Financial Modeling Prep",
                     raw={"provider": "fmp_profile"},
                 )
             )
         income = self._get_json(
-            f"https://financialmodelingprep.com/api/v3/income-statement/{ticker.upper()}?limit=2&apikey={key}"
+            "https://financialmodelingprep.com/stable/income-statement?"
+            + urllib.parse.urlencode({"symbol": ticker.upper(), "limit": 2, "apikey": key})
         )
         if isinstance(income, list) and income:
             item = income[0]
             results.append(
                 SearchResult(
                     title=f"FMP income statement for {ticker.upper()}",
-                    url=f"https://financialmodelingprep.com/api/v3/income-statement/{ticker.upper()}",
+                    url=f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker.upper()}",
                     snippet=(
                         f"date {item.get('date')} revenue {item.get('revenue')} netIncome {item.get('netIncome')} "
                         f"eps {item.get('eps')}"
@@ -436,7 +441,11 @@ class FreeDataSourceClient:
         if sec:
             headers["User-Agent"] = self.config.sec_user_agent or "financial-credibility-toolkit/0.1 contact@example.com"
         request = urllib.request.Request(url, headers=headers, method="GET")
-        with urllib.request.urlopen(request, timeout=self.config.request_timeout) as response:
+        with urlopen_request(
+            request,
+            timeout=self.config.request_timeout,
+            allow_insecure_ssl_fallback=self.config.allow_insecure_ssl_fallback,
+        ) as response:
             return response.read().decode("utf-8", errors="replace")
 
 

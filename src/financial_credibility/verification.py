@@ -52,7 +52,7 @@ def verify_numeric_claim(claim: str, evidence: list[Evidence], judge=None) -> Ve
         )
 
     if judge and hasattr(judge, "judge_numeric_claim"):
-        return judge.judge_numeric_claim(claim, evidence)
+        return judge.judge_numeric_claim(claim, _rank_evidence_for_verification(evidence))
 
     return VerificationCheck(
         check_type="numeric_check",
@@ -82,7 +82,11 @@ def verify_logic_claim(
         )
 
     if judge and hasattr(judge, "judge_logic_claim"):
-        return judge.judge_logic_claim(claim, evidence, argument_type)
+        return judge.judge_logic_claim(
+            claim,
+            _rank_evidence_for_verification(evidence),
+            argument_type,
+        )
 
     support = mean([item.support_score for item in evidence]) if evidence else 0.0
     reasoning = mean([item.reasoning_quality_score for item in evidence]) if evidence else 0.0
@@ -233,6 +237,20 @@ def _source_issues(evidence: list[Evidence]) -> list[str]:
     if len(evidence) < 2:
         issues.append("single_evidence_item")
     return issues
+
+
+def _rank_evidence_for_verification(evidence: list[Evidence]) -> list[Evidence]:
+    return sorted(
+        evidence,
+        key=lambda item: (
+            item.numeric_consistency_score,
+            item.support_score,
+            item.relevance_score,
+            item.source_authority,
+            item.recency_score,
+        ),
+        reverse=True,
+    )
 
 
 def _overall_summary(

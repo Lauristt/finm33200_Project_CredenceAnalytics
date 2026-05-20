@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 from .config import ToolkitConfig
 from .models import Evidence, SearchResult, clamp
+from .net import urlopen_request
 from .sources import assess_source, score_numeric_consistency, score_recency
 from .text import token_overlap
 
@@ -84,7 +85,11 @@ class EvidenceExtractor:
             headers["Authorization"] = f"Bearer {self.config.jina_api_key}"
         request = urllib.request.Request(jina_url, headers=headers, method="GET")
         try:
-            with urllib.request.urlopen(request, timeout=self.config.request_timeout) as response:
+            with urlopen_request(
+                request,
+                timeout=self.config.request_timeout,
+                allow_insecure_ssl_fallback=self.config.allow_insecure_ssl_fallback,
+            ) as response:
                 return response.read().decode("utf-8", errors="replace")[:8000]
         except Exception:
             return ""

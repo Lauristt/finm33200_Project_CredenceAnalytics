@@ -9,6 +9,7 @@ from typing import Any
 
 from .config import ToolkitConfig
 from .models import ArgumentType, Evidence, SupportLabel, VerificationCheck, VerificationVerdict, clamp
+from .net import urlopen_request
 from .sources import canonical_domain
 from .text import token_overlap
 
@@ -139,10 +140,17 @@ class HeuristicJudge(SemanticJudge):
 
 
 class OpenAIJudge(HeuristicJudge):
-    def __init__(self, api_key: str, model: str, timeout: float = 25.0):
+    def __init__(
+        self,
+        api_key: str,
+        model: str,
+        timeout: float = 25.0,
+        allow_insecure_ssl_fallback: bool = False,
+    ):
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
+        self.allow_insecure_ssl_fallback = allow_insecure_ssl_fallback
 
     def judge_evidence_support(self, claim: str, evidence: Evidence) -> tuple[SupportLabel, float, list[str]]:
         prompt = {
@@ -212,17 +220,28 @@ class OpenAIJudge(HeuristicJudge):
             },
             method="POST",
         )
-        with urllib.request.urlopen(request, timeout=self.timeout) as response:
+        with urlopen_request(
+            request,
+            timeout=self.timeout,
+            allow_insecure_ssl_fallback=self.allow_insecure_ssl_fallback,
+        ) as response:
             raw = json.loads(response.read().decode("utf-8"))
         content = raw["choices"][0]["message"]["content"]
-        return json.loads(content)
+        return _loads_json_object(content)
 
 
 class AnthropicJudge(HeuristicJudge):
-    def __init__(self, api_key: str, model: str, timeout: float = 25.0):
+    def __init__(
+        self,
+        api_key: str,
+        model: str,
+        timeout: float = 25.0,
+        allow_insecure_ssl_fallback: bool = False,
+    ):
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
+        self.allow_insecure_ssl_fallback = allow_insecure_ssl_fallback
 
     def judge_evidence_support(self, claim: str, evidence: Evidence) -> tuple[SupportLabel, float, list[str]]:
         prompt = {
@@ -276,7 +295,15 @@ class AnthropicJudge(HeuristicJudge):
             "max_tokens": 400,
             "temperature": 0,
             "system": "You are a narrow financial evidence judge. Return only valid JSON.",
-            "messages": [{"role": "user", "content": json.dumps(payload)}],
+            "messages": [
+                {
+                    "role": "user",
+                    "content": (
+                        "Return exactly one JSON object. Do not wrap it in markdown.\n\n"
+                        + json.dumps(payload)
+                    ),
+                }
+            ],
         }
         request = urllib.request.Request(
             "https://api.anthropic.com/v1/messages",
@@ -288,18 +315,32 @@ class AnthropicJudge(HeuristicJudge):
             },
             method="POST",
         )
-        with urllib.request.urlopen(request, timeout=self.timeout) as response:
+        with urlopen_request(
+            request,
+            timeout=self.timeout,
+            allow_insecure_ssl_fallback=self.allow_insecure_ssl_fallback,
+        ) as response:
             raw = json.loads(response.read().decode("utf-8"))
         content = "".join(block.get("text", "") for block in raw.get("content", []))
-        return json.loads(content)
+        return _loads_json_object(content)
 
 
 def create_judge(config: ToolkitConfig) -> SemanticJudge:
     provider = config.llm_provider.lower()
     if provider in {"auto", "openai"} and config.openai_api_key and config.openai_model:
-        return OpenAIJudge(config.openai_api_key, config.openai_model, config.request_timeout)
+        return OpenAIJudge(
+            config.openai_api_key,
+            config.openai_model,
+            config.request_timeout,
+            config.allow_insecure_ssl_fallback,
+        )
     if provider in {"auto", "anthropic"} and config.anthropic_api_key and config.anthropic_model:
-        return AnthropicJudge(config.anthropic_api_key, config.anthropic_model, config.request_timeout)
+        return AnthropicJudge(
+            config.anthropic_api_key,
+            config.anthropic_model,
+            config.request_timeout,
+            config.allow_insecure_ssl_fallback,
+        )
     return HeuristicJudge()
 
 
@@ -354,6 +395,37 @@ def _check_from_llm_data(
         issues=[str(issue) for issue in issues],
         method=method,
     )
+
+
+def _loads_json_object(content: str) -> dict[str, Any]:
+    text = content.strip()
+    if not text:
+        raise ValueError("empty JSON response")
+
+    candidates = [text]
+    fence = re.search(r"```(?:json)?\s*(.*?)```", text, flags=re.IGNORECASE | re.DOTALL)
+    if fence:
+        candidates.insert(0, fence.group(1).strip())
+
+    decoder = json.JSONDecoder()
+    for candidate in candidates:
+        candidate = candidate.strip()
+        try:
+            parsed = json.loads(candidate)
+            if isinstance(parsed, dict):
+                return parsed
+        except json.JSONDecodeError:
+            pass
+
+        for match in re.finditer(r"\{", candidate):
+            try:
+                parsed, _ = decoder.raw_decode(candidate[match.start() :])
+            except json.JSONDecodeError:
+                continue
+            if isinstance(parsed, dict):
+                return parsed
+
+    raise ValueError("could not parse JSON object from judge response")
 
 
 def _append_issue(check: VerificationCheck, issue: str) -> VerificationCheck:
