@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from .config import ToolkitConfig
+from .data_sources import FreeDataSourceClient
 from .models import ArgumentType, SearchResult
 
 
@@ -25,15 +26,33 @@ class SearchClient:
         if prefetched_results is not None:
             return [_normalize_result(item) for item in prefetched_results][:max_sources], ["used prefetched results"]
 
-        if not self.config.serper_api_key:
-            return [], ["SERPER_API_KEY not configured and no prefetched results supplied"]
-
-        queries = build_queries(claim, ticker, argument_type) + self.extra_queries
-        per_query = max(2, min(5, max_sources))
         results: list[SearchResult] = []
         notes: list[str] = []
         seen_urls: set[str] = set()
 
+        if self.config.enable_structured_sources:
+            structured_results, structured_notes = FreeDataSourceClient(self.config).query(
+                claim=claim,
+                ticker=ticker,
+                argument_type=argument_type,
+                max_results=max_sources,
+            )
+            notes.extend(structured_notes)
+            for result in structured_results:
+                if result.url in seen_urls:
+                    continue
+                seen_urls.add(result.url)
+                results.append(result)
+                if len(results) >= max_sources:
+                    return results, notes
+
+        if not self.config.serper_api_key:
+            if not results:
+                notes.append("SERPER_API_KEY not configured and no search results from structured free sources")
+            return results, notes
+
+        queries = build_queries(claim, ticker, argument_type) + self.extra_queries
+        per_query = max(2, min(5, max_sources))
         for query in queries:
             try:
                 for result in self._serper_search(query, per_query):

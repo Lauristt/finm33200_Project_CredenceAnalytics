@@ -47,6 +47,11 @@ ANTHROPIC_API_KEY=
 SERPER_API_KEY=
 JINA_API_KEY=
 FINNHUB_API_KEY=
+ALPHA_VANTAGE_API_KEY=
+FMP_API_KEY=
+FRED_API_KEY=
+MARKETSTACK_API_KEY=
+TIINGO_API_KEY=
 SEC_USER_AGENT=
 ```
 
@@ -64,6 +69,22 @@ ANTHROPIC_MODEL=
 Numeric verification first uses local fuzzy matching. If a number is matched directly,
 the numeric check passes without an LLM call. If no number matches, the toolkit asks
 the configured LLM judge to verify the numeric claim.
+
+## Free Data Sources
+
+The retrieval layer can query multiple free or free-tier sources:
+
+- SEC EDGAR company facts and recent filings: no key; set `SEC_USER_AGENT`.
+- Stooq latest quote: no key.
+- Alpha Vantage: `ALPHA_VANTAGE_API_KEY`.
+- Finnhub: `FINNHUB_API_KEY`.
+- Financial Modeling Prep: `FMP_API_KEY`.
+- FRED macro data: `FRED_API_KEY`.
+- Marketstack: `MARKETSTACK_API_KEY`.
+- Tiingo: `TIINGO_API_KEY`.
+- Yahoo chart fallback: no key, unofficial, disabled unless `CREDIBILITY_YAHOO_FALLBACK=true`.
+
+Set `CREDIBILITY_STRUCTURED_SOURCES=false` to disable structured source queries.
 
 ## Tests
 
