@@ -1,7 +1,10 @@
 import unittest
+from datetime import date
+from unittest.mock import patch
 
 from financial_credibility.adapters import export_anthropic_tools, export_openai_tools
 from financial_credibility.config import ToolkitConfig
+from financial_credibility.price_history import PricePoint
 from financial_credibility.tool_registry import all_registered_tools, get_registered_tool
 from financial_credibility.tool_runtime import execute_tool
 
@@ -86,6 +89,104 @@ class ToolLayerTests(unittest.TestCase):
         self.assertEqual(result["mode"], "agentic")
         self.assertIn("numeric_check", result)
         self.assertEqual(result["numeric_check"]["verdict"], "verified")
+
+    def test_get_historical_prices_passes_parameters_to_provider(self):
+        calls = {}
+
+        class FakeDataSourceClient:
+            def __init__(self, config):
+                calls["config"] = config
+
+            def alpha_vantage_historical_prices(self, ticker, start, end):
+                calls["alpha_vantage_args"] = (ticker, start, end)
+                return [
+                    PricePoint(date(2025, 1, 2), 100.0, 105.0, 99.0, 100.0, 1000),
+                    PricePoint(date(2025, 1, 3), 104.0, 108.0, 103.0, 107.0, 1200),
+                ]
+
+            def fmp_historical_prices(self, ticker, start, end):
+                raise AssertionError("FMP should not be called after Alpha Vantage succeeds")
+
+            def finnhub_historical_prices(self, ticker, start, end):
+                raise AssertionError("Finnhub should not be called after Alpha Vantage succeeds")
+
+            def stooq_historical_prices(self, ticker, start, end):
+                raise AssertionError("Stooq should not be called after Alpha Vantage succeeds")
+
+            def _price_history_url(self, provider_name, ticker, start, end):
+                calls["url_args"] = (provider_name, ticker, start, end)
+                return "https://example.com/prices"
+
+        config = ToolkitConfig(alpha_vantage_api_key="test-key")
+        with patch("financial_credibility.tool_runtime.FreeDataSourceClient", FakeDataSourceClient):
+            result = execute_tool(
+                "get_historical_prices",
+                {
+                    "ticker": "msft",
+                    "start_date": "2025-01-02",
+                    "end_date": "2025-01-03",
+                },
+                config,
+            )
+
+        self.assertIs(calls["config"], config)
+        self.assertEqual(calls["alpha_vantage_args"], ("msft", date(2025, 1, 2), date(2025, 1, 3)))
+        self.assertEqual(calls["url_args"], ("alpha_vantage_historical_prices", "msft", date(2025, 1, 2), date(2025, 1, 3)))
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["ticker"], "MSFT")
+        self.assertEqual(result["provider"], "Alpha Vantage")
+        self.assertEqual(result["summary"]["observations"], 2)
+
+    def test_build_evidence_pack_strict_mode_passes_arguments_to_toolkit(self):
+        calls = {}
+
+        class FakePack:
+            def to_dict(self):
+                return {"status": "ok"}
+
+        class FakeToolkit:
+            def __init__(self, config):
+                calls["config"] = config
+
+            def build_evidence_pack(self, **kwargs):
+                calls["build_kwargs"] = kwargs
+                return FakePack()
+
+        prefetched = [
+            {
+                "title": "Microsoft report",
+                "url": "https://example.com/msft",
+                "snippet": "Revenue was strong.",
+            }
+        ]
+        config = ToolkitConfig()
+        with patch("financial_credibility.tool_runtime.FinancialCredibilityToolkit", FakeToolkit):
+            result = execute_tool(
+                "build_evidence_pack",
+                {
+                    "claim": "Microsoft performed well.",
+                    "ticker": "MSFT",
+                    "as_of_date": "2026-05-20",
+                    "max_sources": 3,
+                    "mode": "strict",
+                    "prefetched_results": prefetched,
+                },
+                config,
+            )
+
+        self.assertIs(calls["config"], config)
+        self.assertEqual(
+            calls["build_kwargs"],
+            {
+                "claim": "Microsoft performed well.",
+                "ticker": "MSFT",
+                "as_of_date": "2026-05-20",
+                "max_sources": 3,
+                "prefetched_results": prefetched,
+                "mode": "strict",
+            },
+        )
+        self.assertEqual(result, {"status": "ok"})
 
 
 if __name__ == "__main__":
