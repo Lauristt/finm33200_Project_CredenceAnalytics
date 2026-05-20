@@ -1,4 +1,11 @@
-# Financial Credibility Toolkit
+# Credence Analytics
+
+<p><strong>A Financial Credibility Toolkit</strong></p>
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Built with uv](https://img.shields.io/badge/Built%20with-uv-654ff0.svg)](https://docs.astral.sh/uv/)
+[![Tests: unittest](https://img.shields.io/badge/Tests-unittest-blue.svg)](.github/workflows/unittest.yml)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](pyproject.toml)
 
 Provider-neutral credibility tools for US equity financial claims. The project is
 designed to be called by an LLM agent as a tool package, while keeping retrieval,
@@ -52,6 +59,14 @@ agent_build/
 ## Installation And Build
 
 The package currently has no required third-party Python dependencies.
+
+Recommended setup with uv:
+
+```bash
+cd /Users/laurisli/Desktop/FINM33200/final_project/agent_build
+uv sync
+uv run python -m unittest discover -s tests -v
+```
 
 Editable install for local development:
 
@@ -504,3 +519,7 @@ Useful flags:
   planner.
 - The system focuses on US equities; macro support exists only through limited
   FRED keyword matching.
+
+## Copyright
+
+Copyright (c) 2026 The University of Chicago.
