@@ -1,0 +1,379 @@
+from __future__ import annotations
+
+import json
+import re
+import urllib.error
+import urllib.request
+from abc import ABC, abstractmethod
+from typing import Any
+
+from .config import ToolkitConfig
+from .models import ArgumentType, Evidence, SupportLabel, VerificationCheck, VerificationVerdict, clamp
+from .sources import canonical_domain
+from .text import token_overlap
+
+
+class SemanticJudge(ABC):
+    @abstractmethod
+    def judge_evidence_support(self, claim: str, evidence: Evidence) -> tuple[SupportLabel, float, list[str]]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def judge_independence(self, first: Evidence, second: Evidence) -> tuple[float, list[str]]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def judge_reasoning_quality(self, claim: str, evidence: Evidence, argument_type: ArgumentType) -> tuple[float, list[str]]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def judge_numeric_claim(self, claim: str, evidence: list[Evidence]) -> VerificationCheck:
+        raise NotImplementedError
+
+    @abstractmethod
+    def judge_logic_claim(
+        self,
+        claim: str,
+        evidence: list[Evidence],
+        argument_type: ArgumentType,
+    ) -> VerificationCheck:
+        raise NotImplementedError
+
+
+class HeuristicJudge(SemanticJudge):
+    def judge_evidence_support(self, claim: str, evidence: Evidence) -> tuple[SupportLabel, float, list[str]]:
+        combined = f"{evidence.title}\n{evidence.text}"
+        overlap = token_overlap(claim, combined)
+        notes = [f"token overlap={overlap:.2f}"]
+
+        if _has_directional_contradiction(claim, combined):
+            return SupportLabel.CONTRADICTS, 0.78, notes + ["directional contradiction marker"]
+
+        numeric_bonus = max(0.0, evidence.numeric_consistency_score - 0.55)
+        score = clamp(0.25 + overlap * 0.85 + numeric_bonus * 0.35)
+
+        if score >= 0.68:
+            return SupportLabel.SUPPORTS, round(score, 3), notes
+        if score <= 0.34:
+            return SupportLabel.NOT_ENOUGH_INFO, round(score, 3), notes + ["weak lexical support"]
+        return SupportLabel.NOT_ENOUGH_INFO, round(score, 3), notes
+
+    def judge_independence(self, first: Evidence, second: Evidence) -> tuple[float, list[str]]:
+        if canonical_domain(first.url) == canonical_domain(second.url):
+            return 0.25, ["same canonical domain"]
+        title_overlap = token_overlap(first.title, second.title)
+        if title_overlap > 0.80:
+            return 0.40, [f"very similar titles overlap={title_overlap:.2f}"]
+        return 0.85, ["different domains and title text"]
+
+    def judge_reasoning_quality(self, claim: str, evidence: Evidence, argument_type: ArgumentType) -> tuple[float, list[str]]:
+        text = f"{evidence.title}\n{evidence.text}".lower()
+        if argument_type in {
+            ArgumentType.METRIC_FACT,
+            ArgumentType.EVENT_FACT,
+            ArgumentType.ATTRIBUTION_FACT,
+        }:
+            return 0.55, ["reasoning quality is secondary for factual claim type"]
+
+        markers = [
+            r"\bbecause\b",
+            r"\bdue to\b",
+            r"\bassum",
+            r"\bguidance\b",
+            r"\bconsensus\b",
+            r"\bmargin\b",
+            r"\brevenue\b",
+            r"\bcash flow\b",
+            r"\bvaluation\b",
+            r"\bmultiple\b",
+            r"\brisk\b",
+        ]
+        hits = [pattern for pattern in markers if re.search(pattern, text)]
+        score = clamp(0.30 + 0.07 * len(hits) + 0.15 * evidence.numeric_consistency_score)
+        return round(score, 3), [f"reasoning markers={len(hits)}"]
+
+    def judge_numeric_claim(self, claim: str, evidence: list[Evidence]) -> VerificationCheck:
+        best = max((item.numeric_consistency_score for item in evidence), default=0.0)
+        if best >= 0.70:
+            verdict = VerificationVerdict.PARTIALLY_VERIFIED
+            summary = "Numeric values are partially supported by available evidence."
+        elif best >= 0.35:
+            verdict = VerificationVerdict.NOT_FOUND
+            summary = "The exact numeric value was not found, but related numeric evidence exists."
+        else:
+            verdict = VerificationVerdict.NOT_FOUND
+            summary = "The numeric value was not found in available evidence."
+        return VerificationCheck(
+            check_type="numeric_check",
+            verdict=verdict.value,
+            confidence=round(clamp(best), 3),
+            summary=summary,
+            evidence_urls=[item.url for item in evidence[:3]],
+            method="heuristic_llm_fallback",
+        )
+
+    def judge_logic_claim(
+        self,
+        claim: str,
+        evidence: list[Evidence],
+        argument_type: ArgumentType,
+    ) -> VerificationCheck:
+        support = max((item.support_score for item in evidence), default=0.0)
+        reasoning = max((item.reasoning_quality_score for item in evidence), default=0.0)
+        confidence = round(clamp(0.45 * support + 0.55 * reasoning), 3)
+        verdict = (
+            VerificationVerdict.SUPPORTED
+            if confidence >= 0.70
+            else VerificationVerdict.PARTIALLY_SUPPORTED
+            if confidence >= 0.45
+            else VerificationVerdict.WEAK
+        )
+        return VerificationCheck(
+            check_type="logic_check",
+            verdict=verdict.value,
+            confidence=confidence,
+            summary="Heuristic logic check based on evidence support and reasoning markers.",
+            evidence_urls=[item.url for item in evidence[:3]],
+            method="heuristic",
+        )
+
+
+class OpenAIJudge(HeuristicJudge):
+    def __init__(self, api_key: str, model: str, timeout: float = 25.0):
+        self.api_key = api_key
+        self.model = model
+        self.timeout = timeout
+
+    def judge_evidence_support(self, claim: str, evidence: Evidence) -> tuple[SupportLabel, float, list[str]]:
+        prompt = {
+            "task": "evidence_support",
+            "claim": claim,
+            "evidence_title": evidence.title,
+            "evidence_text": evidence.text[:4000],
+            "allowed_labels": [label.value for label in SupportLabel],
+            "instruction": "Return JSON with label, score_0_to_10, and one short reason.",
+        }
+        try:
+            data = self._chat_json(prompt)
+            label = SupportLabel(data.get("label", SupportLabel.NOT_ENOUGH_INFO.value))
+            score = clamp(float(data.get("score_0_to_10", 0)) / 10.0)
+            return label, score, [f"openai judge: {data.get('reason', '')}".strip()]
+        except Exception as exc:
+            label, score, notes = super().judge_evidence_support(claim, evidence)
+            return label, score, notes + [f"openai fallback: {exc}"]
+
+    def judge_numeric_claim(self, claim: str, evidence: list[Evidence]) -> VerificationCheck:
+        prompt = _verification_prompt("numeric_verification", claim, evidence)
+        try:
+            data = self._chat_json(prompt)
+            return _check_from_llm_data("numeric_check", data, evidence, "openai")
+        except Exception as exc:
+            check = super().judge_numeric_claim(claim, evidence)
+            return _append_issue(check, f"openai fallback: {exc}")
+
+    def judge_logic_claim(
+        self,
+        claim: str,
+        evidence: list[Evidence],
+        argument_type: ArgumentType,
+    ) -> VerificationCheck:
+        prompt = _verification_prompt(
+            "logic_verification",
+            claim,
+            evidence,
+            extra={"argument_type": argument_type.value},
+        )
+        try:
+            data = self._chat_json(prompt)
+            return _check_from_llm_data("logic_check", data, evidence, "openai")
+        except Exception as exc:
+            check = super().judge_logic_claim(claim, evidence, argument_type)
+            return _append_issue(check, f"openai fallback: {exc}")
+
+    def _chat_json(self, payload: dict[str, Any]) -> dict[str, Any]:
+        body = {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "You are a narrow financial evidence judge. Return only valid JSON.",
+                },
+                {"role": "user", "content": json.dumps(payload)},
+            ],
+            "temperature": 0,
+            "response_format": {"type": "json_object"},
+        }
+        request = urllib.request.Request(
+            "https://api.openai.com/v1/chat/completions",
+            data=json.dumps(body).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(request, timeout=self.timeout) as response:
+            raw = json.loads(response.read().decode("utf-8"))
+        content = raw["choices"][0]["message"]["content"]
+        return json.loads(content)
+
+
+class AnthropicJudge(HeuristicJudge):
+    def __init__(self, api_key: str, model: str, timeout: float = 25.0):
+        self.api_key = api_key
+        self.model = model
+        self.timeout = timeout
+
+    def judge_evidence_support(self, claim: str, evidence: Evidence) -> tuple[SupportLabel, float, list[str]]:
+        prompt = {
+            "task": "evidence_support",
+            "claim": claim,
+            "evidence_title": evidence.title,
+            "evidence_text": evidence.text[:4000],
+            "allowed_labels": [label.value for label in SupportLabel],
+            "instruction": "Return JSON with label, score_0_to_10, and one short reason.",
+        }
+        try:
+            data = self._messages_json(prompt)
+            label = SupportLabel(data.get("label", SupportLabel.NOT_ENOUGH_INFO.value))
+            score = clamp(float(data.get("score_0_to_10", 0)) / 10.0)
+            return label, score, [f"anthropic judge: {data.get('reason', '')}".strip()]
+        except Exception as exc:
+            label, score, notes = super().judge_evidence_support(claim, evidence)
+            return label, score, notes + [f"anthropic fallback: {exc}"]
+
+    def judge_numeric_claim(self, claim: str, evidence: list[Evidence]) -> VerificationCheck:
+        prompt = _verification_prompt("numeric_verification", claim, evidence)
+        try:
+            data = self._messages_json(prompt)
+            return _check_from_llm_data("numeric_check", data, evidence, "anthropic")
+        except Exception as exc:
+            check = super().judge_numeric_claim(claim, evidence)
+            return _append_issue(check, f"anthropic fallback: {exc}")
+
+    def judge_logic_claim(
+        self,
+        claim: str,
+        evidence: list[Evidence],
+        argument_type: ArgumentType,
+    ) -> VerificationCheck:
+        prompt = _verification_prompt(
+            "logic_verification",
+            claim,
+            evidence,
+            extra={"argument_type": argument_type.value},
+        )
+        try:
+            data = self._messages_json(prompt)
+            return _check_from_llm_data("logic_check", data, evidence, "anthropic")
+        except Exception as exc:
+            check = super().judge_logic_claim(claim, evidence, argument_type)
+            return _append_issue(check, f"anthropic fallback: {exc}")
+
+    def _messages_json(self, payload: dict[str, Any]) -> dict[str, Any]:
+        body = {
+            "model": self.model,
+            "max_tokens": 400,
+            "temperature": 0,
+            "system": "You are a narrow financial evidence judge. Return only valid JSON.",
+            "messages": [{"role": "user", "content": json.dumps(payload)}],
+        }
+        request = urllib.request.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=json.dumps(body).encode("utf-8"),
+            headers={
+                "x-api-key": self.api_key,
+                "anthropic-version": "2023-06-01",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(request, timeout=self.timeout) as response:
+            raw = json.loads(response.read().decode("utf-8"))
+        content = "".join(block.get("text", "") for block in raw.get("content", []))
+        return json.loads(content)
+
+
+def create_judge(config: ToolkitConfig) -> SemanticJudge:
+    provider = config.llm_provider.lower()
+    if provider in {"auto", "openai"} and config.openai_api_key and config.openai_model:
+        return OpenAIJudge(config.openai_api_key, config.openai_model, config.request_timeout)
+    if provider in {"auto", "anthropic"} and config.anthropic_api_key and config.anthropic_model:
+        return AnthropicJudge(config.anthropic_api_key, config.anthropic_model, config.request_timeout)
+    return HeuristicJudge()
+
+
+def _verification_prompt(
+    task: str,
+    claim: str,
+    evidence: list[Evidence],
+    extra: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    return {
+        "task": task,
+        "claim": claim,
+        "evidence": [
+            {
+                "title": item.title,
+                "url": item.url,
+                "source_type": item.source_type.value,
+                "text": item.text[:2000],
+            }
+            for item in evidence[:5]
+        ],
+        "allowed_verdicts": [verdict.value for verdict in VerificationVerdict],
+        "instruction": (
+            "Return JSON with verdict, confidence_0_to_1, summary, and issues. "
+            "For numeric_verification, check whether numbers/periods/units in the claim are supported. "
+            "For logic_verification, check whether the reasoning or inference in the claim is supported."
+        ),
+        **(extra or {}),
+    }
+
+
+def _check_from_llm_data(
+    check_type: str,
+    data: dict[str, Any],
+    evidence: list[Evidence],
+    method: str,
+) -> VerificationCheck:
+    verdict = str(data.get("verdict", VerificationVerdict.INSUFFICIENT.value))
+    allowed = {item.value for item in VerificationVerdict}
+    if verdict not in allowed:
+        verdict = VerificationVerdict.INSUFFICIENT.value
+    confidence = clamp(float(data.get("confidence_0_to_1", data.get("confidence", 0.0))))
+    issues = data.get("issues", [])
+    if isinstance(issues, str):
+        issues = [issues]
+    return VerificationCheck(
+        check_type=check_type,
+        verdict=verdict,
+        confidence=round(confidence, 3),
+        summary=str(data.get("summary", "")),
+        evidence_urls=[item.url for item in evidence[:5]],
+        issues=[str(issue) for issue in issues],
+        method=method,
+    )
+
+
+def _append_issue(check: VerificationCheck, issue: str) -> VerificationCheck:
+    return VerificationCheck(
+        check_type=check.check_type,
+        verdict=check.verdict,
+        confidence=check.confidence,
+        summary=check.summary,
+        evidence_urls=check.evidence_urls,
+        issues=[*check.issues, issue],
+        method=check.method,
+    )
+
+
+def _has_directional_contradiction(claim: str, evidence: str) -> bool:
+    claim_lower = claim.lower()
+    evidence_lower = evidence.lower()
+    positive = r"\b(grew|growth|increased|rose|up|beat|expanded|higher)\b"
+    negative = r"\b(declined|decreased|fell|down|missed|contracted|lower)\b"
+    return (
+        bool(re.search(positive, claim_lower) and re.search(negative, evidence_lower))
+        or bool(re.search(negative, claim_lower) and re.search(positive, evidence_lower))
+    )
