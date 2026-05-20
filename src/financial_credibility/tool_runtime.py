@@ -1,0 +1,371 @@
+"""Execution runtime for registered agent tools."""
+
+from __future__ import annotations
+
+from datetime import date
+from typing import Any, Callable
+
+from .aggregation import aggregate_scores
+from .argument import classify_argument_type
+from .config import ToolkitConfig
+from .data_sources import FreeDataSourceClient
+from .extraction import EvidenceExtractor
+from .judges import create_judge
+from .models import (
+    ArgumentType,
+    Evidence,
+    SearchResult,
+    SourceTier,
+    SourceType,
+    SupportLabel,
+    to_plain,
+)
+from .modes.agentic import AgenticCredibilityRunner
+from .price_history import format_price_history_summary, summarize_price_history
+from .search import SearchClient
+from .sources import assess_source
+from .tool_registry import get_registered_tool
+from .toolkit import FinancialCredibilityToolkit
+from .verification import verify_logic_claim as run_logic_verification
+from .verification import verify_numeric_claim as run_numeric_verification
+from .verification import verify_sources
+
+
+ToolExecutor = Callable[[dict[str, Any], ToolkitConfig], dict[str, Any]]
+
+
+def execute_tool(
+    name: str,
+    args: dict[str, Any] | None = None,
+    config: ToolkitConfig | None = None,
+) -> dict[str, Any]:
+    """Execute a registered tool by name and return a JSON-compatible dict."""
+    get_registered_tool(name)
+    executors = _executors()
+    if name not in executors:
+        raise KeyError(f"No executor implemented for tool: {name}")
+    return executors[name](dict(args or {}), config or ToolkitConfig.from_env())
+
+
+def _executors() -> dict[str, ToolExecutor]:
+    return {
+        "classify_claim": _execute_classify_claim,
+        "get_sec_company_facts": _execute_get_sec_company_facts,
+        "get_recent_filings": _execute_get_recent_filings,
+        "get_company_fundamentals": _execute_get_company_fundamentals,
+        "get_historical_prices": _execute_get_historical_prices,
+        "compare_stock_performance": _execute_compare_stock_performance,
+        "retrieve_evidence": _execute_retrieve_evidence,
+        "verify_numeric_claim": _execute_verify_numeric_claim,
+        "verify_logic_claim": _execute_verify_logic_claim,
+        "verify_source_quality": _execute_verify_source_quality,
+        "aggregate_credibility": _execute_aggregate_credibility,
+        "build_evidence_pack": _execute_build_evidence_pack,
+    }
+
+
+def _execute_classify_claim(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    classification = classify_argument_type(_required_str(args, "claim"))
+    return to_plain(classification)
+
+
+def _execute_get_sec_company_facts(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    client = FreeDataSourceClient(config)
+    results = client.sec_company_facts(
+        claim=_required_str(args, "claim"),
+        ticker=_required_str(args, "ticker"),
+    )
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
+def _execute_get_recent_filings(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    client = FreeDataSourceClient(config)
+    results = client.sec_recent_filings(_required_str(args, "ticker"))
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
+def _execute_get_company_fundamentals(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    client = FreeDataSourceClient(config)
+    provider_calls = [
+        ("alpha_vantage", lambda: client.alpha_vantage(ticker)),
+        ("finnhub", lambda: client.finnhub(ticker)),
+        ("fmp", lambda: client.fmp(ticker)),
+    ]
+    results: list[SearchResult] = []
+    notes: list[str] = []
+    for name, provider in provider_calls:
+        try:
+            provider_results = provider()
+        except Exception as exc:
+            notes.append(f"{name} failed: {exc}")
+            continue
+        results.extend(provider_results)
+        if provider_results:
+            notes.append(f"{name}: {len(provider_results)} result(s)")
+    return {"results": [_search_result_to_dict(item) for item in _dedupe_results(results)], "notes": notes}
+
+
+def _execute_get_historical_prices(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    start = _parse_date(_required_str(args, "start_date"))
+    end = _parse_date(_required_str(args, "end_date"))
+    return _historical_price_payload(ticker, start, end, config)
+
+
+def _execute_compare_stock_performance(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    benchmark = _required_str(args, "benchmark_ticker")
+    start = _parse_date(_required_str(args, "start_date"))
+    end = _parse_date(_required_str(args, "end_date"))
+    left = _historical_price_payload(ticker, start, end, config)
+    right = _historical_price_payload(benchmark, start, end, config)
+
+    if left.get("status") != "ok" or right.get("status") != "ok":
+        return {
+            "status": "insufficient",
+            "ticker": ticker.upper(),
+            "benchmark_ticker": benchmark.upper(),
+            "ticker_result": left,
+            "benchmark_result": right,
+            "summary": "Could not retrieve both price histories.",
+        }
+
+    ticker_return = float(left["summary"]["total_return_pct"])
+    benchmark_return = float(right["summary"]["total_return_pct"])
+    relative = round(ticker_return - benchmark_return, 3)
+    direction = "outperformed" if relative > 0 else "underperformed" if relative < 0 else "matched"
+    return {
+        "status": "ok",
+        "ticker": ticker.upper(),
+        "benchmark_ticker": benchmark.upper(),
+        "ticker_return_pct": ticker_return,
+        "benchmark_return_pct": benchmark_return,
+        "relative_return_pct": relative,
+        "summary": f"{ticker.upper()} {direction} {benchmark.upper()} by {abs(relative):.2f} percentage points.",
+        "ticker_result": left,
+        "benchmark_result": right,
+    }
+
+
+def _execute_retrieve_evidence(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    claim = _required_str(args, "claim")
+    ticker = _required_str(args, "ticker")
+    as_of_date = args.get("as_of_date")
+    max_sources = int(args.get("max_sources", 8))
+    classification = classify_argument_type(claim)
+    results, search_notes = SearchClient(config).search_financial_sources(
+        claim=claim,
+        ticker=ticker,
+        argument_type=classification.argument_type,
+        max_sources=max_sources,
+        as_of_date=as_of_date,
+        prefetched_results=args.get("prefetched_results"),
+    )
+    evidence, extraction_notes = EvidenceExtractor(config).extract(
+        claim=claim,
+        ticker=ticker,
+        search_results=results,
+        as_of_date=as_of_date or date.today().isoformat(),
+        max_sources=max_sources,
+    )
+    return {
+        "argument_type": classification.argument_type.value,
+        "classification": to_plain(classification),
+        "evidence": [_evidence_to_dict(item) for item in evidence],
+        "search_notes": search_notes,
+        "extraction_notes": extraction_notes,
+    }
+
+
+def _execute_verify_numeric_claim(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    check = run_numeric_verification(
+        claim=_required_str(args, "claim"),
+        evidence=_evidence_list_from_args(args),
+        judge=create_judge(config),
+    )
+    return to_plain(check)
+
+
+def _execute_verify_logic_claim(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    claim = _required_str(args, "claim")
+    argument_type = _argument_type(args.get("argument_type"), claim)
+    check = run_logic_verification(
+        claim=claim,
+        evidence=_evidence_list_from_args(args),
+        argument_type=argument_type,
+        judge=create_judge(config),
+    )
+    return to_plain(check)
+
+
+def _execute_verify_source_quality(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    evidence = _evidence_list_from_args(args)
+    argument_type = _argument_type(args.get("argument_type"), "")
+    breakdown, _, _, _ = aggregate_scores(argument_type, evidence, [])
+    return to_plain(verify_sources(evidence, breakdown))
+
+
+def _execute_aggregate_credibility(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    evidence = _evidence_list_from_args(args)
+    argument_type = _argument_type(args.get("argument_type"), "")
+    breakdown, verdict, label, risk_flags = aggregate_scores(
+        argument_type,
+        evidence,
+        args.get("risk_flags") or [],
+    )
+    return {
+        "score_breakdown": to_plain(breakdown),
+        "verdict": verdict.value,
+        "credibility_label": label.value,
+        "risk_flags": risk_flags,
+    }
+
+
+def _execute_build_evidence_pack(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    toolkit = FinancialCredibilityToolkit(config)
+    mode = str(args.get("mode", "agentic"))
+    kwargs = {
+        "claim": _required_str(args, "claim"),
+        "ticker": _required_str(args, "ticker"),
+        "as_of_date": args.get("as_of_date"),
+        "max_sources": int(args.get("max_sources", 8)),
+        "prefetched_results": args.get("prefetched_results"),
+    }
+    if mode == "agentic":
+        pack = AgenticCredibilityRunner(toolkit).run(**kwargs)
+    else:
+        pack = toolkit.build_evidence_pack(**kwargs, mode="strict")
+    return pack.to_dict()
+
+
+def _historical_price_payload(
+    ticker: str,
+    start: date,
+    end: date,
+    config: ToolkitConfig,
+) -> dict[str, Any]:
+    if end < start:
+        raise ValueError("end_date must be on or after start_date")
+
+    client = FreeDataSourceClient(config)
+    providers = [
+        ("Alpha Vantage", "alpha_vantage_historical_prices", client.alpha_vantage_historical_prices),
+        ("Financial Modeling Prep", "fmp_historical_prices", client.fmp_historical_prices),
+        ("Finnhub", "finnhub_historical_prices", client.finnhub_historical_prices),
+        ("Stooq", "stooq_historical_prices", client.stooq_historical_prices),
+    ]
+    errors = []
+    for provider_label, provider_name, provider in providers:
+        try:
+            points = provider(ticker, start, end)
+        except Exception as exc:
+            errors.append(f"{provider_name} failed: {exc}")
+            continue
+        summary = summarize_price_history(points)
+        if summary is None:
+            errors.append(f"{provider_name}: no usable price history")
+            continue
+        months = max(1, round((end - start).days / 30.5))
+        url = client._price_history_url(provider_name, ticker, start, end)
+        return {
+            "status": "ok",
+            "ticker": ticker.upper(),
+            "provider": provider_label,
+            "start_date": start.isoformat(),
+            "end_date": end.isoformat(),
+            "summary": summary.__dict__,
+            "evidence_text": format_price_history_summary(ticker, months, summary),
+            "evidence_url": url,
+        }
+
+    return {
+        "status": "insufficient",
+        "ticker": ticker.upper(),
+        "start_date": start.isoformat(),
+        "end_date": end.isoformat(),
+        "summary": {},
+        "evidence_text": "",
+        "evidence_url": "",
+        "errors": errors,
+    }
+
+
+def _evidence_list_from_args(args: dict[str, Any]) -> list[Evidence]:
+    return [_evidence_from_dict(item) for item in args.get("evidence", [])]
+
+
+def _evidence_from_dict(item: dict[str, Any]) -> Evidence:
+    source = assess_source(str(item.get("url", "")), str(item.get("title", "")))
+    source_type = _enum_value(SourceType, item.get("source_type"), source.source_type)
+    source_tier = _enum_value(SourceTier, item.get("source_tier"), source.source_tier)
+    support_label = _enum_value(SupportLabel, item.get("support_label"), SupportLabel.NOT_ENOUGH_INFO)
+    return Evidence(
+        url=str(item.get("url", "")),
+        title=str(item.get("title", "")),
+        text=str(item.get("text") or item.get("snippet") or ""),
+        source_type=source_type,
+        source_tier=source_tier,
+        domain=str(item.get("domain") or source.domain),
+        published_at=item.get("published_at"),
+        source_authority=float(item.get("source_authority", source.authority_score)),
+        recency_score=float(item.get("recency_score", 0.0)),
+        relevance_score=float(item.get("relevance_score", 0.0)),
+        entity_match_score=float(item.get("entity_match_score", 0.0)),
+        numeric_consistency_score=float(item.get("numeric_consistency_score", 0.0)),
+        support_label=support_label,
+        support_score=float(item.get("support_score", 0.0)),
+        reasoning_quality_score=float(item.get("reasoning_quality_score", 0.0)),
+        independence_score=float(item.get("independence_score", 0.0)),
+        notes=[str(note) for note in item.get("notes", [])],
+    )
+
+
+def _search_result_to_dict(item: SearchResult) -> dict[str, Any]:
+    return to_plain(item)
+
+
+def _evidence_to_dict(item: Evidence) -> dict[str, Any]:
+    return to_plain(item)
+
+
+def _dedupe_results(results: list[SearchResult]) -> list[SearchResult]:
+    seen = set()
+    deduped = []
+    for item in results:
+        if not item.url or item.url in seen:
+            continue
+        seen.add(item.url)
+        deduped.append(item)
+    return deduped
+
+
+def _argument_type(value: Any, claim: str) -> ArgumentType:
+    if value:
+        try:
+            return ArgumentType(str(value))
+        except ValueError:
+            pass
+    if claim:
+        return classify_argument_type(claim).argument_type
+    return ArgumentType.OPINION_ANALYSIS
+
+
+def _enum_value(enum_cls, value: Any, default):
+    if value is None:
+        return default
+    try:
+        return enum_cls(value)
+    except ValueError:
+        return default
+
+
+def _parse_date(value: str) -> date:
+    return date.fromisoformat(value[:10])
+
+
+def _required_str(args: dict[str, Any], key: str) -> str:
+    value = args.get(key)
+    if value is None or str(value).strip() == "":
+        raise ValueError(f"Missing required argument: {key}")
+    return str(value)

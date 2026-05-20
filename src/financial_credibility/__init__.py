@@ -17,6 +17,8 @@ from .models import (
     VerificationVerdict,
     Verdict,
 )
+from .tool_registry import RegisteredTool, all_registered_tools, all_tool_specs, get_registered_tool
+from .tool_runtime import execute_tool
 from .toolkit import FinancialCredibilityToolkit
 
 __all__ = [
@@ -26,10 +28,15 @@ __all__ = [
     "EvidencePack",
     "FinancialCredibilityToolkit",
     "OverallConclusion",
+    "RegisteredTool",
     "SearchResult",
     "SupportLabel",
     "ToolkitConfig",
     "VerificationCheck",
     "VerificationVerdict",
     "Verdict",
+    "all_registered_tools",
+    "all_tool_specs",
+    "execute_tool",
+    "get_registered_tool",
 ]

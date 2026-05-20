@@ -20,6 +20,7 @@ The default mode is useful-first rather than strictly reproducible:
 agent_build/
   pyproject.toml
   README.md
+  TOOLS.md
   .env.example
   examples/
   src/financial_credibility/
@@ -41,6 +42,8 @@ agent_build/
     search.py            # Structured retrieval plus optional Serper.
     sources.py           # Source authority, recency, numeric scoring.
     text.py              # Token overlap utilities.
+    tool_registry.py     # Agent-facing tool metadata and JSON schemas.
+    tool_runtime.py      # Execute registered tools by name.
     toolkit.py           # Main orchestration API.
     verification.py      # Numeric, logic, source, and overall checks.
   tests/
@@ -386,24 +389,82 @@ Weights live in `rubrics.py` and differ by argument type.
 and strong support before sending snippets to the LLM, so the judge sees the most
 relevant sources within the token budget.
 
+## Agent Tool Layer
+
+The package exposes both one-shot orchestration and atomic tools. The human and
+agent-facing manual is [TOOLS.md](TOOLS.md).
+
+Core files:
+
+- `tool_registry.py`: declarative metadata for every tool, including schema,
+  when-to-use guidance, data sources, required keys, and limitations.
+- `tool_runtime.py`: executes a registered tool by name with JSON arguments.
+- `adapters.py`: exports the registered tools to OpenAI or Anthropic schemas.
+
+Registered tools:
+
+- `classify_claim`
+- `get_sec_company_facts`
+- `get_recent_filings`
+- `get_company_fundamentals`
+- `get_historical_prices`
+- `compare_stock_performance`
+- `retrieve_evidence`
+- `verify_numeric_claim`
+- `verify_logic_claim`
+- `verify_source_quality`
+- `aggregate_credibility`
+- `build_evidence_pack`
+
+Example:
+
+```python
+from financial_credibility import ToolkitConfig, execute_tool
+
+config = ToolkitConfig.from_env()
+result = execute_tool(
+    "get_historical_prices",
+    {
+        "ticker": "MSFT",
+        "start_date": "2025-01-01",
+        "end_date": "2025-12-31",
+    },
+    config,
+)
+```
+
+The high-level tool remains available:
+
+```python
+pack = execute_tool(
+    "build_evidence_pack",
+    {
+        "claim": "Microsoft performed poorly last year.",
+        "ticker": "MSFT",
+        "as_of_date": "2026-05-20",
+    },
+    config,
+)
+```
+
 ## Tool Schema Adapters
 
 `adapters.py`
 
 ```python
-from financial_credibility.adapters import build_evidence_pack_tool
+from financial_credibility.adapters import export_anthropic_tools, export_openai_tools
 
-spec = build_evidence_pack_tool()
-openai_tool = spec.to_openai_tool_schema()
-anthropic_tool = spec.to_anthropic_tool_schema()
+openai_tools = export_openai_tools()
+anthropic_tools = export_anthropic_tools()
 ```
 
-Use `openai_tool` in an OpenAI tool/function registration flow and
-`anthropic_tool` in an Anthropic tool-use flow. The actual execution endpoint
-should call:
+Use these schemas in an OpenAI tool/function registration flow or an Anthropic
+tool-use flow. The actual execution endpoint should call:
 
 ```python
-FinancialCredibilityToolkit.from_env().build_evidence_pack(**tool_args)
+from financial_credibility import execute_tool
+
+result = execute_tool(tool_name, tool_args)
 ```
 
 ## CLI

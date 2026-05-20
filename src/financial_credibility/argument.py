@@ -37,6 +37,7 @@ PATTERNS: dict[ArgumentType, list[tuple[str, str]]] = {
         ("valuation opinion", r"\b(overvalued|undervalued|cheap|expensive|fairly valued)\b"),
         ("investment stance", r"\b(bullish|bearish|neutral|buy|sell|hold|attractive|risky)\b"),
         ("business judgment", r"\b(moat|competitive advantage|risk|quality|weak|strong)\b"),
+        ("performance judgment", r"\b(performed poorly|poor performance|underperformed|outperformed|performed well)\b"),
         ("price action pattern", r"\b(oscillat\w*|fluctuat\w*|volatile|volatility|range[- ]?bound|choppy|sideways|swing\w*|trend\w*)\b"),
         ("tentative interpretation", r"\b(seems|appears|looks like|suggests)\b"),
     ],
@@ -63,8 +64,9 @@ def classify_argument_type(claim: str) -> Classification:
                 scores[argument_type] += 1.0
                 signals[argument_type].append(label)
 
-    if scores[ArgumentType.FORECAST] > 0 and (
-        scores[ArgumentType.METRIC_FACT] > 0 or scores[ArgumentType.OPINION_ANALYSIS] > 0
+    if scores.get(ArgumentType.FORECAST, 0.0) > 0 and (
+        scores.get(ArgumentType.METRIC_FACT, 0.0) > 0
+        or scores.get(ArgumentType.OPINION_ANALYSIS, 0.0) > 0
     ):
         scores[ArgumentType.FORECAST] += 1.0
         signals[ArgumentType.FORECAST].append("forward-looking financial claim")
