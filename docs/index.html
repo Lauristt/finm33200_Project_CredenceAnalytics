@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Credence Analytics — Evaluation</title>
+<style>
+  :root { --ink:#1a2233; --muted:#5b6677; --line:#e3e8ef; --accent:#176de8;
+          --good:#138a4e; --bad:#c0392b; --bg:#fbfcfe; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:16px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC",sans-serif; }
+  .wrap { max-width:860px; margin:0 auto; padding:48px 22px 80px; }
+  h1 { font-size:30px; line-height:1.25; margin:0 0 8px; letter-spacing:-.01em; }
+  .sub { color:var(--muted); font-size:18px; margin:0 0 28px; }
+  h2 { font-size:21px; margin:42px 0 12px; padding-top:14px; border-top:1px solid var(--line); }
+  h3 { font-size:17px; margin:26px 0 8px; }
+  p { margin:12px 0; }
+  code { background:#eef1f6; padding:1px 6px; border-radius:5px; font-size:13.5px;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  table { border-collapse:collapse; width:100%; margin:16px 0; font-size:14.5px; }
+  th,td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { background:#f3f6fb; font-weight:600; }
+  td.num,th.num { text-align:right; white-space:nowrap; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:14px; margin:26px 0 8px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px; }
+  .card .big { font-size:26px; font-weight:700; letter-spacing:-.02em; }
+  .card .lbl { color:var(--muted); font-size:13px; margin-top:3px; }
+  .up { color:var(--good); } .down { color:var(--bad); }
+  .callout { background:#eef4ff; border:1px solid #cfe0ff; border-left:4px solid var(--accent);
+             border-radius:10px; padding:14px 16px; margin:18px 0; }
+  .bad-box { background:#fdeeec; border:1px solid #f6ccc5; border-left:4px solid var(--bad); }
+  .good-box{ background:#ecf8f1; border:1px solid #c7ecd5; border-left:4px solid var(--good); }
+  .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
+  .tag { display:inline-block; background:#eef1f6; color:var(--muted); font-size:12px;
+         padding:2px 9px; border-radius:999px; margin-right:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Does the Credence Analytics agent actually work — and does AI help?</h1>
+  <p class="sub">A stage-by-stage evaluation of a financial-claim verification agent on real, labeled data.</p>
+  <div><span class="tag">FINM 33200</span><span class="tag">agent use case</span><span class="tag">evaluation &amp; evidence</span></div>
+
+  <div class="cards">
+    <div class="card"><div class="big up">+9 pts</div><div class="lbl">entity extraction with the LLM layer (80.5% → 89.4%)</div></div>
+    <div class="card"><div class="big down">74% → 36%</div><div class="lbl">verdict accuracy: easy benchmark vs. realistic news</div></div>
+    <div class="card"><div class="big down">19 → 0</div><div class="lbl">true claims wrongly judged <em>false</em>, after our fix</div></div>
+    <div class="card"><div class="big up">0.50 → 0.83</div><div class="lbl">true-vs-false separation (AUC) after our fix</div></div>
+  </div>
+
+  <h2>What the agent does</h2>
+  <p>Given a financial statement, the pipeline <strong>extracts the entity / asset class →
+  classifies the claim type → routes it to a data source → retrieves evidence → produces a
+  verdict, a confidence, and a human-review flag</strong>. We evaluate each stage.</p>
+
+  <h2>Method</h2>
+  <p><strong>Benchmark 1 — real news (113 statements).</strong> Real statements from Yahoo
+  Finance across <strong>stocks, macro, commodities, FX, indices, rates, crypto</strong> and
+  five claim types (numeric, factual, opinion, forecast, causal). Factual statements are
+  labeled <code>true</code> from authoritative sources and <strong>each cross-checked against
+  SEC / FRED</strong>; a copy of each is perturbed (changed number or date) to make a matched
+  <code>false</code>. Opinion/forecast carry no truth value and test classification only.</p>
+  <p><strong>Benchmark 2 — SEC-anchored (100 statements).</strong> Numbers taken straight from
+  SEC filings, perturbed for false twins — objective but "easy" (the labels come from the same
+  source the agent queries). Comparing the two benchmarks shows how much the easy setup
+  overstates performance. Every claim is traceable in the published per-claim CSVs.</p>
+
+  <h2>Results by pipeline stage</h2>
+  <table>
+    <tr><th>Stage</th><th class="num">Accuracy</th><th>Notes</th></tr>
+    <tr><td>Entity / asset-class extraction</td><td class="num"><strong>80.5% → 89.4%</strong></td><td>rules → rules + LLM; AI helps, esp. company names &amp; macro; FX/index/rates stay weak</td></tr>
+    <tr><td>Claim-type classification</td><td class="num">84.5%</td><td>rule-based (no LLM); opinion/forecast weaker</td></tr>
+    <tr><td>Fact-check routing</td><td class="num">84.1%</td><td>opinion/forecast correctly skipped; macro sometimes not routed to FRED</td></tr>
+    <tr><td>Verdict accuracy</td><td class="num">see below</td><td>the critical stage — shipped with a systematic bug</td></tr>
+  </table>
+
+  <h3>Verdict: easy vs. realistic, and a systematic bug</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">SEC-anchored (easy)</th><th class="num">Real news (realistic)</th></tr>
+    <tr><td>Overall accuracy</td><td class="num">74%</td><td class="num"><strong>36%</strong></td></tr>
+    <tr><td>True claims confirmed (<code>supported</code>)</td><td class="num">0 / 20</td><td class="num"><strong>0 / 50</strong></td></tr>
+    <tr><td>False claims caught (<code>contradicted</code>)</td><td class="num">74 / 80</td><td class="num">31 / 36</td></tr>
+    <tr><td>Confidence AUC (true vs false)</td><td class="num">0.50</td><td class="num"><strong>0.345</strong></td></tr>
+  </table>
+  <div class="callout bad-box">
+    The pipeline <strong>never confirmed a single true claim</strong> and rated most true claims
+    <code>contradicted</code> — even statements that match SEC to the dollar (NVIDIA Q1 revenue
+    $81.62B = SEC&nbsp;$81,615M; Apple Q2 revenue $111.2B = SEC&nbsp;$111,184M). A trivial
+    "always say false" baseline (80%) beats it, and AUC ≈ 0.5 means it could not tell true from
+    false. The "easy" benchmark (74%) badly overstated this.
+  </div>
+
+  <h2>Root cause &amp; fix — found via the evaluation</h2>
+  <p><strong>Root cause.</strong> The SEC fact extractor kept only the two <em>most-recently-filed</em>
+  values per metric, so recent quarterly figures crowded out the <strong>specific fiscal-period
+  value a claim refers to</strong>. The figure to verify was simply absent from the evidence →
+  <code>not_found</code> → the verdict logic escalated that to <code>contradicted</code> (a true
+  claim judged false).</p>
+  <p><strong>Fix A.</strong> Surface full-year <em>and</em> quarterly figures, de-duplicated by
+  reporting period (end date + period kind) and tagged <code>for fiscal year/quarter ending
+  YYYY-MM-DD</code>, so the claim's period value is present.</p>
+  <table>
+    <tr><th>Metric (SEC-anchored, same pipeline)</th><th class="num">Before</th><th class="num">After Fix A</th></tr>
+    <tr><td>True claims judged <code>contradicted</code></td><td class="num">19 / 20</td><td class="num"><strong>0 / 20</strong></td></tr>
+    <tr><td>Confidence AUC (true vs false)</td><td class="num">0.50</td><td class="num"><strong>0.83</strong></td></tr>
+    <tr><td>False claims caught</td><td class="num">74 / 80</td><td class="num">79 / 80</td></tr>
+    <tr><td>Human-review precision (flagged &amp; wrong)</td><td class="num">15 / 69</td><td class="num"><strong>1 / 56</strong></td></tr>
+  </table>
+  <div class="callout good-box">
+    Fix A eliminated the catastrophic behavior — true claims are no longer judged false — and made
+    confidence cleanly separate true from false (AUC 0.50 → 0.83). One residual remains: true
+    claims now top out at <code>partially_supported</code> rather than <code>supported</code>
+    (documented as Fix B).
+  </div>
+
+  <h2>Does AI help? (per stage)</h2>
+  <ul>
+    <li><strong>Entity extraction — yes.</strong> The LLM layer lifts accuracy 80.5% → 89.4%.</li>
+    <li><strong>Classification — n/a.</strong> Rule-based; AI is not used here.</li>
+    <li><strong>Verdict — AI was not the bottleneck.</strong> The failure came from a deterministic
+      data-coverage bug, not the LLM judge. Fixing the deterministic extraction unlocked most of
+      the value (AUC 0.50 → 0.83).</li>
+  </ul>
+  <p><strong>Conclusion:</strong> AI is necessary but not sufficient — on this task, data coverage
+  and period alignment mattered more than the model.</p>
+
+  <h2>Failure cases</h2>
+  <ol>
+    <li><strong>True claims judged false</strong> (pre-fix): NVIDIA $81.62B, Apple $111.2B — both
+      match SEC, both rated <code>contradicted</code>.</li>
+    <li><strong>Macro routing gap:</strong> "U.S. CPI rose 3.8%" returned zero evidence because the
+      claim was not routed to FRED.</li>
+    <li><strong>Quarterly period confusion:</strong> SEC reports overlapping periods (quarter /
+      half-year / annual); matching the wrong one produced false contradictions.</li>
+  </ol>
+
+  <h2>Limitations</h2>
+  <ul>
+    <li>Verdict accuracy is trustworthy mainly for <strong>US equities</strong> (SEC, no key);
+      macro/commodity/FX verdicts depend on FRED routing and are partly a coverage gap, not a
+      judgment error.</li>
+    <li>Crypto / exotic credit facts are not reliably checkable by the agent's sources — out of scope.</li>
+    <li>Opinion/forecast have no ground truth; we evaluate only whether they are correctly
+      classified and <strong>not</strong> fact-checked.</li>
+    <li>News "true" labels were cross-checked against SEC/FRED, but quarterly figures and phrasing
+      remain a known source of label noise.</li>
+  </ul>
+
+  <h2>Bottom line</h2>
+  <p>The agent's <strong>front end (entity extraction, classification, routing) works reasonably
+  and AI improves extraction</strong>, but its <strong>verdict stage shipped with a systematic bug
+  that made it reject true claims</strong> — invisible on an easy benchmark, exposed by realistic
+  news data. We located the cause, fixed it (AUC 0.50 → 0.83; true-claim contradictions 19 → 0),
+  and documented the rest. <em>On this task, the win came from fixing the data pipeline, not from
+  the AI model.</em></p>
+
+  <div class="footer">
+    FINM 33200 final project — evaluation track. Benchmarks, scripts, and per-claim results are in
+    the project's <code>evaluation/</code> folder. All numbers are reproducible from the committed data.
+  </div>
+
+</div>
+</body>
+</html>

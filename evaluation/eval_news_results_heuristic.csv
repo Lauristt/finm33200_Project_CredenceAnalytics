@@ -1,0 +1,114 @@
+﻿id,statement,asset_class,claim_type,label,detected_asset_classes,detected_entity,argument_type,entity_ok,class_ok,route_ok
+S1,"Nvidia reported first-quarter revenue of $81.62 billion, beating analyst estimates of $79.18 billion.",stock,numeric,true,single_name_equity,NVIDIA Corporation,metric_fact,True,True,True
+S1n,Nvidia reported first-quarter revenue of $61.62 billion.,stock,numeric,false,single_name_equity,NVIDIA Corporation,metric_fact,True,True,True
+S2,Nvidia's data center revenue rose 92% year over year in the first quarter.,stock,numeric,true,single_name_equity,NVIDIA Corporation,metric_fact,True,True,True
+S2n,Nvidia's data center revenue rose 19% year over year in the first quarter.,stock,numeric,false,single_name_equity,NVIDIA Corporation,metric_fact,True,True,True
+S9,"Nvidia posted adjusted earnings of $1.87 per share, beating estimates of $1.77.",stock,numeric,true,single_name_equity,NVIDIA Corporation,forecast,True,False,False
+S9n,Nvidia posted adjusted earnings of $2.87 per share.,stock,numeric,false,single_name_equity,NVIDIA Corporation,metric_fact,True,True,True
+S6,Nvidia guided to second-quarter revenue of between $89.1 billion and $92.8 billion.,stock,forecast,na,single_name_equity,NVIDIA Corporation,metric_fact,True,False,False
+S7,Nvidia's strong revenue outlook makes it the most attractive AI stock to own right now.,stock,opinion,na,single_name_equity,NVIDIA Corporation,forecast,True,False,True
+Sc1,Nvidia's growth was driven by surging data center demand.,stock,causal,true,single_name_equity,NVIDIA Corporation,opinion_analysis,True,,False
+S3,"Apple reported second-quarter revenue of $111.2 billion, above estimates of $109.66 billion.",stock,numeric,true,single_name_equity,Apple Inc.,metric_fact,True,True,True
+S3d,"Apple reported fourth-quarter revenue of $111.2 billion, above estimates.",stock,numeric,false,single_name_equity,Apple Inc.,metric_fact,True,True,True
+S4,Apple's Greater China revenue was $20.50 billion in the second quarter.,stock,numeric,true,single_name_equity,Apple Inc.,metric_fact,True,True,True
+S4n,Apple's Greater China revenue was $30.50 billion in the second quarter.,stock,numeric,false,single_name_equity,Apple Inc.,metric_fact,True,True,True
+S5,"Apple posted adjusted earnings per share of $2.01, beating estimates of $1.96.",stock,numeric,true,single_name_equity,Apple Inc.,forecast,True,False,False
+S8,Apple's iPhone revenue was $56.99 billion in the second quarter.,stock,numeric,true,single_name_equity,Apple Inc.,metric_fact,True,True,True
+S8n,Apple's iPhone revenue was $46.99 billion in the second quarter.,stock,numeric,false,single_name_equity,Apple Inc.,metric_fact,True,True,True
+Sc2,Apple's revenue beat was driven by strong iPhone and China sales.,stock,causal,true,single_name_equity,Apple Inc.,metric_fact,True,,True
+MS1,"Microsoft reported adjusted earnings per share of $4.27, beating consensus by $0.21.",stock,numeric,true,single_name_equity,Microsoft Corporation,metric_fact,True,True,True
+MS1n,Microsoft reported adjusted earnings per share of $3.27.,stock,numeric,false,single_name_equity,Microsoft Corporation,metric_fact,True,True,True
+MS2,"Microsoft reported revenue of $82.89 billion, beating estimates by about $1.5 billion.",stock,numeric,true,single_name_equity,Microsoft Corporation,forecast,True,False,False
+MS2n,Microsoft reported revenue of $92.89 billion.,stock,numeric,false,single_name_equity,Microsoft Corporation,metric_fact,True,True,True
+MS3,Microsoft guided to Azure revenue growth of 39% to 40% for the current quarter.,stock,forecast,na,single_name_equity,Microsoft Corporation,metric_fact,True,False,False
+MSc,Microsoft's revenue grew because of strong Azure and cloud demand.,stock,causal,true,single_name_equity,Microsoft Corporation,metric_fact,True,,True
+MSo,Microsoft is the safest mega-cap AI investment today.,stock,opinion,na,single_name_equity,Microsoft Corporation,opinion_analysis,True,True,True
+AM1,"Amazon reported earnings per share of $2.78, beating estimates by $1.10.",stock,numeric,true,single_name_equity,"Amazon.com, Inc.",forecast,True,False,False
+AM1n,Amazon reported earnings per share of $1.78.,stock,numeric,false,single_name_equity,"Amazon.com, Inc.",metric_fact,True,True,True
+AM2,"Amazon reported revenue of $181.5 billion, beating estimates by over $4 billion.",stock,numeric,true,single_name_equity,"Amazon.com, Inc.",forecast,True,False,False
+AM2n,Amazon reported revenue of $151.5 billion.,stock,numeric,false,single_name_equity,"Amazon.com, Inc.",metric_fact,True,True,True
+AM3,Amazon Web Services revenue rose 24% to $35.6 billion in the fourth quarter of 2025.,stock,numeric,true,single_name_equity,"Amazon.com, Inc.",metric_fact,True,True,True
+AM3d,Amazon Web Services revenue rose 24% to $35.6 billion in the first quarter of 2025.,stock,numeric,false,single_name_equity,"Amazon.com, Inc.",metric_fact,True,True,True
+AMo,Amazon looks like a better buy than Microsoft after this earnings season.,stock,opinion,na,single_name_equity,Microsoft Corporation,opinion_analysis,True,True,True
+AMf,Amazon's AWS growth will keep accelerating through 2026.,stock,forecast,na,single_name_equity,"Amazon.com, Inc.",forecast,True,True,True
+GO1,"Alphabet reported adjusted earnings per share of $2.62, missing estimates by a penny.",stock,numeric,true,single_name_equity,Alphabet Inc.,forecast,True,False,False
+GO1d,Alphabet reported fourth-quarter adjusted earnings per share of $2.62.,stock,numeric,false,single_name_equity,Alphabet Inc.,metric_fact,True,True,True
+GO2,"Alphabet reported revenue of nearly $110 billion, beating estimates by $2.7 billion.",stock,numeric,true,single_name_equity,Alphabet Inc.,forecast,True,False,False
+GO2n,Alphabet reported revenue of nearly $140 billion.,stock,numeric,false,single_name_equity,Alphabet Inc.,metric_fact,True,True,True
+GO3,Google Cloud revenue soared 63% year over year.,stock,numeric,true,single_name_equity,Alphabet Inc.,metric_fact,True,True,True
+GO3n,Google Cloud revenue soared 33% year over year.,stock,numeric,false,single_name_equity,Alphabet Inc.,metric_fact,True,True,True
+GOo,Alphabet is the best buy among the mega-cap tech stocks.,stock,opinion,na,single_name_equity,Alphabet Inc.,opinion_analysis,True,True,True
+TS1,"Tesla posted first-quarter revenue of $22.39 billion, topping the consensus estimate of $21.92 billion.",stock,numeric,true,single_name_equity,"Tesla, Inc.",metric_fact,True,True,True
+TS1n,Tesla posted first-quarter revenue of $32.39 billion.,stock,numeric,false,single_name_equity,"Tesla, Inc.",metric_fact,True,True,True
+TS2,Tesla reported first-quarter adjusted earnings of 41 cents per share.,stock,numeric,true,single_name_equity,"Tesla, Inc.",metric_fact,True,True,True
+TS2n,Tesla reported first-quarter adjusted earnings of 81 cents per share.,stock,numeric,false,single_name_equity,"Tesla, Inc.",metric_fact,True,True,True
+TS3,Tesla's services and other revenue climbed to $3.75 billion from $2.64 billion a year earlier.,stock,numeric,true,single_name_equity,"Tesla, Inc.",metric_fact,True,True,True
+TS4,Tesla expects 2026 capital expenditure of over $25 billion and negative free cash flow for the rest of the year.,stock,forecast,na,single_name_equity,"Tesla, Inc.",forecast,True,True,True
+TS5,Tesla's Optimus robots are on track for end-of-year production.,stock,forecast,na,single_name_equity,"Tesla, Inc.",opinion_analysis,True,False,True
+TSo,Tesla stock will plunge 60% from current levels.,stock,forecast,na,single_name_equity,"Tesla, Inc.",forecast,True,True,True
+ME1,Meta's first-quarter revenue beat was driven by strength in advertising.,stock,causal,true,single_name_equity,"Meta Platforms, Inc.",metric_fact,True,,True
+ME2,Meta's CFO said the company will fund its AI ambitions primarily with cash rather than debt.,stock,factual,true,single_name_equity,"Meta Platforms, Inc.",forecast,True,False,False
+MEo,Meta is winning the AI race among big tech companies.,stock,opinion,na,single_name_equity,"Meta Platforms, Inc.",opinion_analysis,True,True,True
+JP1,JPMorgan generated fourth-quarter net income of $14.7 billion excluding a significant item.,stock,numeric,true,(none),,metric_fact,False,True,True
+JP1n,JPMorgan generated fourth-quarter net income of $24.7 billion.,stock,numeric,false,(none),,metric_fact,False,True,True
+JP2,"JPMorgan reported fourth-quarter net revenue of $46.8 billion, up 7%.",stock,numeric,true,(none),,metric_fact,False,True,True
+JP2n,JPMorgan reported fourth-quarter net revenue of $66.8 billion.,stock,numeric,false,(none),,metric_fact,False,True,True
+JP3,"JPMorgan reported net interest income of $25.1 billion in the fourth quarter, up 7%.",stock,numeric,true,(none),,metric_fact,False,True,True
+JP3n,JPMorgan reported net interest income of $15.1 billion in the fourth quarter.,stock,numeric,false,(none),,metric_fact,False,True,True
+M1,"U.S. consumer prices rose 3.8% over the 12 months ending in April 2026, the fastest annual pace since May 2023.",macro,numeric,true,(none),,metric_fact,False,True,True
+M1n,U.S. consumer prices rose 1.9% over the 12 months ending in April 2026.,macro,numeric,false,(none),,metric_fact,False,True,True
+M1d,"U.S. consumer prices rose 3.8% over the 12 months ending in April 2026, the fastest pace since May 2019.",macro,numeric,false,(none),,metric_fact,False,True,True
+M2,The 12-month energy index gain reached 17.9% in the April 2026 inflation report.,macro,numeric,true,macro_indicator,Consumer Price Index,metric_fact,True,True,True
+M2n,The 12-month energy index gain reached 7.9% in the April 2026 inflation report.,macro,numeric,false,macro_indicator,Consumer Price Index,metric_fact,True,True,True
+M3,U.S. GDP grew at a 2.1% pace in 2025.,macro,numeric,true,macro_indicator,Gross Domestic Product,metric_fact,True,True,True
+M3n,U.S. GDP grew at a 3.4% pace in 2025.,macro,numeric,false,macro_indicator,Gross Domestic Product,metric_fact,True,True,True
+M4,The U.S. economy is heading into a period of mild stagflation.,macro,opinion,na,(none),,opinion_analysis,False,True,True
+M5,"Headline inflation is forecast to reach 3.6% in 2026, up from 2.8%.",macro,forecast,na,macro_indicator,Consumer Price Index,forecast,True,True,True
+M6,The Iran war could slow U.S. GDP growth to 1.8% this year.,macro,forecast,na,macro_indicator,Gross Domestic Product,forecast,True,True,True
+M7,Energy costs tied to the war with Iran drove U.S. inflation higher in April 2026.,macro,causal,true,macro_indicator,Consumer Price Index,metric_fact,True,,True
+M8,Hotter-than-expected inflation has raised the odds of a Fed rate hike.,rates,opinion,na,macro_indicator,Consumer Price Index,forecast,False,False,True
+C1,"Brent crude was trading around $105 a barrel, up 44% since before the Iran war started.",commodity,numeric,true,commodity,Brent Crude Oil,metric_fact,True,True,True
+C1n,Brent crude was trading around $135 a barrel.,commodity,numeric,false,commodity,Brent Crude Oil,metric_fact,True,True,True
+C2,Oil prices will stay above $100 a barrel for all of 2026.,commodity,forecast,na,(none),,forecast,False,True,True
+C3,Gold remains the ultimate safe-haven asset in times of war.,commodity,opinion,na,commodity,Gold,opinion_analysis,True,True,True
+C4,Oil prices rose because the Iran war tightened global crude supply.,commodity,causal,true,(none),,opinion_analysis,False,,False
+IX1,"The S&P 500 closed at a record 7,501.24 on May 15, 2026.",index,numeric,true,equity_index,S&P 500 Index,metric_fact,True,True,True
+IX1n,"The S&P 500 closed at 6,501.24 on May 15, 2026.",index,numeric,false,equity_index,S&P 500 Index,metric_fact,True,True,True
+IX2,"The S&P 500 closed above the 7,500 mark for the first time in its history.",index,factual,true,equity_index,S&P 500 Index,metric_fact,True,True,True
+IX3,The S&P 500 was on track for its longest weekly winning streak since 2023.,index,factual,true,equity_index,S&P 500 Index,metric_fact,True,True,True
+IXf,The AI trade will keep pushing U.S. stocks to fresh record highs.,index,forecast,na,(none),,forecast,False,True,True
+FX1,"EUR/USD was trading at about 1.1637, down slightly on the day.",fx,numeric,true,fx,EUR/USD,metric_fact,True,True,True
+FX1n,EUR/USD was trading at about 1.2637.,fx,numeric,false,fx,EUR/USD,metric_fact,True,True,True
+FX2,Standard Chartered raised its EUR/USD forecast to 1.16.,fx,forecast,na,fx,EUR/USD,forecast,True,True,True
+FXo,The euro looks set to grind higher against the U.S. dollar.,fx,opinion,na,(none),,opinion_analysis,False,True,True
+FXc,The euro has risen on expectations the Fed will ease policy faster than the ECB.,fx,causal,na,(none),,forecast,False,,False
+CG1,"Gold was trading at $4,879.60 an ounce, up 1.48% on the day.",commodity,numeric,true,commodity,Gold,metric_fact,True,True,True
+CG1n,"Gold was trading at $3,879.60 an ounce.",commodity,numeric,false,commodity,Gold,metric_fact,True,True,True
+CC1,Copper was trading around $6.11 per pound.,commodity,numeric,true,commodity,Copper,metric_fact,True,True,True
+CC1n,Copper was trading around $9.11 per pound.,commodity,numeric,false,commodity,Copper,metric_fact,True,True,True
+CNG1,Natural gas was trading around $2.67 per million BTU.,commodity,numeric,true,commodity|single_name_equity,Natural Gas,metric_fact,True,True,True
+CCo,Copper's 2026 rally is unsustainable.,commodity,opinion,na,commodity,Copper,metric_fact,True,False,False
+CCc,Soaring copper prices often signal economic strength.,commodity,causal,na,commodity,Copper,opinion_analysis,True,,False
+IXD1,"The Dow Jones Industrial Average closed at 50,579.70, up 0.58%.",index,numeric,true,equity_index,Dow Jones Industrial Average,metric_fact,True,True,True
+IXD1n,"The Dow Jones Industrial Average closed at 40,579.70.",index,numeric,false,equity_index,Dow Jones Industrial Average,metric_fact,True,True,True
+IXN1,"The Nasdaq Composite closed at 26,343.97, up 0.19%.",index,numeric,true,(none),,metric_fact,False,True,True
+IXN1n,"The Nasdaq Composite closed at 29,343.97.",index,numeric,false,(none),,metric_fact,False,True,True
+R1,The 10-year Treasury yield was about 4.26%.,rates,numeric,true,rates,10-Year Treasury Yield,metric_fact,True,True,True
+R1n,The 10-year Treasury yield was about 6.26%.,rates,numeric,false,rates,10-Year Treasury Yield,metric_fact,True,True,True
+R2,The 10-year Treasury yield rose to its highest level in 10 months on hotter-than-expected inflation.,rates,causal,true,macro_indicator|rates,Consumer Price Index,forecast,True,,False
+Rf,Markets are pricing in the next Fed interest-rate cut for mid-to-late 2027.,rates,forecast,na,(none),,metric_fact,False,False,False
+Ro,The Fed should hold off on additional rate cuts given labor-market strength.,rates,opinion,na,(none),,forecast,False,False,True
+J1,"The U.S. added 115,000 nonfarm payrolls in April 2026.",macro,numeric,true,macro_indicator,Nonfarm Payrolls,metric_fact,True,True,True
+J1n,"The U.S. added 315,000 nonfarm payrolls in April 2026.",macro,numeric,false,macro_indicator,Nonfarm Payrolls,metric_fact,True,True,True
+J2,The U.S. unemployment rate was unchanged at 4.3% in April 2026.,macro,numeric,true,macro_indicator,Unemployment Rate,metric_fact,True,True,True
+J2n,The U.S. unemployment rate was 6.3% in April 2026.,macro,numeric,false,macro_indicator,Unemployment Rate,metric_fact,True,True,True
+J3,"The U.S. lost 92,000 nonfarm payrolls in February 2026, with unemployment climbing to 4.4%.",macro,numeric,true,macro_indicator,Unemployment Rate,metric_fact,True,True,True
+J3d,"The U.S. lost 92,000 nonfarm payrolls in April 2026.",macro,numeric,false,macro_indicator,Nonfarm Payrolls,metric_fact,True,True,True
+Jc,Stronger-than-expected jobs data pushed back expectations for Fed rate cuts.,macro,causal,true,(none),,forecast,False,,False
+FXJ,USD/JPY was trading at about 159.24.,fx,numeric,true,fx,USD/JPY,metric_fact,True,True,True
+FXJn,USD/JPY was trading at about 129.24.,fx,numeric,false,fx,USD/JPY,metric_fact,True,True,True
+FXG,GBP/JPY was trading at about 214.82.,fx,numeric,true,(none),,metric_fact,False,True,True
+BT1,"Bitcoin was trading at about $81,240, up 0.35% over 24 hours.",crypto,numeric,true,crypto,Bitcoin,metric_fact,True,True,True
+BT1n,"Bitcoin was trading at about $61,240.",crypto,numeric,false,crypto,Bitcoin,metric_fact,True,True,True
+BTo,Bitcoin is digital gold and the ultimate inflation hedge.,crypto,opinion,na,commodity|crypto|macro_indicator,Gold,opinion_analysis,True,True,True
+BTf,"Bitcoin will reach $150,000 by the end of 2026.",crypto,forecast,na,crypto,Bitcoin,forecast,True,True,True
