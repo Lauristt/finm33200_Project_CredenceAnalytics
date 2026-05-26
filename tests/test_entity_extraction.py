@@ -124,9 +124,10 @@ class EntityExtractionTests(unittest.TestCase):
                 }
             ]
         }
-        with tempfile.NamedTemporaryFile("w", suffix=".json") as file:
-            json.dump(local, file)
-            file.flush()
+        with tempfile.TemporaryDirectory() as tmp:
+            file_path = f"{tmp}/asset_universe.json"
+            with open(file_path, "w", encoding="utf-8") as file:
+                json.dump(local, file)
             with patch(
                 "financial_credibility.entity_extraction._openai_extract_entities",
                 lambda memo, config: [
@@ -147,7 +148,7 @@ class EntityExtractionTests(unittest.TestCase):
                         openai_api_key="test",
                         openai_model="test",
                         llm_provider="openai",
-                        asset_universe_file=file.name,
+                        asset_universe_file=file_path,
                     ),
                 )
 
@@ -222,12 +223,13 @@ class EntityExtractionTests(unittest.TestCase):
             "fields": ["cik", "name", "ticker", "exchange"],
             "data": [[1045810, "NVIDIA CORP", "NVDA", "Nasdaq"]],
         }
-        with tempfile.NamedTemporaryFile("w", suffix=".json") as file:
-            json.dump(universe, file)
-            file.flush()
+        with tempfile.TemporaryDirectory() as tmp:
+            file_path = f"{tmp}/ticker_universe.json"
+            with open(file_path, "w", encoding="utf-8") as file:
+                json.dump(universe, file)
             result = extract_entities_from_memo(
                 "NVDA revenue grew while ABCD remained speculative.",
-                ToolkitConfig(ticker_universe_file=file.name),
+                ToolkitConfig(ticker_universe_file=file_path),
             )
 
         self.assertEqual(result["tickers"], ["NVDA"])

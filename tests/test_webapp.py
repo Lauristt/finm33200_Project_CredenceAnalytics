@@ -19,6 +19,7 @@ class WebappTests(unittest.TestCase):
         self.assertIn("Rendered Report", HTML)
         self.assertIn("renderMarkdown(markdown)", HTML)
         self.assertIn("Raw Markdown", HTML)
+        self.assertIn("formatError", HTML)
         self.assertIn("Detected Asset Classes", HTML)
         self.assertIn('details class="asset-group"', HTML)
         self.assertIn("asset-group-items", HTML)

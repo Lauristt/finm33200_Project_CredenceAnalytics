@@ -1,0 +1,18 @@
+[
+  {
+    "title": "SEC Company Facts for AAPL",
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+    "snippet": "Revenues (USD) 2025 Q4: 102500000000 filed 2025-10-31 form 10-K",
+    "published_at": "2025-10-31",
+    "source": "SEC EDGAR",
+    "raw": {"provider": "sec_company_facts", "cik": 320193}
+  },
+  {
+    "title": "Apple reports fourth quarter results",
+    "url": "https://www.apple.com/newsroom/example",
+    "snippet": "Apple reported quarterly revenue up 6 percent year over year.",
+    "published_at": "2025-10-30",
+    "source": "Apple Newsroom",
+    "raw": {"provider": "company_ir"}
+  }
+]

@@ -8,6 +8,8 @@ from typing import Any, Callable
 from .config import ToolkitConfig
 from .claims import decompose_claims
 from .entity_extraction import extract_entities_from_memo
+from .errors import UserFacingError
+from .explanations import build_claim_explanation, explain_review_reasons
 from .models import EvidencePack
 from .modes.agentic import AgenticCredibilityRunner
 from .toolkit import FinancialCredibilityToolkit
@@ -55,7 +57,11 @@ def build_verification_report(
     )
     if not clean_tickers:
         if not entity_extraction.get("entities"):
-            raise ValueError("Could not extract a verifiable financial entity from the memo.")
+            raise UserFacingError(
+                "no_financial_entity_detected",
+                "Could not extract a verifiable financial entity from the memo.",
+                "Add a public-company ticker such as AAPL, or mention a supported financial asset more explicitly.",
+            )
         payload = {
             "input": {
                 "memo": memo,
@@ -69,6 +75,7 @@ def build_verification_report(
             "runs": [],
             "errors": [],
         }
+        _enhance_payload(payload)
         payload["report_markdown"] = render_markdown_report(payload)
         _emit_progress(
             progress_callback,
@@ -133,6 +140,7 @@ def build_verification_report(
         "runs": runs,
         "errors": errors,
     }
+    _enhance_payload(payload)
     payload["report_markdown"] = render_markdown_report(payload)
     _emit_progress(
         progress_callback,
@@ -159,6 +167,35 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
         f"- Average confidence: {_fmt_conf(summary.get('average_confidence'))}",
         "",
     ]
+    coverage = payload.get("coverage_summary") or {}
+    coverage_rows = coverage.get("entities") or []
+    if coverage_rows:
+        lines.extend(
+            [
+                "## Verification Coverage",
+                "",
+                "| Entity | Asset Class | Status | Reason |",
+                "|---|---|---|---|",
+            ]
+        )
+        for item in coverage_rows:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        _md_cell(item.get("label", "")),
+                        _md_cell(_asset_class_label(str(item.get("asset_class", "")))),
+                        _md_cell(item.get("verification_status", "")),
+                        _md_cell(item.get("reason", "")),
+                    ]
+                )
+                + " |"
+            )
+        if coverage.get("notes"):
+            lines.append("")
+            for note in coverage.get("notes", []):
+                lines.append(f"- {note}")
+        lines.append("")
     extraction = (payload.get("input") or {}).get("entity_extraction") or {}
     if extraction:
         groups = extraction.get("asset_groups") or _group_entities_by_asset_class(extraction.get("entities", []))
@@ -191,6 +228,30 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
                 sources = ", ".join(selection.get("selected_sources") or [])
                 rationale = selection.get("rationale", "")
                 lines.append(f"- `{selection.get('claim_id') or 'claim'}`: {sources}. {rationale}")
+            lines.append("")
+        debug_rows = run.get("source_selection_debug") or []
+        if debug_rows:
+            lines.extend(
+                [
+                    "### Source Selection Explanation",
+                    "",
+                    "| Claim | Selected Sources | Policy Result | Rationale |",
+                    "|---|---|---|---|",
+                ]
+            )
+            for item in debug_rows:
+                lines.append(
+                    "| "
+                    + " | ".join(
+                        [
+                            _md_cell(item.get("claim_id", "")),
+                            _md_cell(", ".join(item.get("selected_sources") or []) or "n/a"),
+                            _md_cell(item.get("official_first_policy", "")),
+                            _md_cell(item.get("rationale", "")),
+                        ]
+                    )
+                    + " |"
+                )
             lines.append("")
         trace = run.get("audit_trace") or {}
         if trace.get("events"):
@@ -232,6 +293,34 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
                 + " |"
             )
         lines.append("")
+        explanations = run.get("claim_explanations") or []
+        if explanations:
+            lines.extend(["### Claim Explanations", ""])
+            for explanation in explanations:
+                lines.extend(
+                    [
+                        f"#### {explanation.get('claim_id', 'claim')}",
+                        "",
+                        f"- Claim: {explanation.get('claim', '')}",
+                        f"- Verdict: {explanation.get('verdict', 'n/a')}",
+                        f"- Explanation: {explanation.get('summary', '')}",
+                        f"- Numeric check: {explanation.get('numeric_summary', '')}",
+                        f"- Source quality: {explanation.get('source_summary', '')}",
+                    ]
+                )
+                caveats = explanation.get("caveats") or []
+                if caveats:
+                    lines.append(f"- Caveats: {'; '.join(caveats)}")
+                lines.append("")
+        review_explanations = _review_explanations_for_run(run)
+        if review_explanations:
+            lines.extend(["### Human Review Explanations", ""])
+            for item in review_explanations:
+                lines.append(
+                    f"- `{item.get('code')}`: {item.get('description')} "
+                    f"Recommended action: {item.get('recommended_action')}"
+                )
+            lines.append("")
         if skipped_results:
             lines.extend(["### Not Fact-Checked", ""])
             for result in skipped_results:
@@ -246,7 +335,165 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
                 f"({evidence.get('domain')}) - {evidence.get('url')}"
             )
         lines.append("")
+        provenance = run.get("evidence_provenance") or []
+        if provenance:
+            lines.extend(
+                [
+                    "### Evidence Provenance",
+                    "",
+                    "| Source | Tier | Official | License | Date | Used By | URL |",
+                    "|---|---|---|---|---|---|---|",
+                ]
+            )
+            for item in provenance:
+                lines.append(
+                    "| "
+                    + " | ".join(
+                        [
+                            _md_cell(item.get("title", "")),
+                            _md_cell(item.get("source_tier", "")),
+                            _md_cell("Yes" if item.get("is_official_primary") else "No"),
+                            _md_cell(item.get("license_tag", "")),
+                            _md_cell(item.get("published_at") or "n/a"),
+                            _md_cell(", ".join(item.get("used_by_claims") or []) or "n/a"),
+                            _md_cell(item.get("url", "")),
+                        ]
+                    )
+                    + " |"
+                )
+            lines.append("")
     return "\n".join(lines).strip() + "\n"
+
+
+def _enhance_payload(payload: dict[str, Any]) -> None:
+    """Attach report-layer explainability structures in place."""
+    extraction = (payload.get("input") or {}).get("entity_extraction") or {}
+    payload["coverage_summary"] = _build_coverage_summary(payload.get("runs", []), extraction)
+    for run in payload.get("runs", []):
+        evidence_lookup = {item.get("url", ""): item for item in run.get("evidence", []) if item.get("url")}
+        run["evidence_provenance"] = _build_evidence_provenance(run)
+        run["claim_explanations"] = [
+            build_claim_explanation(result, evidence_lookup)
+            for result in run.get("atomic_claims", [])
+            if not _is_skipped_result(result)
+        ]
+        run["source_selection_debug"] = _build_source_selection_debug(run)
+        run["audit_export"] = _build_audit_export_summary(run)
+
+
+def _build_coverage_summary(
+    runs: list[dict[str, Any]],
+    entity_extraction: dict[str, Any],
+) -> dict[str, Any]:
+    verified_tickers = {str(run.get("ticker", "")).upper() for run in runs if run.get("ticker")}
+    rows = []
+    for entity in entity_extraction.get("entities", []):
+        ticker = str(entity.get("ticker") or "").upper()
+        asset_class = str(entity.get("asset_class") or "other")
+        label = _entity_label(entity)
+        if ticker and ticker in verified_tickers and asset_class == "single_name_equity":
+            status = "fully_verified"
+            reason = "Public-company verification path was run for this entity."
+        elif asset_class == "single_name_equity" and ticker:
+            status = "not_verified"
+            reason = "The entity was detected but no successful verification run was produced."
+        else:
+            status = "detected_only"
+            reason = f"No full claim-level verifier is currently implemented for {asset_class} in this report flow."
+        rows.append(
+            {
+                "label": label,
+                "name": entity.get("name"),
+                "ticker": entity.get("ticker"),
+                "symbol": entity.get("symbol"),
+                "asset_class": asset_class,
+                "verification_status": status,
+                "reason": reason,
+            }
+        )
+    notes = []
+    if any(item["verification_status"] == "detected_only" for item in rows):
+        notes.append("Detected-only assets are surfaced for scope transparency; they should not be read as fully verified claims.")
+    return {
+        "entities": rows,
+        "fully_verified_entities": [item for item in rows if item["verification_status"] == "fully_verified"],
+        "detected_only_entities": [item for item in rows if item["verification_status"] == "detected_only"],
+        "unsupported_asset_classes": sorted(
+            {item["asset_class"] for item in rows if item["verification_status"] == "detected_only"}
+        ),
+        "notes": notes,
+    }
+
+
+def _build_evidence_provenance(run: dict[str, Any]) -> list[dict[str, Any]]:
+    used_by_url: dict[str, list[str]] = {}
+    for result in run.get("atomic_claims", []):
+        claim_id = (result.get("atomic_claim") or {}).get("claim_id", "claim")
+        for url in result.get("evidence_urls") or []:
+            used_by_url.setdefault(url, []).append(claim_id)
+    provenance = []
+    for item in run.get("evidence", []):
+        url = item.get("url", "")
+        provenance.append(
+            {
+                "title": item.get("title", ""),
+                "domain": item.get("domain", ""),
+                "source_tier": item.get("source_tier", ""),
+                "is_official_primary": bool(item.get("is_official_primary")),
+                "license_tag": item.get("license_tag", ""),
+                "published_at": item.get("published_at"),
+                "url": url,
+                "used_by_claims": sorted(set(used_by_url.get(url, []))),
+            }
+        )
+    return provenance
+
+
+def _build_source_selection_debug(run: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = []
+    selections = (run.get("metadata") or {}).get("source_selection") or []
+    for selection in selections:
+        selected = selection.get("selected_sources") or []
+        rows.append(
+            {
+                "claim_id": selection.get("claim_id") or "claim",
+                "selected_sources": selected,
+                "rationale": selection.get("rationale", ""),
+                "method": selection.get("method", ""),
+                "official_first_policy": "passed" if _has_official_source(selected) else "needs_review",
+            }
+        )
+    return rows
+
+
+def _build_audit_export_summary(run: dict[str, Any]) -> dict[str, Any]:
+    trace = run.get("audit_trace") or {}
+    events = trace.get("events") or []
+    failed = [event for event in events if event.get("status") in {"error", "failed"}]
+    return {
+        "trace_id": trace.get("trace_id"),
+        "event_count": len(events),
+        "failed_steps": [event.get("step") for event in failed],
+        "download_ready": bool(trace),
+    }
+
+
+def _review_explanations_for_run(run: dict[str, Any]) -> list[dict[str, str]]:
+    codes = []
+    for result in run.get("atomic_claims", []):
+        codes.extend(result.get("review_reasons") or [])
+    return explain_review_reasons(codes)
+
+
+def _has_official_source(source_ids: list[str]) -> bool:
+    official_markers = {
+        "sec_company_facts",
+        "sec_recent_filings",
+        "treasury_fiscal_data",
+        "fred",
+        "gleif_entity",
+    }
+    return bool(set(source_ids) & official_markers)
 
 
 def infer_tickers(text: str) -> list[str]:

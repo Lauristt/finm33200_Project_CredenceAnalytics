@@ -1,6 +1,6 @@
 import unittest
 
-from financial_credibility.reporting import build_verification_report, infer_tickers
+from financial_credibility.reporting import build_verification_report, infer_tickers, render_markdown_report
 from financial_credibility.config import ToolkitConfig
 
 
@@ -70,6 +70,13 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("Detected Asset Classes", payload["report_markdown"])
         self.assertIn("Single-name equities", payload["report_markdown"])
         self.assertNotIn("Method:", payload["report_markdown"])
+        self.assertIn("Verification Coverage", payload["report_markdown"])
+        self.assertEqual(payload["coverage_summary"]["fully_verified_entities"][0]["ticker"], "AAPL")
+        self.assertIn("Evidence Provenance", payload["report_markdown"])
+        self.assertIn("Claim Explanations", payload["report_markdown"])
+        self.assertIn("Source Selection Explanation", payload["report_markdown"])
+        self.assertTrue(payload["runs"][0]["source_selection_debug"])
+        self.assertTrue(payload["runs"][0]["audit_export"]["download_ready"])
 
     def test_build_report_with_only_non_equity_entities_does_not_force_ticker_run(self):
         payload = build_verification_report(
@@ -86,6 +93,11 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("Macro indicators", payload["report_markdown"])
         self.assertIn("Commodities", payload["report_markdown"])
         self.assertIn("FX", payload["report_markdown"])
+        self.assertIn("Verification Coverage", payload["report_markdown"])
+        self.assertEqual(
+            sorted(payload["coverage_summary"]["unsupported_asset_classes"]),
+            ["commodity", "fx", "macro_indicator"],
+        )
 
     def test_auto_extracted_multi_entity_report_scopes_claims(self):
         payload = build_verification_report(
@@ -108,6 +120,98 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(payload["input"]["tickers"], ["AAPL", "MSFT"])
         self.assertEqual(payload["runs"][0]["claim"], "Apple revenue grew 6% year over year")
         self.assertEqual(payload["runs"][1]["claim"], "Microsoft debt declined")
+
+    def test_mixed_equity_and_macro_coverage_summary(self):
+        payload = build_verification_report(
+            memo="Apple revenue grew 6% year over year while CPI rose and WTI rallied.",
+            tickers=[],
+            config=ToolkitConfig(),
+            as_of_date="2025-11-01",
+            prefetched_results=[
+                {
+                    "title": "SEC Company Facts for AAPL",
+                    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+                    "snippet": "Revenues (USD) 2025 Q4: 102500000000 filed 2025-10-31 form 10-K",
+                    "published_at": "2025-10-31",
+                    "source": "SEC EDGAR",
+                    "raw": {"provider": "sec_company_facts", "cik": 320193},
+                }
+            ],
+        )
+
+        statuses = {
+            item["symbol"] or item["ticker"]: item["verification_status"]
+            for item in payload["coverage_summary"]["entities"]
+        }
+        self.assertEqual(statuses["AAPL"], "fully_verified")
+        self.assertEqual(statuses["CPI"], "detected_only")
+        self.assertEqual(statuses["WTI"], "detected_only")
+        self.assertIn("Detected-only assets", payload["report_markdown"])
+
+    def test_report_renders_human_review_explanations(self):
+        payload = build_verification_report(
+            memo="Apple revenue accelerated due to stronger demand.",
+            tickers=["AAPL"],
+            config=ToolkitConfig(),
+            as_of_date="2025-11-01",
+            prefetched_results=[
+                {
+                    "title": "Market blog says revenue accelerated",
+                    "url": "https://example.com/market-blog/aapl",
+                    "snippet": "Apple revenue accelerated due to demand, according to a blog.",
+                    "published_at": "2025-10-31",
+                    "source": "Market Blog",
+                }
+            ],
+        )
+
+        self.assertIn("Human Review Explanations", payload["report_markdown"])
+        self.assertIn("Recommended action", payload["report_markdown"])
+
+    def test_sec_evidence_provenance_marks_official_primary(self):
+        payload = build_verification_report(
+            memo="Apple revenue grew 6% year over year.",
+            tickers=["AAPL"],
+            config=ToolkitConfig(),
+            as_of_date="2025-11-01",
+            prefetched_results=[
+                {
+                    "title": "SEC Company Facts for AAPL",
+                    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+                    "snippet": "Revenues (USD) 2025 Q4: 102500000000 filed 2025-10-31 form 10-K",
+                    "published_at": "2025-10-31",
+                    "source": "SEC EDGAR",
+                    "raw": {"provider": "sec_company_facts", "cik": 320193},
+                }
+            ],
+        )
+
+        provenance = payload["runs"][0]["evidence_provenance"][0]
+        self.assertTrue(provenance["is_official_primary"])
+        self.assertEqual(provenance["source_tier"], "T1")
+        self.assertEqual(provenance["license_tag"], "public_official")
+        self.assertIn("claim_1", provenance["used_by_claims"])
+
+    def test_source_selection_debug_handles_empty_selection(self):
+        payload = {
+            "summary": {},
+            "input": {"entity_extraction": {}},
+            "runs": [
+                {
+                    "ticker": "AAPL",
+                    "overall_conclusion": {},
+                    "metadata": {"source_selection": []},
+                    "audit_trace": {},
+                    "atomic_claims": [],
+                    "evidence": [],
+                }
+            ],
+            "errors": [],
+        }
+
+        markdown = render_markdown_report(payload)
+
+        self.assertIn("Credence Verification Report", markdown)
 
 
 if __name__ == "__main__":

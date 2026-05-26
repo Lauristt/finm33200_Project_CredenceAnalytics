@@ -11,6 +11,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from .config import ToolkitConfig
+from .errors import error_payload
 from .reporting import build_verification_report
 
 
@@ -62,7 +63,7 @@ def _handler(config: ToolkitConfig):
                 payload = self._read_json()
                 report = self._build_report(payload)
             except Exception as exc:
-                self._json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
+                self._json(error_payload(exc), HTTPStatus.BAD_REQUEST)
                 return
             self._json(report)
 
@@ -110,7 +111,7 @@ def _handler(config: ToolkitConfig):
                 )
                 emit({"type": "report", "report": report})
             except Exception as exc:
-                emit({"type": "error", "error": str(exc)})
+                emit({"type": "error", **error_payload(exc)})
 
         def _build_report(
             self,
@@ -1022,7 +1023,7 @@ HTML = r"""<!doctype html>
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || "Request failed");
+        throw new Error(formatError(data.error || "Request failed"));
       }
       if (!response.body) {
         const fallback = await fetch("/api/report", {
@@ -1031,7 +1032,7 @@ HTML = r"""<!doctype html>
           body: JSON.stringify(payload)
         });
         const data = await fallback.json();
-        if (!fallback.ok) throw new Error(data.error || "Request failed");
+        if (!fallback.ok) throw new Error(formatError(data.error || "Request failed"));
         return data;
       }
 
@@ -1053,17 +1054,25 @@ HTML = r"""<!doctype html>
           } else if (message.type === "report") {
             finalReport = message.report;
           } else if (message.type === "error") {
-            throw new Error(message.error || "Streaming report failed");
+            throw new Error(formatError(message.error || "Streaming report failed"));
           }
         }
       }
       if (buffer.trim()) {
         const message = JSON.parse(buffer);
         if (message.type === "report") finalReport = message.report;
-        if (message.type === "error") throw new Error(message.error || "Streaming report failed");
+        if (message.type === "error") throw new Error(formatError(message.error || "Streaming report failed"));
       }
       if (!finalReport) throw new Error("Report stream ended before a final report was returned.");
       return finalReport;
+    }
+
+    function formatError(error) {
+      if (!error || typeof error === "string") return error || "Request failed";
+      const message = error.message || "Request failed";
+      const hint = error.hint ? ` Hint: ${error.hint}` : "";
+      const code = error.code ? ` (${error.code})` : "";
+      return `${message}${code}${hint}`;
     }
 
     function resizeComposer() {

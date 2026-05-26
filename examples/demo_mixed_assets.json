@@ -1,0 +1,10 @@
+[
+  {
+    "title": "SEC Company Facts for AAPL",
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+    "snippet": "Revenues (USD) 2025 Q4: 102500000000 filed 2025-10-31 form 10-K",
+    "published_at": "2025-10-31",
+    "source": "SEC EDGAR",
+    "raw": {"provider": "sec_company_facts", "cik": 320193}
+  }
+]

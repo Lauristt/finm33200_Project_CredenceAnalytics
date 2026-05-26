@@ -1,0 +1,3 @@
+claim,ticker,as_of_date,max_sources,mode
+Apple revenue grew 6% year over year.,AAPL,2025-11-01,3,strict
+NVIDIA reported strong revenue growth.,NVDA,2025-11-01,3,strict

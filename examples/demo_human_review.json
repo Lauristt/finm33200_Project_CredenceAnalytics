@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Market blog says revenue accelerated",
+    "url": "https://example.com/market-blog/aapl",
+    "snippet": "A market blog says Apple revenue accelerated, but it does not cite an official filing.",
+    "published_at": "2025-10-31",
+    "source": "Market Blog",
+    "raw": {"provider": "web"}
+  }
+]
