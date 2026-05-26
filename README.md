@@ -1,110 +1,135 @@
 # Credence Analytics
 
-<p><strong>A Financial Credibility Toolkit</strong></p>
+<p><strong>An asset-class aware financial credibility agent for official-evidence verification.</strong></p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Built with uv](https://img.shields.io/badge/Built%20with-uv-654ff0.svg)](https://docs.astral.sh/uv/)
-[![Tests: unittest](https://img.shields.io/badge/Tests-unittest-blue.svg)](.github/workflows/unittest.yml)
+[![Tests: pytest](https://img.shields.io/badge/Tests-pytest-blue.svg)](pyproject.toml)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](pyproject.toml)
 
-Provider-neutral credibility tools for US equity financial claims. The project is
-designed to be called by an LLM agent as a tool package, while keeping retrieval,
-evidence construction, verification, and scoring inspectable for developers.
+Credence Analytics is a local research prototype for verifying financial claims
+against auditable evidence. The project has moved beyond a US-equity-only
+credibility toolkit toward a memo-level agent that:
 
-The default mode is useful-first rather than strictly reproducible:
+- accepts a free-form investment note or financial statement in a chat-style UI;
+- extracts financial entities across asset classes, not just public-company
+  tickers;
+- decomposes the input into fact-checkable atomic claims;
+- selects sources with progressive disclosure, loading detailed source
+  descriptions only after compact candidate selection;
+- retrieves official or structured evidence where runtime adapters exist;
+- builds canonical facts, numeric derivations, confidence components, human
+  review flags, and replayable audit traces;
+- renders a readable verification report plus collapsible trace and raw
+  Markdown.
 
-- Retrieve structured financial evidence from free/free-tier data sources.
-- Extract evidence objects with source authority, recency, relevance, and numeric
-  consistency scores.
-- Use local fuzzy numeric matching before any LLM call.
-- Use OpenAI or Anthropic for narrow semantic checks when configured.
-- Return numeric confidence, logic confidence, source confidence, and an English
-  overall label.
+The current strongest verification path is still public-company financial
+statement checking through SEC EDGAR / data.sec.gov. Non-equity assets such as
+macro indicators, commodities, FX, credit, rates, indexes, futures, ETFs, and
+crypto are now detected and grouped in the report; full claim-level verification
+for all of those classes is the next expansion layer.
 
-## Repository Layout
+## Quick Start
+
+The package currently has no required third-party runtime dependencies.
+
+```bash
+PYTHONPATH=src python3 -m pytest -q
+```
+
+Run the local web UI:
+
+```bash
+PYTHONPATH=src python3 -m financial_credibility.webapp --port 8783
+```
+
+Open:
 
 ```text
-agent_build/
-  pyproject.toml
-  README.md
-  TOOLS.md
-  .env.example
-  examples/
-  src/financial_credibility/
-    adapters.py          # OpenAI/Anthropic tool schema adapters.
-    aggregation.py       # Deterministic weighted credibility score.
-    argument.py          # Claim type classifier.
-    cli.py               # CLI entry point.
-    config.py            # Env/config loading.
-    data_sources.py      # SEC, Alpha Vantage, Finnhub, FMP, FRED, etc.
-    extraction.py        # SearchResult -> Evidence conversion.
-    judges.py            # Heuristic/OpenAI/Anthropic semantic judges.
-    models.py            # Dataclasses and enums shared across the package.
-    modes/
-      agentic.py         # Default exploratory wrapper.
-      strict.py          # Thin strict-mode wrapper.
-    net.py               # urllib helper with cert handling.
-    price_history.py     # Historical price extraction and oscillation features.
-    rubrics.py           # Argument-type scoring weights.
-    search.py            # Structured retrieval plus optional Serper.
-    sources.py           # Source authority, recency, numeric scoring.
-    text.py              # Token overlap utilities.
-    tool_registry.py     # Agent-facing tool metadata and JSON schemas.
-    tool_runtime.py      # Execute registered tools by name.
-    toolkit.py           # Main orchestration API.
-    verification.py      # Numeric, logic, source, and overall checks.
-  tests/
+http://127.0.0.1:8783
 ```
 
-## Installation And Build
+The UI has a single input box. Paste an investment memo, analyst note, or
+financial statement. The app will extract entities automatically; you do not
+need to type tickers manually.
 
-The package currently has no required third-party Python dependencies.
-
-Recommended setup with uv:
-
-```bash
-cd /Users/laurisli/Desktop/FINM33200/final_project/agent_build
-uv sync
-uv run python -m unittest discover -s tests -v
-```
-
-Editable install for local development:
-
-```bash
-cd /Users/laurisli/Desktop/FINM33200/final_project/agent_build
-python3 -m pip install -e .
-```
-
-Run from source without installing:
+Run the legacy CLI for one public-company ticker:
 
 ```bash
 PYTHONPATH=src python3 -m financial_credibility \
-  "Apple revenue grew 6% year over year in the latest quarter." \
-  --ticker AAPL \
+  "NVIDIA reported very strong revenue growth in its latest quarter." \
+  --ticker NVDA \
   --pretty
 ```
 
-Run tests:
+Editable install:
 
 ```bash
-PYTHONPATH=src python3 -m unittest discover -s tests -v
+python3 -m pip install -e .
 ```
 
-Compile check:
+## What The UI Shows
 
-```bash
-PYTHONPATH=src python3 -m compileall src tests
+The report UI is designed around reviewability rather than chatty answers:
+
+- `Question`: the submitted input, collapsible so long memos do not dominate the
+  screen.
+- `Detected Asset Classes`: collapsible groups such as single-name equities,
+  macro indicators, commodities, FX, credit, indexes, futures, ETFs, rates, and
+  crypto. Only asset classes found in the input are shown.
+- `Claim Checks`: one card per fact-checkable atomic claim.
+- `Data Source Checked`: the source used for that claim.
+- `What The Source Says`: extracted values or source excerpts.
+- `Does It Match The Claim?`: plain-language support, inconsistency, partial
+  support, or insufficient-evidence explanation.
+- `Human Review`: shown on claims that trigger hard escalation rules.
+- `Selected Sources`: source-selection decisions and rationale.
+- `Trace`: collapsible audit trail of the agent workflow.
+- `Rendered Report`: Markdown report rendered into HTML, with raw Markdown
+  available in a collapsible block.
+
+## Asset Classes
+
+Entity extraction is now asset-class aware. It can identify and group:
+
+- `single_name_equity`: AAPL, MSFT, NVDA, JPM, TSLA, etc.
+- `equity_index`: S&P 500 / SPX, Nasdaq 100 / NDX, Russell 2000 / RUT.
+- `equity_index_future`: ES, NQ, RTY futures.
+- `fund_etf`: SPY, QQQ, IWM, HYG, LQD, TLT, GLD, USO.
+- `commodity` and `commodity_future`: WTI, Brent, gold, copper, natural gas,
+  CL, GC, NG.
+- `fx`: EUR/USD, USD/JPY, GBP/USD, DXY.
+- `rates`: Fed funds, SOFR, 2-year and 10-year Treasury yields.
+- `credit`: high-yield spreads, investment-grade spreads, CDX, iTraxx, CDS.
+- `macro_indicator`: CPI, core CPI, PCE, PMI, GDP, unemployment, NFP.
+- `crypto`: BTC, ETH.
+- `volatility_index`: VIX.
+
+Example:
+
+```text
+NVDA revenue grew while CPI surprised higher, WTI rallied, EUR/USD weakened,
+S&P 500 fell, ES futures sold off, and HY spreads widened.
 ```
 
-Build a wheel/sdist if the `build` package is installed:
+This is grouped as:
 
-```bash
-python3 -m build
-```
+- Single-name equities: NVDA
+- Macro indicators: CPI
+- Commodities: WTI
+- FX: EUR/USD
+- Equity indexes: SPX
+- Equity index futures: ES
+- Credit: HY_CREDIT
+
+Only public-company tickers currently trigger the full memo-level
+`EvidencePack` verification loop. Non-equity classes are surfaced as detected
+scope so the system does not incorrectly treat `CPI`, `WTI`, or `SPX` as a
+company ticker.
 
 ## Configuration
 
-Copy `.env.example` to `.env`. `.env` is intentionally ignored by git.
+Copy `.env.example` to `.env`. `.env` is ignored by git.
 
 ```text
 OPENAI_API_KEY=
@@ -115,316 +140,245 @@ CREDIBILITY_LLM_PROVIDER=auto
 
 SERPER_API_KEY=
 JINA_API_KEY=
+
 FINNHUB_API_KEY=
 ALPHA_VANTAGE_API_KEY=
 FMP_API_KEY=
 FRED_API_KEY=
 MARKETSTACK_API_KEY=
 TIINGO_API_KEY=
+
 SEC_USER_AGENT=
+
+CREDIBILITY_STRUCTURED_SOURCES=true
+CREDIBILITY_LIVE_EXTRACTION=false
+CREDIBILITY_YAHOO_FALLBACK=false
+CREDIBILITY_REQUEST_TIMEOUT=25
+
+CREDIBILITY_TICKER_UNIVERSE_FILTER=true
+CREDIBILITY_TICKER_UNIVERSE_FETCH=true
+CREDIBILITY_TICKER_UNIVERSE_CACHE=.cache/financial_credibility/company_tickers_exchange.json
+
+CREDIBILITY_ASSET_UNIVERSE_FILTER=true
+CREDIBILITY_ASSET_UNIVERSE_FILE=
 ```
 
-Important flags:
+Important notes:
 
-- `CREDIBILITY_LLM_PROVIDER=auto|openai|anthropic`: choose semantic judge.
-- `CREDIBILITY_STRUCTURED_SOURCES=true|false`: enable free structured sources.
-- `CREDIBILITY_LIVE_EXTRACTION=true|false`: fetch article/page text through Jina
-  Reader instead of using snippets only.
-- `CREDIBILITY_YAHOO_FALLBACK=true|false`: enable unofficial Yahoo chart fallback.
-- `CREDIBILITY_REQUEST_TIMEOUT=25`: network timeout in seconds.
+- `OPENAI_API_KEY` plus `OPENAI_MODEL` enables LLM entity extraction, source
+  selection, and narrow semantic judging.
+- If no LLM key/model is configured, the system falls back to deterministic
+  heuristics where available.
+- `SEC_USER_AGENT` is not a key, but SEC requests should include a descriptive
+  user agent.
+- `CREDIBILITY_TICKER_UNIVERSE_FILTER=true` helps prevent false ticker matches
+  such as treating "AI" as a company unless the context is explicit.
+- `CREDIBILITY_ASSET_UNIVERSE_FILTER=true` hard-filters non-equity extraction
+  against built-in asset-class universes for indexes, futures, commodities, FX,
+  rates, credit, macro indicators, ETFs, and crypto.
+- `CREDIBILITY_ASSET_UNIVERSE_FILE` can point to a local JSON file for project
+  additions such as custom indexes or internal baskets.
 
-If no LLM key/model is configured, the package falls back to `HeuristicJudge`.
+Local asset-universe file shape:
+
+```json
+{
+  "assets": [
+    {
+      "asset_class": "equity_index",
+      "symbol": "MYIDX",
+      "name": "My Custom Index",
+      "entity_type": "index",
+      "aliases": ["custom index"]
+    }
+  ]
+}
+```
+
+## Runtime Data Sources
+
+These sources have runtime adapters today:
+
+| Source id | What it covers | Key required? | Runtime status |
+|---|---|---:|---|
+| `sec_company_facts` | SEC XBRL company facts for reported financial metrics | No, but set `SEC_USER_AGENT` | Implemented |
+| `sec_recent_filings` | SEC 10-K, 10-Q, 8-K filing metadata and links | No, but set `SEC_USER_AGENT` | Implemented |
+| `treasury_fiscal_data` | U.S. Treasury fiscal/debt data | No | Implemented |
+| `gleif_entity` | GLEIF LEI legal-entity lookup | No | Implemented |
+| `fred` | FRED macro time series | Yes, `FRED_API_KEY` | Implemented |
+| `historical_prices` | Historical price evidence via Alpha Vantage, FMP, Finnhub, or Stooq | Stooq no; others yes | Implemented |
+| `company_fundamentals_vendor` | Alpha Vantage, Finnhub, FMP fundamentals | Yes, corresponding vendor key | Implemented |
+| `market_prices_vendor` | Marketstack, Tiingo, Stooq latest/EOD prices | Stooq no; others yes | Implemented |
+| `serper_web` | Supplemental web search | Yes, `SERPER_API_KEY` | Implemented |
+| `yahoo_chart_unofficial` | Unofficial Yahoo chart fallback | No | Disabled by default |
+
+Cost/access summary:
+
+- Usually free/no key: SEC, Treasury Fiscal Data, GLEIF, Stooq.
+- Free key or modest friction: FRED.
+- Vendor keys: Alpha Vantage, Finnhub, FMP, Marketstack, Tiingo.
+- Web search: Serper key.
+- Live page extraction: optional Jina Reader key.
+
+## Source Catalog And Progressive Disclosure
+
+Source metadata lives in:
+
+```text
+src/financial_credibility/source_selection.py
+```
+
+Long-form source descriptions live in:
+
+```text
+src/financial_credibility/source_descriptions/
+```
+
+The selector uses progressive disclosure:
+
+1. Stage 1: show the LLM compact candidate cards with source id, authority tier,
+   license tag, required inputs, and a brief description.
+2. Stage 2: load detailed Markdown only for sources selected in stage 1.
+3. Policy validation: discard unknown sources and prefer official primary
+   sources for factual verification.
+
+Planned source-library entries already have descriptions but are not yet
+runtime-callable by default:
+
+| Source id | Purpose | Runtime status |
+|---|---|---|
+| `xbrl_us_api` | XBRL US Public Filings API | Planned |
+| `arelle` | Local XBRL/iXBRL parser and validator | Planned parser |
+| `federal_reserve_ddp` | Federal Reserve DDP / Z.1 data | Planned |
+| `bea_api` | BEA GDP/NIPA/industry/regional/international data | Planned |
+| `bls_api` | BLS CPI, PPI, employment, wages, JOLTS | Planned |
+| `cftc_cot` | CFTC COT futures/options positioning | Planned |
+| `finra_query_api` | FINRA regulatory data | Planned |
+| `ofr_stfm` | OFR short-term funding monitor | Planned |
+| `openfigi` | FIGI / ISIN / CUSIP / ticker mapping | Planned |
+| `ecb_data_portal` | ECB SDMX statistics | Planned |
+| `bis_data_portal` | BIS banking, debt, liquidity, financial stability data | Planned |
+| `imf_data_api` | IMF WEO, BOP, reserves, fiscal, CPI data | Planned |
+| `world_bank_indicators` | World Bank indicator API | Planned |
+| `esma_registers` | ESMA regulatory registers | Planned |
+| `bank_of_england` | Bank of England statistics | Planned |
+| `nasdaq_data_link` | Nasdaq Data Link / Quandl datasets | Planned |
+
+Cost/access caution:
+
+- Potentially expensive or subscription-heavy: `nasdaq_data_link`,
+  `finra_query_api`, `xbrl_us_api`.
+- Mostly public/free official APIs: BEA, BLS, CFTC, OFR, ECB, BIS, World Bank,
+  Bank of England, Federal Reserve DDP.
+- Free but license/redistribution terms still matter: IMF, World Bank, ECB/BIS,
+  vendor and market-data sources.
+
+## Architecture
+
+The memo-level report flow is:
+
+```text
+User statement
+  -> asset-class aware entity extraction
+  -> atomic claim decomposition
+  -> source routing and progressive source selection
+  -> structured retrieval / optional web search
+  -> evidence extraction and source scoring
+  -> canonical fact normalization
+  -> numeric derivation and claim-level verdict
+  -> confidence component calibration
+  -> human review escalation rules
+  -> audit trace and Markdown report
+```
+
+Key modules:
+
+```text
+src/financial_credibility/
+  entity_extraction.py   # Asset-class aware entity extraction.
+  asset_universe.py      # Per-asset-class hard filters and custom universes.
+  ticker_universe.py     # SEC ticker universe for public-company filtering.
+  reporting.py           # Memo-level report payload and Markdown rendering.
+  webapp.py              # Local chat-style report UI.
+  source_selection.py    # Source catalog, progressive disclosure, policy checks.
+  data_sources.py        # Runtime data-source adapters.
+  search.py              # Retrieval facade.
+  extraction.py          # SearchResult -> Evidence conversion.
+  facts.py               # Canonical fact normalization.
+  derivations.py         # Numeric derivation logic.
+  claim_verification.py  # Atomic-claim verdicts.
+  uncertainty.py         # Confidence components and human-review triggers.
+  audit.py               # Replayable audit trace.
+  toolkit.py             # Main public-company EvidencePack orchestration.
+  tool_registry.py       # Agent-facing tool specs.
+  tool_runtime.py        # Execute registered tools.
+  adapters.py            # OpenAI/Anthropic tool schema export.
+```
 
 ## Main Developer API
 
-### `FinancialCredibilityToolkit`
-
-Located in `src/financial_credibility/toolkit.py`.
+Use `FinancialCredibilityToolkit` for one public-company ticker:
 
 ```python
 from financial_credibility import FinancialCredibilityToolkit
 
 toolkit = FinancialCredibilityToolkit.from_env()
 pack = toolkit.build_evidence_pack(
-    claim="Apple reported revenue of 416161000000 in fiscal 2025.",
-    ticker="AAPL",
-    as_of_date="2026-05-19",
-    max_sources=10,
+    claim="NVIDIA reported very strong revenue growth in its latest quarter.",
+    ticker="NVDA",
+    max_sources=8,
 )
 print(pack.to_dict())
 ```
 
-`build_evidence_pack(...)` is the main orchestration function. It performs:
-
-1. Argument classification with `classify_argument_type`.
-2. Retrieval with `SearchClient.search_financial_sources`.
-3. Evidence extraction with `EvidenceExtractor.extract`.
-4. Per-source semantic judging with `SemanticJudge`.
-5. Source independence scoring.
-6. Weighted scoring with `aggregate_scores`.
-7. Explicit numeric, logic, source, and overall verification.
-8. Returns an `EvidencePack`.
-
-Use `prefetched_results` for deterministic tests or demos without network calls:
+Use `build_verification_report` for a memo-level report:
 
 ```python
-pack = toolkit.build_evidence_pack(
-    claim="Apple revenue grew 6% year over year.",
-    ticker="AAPL",
-    prefetched_results=[
-        {
-            "title": "Apple reports fourth quarter results",
-            "url": "https://www.apple.com/newsroom/example",
-            "snippet": "Apple reported quarterly revenue up 6 percent year over year.",
-            "published_at": "2025-10-30",
-        }
-    ],
+from financial_credibility.config import ToolkitConfig
+from financial_credibility.reporting import build_verification_report
+
+payload = build_verification_report(
+    memo=(
+        "NVIDIA reported very strong revenue growth in its latest quarter. "
+        "CPI surprised higher, WTI rallied, and HY spreads widened."
+    ),
+    tickers=[],
+    config=ToolkitConfig.from_env(),
 )
+print(payload["report_markdown"])
 ```
 
-### Agentic Mode
-
-`modes/agentic.py` contains `AgenticCredibilityRunner`. It does not create
-autonomous sub-agents. It adds extra search-plan queries, including contradiction
-and official-source queries, then calls the same underlying toolkit pipeline.
-
-CLI default:
-
-```bash
-PYTHONPATH=src python3 -m financial_credibility \
-  "Apple reported revenue of 416161000000 in fiscal 2025." \
-  --ticker AAPL \
-  --mode agentic
-```
-
-Strict mode:
-
-```bash
-PYTHONPATH=src python3 -m financial_credibility \
-  "Apple reported revenue of 416161000000 in fiscal 2025." \
-  --ticker AAPL \
-  --mode strict
-```
-
-## Core Data Model
-
-All shared types are in `models.py`.
-
-- `SearchResult`: raw retrieval item from an API, search engine, or prefetched
-  JSON.
-- `Evidence`: normalized source-level evidence with scores and notes.
-- `ScoreBreakdown`: deterministic weighted scoring dimensions.
-- `VerificationCheck`: explicit check result for numeric, logic, or source
-  confidence.
-- `OverallConclusion`: user-facing label and confidence summary.
-- `EvidencePack`: final output object returned by the toolkit.
-- `ToolSpec`: provider-agnostic tool definition that can be exported to OpenAI
-  or Anthropic schemas.
-
-Typical output shape:
-
-```json
-{
-  "claim": "...",
-  "ticker": "AAPL",
-  "argument_type": "metric_fact",
-  "credibility_score": 0.778,
-  "numeric_check": {"verdict": "verified", "method": "fuzzy_local"},
-  "logic_check": {"verdict": "partially_verified", "method": "anthropic"},
-  "source_check": {"verdict": "partially_verified", "method": "scoring"},
-  "overall_conclusion": {"overall_label": "High"}
-}
-```
-
-## Pipeline Details
-
-### 1. Argument Classification
-
-`argument.py`
-
-- `classify_argument_type(claim)`: rule-based classifier for:
-  - `metric_fact`
-  - `event_fact`
-  - `attribution_fact`
-  - `opinion_analysis`
-  - `forecast`
-- `_needs_decomposition(claim)`: marks long or multi-part claims.
-
-The argument type selects rubric weights. For example, metric facts emphasize
-numeric consistency; forecasts emphasize reasoning quality and independence.
-
-### 2. Retrieval
-
-`search.py`
-
-- `SearchClient.search_financial_sources(...)`: top-level retrieval method.
-- `build_queries(...)`: creates argument-type-specific web-search queries.
-- `_normalize_result(...)`: converts dicts and existing `SearchResult` objects
-  into the same internal shape.
-
-Retrieval order:
-
-1. Use `prefetched_results` when provided.
-2. Query structured free/free-tier sources via `FreeDataSourceClient`.
-3. If configured, query Serper web search.
-
-### 3. Structured Data Sources
-
-`data_sources.py`
-
-`FreeDataSourceClient.query(...)` calls providers in order until `max_results` is
-reached. Provider methods return `SearchResult` objects, not final evidence.
-
-Implemented providers:
-
-- `historical_prices(ticker, claim, as_of_date)`: daily historical prices from
-  Alpha Vantage, FMP, Finnhub, or Stooq fallback for price-pattern claims such
-  as oscillating, volatile, range-bound, or trending over a lookback window.
-- `sec_company_facts(claim, ticker)`: SEC XBRL company facts.
-- `sec_recent_filings(ticker)`: recent SEC 10-K, 10-Q, and 8-K filings.
-- `alpha_vantage(ticker)`: company overview and earnings.
-- `finnhub(ticker)`: profile and basic financial metrics.
-- `fmp(ticker)`: profile and income statement.
-- `fred(claim)`: macro series selected from claim keywords.
-- `marketstack(ticker)`: latest EOD quote.
-- `tiingo(ticker)`: recent EOD price.
-- `stooq(ticker)`: latest free quote, no key needed.
-- `yahoo_chart(ticker)`: unofficial chart fallback, disabled by default.
-
-To add a new provider:
-
-1. Add a method returning `list[SearchResult]`.
-2. Add it to the `providers` list in `FreeDataSourceClient.query`.
-3. Add a source authority mapping in `sources.DOMAIN_AUTHORITY`.
-4. Add a focused unit test using mocked or prefetched data.
-
-### 4. Evidence Extraction
-
-`extraction.py`
-
-- `EvidenceExtractor.extract(...)`: converts `SearchResult` into scored
-  `Evidence`.
-- `score_relevance(...)`: lexical overlap plus entity/ticker bonus.
-- `score_entity_match(...)`: detects ticker or known company aliases.
-
-Extraction assigns:
-
-- source type and authority from `assess_source`
-- recency from `score_recency`
-- numeric consistency from `score_numeric_consistency`
-- relevance and entity match scores
-
-If `CREDIBILITY_LIVE_EXTRACTION=true`, extractor uses Jina Reader to fetch page
-text; otherwise it uses snippets from retrieval providers.
-
-### Historical Price Extractor
-
-`price_history.py`
-
-Price-pattern claims need time-series evidence rather than only fundamentals.
-For claims such as "NVDA's stock price seems to be oscillating over 10 months",
-the retrieval layer calls `historical_prices(...)`, which uses configured daily
-price providers and formats a compact evidence snippet with:
-
-- start/end close
-- min/max close
-- total return
-- price range percentage
-- annualized volatility
-- daily and monthly direction changes
-- `oscillation_signal` as `weak`, `moderate`, or `strong`
-
-Main helper functions:
-
-- `needs_historical_price_data(claim)`: detects price-pattern claims.
-- `parse_lookback_months(claim)`: converts "10 months", "40 weeks", or "1 year"
-  into an approximate month window.
-- `parse_stooq_price_csv(text)`: parses Stooq CSV into daily `PricePoint` rows.
-- `summarize_price_history(points)`: computes volatility/range/direction-change
-  features.
-- `format_price_history_summary(ticker, lookback_months, summary)`: creates the
-  dense snippet passed downstream to the judge.
-
-### 5. Semantic Judges
-
-`judges.py`
-
-- `SemanticJudge`: abstract interface.
-- `HeuristicJudge`: local no-key fallback.
-- `OpenAIJudge`: narrow JSON judge through OpenAI chat completions.
-- `AnthropicJudge`: narrow JSON judge through Anthropic messages.
-- `create_judge(config)`: chooses a judge from env/config.
-
-Judge methods:
-
-- `judge_evidence_support(claim, evidence)`: supports/contradicts/not enough info.
-- `judge_independence(first, second)`: source independence score.
-- `judge_reasoning_quality(claim, evidence, argument_type)`: quality of reasoning.
-- `judge_numeric_claim(claim, evidence)`: LLM fallback for numeric verification.
-- `judge_logic_claim(claim, evidence, argument_type)`: semantic logic check.
-
-The LLM judge is deliberately narrow: each call asks for one small JSON judgment
-instead of a global credibility score.
-
-### 6. Aggregation
-
-`aggregation.py`
-
-- `aggregate_scores(argument_type, evidence, risk_flags)`: computes the legacy
-  deterministic credibility score and label.
-
-Score dimensions:
-
-- source authority
-- recency
-- evidence support
-- numeric consistency
-- independence
-- reasoning quality
-- penalties
-
-Weights live in `rubrics.py` and differ by argument type.
-
-### 7. Explicit Verification
-
-`verification.py`
-
-- `verify_numeric_claim(claim, evidence, judge)`: fuzzy local numeric matching
-  first; LLM fallback only when no local match is found. Temporal lookback
-  durations such as "10 months" are ignored so they do not falsely verify a
-  price-pattern claim.
-- `verify_logic_claim(claim, evidence, argument_type, judge)`: asks the configured
-  semantic judge whether the inference or reasoning is supported.
-- `verify_sources(evidence, breakdown)`: source-quality confidence from authority,
-  independence, and recency.
-- `build_overall_conclusion(...)`: combines numeric, logic, and source confidence
-  into `Very High`, `High`, `Medium`, `Low`, or `Contradicted`.
-
-`_rank_evidence_for_verification(...)` prioritizes evidence with numeric matches
-and strong support before sending snippets to the LLM, so the judge sees the most
-relevant sources within the token budget.
+Use `prefetched_results` for deterministic tests without network calls.
 
 ## Agent Tool Layer
 
-The package exposes both one-shot orchestration and atomic tools. The human and
-agent-facing manual is [TOOLS.md](TOOLS.md).
+The package exposes provider-neutral tools that can be exported to OpenAI or
+Anthropic schemas.
 
 Core files:
 
-- `tool_registry.py`: declarative metadata for every tool, including schema,
-  when-to-use guidance, data sources, required keys, and limitations.
-- `tool_runtime.py`: executes a registered tool by name with JSON arguments.
-- `adapters.py`: exports the registered tools to OpenAI or Anthropic schemas.
+- `tool_registry.py`: declarative tool metadata and JSON schemas.
+- `tool_runtime.py`: executes a registered tool by name.
+- `adapters.py`: exports OpenAI/Anthropic-compatible tool schemas.
 
-Registered tools:
+Registered tools include:
 
 - `classify_claim`
+- `extract_entities`
+- `decompose_claims`
+- `resolve_entity`
+- `route_sources`
+- `select_sources`
 - `get_sec_company_facts`
 - `get_recent_filings`
+- `get_canonical_facts`
 - `get_company_fundamentals`
 - `get_historical_prices`
 - `compare_stock_performance`
 - `retrieve_evidence`
+- `verify_atomic_claim`
+- `calibrate_uncertainty`
+- `build_audit_trace`
 - `verify_numeric_claim`
 - `verify_logic_claim`
 - `verify_source_quality`
@@ -436,90 +390,71 @@ Example:
 ```python
 from financial_credibility import ToolkitConfig, execute_tool
 
-config = ToolkitConfig.from_env()
 result = execute_tool(
-    "get_historical_prices",
+    "select_sources",
     {
-        "ticker": "MSFT",
-        "start_date": "2025-01-01",
-        "end_date": "2025-12-31",
+        "claim": "NVIDIA reported very strong revenue growth in its latest quarter.",
     },
-    config,
+    ToolkitConfig.from_env(),
 )
 ```
 
-The high-level tool remains available:
+## Human Review Rules
 
-```python
-pack = execute_tool(
-    "build_evidence_pack",
-    {
-        "claim": "Microsoft performed poorly last year.",
-        "ticker": "MSFT",
-        "as_of_date": "2026-05-20",
-    },
-    config,
-)
-```
+Claim-level results can set `human_review_required=true`. Hard triggers include:
 
-## Tool Schema Adapters
+- no official primary source found;
+- only non-official sources are available;
+- official source conflict;
+- amended/restated/vintage revision signals;
+- low entity-resolution confidence;
+- low retrieval sufficiency;
+- ambiguous unit, currency, or period;
+- explanation/causal claims such as "primarily driven by" without strong
+  official textual support.
 
-`adapters.py`
+These are exposed in both the UI and the structured `AtomicClaimResult`.
 
-```python
-from financial_credibility.adapters import export_anthropic_tools, export_openai_tools
+## Testing
 
-openai_tools = export_openai_tools()
-anthropic_tools = export_anthropic_tools()
-```
-
-Use these schemas in an OpenAI tool/function registration flow or an Anthropic
-tool-use flow. The actual execution endpoint should call:
-
-```python
-from financial_credibility import execute_tool
-
-result = execute_tool(tool_name, tool_args)
-```
-
-## CLI
-
-The CLI is defined in `cli.py`.
+Run all tests:
 
 ```bash
-financial-credibility "Claim text" --ticker AAPL --pretty
+PYTHONPATH=src python3 -m pytest -q
 ```
 
-Useful flags:
+Current local test suite:
 
-- `--ticker AAPL`
-- `--as-of-date 2026-05-19`
-- `--max-sources 10`
-- `--mode strict|agentic`
-- `--env-file path/to/.env`
-- `--prefetched-json examples/prefetched_aapl.json`
-- `--pretty`
+```text
+62 passed
+```
 
-## Development Notes
+Compile check:
 
-- Keep `.env` out of git; put only placeholders in `.env.example`.
-- Prefer adding providers as `SearchResult` producers, not direct `Evidence`
-  producers. This keeps extraction and scoring centralized.
-- Keep LLM tasks narrow and JSON-shaped. The aggregator should not rely on a
-  free-form global LLM credibility score.
-- Use `prefetched_results` in tests when possible to avoid flaky network calls.
-- When adding a new score field, update `models.ScoreBreakdown`, `rubrics.py`,
-  `aggregation.py`, and tests together.
+```bash
+PYTHONPATH=src python3 -m compileall src tests
+```
 
 ## Current Limitations
 
-- Source extraction is snippet-first unless Jina Reader is enabled.
+- The strongest end-to-end verification path is public-company factual claims
+  backed by SEC Company Facts and SEC filings.
+- Non-equity assets are now detected and grouped, but most non-equity
+  asset-class verifiers are still planned.
+- Non-equity extraction is intentionally conservative: unknown symbols are
+  filtered unless they appear in the built-in asset universe or a configured
+  `CREDIBILITY_ASSET_UNIVERSE_FILE`.
+- Macro-only report inputs currently produce detected asset-class scope unless a
+  public-company ticker is also present; independent macro verification is a
+  next-stage adapter/routing task.
+- SEC Company Facts concept mapping is still keyword-based, not a full XBRL
+  taxonomy planner.
+- Live page extraction is snippet-first unless `CREDIBILITY_LIVE_EXTRACTION` is
+  enabled.
 - Yahoo Finance support is unofficial and disabled by default.
-- SEC company facts are concept-mapped by simple keywords, not a full XBRL query
-  planner.
-- The system focuses on US equities; macro support exists only through limited
-  FRED keyword matching.
+- This system verifies claims against evidence. It does not provide investment
+  advice.
 
-## Copyright
+## License
 
-Copyright (c) 2026 The University of Chicago.
+MIT. See [LICENSE](LICENSE).

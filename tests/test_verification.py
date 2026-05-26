@@ -114,6 +114,50 @@ class VerificationTests(unittest.TestCase):
 
         self.assertEqual(check.verdict, "not_applicable")
 
+    def test_numeric_check_requires_all_material_numbers_to_match(self):
+        evidence = [
+            Evidence(
+                url="https://data.sec.gov/example",
+                title="SEC Company Facts for NVDA",
+                text="Revenues (USD) 2027 Q1: 81,615,000,000 filed 2026-05-20 form 10-Q.",
+                source_type=SourceType.SEC_FILING,
+                source_tier=SourceTier.T1,
+                domain="data.sec.gov",
+            )
+        ]
+
+        check = verify_numeric_claim(
+            "In fiscal 2027 Q1, NVIDIA reported total revenue of $81.6 billion, up 85% year over year.",
+            evidence,
+        )
+
+        self.assertEqual(check.verdict, "partially_verified")
+        self.assertTrue(any("matched $81.6 billion" in issue for issue in check.issues))
+        self.assertIn("unmatched claim numbers: 85%", check.issues)
+        self.assertFalse(any(issue.startswith("matched 1 with") for issue in check.issues))
+        self.assertFalse(any(issue.startswith("matched 2027 with") for issue in check.issues))
+
+    def test_numeric_check_matches_chinese_hundred_million_amounts(self):
+        evidence = [
+            Evidence(
+                url="https://data.sec.gov/example",
+                title="SEC Company Facts for NVDA",
+                text="Revenues (USD) 2027 Q1: 81,615,000,000; revenue was up 85 percent year over year.",
+                source_type=SourceType.SEC_FILING,
+                source_tier=SourceTier.T1,
+                domain="data.sec.gov",
+            )
+        ]
+
+        check = verify_numeric_claim(
+            "在 2027 财年第一季度，NVIDIA 报告总收入为 816 亿美元，同比增长 85%。",
+            evidence,
+        )
+
+        self.assertEqual(check.verdict, "verified")
+        self.assertTrue(any("matched 816 亿美元" in issue for issue in check.issues))
+        self.assertTrue(any("matched 85%" in issue for issue in check.issues))
+
 
 if __name__ == "__main__":
     unittest.main()

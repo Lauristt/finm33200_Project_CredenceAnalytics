@@ -50,12 +50,21 @@ def all_registered_tools() -> list[RegisteredTool]:
     """Return all tools exposed to an agent."""
     return [
         _classify_claim_tool(),
+        _extract_entities_tool(),
+        _decompose_claims_tool(),
+        _resolve_entity_tool(),
+        _route_sources_tool(),
+        _select_sources_tool(),
         _get_sec_company_facts_tool(),
         _get_recent_filings_tool(),
+        _get_canonical_facts_tool(),
         _get_company_fundamentals_tool(),
         _get_historical_prices_tool(),
         _compare_stock_performance_tool(),
         _retrieve_evidence_tool(),
+        _verify_atomic_claim_tool(),
+        _calibrate_uncertainty_tool(),
+        _build_audit_trace_tool(),
         _verify_numeric_claim_tool(),
         _verify_logic_claim_tool(),
         _verify_source_quality_tool(),
@@ -119,6 +128,116 @@ def _classify_claim_tool() -> RegisteredTool:
     )
 
 
+def _extract_entities_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="extract_entities",
+        description="Extract public companies, issuers, securities, and ticker hints from an investment memo.",
+        when_to_use="Use before claim decomposition when the user provides a memo but no ticker/entity hints.",
+        data_sources=["Optional OpenAI/Anthropic entity extractor", "Local ticker/name heuristics"],
+        requires_keys=["Optional OPENAI_API_KEY/OPENAI_MODEL or ANTHROPIC_API_KEY/ANTHROPIC_MODEL"],
+        limitations=[
+            "The tool returns only entities explicitly mentioned in the memo.",
+            "Entities without confident public tickers are reported as unresolved and are not used for SEC ticker-based retrieval.",
+        ],
+        input_schema=_object_schema(
+            {
+                "memo": {"type": "string"},
+                "max_entities": {"type": "integer", "default": 8},
+            },
+            ["memo"],
+        ),
+        output_schema={"type": "object"},
+    )
+
+
+def _decompose_claims_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="decompose_claims",
+        description="Split a longer financial statement into atomic verifiable claims.",
+        when_to_use="Use before retrieval when a memo, paragraph, or multi-part sentence contains more than one financial claim.",
+        data_sources=[],
+        requires_keys=[],
+        limitations=["Rule-based decomposition; callers can override by passing one atomic claim at a time."],
+        input_schema=_object_schema({"claim": {"type": "string"}}, ["claim"]),
+        output_schema=_object_schema({"claims": {"type": "array", "items": {"type": "object"}}}),
+    )
+
+
+def _resolve_entity_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="resolve_entity",
+        description="Resolve ticker/CIK/LEI identifiers into a single entity mapping.",
+        when_to_use="Use before official retrieval or claim verification to record entity confidence and mapping issues.",
+        data_sources=["SEC metadata when provided", "GLEIF/LEI identifiers when provided"],
+        requires_keys=[],
+        limitations=["MVP resolver uses available identifiers and evidence metadata; it does not perform live GLEIF search by company name."],
+        input_schema=_object_schema(
+            {
+                "ticker": {"type": "string"},
+                "cik": {"type": "string"},
+                "lei": {"type": "string"},
+                "figi": {"type": "string"},
+                "evidence": _evidence_array(),
+                "search_results": _search_result_array(),
+            },
+            ["ticker"],
+        ),
+        output_schema={"type": "object"},
+    )
+
+
+def _route_sources_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="route_sources",
+        description="Choose official source adapters for a claim.",
+        when_to_use="Use after claim decomposition to decide whether to call SEC, FRED, Treasury, GLEIF, or supplemental sources.",
+        data_sources=[],
+        requires_keys=[],
+        limitations=["Keyword route planner; the retrieval layer still determines which sources are actually available."],
+        input_schema=_object_schema(
+            {
+                "claim": {"type": "string"},
+                "official_only": {"type": "boolean", "default": True},
+            },
+            ["claim"],
+        ),
+        output_schema={"type": "object"},
+    )
+
+
+def _select_sources_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="select_sources",
+        description="Select source candidates with brief-first progressive disclosure, optional LLM refinement, and policy validation.",
+        when_to_use="Use after claim decomposition when the agent needs to choose which official or supplemental data sources to call.",
+        data_sources=["Source catalog", "Local source description files", "Optional OpenAI/Anthropic source selector"],
+        requires_keys=["Optional OPENAI_API_KEY/OPENAI_MODEL or ANTHROPIC_API_KEY/ANTHROPIC_MODEL"],
+        limitations=[
+            "The LLM can only choose from provided catalog candidates.",
+            "Detailed source descriptions are only loaded for selected first-pass candidates.",
+            "Policy validation may add official primary sources or discard unknown ids.",
+        ],
+        input_schema=_object_schema(
+            {
+                "claim": {"type": "string"},
+                "candidate_limit": {"type": "integer", "default": 6},
+                "max_selected": {"type": "integer", "default": 4},
+                "include_planned_sources": {
+                    "type": "boolean",
+                    "default": False,
+                    "description": "Include official/planned source descriptions even when no runtime adapter exists yet.",
+                },
+            },
+            ["claim"],
+        ),
+        output_schema=_object_schema(
+            {
+                "selections": {"type": "array", "items": {"type": "object"}},
+            }
+        ),
+    )
+
+
 def _get_sec_company_facts_tool() -> RegisteredTool:
     return RegisteredTool(
         name="get_sec_company_facts",
@@ -148,6 +267,33 @@ def _get_recent_filings_tool() -> RegisteredTool:
         limitations=["Returns filing metadata/snippets, not full filing text unless live extraction is enabled elsewhere."],
         input_schema=_object_schema({"ticker": {"type": "string"}}, ["ticker"]),
         output_schema=_object_schema({"results": _search_result_array(), "notes": {"type": "array"}}),
+    )
+
+
+def _get_canonical_facts_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="get_canonical_facts",
+        description="Normalize structured search results or official evidence into canonical facts.",
+        when_to_use="Use after SEC/FRED/Treasury/GLEIF retrieval, before claim-level numeric or evidence verification.",
+        data_sources=["SEC company facts", "FRED observations", "Official evidence objects"],
+        requires_keys=[],
+        limitations=["MVP canonicalization parses compact provider snippets and official evidence metadata, not full iXBRL documents."],
+        input_schema=_object_schema(
+            {
+                "ticker": {"type": "string"},
+                "search_results": _search_result_array(),
+                "evidence": _evidence_array(),
+                "cik": {"type": "string"},
+                "lei": {"type": "string"},
+            },
+            ["ticker"],
+        ),
+        output_schema=_object_schema(
+            {
+                "entity_resolution": {"type": "object"},
+                "canonical_facts": {"type": "array", "items": {"type": "object"}},
+            }
+        ),
     )
 
 
@@ -248,6 +394,73 @@ def _retrieve_evidence_tool() -> RegisteredTool:
                 "extraction_notes": {"type": "array"},
             }
         ),
+    )
+
+
+def _verify_atomic_claim_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="verify_atomic_claim",
+        description="Verify one or more atomic claims with evidence, canonical facts, uncertainty, and HITL flags.",
+        when_to_use="Use when the agent wants claim-level verdicts rather than only a whole-paragraph evidence pack.",
+        data_sources=["Provided evidence", "Provided canonical facts", "OpenAI/Anthropic judge when configured"],
+        requires_keys=["Optional OPENAI_API_KEY or ANTHROPIC_API_KEY"],
+        limitations=["Uses the same narrow judges and heuristic numeric derivations as the main toolkit."],
+        input_schema=_object_schema(
+            {
+                "claim": {"type": "string"},
+                "ticker": {"type": "string"},
+                "evidence": _evidence_array(),
+                "canonical_facts": {"type": "array", "items": {"type": "object"}},
+                "cik": {"type": "string"},
+                "lei": {"type": "string"},
+            },
+            ["claim", "ticker", "evidence"],
+        ),
+        output_schema=_object_schema({"atomic_claims": {"type": "array", "items": {"type": "object"}}}),
+    )
+
+
+def _calibrate_uncertainty_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="calibrate_uncertainty",
+        description="Return confidence components and human-review triggers for claim-level verification.",
+        when_to_use="Use after evidence and canonical facts are available to decide whether automatic verdicts need human review.",
+        data_sources=["Provided evidence", "Provided canonical facts"],
+        requires_keys=["Optional OpenAI/Anthropic key if semantic logic fallback is needed"],
+        limitations=["Runs the same calibrator as verify_atomic_claim and returns claim-level results."],
+        input_schema=_object_schema(
+            {
+                "claim": {"type": "string"},
+                "ticker": {"type": "string"},
+                "evidence": _evidence_array(),
+                "canonical_facts": {"type": "array", "items": {"type": "object"}},
+            },
+            ["claim", "ticker", "evidence"],
+        ),
+        output_schema=_object_schema({"atomic_claims": {"type": "array", "items": {"type": "object"}}}),
+    )
+
+
+def _build_audit_trace_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="build_audit_trace",
+        description="Build a replayable audit trace for a claim verification task.",
+        when_to_use="Use at the end of a manual atomic workflow to preserve inputs, evidence, facts, verdicts, and review reasons.",
+        data_sources=["Provided workflow objects"],
+        requires_keys=[],
+        limitations=["The high-level build_evidence_pack tool automatically includes an audit_trace."],
+        input_schema=_object_schema(
+            {
+                "claim": {"type": "string"},
+                "ticker": {"type": "string"},
+                "as_of_date": {"type": "string"},
+                "search_results": _search_result_array(),
+                "evidence": _evidence_array(),
+                "canonical_facts": {"type": "array", "items": {"type": "object"}},
+            },
+            ["claim", "ticker"],
+        ),
+        output_schema={"type": "object"},
     )
 
 

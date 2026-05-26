@@ -51,6 +51,12 @@ class ToolkitConfig:
     enable_structured_sources: bool = True
     enable_yahoo_fallback: bool = False
     allow_insecure_ssl_fallback: bool = False
+    enable_ticker_universe_filter: bool = True
+    enable_ticker_universe_fetch: bool = False
+    ticker_universe_file: str | None = None
+    ticker_universe_cache_file: str | None = ".cache/financial_credibility/company_tickers_exchange.json"
+    enable_asset_universe_filter: bool = True
+    asset_universe_file: str | None = None
 
     @classmethod
     def from_env(cls, env_file: str | Path | None = None) -> "ToolkitConfig":
@@ -86,4 +92,20 @@ class ToolkitConfig:
                 "CREDIBILITY_ALLOW_INSECURE_SSL_FALLBACK", ""
             ).lower()
             in {"1", "true", "yes"},
+            enable_ticker_universe_filter=os.getenv(
+                "CREDIBILITY_TICKER_UNIVERSE_FILTER", "true"
+            ).lower()
+            in {"1", "true", "yes"},
+            enable_ticker_universe_fetch=os.getenv(
+                "CREDIBILITY_TICKER_UNIVERSE_FETCH", "true"
+            ).lower()
+            in {"1", "true", "yes"},
+            ticker_universe_file=os.getenv("CREDIBILITY_TICKER_UNIVERSE_FILE") or None,
+            ticker_universe_cache_file=os.getenv("CREDIBILITY_TICKER_UNIVERSE_CACHE")
+            or ".cache/financial_credibility/company_tickers_exchange.json",
+            enable_asset_universe_filter=os.getenv(
+                "CREDIBILITY_ASSET_UNIVERSE_FILTER", "true"
+            ).lower()
+            in {"1", "true", "yes"},
+            asset_universe_file=os.getenv("CREDIBILITY_ASSET_UNIVERSE_FILE") or None,
         )

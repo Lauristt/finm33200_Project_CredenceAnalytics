@@ -18,9 +18,13 @@ dependencies = []
 
 [project.scripts]
 financial-credibility = "financial_credibility.cli:main"
+financial-credibility-ui = "financial_credibility.webapp:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+financial_credibility = ["source_descriptions/*.md"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

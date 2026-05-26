@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field, is_dataclass
-from datetime import date
+from datetime import date, datetime, timezone
 from enum import Enum
 from typing import Any
 
@@ -79,6 +79,16 @@ class VerificationVerdict(str, Enum):
     WEAK = "weak"
 
 
+class LicenseTag(str, Enum):
+    """Coarse reuse/redistribution tag for evidence governance."""
+
+    PUBLIC_OFFICIAL = "public_official"
+    CC0 = "cc0"
+    CC_BY = "cc_by"
+    THIRD_PARTY_RESTRICTED = "third_party_restricted"
+    UNKNOWN = "unknown"
+
+
 @dataclass(frozen=True)
 class Classification:
     argument_type: ArgumentType
@@ -104,6 +114,8 @@ class SourceAssessment:
     authority_score: float
     domain: str
     reasons: list[str] = field(default_factory=list)
+    license_tag: LicenseTag = LicenseTag.UNKNOWN
+    is_official_primary: bool = False
 
 
 @dataclass
@@ -121,6 +133,8 @@ class Evidence:
     source_tier: SourceTier
     domain: str
     published_at: str | None = None
+    license_tag: LicenseTag = LicenseTag.UNKNOWN
+    is_official_primary: bool = False
     source_authority: float = 0.0
     recency_score: float = 0.0
     relevance_score: float = 0.0
@@ -172,6 +186,130 @@ class OverallConclusion:
 
 
 @dataclass(frozen=True)
+class AtomicClaim:
+    """A minimal verifiable claim extracted from a longer user statement."""
+
+    claim_id: str
+    text: str
+    argument_type: ArgumentType
+    classification_confidence: float
+    signals: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class EntityResolution:
+    """Structured entity mapping used by official-source routing."""
+
+    ticker: str
+    entity_id: str
+    cik: str | None = None
+    lei: str | None = None
+    figi: str | None = None
+    confidence: float = 0.0
+    sources: list[str] = field(default_factory=list)
+    issues: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class CanonicalFact:
+    """Official or normalized fact with enough metadata to replay provenance."""
+
+    fact_id: str
+    source_type: SourceType
+    authority_tier: SourceTier
+    license_tag: LicenseTag
+    entity_id: str
+    ticker: str
+    cik: str | None = None
+    lei: str | None = None
+    report_period: str | None = None
+    filing_date: str | None = None
+    observation_date: str | None = None
+    vintage_date: str | None = None
+    unit: str | None = None
+    currency: str | None = None
+    fact_name: str | None = None
+    value: str | float | int | None = None
+    provenance_locator: str = ""
+    parser_confidence: float = 0.0
+    raw: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class NumericDerivation:
+    """A replayable numeric check or formula for an atomic claim."""
+
+    expression: str
+    inputs: dict[str, float | int | str] = field(default_factory=dict)
+    result: float | int | str | None = None
+    comparator: str | None = None
+    threshold: float | int | str | None = None
+    passed: bool | None = None
+    tolerance: float | None = None
+    notes: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class ConfidenceComponents:
+    """Explainable confidence dimensions for claim-level verification."""
+
+    source_authority: float
+    entity_match: float
+    time_alignment: float
+    numeric_exactness: float
+    retrieval_sufficiency: float
+    cross_source_consistency: float
+    parser_confidence: float
+    final_confidence: float
+
+
+@dataclass(frozen=True)
+class AtomicClaimResult:
+    """Claim-level verdict with evidence, derivation, uncertainty, and HITL state."""
+
+    atomic_claim: AtomicClaim
+    verdict: VerificationVerdict
+    evidence_urls: list[str] = field(default_factory=list)
+    evidence_keys: list[str] = field(default_factory=list)
+    canonical_fact_ids: list[str] = field(default_factory=list)
+    numeric_derivation: NumericDerivation | None = None
+    confidence_components: ConfidenceComponents | None = None
+    human_review_required: bool = False
+    review_reasons: list[str] = field(default_factory=list)
+    issues: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class AuditEvent:
+    """One replayable event emitted by the verifier."""
+
+    step: str
+    status: str
+    summary: str
+    inputs: dict[str, Any] = field(default_factory=dict)
+    outputs: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class AuditTrace:
+    """Compact trace that lets a developer replay the credibility decision."""
+
+    trace_id: str
+    created_at: str
+    replayable_inputs: dict[str, Any] = field(default_factory=dict)
+    events: list[AuditEvent] = field(default_factory=list)
+    source_notes: list[str] = field(default_factory=list)
+
+    @classmethod
+    def create(cls, trace_id: str, replayable_inputs: dict[str, Any]) -> "AuditTrace":
+        return cls(
+            trace_id=trace_id,
+            created_at=datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            replayable_inputs=replayable_inputs,
+        )
+
+
+@dataclass(frozen=True)
 class EvidencePack:
     """Final output returned by `FinancialCredibilityToolkit`.
 
@@ -193,6 +331,10 @@ class EvidencePack:
     logic_check: VerificationCheck | None = None
     source_check: VerificationCheck | None = None
     overall_conclusion: OverallConclusion | None = None
+    atomic_claims: list[AtomicClaimResult] = field(default_factory=list)
+    canonical_facts: list[CanonicalFact] = field(default_factory=list)
+    entity_resolution: EntityResolution | None = None
+    audit_trace: AuditTrace | None = None
     evidence: list[Evidence] = field(default_factory=list)
     risk_flags: list[str] = field(default_factory=list)
     mode: str = "strict"

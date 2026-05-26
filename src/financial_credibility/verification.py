@@ -24,7 +24,7 @@ from .sources import extract_numbers, extract_substantive_numbers
 
 def verify_numeric_claim(claim: str, evidence: list[Evidence], judge=None) -> VerificationCheck:
     """Verify numeric claims with fuzzy local matching first, then optional LLM fallback."""
-    claim_numbers = extract_substantive_numbers(claim)
+    claim_numbers = _material_claim_numbers(claim)
     if not claim_numbers:
         return VerificationCheck(
             check_type="numeric_check",
@@ -45,15 +45,32 @@ def verify_numeric_claim(claim: str, evidence: list[Evidence], judge=None) -> Ve
         )
 
     matches = _fuzzy_numeric_matches(claim_numbers, evidence)
-    if matches:
+    if len(matches) == len(claim_numbers):
         urls = sorted({url for _, _, url in matches})
         return VerificationCheck(
             check_type="numeric_check",
             verdict=VerificationVerdict.VERIFIED.value,
             confidence=0.90,
-            summary="At least one numeric value in the claim was matched directly in the evidence.",
+            summary="All material numeric values in the claim were matched directly in the evidence.",
             evidence_urls=urls,
             issues=[f"matched {claim_num} with {evidence_num}" for claim_num, evidence_num, _ in matches],
+            method="fuzzy_local",
+        )
+
+    if matches:
+        matched_claim_numbers = {claim_num for claim_num, _, _ in matches}
+        unmatched = [claim_num for claim_num in claim_numbers if claim_num not in matched_claim_numbers]
+        urls = sorted({url for _, _, url in matches})
+        return VerificationCheck(
+            check_type="numeric_check",
+            verdict=VerificationVerdict.PARTIALLY_VERIFIED.value,
+            confidence=0.62,
+            summary="Only some material numeric values in the claim were matched directly in the evidence.",
+            evidence_urls=urls,
+            issues=[
+                *[f"matched {claim_num} with {evidence_num}" for claim_num, evidence_num, _ in matches],
+                f"unmatched claim numbers: {', '.join(unmatched)}",
+            ],
             method="fuzzy_local",
         )
 
@@ -221,23 +238,86 @@ def _fuzzy_numeric_matches(claim_numbers: list[str], evidence: list[Evidence]) -
             evidence_numbers.append((number, item.url))
 
     for claim_number in claim_numbers:
-        claim_forms = _numeric_forms(claim_number)
         for evidence_number, url in evidence_numbers:
-            if claim_forms & _numeric_forms(evidence_number):
+            if _numbers_match(claim_number, evidence_number):
                 matches.append((claim_number, evidence_number, url))
                 break
     return matches
+
+
+def _material_claim_numbers(claim: str) -> list[str]:
+    """Keep amounts, percentages, and large values; drop period labels like Q1/FY2027."""
+    material = []
+    for value in extract_substantive_numbers(claim):
+        if _is_period_marker_number(value):
+            continue
+        material.append(value)
+    return material
+
+
+def _is_period_marker_number(value: str) -> bool:
+    compact = re.sub(r"[\s,$,]", "", value.lower())
+    if re.search(r"(%|percent|bps|billion|million|trillion|bn|mn|亿|万|美元)", compact):
+        return False
+    try:
+        numeric = int(float(compact))
+    except ValueError:
+        return False
+    return 1900 <= numeric <= 2100 or 1 <= numeric <= 4
+
+
+def _numbers_match(left: str, right: str) -> bool:
+    if _numeric_forms(left) & _numeric_forms(right):
+        return True
+    left_value = _numeric_scalar(left)
+    right_value = _numeric_scalar(right)
+    if not left_value or not right_value:
+        return False
+    left_number, left_kind = left_value
+    right_number, right_kind = right_value
+    if "percent" in {left_kind, right_kind} and left_kind != right_kind:
+        return False
+    if "bps" in {left_kind, right_kind} and left_kind != right_kind:
+        return False
+    if left_number == right_number:
+        return True
+    scale = max(abs(left_number), abs(right_number), 1.0)
+    tolerance = 0.012 if scale >= 1_000_000 else 0.001
+    return abs(left_number - right_number) / scale <= tolerance
 
 
 def _numeric_forms(value: str) -> set[str]:
     """Generate rough comparable forms for numeric strings and units."""
     raw = value.lower().strip()
     compact = re.sub(r"[\s,$,]", "", raw).replace("percent", "%")
-    no_unit = re.sub(r"(billion|million|trillion|bn|mn|bps|%)$", "", compact)
+    no_unit = re.sub(r"(billion|million|trillion|bn|mn|bps|%|亿美元|万美元|美元|亿|万)$", "", compact)
     forms = {compact, no_unit}
     if compact.endswith("%"):
         forms.add(compact[:-1])
     return {form for form in forms if form}
+
+
+def _numeric_scalar(value: str) -> tuple[float, str] | None:
+    compact = re.sub(r"[\s,$,]", "", value.lower()).replace("percent", "%")
+    match = re.search(r"[-+]?\d+(?:\.\d+)?", compact)
+    if not match:
+        return None
+    number = float(match.group(0))
+    if "%" in compact:
+        return number, "percent"
+    if "bps" in compact:
+        return number, "bps"
+    if "trillion" in compact:
+        return number * 1_000_000_000_000, "amount"
+    if "billion" in compact or "bn" in compact:
+        return number * 1_000_000_000, "amount"
+    if "million" in compact or "mn" in compact:
+        return number * 1_000_000, "amount"
+    if "亿" in compact:
+        return number * 100_000_000, "amount"
+    if "万" in compact:
+        return number * 10_000, "amount"
+    return number, "plain"
 
 
 def _source_issues(evidence: list[Evidence]) -> list[str]:

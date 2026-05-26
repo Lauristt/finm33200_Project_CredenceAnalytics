@@ -5,11 +5,20 @@ JSON-serializable model types used by downstream agent/tool integrations.
 """
 
 from .config import ToolkitConfig
+from .entity_extraction import extract_entities_from_memo
 from .models import (
     ArgumentType,
+    AtomicClaim,
+    AtomicClaimResult,
+    AuditTrace,
+    CanonicalFact,
+    ConfidenceComponents,
     CredibilityLabel,
     Evidence,
     EvidencePack,
+    EntityResolution,
+    LicenseTag,
+    NumericDerivation,
     OverallConclusion,
     SearchResult,
     SupportLabel,
@@ -23,10 +32,18 @@ from .toolkit import FinancialCredibilityToolkit
 
 __all__ = [
     "ArgumentType",
+    "AtomicClaim",
+    "AtomicClaimResult",
+    "AuditTrace",
+    "CanonicalFact",
+    "ConfidenceComponents",
     "CredibilityLabel",
     "Evidence",
     "EvidencePack",
+    "EntityResolution",
     "FinancialCredibilityToolkit",
+    "LicenseTag",
+    "NumericDerivation",
     "OverallConclusion",
     "RegisteredTool",
     "SearchResult",
@@ -38,5 +55,6 @@ __all__ = [
     "all_registered_tools",
     "all_tool_specs",
     "execute_tool",
+    "extract_entities_from_memo",
     "get_registered_tool",
 ]

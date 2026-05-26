@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: credence-analytics-agent
+    env: python
+    plan: starter
+    buildCommand: python -m pip install --upgrade pip && python -m pip install .
+    startCommand: financial-credibility-ui --host 0.0.0.0
+    healthCheckPath: /health
+    envVars:
+      - key: CREDIBILITY_HOST
+        value: 0.0.0.0
+      - key: CREDIBILITY_LLM_PROVIDER
+        value: auto
+      - key: OPENAI_MODEL
+        value: gpt-4.1-mini
+      - key: CREDIBILITY_STRUCTURED_SOURCES
+        value: "true"
+      - key: CREDIBILITY_TICKER_UNIVERSE_FILTER
+        value: "true"
+      - key: CREDIBILITY_TICKER_UNIVERSE_FETCH
+        value: "true"
+      - key: CREDIBILITY_REQUEST_TIMEOUT
+        value: "25"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SEC_USER_AGENT
+        sync: false

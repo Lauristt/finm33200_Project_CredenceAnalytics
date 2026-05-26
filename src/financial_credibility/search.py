@@ -32,6 +32,7 @@ class SearchClient:
         max_sources: int = 8,
         as_of_date: str | None = None,
         prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
+        selected_sources: list[str] | None = None,
     ) -> tuple[list[SearchResult], list[str]]:
         """Retrieve candidate sources for one claim.
 
@@ -53,6 +54,7 @@ class SearchClient:
                 argument_type=argument_type,
                 max_results=max_sources,
                 as_of_date=as_of_date,
+                allowed_sources=selected_sources,
             )
             notes.extend(structured_notes)
             for result in structured_results:
@@ -63,9 +65,13 @@ class SearchClient:
                 if len(results) >= max_sources:
                     return results, notes
 
-        if not self.config.serper_api_key:
+        allow_web_search = selected_sources is None or "serper_web" in selected_sources
+        if not self.config.serper_api_key or not allow_web_search:
             if not results:
-                notes.append("SERPER_API_KEY not configured and no search results from structured free sources")
+                if not allow_web_search:
+                    notes.append("web search skipped by source selection policy")
+                else:
+                    notes.append("SERPER_API_KEY not configured and no search results from structured free sources")
             return results, notes
 
         queries = build_queries(claim, ticker, argument_type) + self.extra_queries
@@ -156,11 +162,12 @@ def _normalize_result(item: dict[str, Any] | SearchResult) -> SearchResult:
     """Accept either dict fixtures or already-normalized search results."""
     if isinstance(item, SearchResult):
         return item
+    raw = dict(item.get("raw") or item)
     return SearchResult(
         title=str(item.get("title", "")),
         url=str(item.get("url") or item.get("link") or ""),
         snippet=str(item.get("snippet") or item.get("summary") or item.get("text") or ""),
         published_at=item.get("published_at") or item.get("date"),
         source=item.get("source"),
-        raw=dict(item),
+        raw=raw,
     )

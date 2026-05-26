@@ -17,6 +17,21 @@ class DataSourceClientTests(unittest.TestCase):
         concepts = client._concepts_for_claim("Apple revenue grew 6% year over year.")
         self.assertIn("Revenues", concepts)
 
+    def test_sec_concept_matcher_handles_custom_revenue_tags(self):
+        client = FreeDataSourceClient(ToolkitConfig())
+        facts = {
+            "us-gaap": {"Revenues": {"units": {"USD": []}}},
+            "nvda": {"DataCenterRevenue": {"units": {"USD": []}}},
+        }
+
+        matches = client._matching_sec_concepts(
+            facts,
+            ["Revenues"],
+            "NVIDIA data center revenue represented more than 80% of total revenue.",
+        )
+
+        self.assertEqual([concept for concept, _ in matches], ["Revenues", "DataCenterRevenue"])
+
     def test_fred_series_for_macro_claim(self):
         client = FreeDataSourceClient(ToolkitConfig(fred_api_key="demo"))
         self.assertEqual(client._fred_series_for_claim("Inflation is falling."), "CPIAUCSL")

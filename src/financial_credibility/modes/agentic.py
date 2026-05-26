@@ -7,10 +7,10 @@ retrieval, extraction, judging, and verification pipeline.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Callable
 
 from ..argument import classify_argument_type
-from ..models import EvidencePack, SearchResult
+from ..models import EvidencePack, SearchResult, to_plain
 from ..search import build_queries
 from ..toolkit import FinancialCredibilityToolkit
 
@@ -28,10 +28,18 @@ class AgenticCredibilityRunner:
         as_of_date: str | None = None,
         max_sources: int = 8,
         prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
+        trace_callback: Callable[[dict[str, Any]], None] | None = None,
     ) -> EvidencePack:
         """Run the toolkit with an expanded search plan and annotated metadata."""
         classification = classify_argument_type(claim)
         plan = self._make_search_plan(claim, ticker, classification.argument_type)
+        _emit_trace(
+            trace_callback,
+            "plan_search",
+            "ok",
+            f"Created {len(plan)} agentic search query candidate(s).",
+            outputs={"queries": plan},
+        )
         pack = self.toolkit.build_evidence_pack(
             claim=claim,
             ticker=ticker,
@@ -40,6 +48,7 @@ class AgenticCredibilityRunner:
             prefetched_results=prefetched_results,
             mode="agentic",
             extra_queries=plan,
+            trace_callback=trace_callback,
         )
         metadata = dict(pack.metadata)
         metadata["agentic_search_plan"] = plan
@@ -57,6 +66,10 @@ class AgenticCredibilityRunner:
             logic_check=pack.logic_check,
             source_check=pack.source_check,
             overall_conclusion=pack.overall_conclusion,
+            atomic_claims=pack.atomic_claims,
+            canonical_facts=pack.canonical_facts,
+            entity_resolution=pack.entity_resolution,
+            audit_trace=pack.audit_trace,
             evidence=pack.evidence,
             risk_flags=pack.risk_flags,
             mode="agentic",
@@ -71,3 +84,23 @@ class AgenticCredibilityRunner:
             f"{ticker} {claim} SEC filing official source",
         ]
         return base_queries + counter_queries
+
+
+def _emit_trace(
+    callback: Callable[[dict[str, Any]], None] | None,
+    step: str,
+    status: str,
+    summary: str,
+    outputs: dict[str, Any] | None = None,
+) -> None:
+    if not callback:
+        return
+    callback(
+        {
+            "step": step,
+            "status": status,
+            "summary": summary,
+            "inputs": {},
+            "outputs": to_plain(outputs or {}),
+        }
+    )

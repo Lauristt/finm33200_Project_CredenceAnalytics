@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
@@ -36,10 +37,27 @@ SEC_CONCEPTS = {
     "earnings": ["NetIncomeLoss", "EarningsPerShareDiluted"],
     "net income": ["NetIncomeLoss"],
     "margin": ["GrossProfit", "OperatingIncomeLoss", "NetIncomeLoss", "Revenues"],
-    "cash flow": ["NetCashProvidedByUsedInOperatingActivities", "FreeCashFlow"],
+    "gross margin": ["GrossProfit", "Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "SalesRevenueNet"],
+    "operating margin": ["OperatingIncomeLoss", "Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "SalesRevenueNet"],
+    "net margin": ["NetIncomeLoss", "Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "SalesRevenueNet"],
+    "cash flow": ["NetCashProvidedByUsedInOperatingActivities", "PaymentsToAcquirePropertyPlantAndEquipment"],
+    "free cash flow": ["NetCashProvidedByUsedInOperatingActivities", "PaymentsToAcquirePropertyPlantAndEquipment"],
+    "capex": ["PaymentsToAcquirePropertyPlantAndEquipment"],
+    "capital expenditure": ["PaymentsToAcquirePropertyPlantAndEquipment"],
     "assets": ["Assets", "AssetsCurrent"],
     "liabilities": ["Liabilities", "LiabilitiesCurrent"],
-    "debt": ["LongTermDebt", "ShortTermBorrowings"],
+    "current ratio": ["AssetsCurrent", "LiabilitiesCurrent"],
+    "working capital": ["AssetsCurrent", "LiabilitiesCurrent"],
+    "debt": ["LongTermDebt", "LongTermDebtCurrent", "ShortTermBorrowings", "ShortTermDebt"],
+    "net debt": [
+        "LongTermDebt",
+        "LongTermDebtCurrent",
+        "ShortTermBorrowings",
+        "ShortTermDebt",
+        "CashAndCashEquivalentsAtCarryingValue",
+        "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+    ],
+    "cash": ["CashAndCashEquivalentsAtCarryingValue", "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents"],
 }
 
 FRED_SERIES = {
@@ -68,10 +86,12 @@ class FreeDataSourceClient:
         argument_type: ArgumentType,
         max_results: int = 8,
         as_of_date: str | None = None,
+        allowed_sources: list[str] | set[str] | None = None,
     ) -> tuple[list[SearchResult], list[str]]:
         """Query configured providers and return deduplicated search results."""
         results: list[SearchResult] = []
         notes: list[str] = []
+        allowed = set(allowed_sources or [])
 
         providers = [
             ("historical_prices", lambda: self.historical_prices(ticker, claim, as_of_date)),
@@ -81,6 +101,8 @@ class FreeDataSourceClient:
             ("finnhub", lambda: self.finnhub(ticker)),
             ("fmp", lambda: self.fmp(ticker)),
             ("fred", lambda: self.fred(claim)),
+            ("treasury_fiscal_data", lambda: self.treasury_fiscal_data(claim)),
+            ("gleif_entity", lambda: self.gleif_entity(claim, ticker)),
             ("marketstack", lambda: self.marketstack(ticker)),
             ("tiingo", lambda: self.tiingo(ticker)),
             ("stooq", lambda: self.stooq(ticker)),
@@ -91,6 +113,8 @@ class FreeDataSourceClient:
         for name, provider in providers:
             if len(results) >= max_results:
                 break
+            if allowed and not _provider_allowed(name, allowed):
+                continue
             if name == "historical_prices" and not needs_historical_price_data(claim):
                 continue
             try:
@@ -109,13 +133,12 @@ class FreeDataSourceClient:
         if cik is None:
             return []
         data = self._get_json(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json", sec=True)
-        facts = data.get("facts", {}).get("us-gaap", {})
+        facts_by_taxonomy = data.get("facts", {})
         concept_names = self._concepts_for_claim(claim)
         snippets = []
         latest_date = None
 
-        for concept in concept_names:
-            concept_data = facts.get(concept)
+        for concept, concept_data in self._matching_sec_concepts(facts_by_taxonomy, concept_names, claim):
             if not concept_data:
                 continue
             units = concept_data.get("units", {})
@@ -128,9 +151,10 @@ class FreeDataSourceClient:
                 clean_values.sort(key=lambda value: value.get("filed", ""), reverse=True)
                 for value in clean_values[:2]:
                     latest_date = max(latest_date or "", value.get("filed", "")) or latest_date
+                    frame = f" frame {value.get('frame')}" if value.get("frame") else ""
                     snippets.append(
                         f"{concept} ({unit_name}) {value.get('fy', '')} {value.get('fp', '')}: "
-                        f"{value.get('val')} filed {value.get('filed')} form {value.get('form')}"
+                        f"{value.get('val')} filed {value.get('filed')} form {value.get('form')}{frame}"
                     )
 
         if not snippets:
@@ -337,7 +361,62 @@ class FreeDataSourceClient:
                 snippet=snippet,
                 published_at=observations[0].get("date"),
                 source="FRED",
-                raw={"provider": "fred", "series_id": series_id},
+                raw={"provider": "fred", "series_id": series_id, "observations": observations},
+            )
+        ]
+
+    def treasury_fiscal_data(self, claim: str) -> list[SearchResult]:
+        """Return U.S. Treasury fiscal data for federal debt/fiscal claims."""
+        if not _needs_treasury_data(claim):
+            return []
+        url = (
+            "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/"
+            "v2/accounting/od/debt_to_penny?"
+            + urllib.parse.urlencode({"sort": "-record_date", "page[size]": 3})
+        )
+        data = self._get_json(url)
+        rows = data.get("data", []) if isinstance(data, dict) else []
+        if not rows:
+            return []
+        snippet = "; ".join(
+            f"{row.get('record_date')}: debt_held_public {row.get('debt_held_public_amt')} intragov {row.get('intragov_hold_amt')}"
+            for row in rows
+        )
+        return [
+            SearchResult(
+                title="U.S. Treasury Debt to the Penny",
+                url="https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/debt-to-the-penny",
+                snippet=snippet,
+                published_at=rows[0].get("record_date"),
+                source="U.S. Treasury Fiscal Data",
+                raw={"provider": "treasury_fiscal_data", "dataset": "debt_to_penny", "rows": rows},
+            )
+        ]
+
+    def gleif_entity(self, claim: str, ticker: str) -> list[SearchResult]:
+        """Return a lightweight GLEIF entity lookup when entity mapping is requested."""
+        if not _needs_gleif_data(claim):
+            return []
+        url = "https://api.gleif.org/api/v1/lei-records?" + urllib.parse.urlencode(
+            {"filter[entity.names]": ticker.upper(), "page[size]": 3}
+        )
+        data = self._get_json(url)
+        rows = data.get("data", []) if isinstance(data, dict) else []
+        if not rows:
+            return []
+        snippets = []
+        for row in rows:
+            attributes = row.get("attributes", {}) if isinstance(row, dict) else {}
+            entity = attributes.get("entity", {}) if isinstance(attributes, dict) else {}
+            legal_name = entity.get("legalName", {}).get("name") if isinstance(entity, dict) else None
+            snippets.append(f"LEI {row.get('id')} legalName {legal_name}")
+        return [
+            SearchResult(
+                title=f"GLEIF LEI records for {ticker.upper()}",
+                url=url,
+                snippet="; ".join(snippets),
+                source="GLEIF",
+                raw={"provider": "gleif_entity", "rows": rows, "lei": rows[0].get("id")},
             )
         ]
 
@@ -692,6 +771,29 @@ class FreeDataSourceClient:
             ]
         return list(dict.fromkeys(concepts))
 
+    def _matching_sec_concepts(
+        self,
+        facts_by_taxonomy: dict[str, Any],
+        concept_names: list[str],
+        claim: str,
+    ) -> list[tuple[str, dict[str, Any]]]:
+        matches: list[tuple[str, dict[str, Any]]] = []
+        preferred = set(concept_names)
+        seen = set()
+        for taxonomy, taxonomy_facts in facts_by_taxonomy.items():
+            if not isinstance(taxonomy_facts, dict):
+                continue
+            for concept, concept_data in taxonomy_facts.items():
+                if concept not in preferred and not _sec_concept_matches_claim(concept, claim):
+                    continue
+                key = (taxonomy, concept)
+                if key in seen:
+                    continue
+                seen.add(key)
+                matches.append((concept, concept_data))
+        matches.sort(key=lambda item: (0 if item[0] in preferred else 1, item[0]))
+        return matches[:24]
+
     def _fred_series_for_claim(self, claim: str) -> str | None:
         """Map macro claim keywords to a FRED series id."""
         lower = claim.lower()
@@ -747,3 +849,57 @@ def _price_history_source_name(provider_name: str) -> str:
         "finnhub_historical_prices": "Finnhub",
         "stooq_historical_prices": "Stooq",
     }.get(provider_name, provider_name)
+
+
+def _provider_allowed(name: str, allowed: set[str]) -> bool:
+    if name in allowed:
+        return True
+    grouped = {
+        "company_fundamentals_vendor": {"alpha_vantage", "finnhub", "fmp"},
+        "market_prices_vendor": {"marketstack", "tiingo", "stooq", "yahoo_chart_unofficial"},
+    }
+    return any(name in members for provider, members in grouped.items() if provider in allowed)
+
+
+def _needs_treasury_data(claim: str) -> bool:
+    lower = claim.lower()
+    return any(
+        phrase in lower
+        for phrase in ["federal debt", "public debt", "debt held by the public", "fiscal deficit", "treasury debt"]
+    )
+
+
+def _needs_gleif_data(claim: str) -> bool:
+    lower = claim.lower()
+    return any(phrase in lower for phrase in ["lei", "legal entity", "counterparty", "issuer identity"])
+
+
+def _sec_concept_matches_claim(concept: str, claim: str) -> bool:
+    concept_tokens = set(_tokenize_concept(concept))
+    claim_tokens = {token for token in re.split(r"[^a-z0-9]+", claim.lower()) if len(token) > 2}
+    if not concept_tokens or not claim_tokens:
+        return False
+    if "revenue" in concept_tokens and {"revenue", "sales"} & claim_tokens:
+        specific_claim_tokens = claim_tokens - {
+            "the",
+            "and",
+            "for",
+            "with",
+            "from",
+            "total",
+            "revenue",
+            "sales",
+            "reported",
+            "latest",
+            "quarter",
+            "year",
+            "fiscal",
+        }
+        if specific_claim_tokens and concept_tokens & specific_claim_tokens:
+            return True
+    return False
+
+
+def _tokenize_concept(concept: str) -> list[str]:
+    spaced = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", concept)
+    return [token.lower() for token in re.split(r"[^A-Za-z0-9]+", spaced) if len(token) > 2]

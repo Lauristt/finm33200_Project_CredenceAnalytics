@@ -7,12 +7,16 @@ import re
 from datetime import date, datetime
 from urllib.parse import urlparse
 
-from .models import SourceAssessment, SourceTier, SourceType, clamp
+from .models import LicenseTag, SourceAssessment, SourceTier, SourceType, clamp
 
 
 DOMAIN_AUTHORITY: list[tuple[str, SourceType, SourceTier, float, str]] = [
     ("sec.gov", SourceType.SEC_FILING, SourceTier.T1, 1.00, "SEC filing/regulatory source"),
     ("data.sec.gov", SourceType.SEC_FILING, SourceTier.T1, 1.00, "SEC structured data"),
+    ("fiscaldata.treasury.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.95, "U.S. Treasury fiscal data"),
+    ("api.fiscaldata.treasury.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.95, "U.S. Treasury fiscal data API"),
+    ("gleif.org", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.93, "GLEIF legal entity data"),
+    ("api.gleif.org", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.93, "GLEIF legal entity API"),
     ("nasdaq.com", SourceType.REGULATOR_EXCHANGE, SourceTier.T2, 0.82, "exchange/data source"),
     ("nyse.com", SourceType.REGULATOR_EXCHANGE, SourceTier.T2, 0.86, "exchange source"),
     ("reuters.com", SourceType.FINANCIAL_MEDIA, SourceTier.T3, 0.85, "major financial media"),
@@ -43,6 +47,26 @@ DOMAIN_AUTHORITY: list[tuple[str, SourceType, SourceTier, float, str]] = [
 ]
 
 
+SOURCE_GOVERNANCE: dict[str, tuple[LicenseTag, bool]] = {
+    "sec.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "data.sec.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "fiscaldata.treasury.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "api.fiscaldata.treasury.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "gleif.org": (LicenseTag.CC0, True),
+    "api.gleif.org": (LicenseTag.CC0, True),
+    "api.stlouisfed.org": (LicenseTag.THIRD_PARTY_RESTRICTED, True),
+    "fred.stlouisfed.org": (LicenseTag.THIRD_PARTY_RESTRICTED, True),
+    "worldbank.org": (LicenseTag.CC_BY, True),
+    "api.worldbank.org": (LicenseTag.CC_BY, True),
+    "query1.finance.yahoo.com": (LicenseTag.THIRD_PARTY_RESTRICTED, False),
+    "finance.yahoo.com": (LicenseTag.THIRD_PARTY_RESTRICTED, False),
+    "alphavantage.co": (LicenseTag.THIRD_PARTY_RESTRICTED, False),
+    "finnhub.io": (LicenseTag.THIRD_PARTY_RESTRICTED, False),
+    "financialmodelingprep.com": (LicenseTag.THIRD_PARTY_RESTRICTED, False),
+    "stooq.com": (LicenseTag.UNKNOWN, False),
+}
+
+
 def canonical_domain(url: str) -> str:
     """Normalize a URL or host into a comparable domain."""
     parsed = urlparse(url if "://" in url else f"https://{url}")
@@ -60,7 +84,16 @@ def assess_source(url: str, title: str = "") -> SourceAssessment:
 
     for pattern, source_type, tier, score, reason in DOMAIN_AUTHORITY:
         if domain == pattern or domain.endswith(f".{pattern}"):
-            return SourceAssessment(source_type, tier, score, domain, [reason])
+            license_tag, is_official_primary = source_governance(pattern)
+            return SourceAssessment(
+                source_type,
+                tier,
+                score,
+                domain,
+                [reason],
+                license_tag=license_tag,
+                is_official_primary=is_official_primary,
+            )
 
     if re.search(r"\b(investor|investors|ir|newsroom|press-release|press_release)\b", lower_url):
         return SourceAssessment(
@@ -69,6 +102,8 @@ def assess_source(url: str, title: str = "") -> SourceAssessment:
             0.86,
             domain,
             ["company investor-relations or official press page pattern"],
+            license_tag=LicenseTag.UNKNOWN,
+            is_official_primary=False,
         )
 
     if "press release" in lower_title or "earnings release" in lower_title:
@@ -78,6 +113,8 @@ def assess_source(url: str, title: str = "") -> SourceAssessment:
             0.80,
             domain,
             ["official-style release title pattern"],
+            license_tag=LicenseTag.UNKNOWN,
+            is_official_primary=False,
         )
 
     return SourceAssessment(
@@ -87,6 +124,15 @@ def assess_source(url: str, title: str = "") -> SourceAssessment:
         domain,
         ["unknown source; conservative default"],
     )
+
+
+def source_governance(domain_or_pattern: str) -> tuple[LicenseTag, bool]:
+    """Return license and primary-source policy for a known domain."""
+    domain = canonical_domain(domain_or_pattern)
+    for pattern, policy in SOURCE_GOVERNANCE.items():
+        if domain == pattern or domain.endswith(f".{pattern}"):
+            return policy
+    return LicenseTag.UNKNOWN, False
 
 
 def score_recency(published_at: str | None, as_of_date: str | None = None) -> tuple[float, list[str]]:
@@ -131,7 +177,8 @@ def parse_date(value: str | None) -> date | None:
 
 
 NUMBER_RE = re.compile(
-    r"[-+]?\$?\d+(?:,\d{3})*(?:\.\d+)?\s*(?:%|percent|bps|billion|million|trillion|bn|mn)?",
+    r"[-+]?\$?\d+(?:,\d{3})*(?:\.\d+)?\s*"
+    r"(?:%|percent|bps|billion|million|trillion|bn|mn|亿\s*美元|万\s*美元|亿美元|万美元|美元|亿|万)?",
     re.IGNORECASE,
 )
 
@@ -195,4 +242,10 @@ def _is_temporal_duration(text: str, number_end: int) -> bool:
 
 
 def _has_financial_numeric_unit(value: str) -> bool:
-    return bool(re.search(r"(%|percent|bps|billion|million|trillion|bn|mn|\$)", value, re.IGNORECASE))
+    return bool(
+        re.search(
+            r"(%|percent|bps|billion|million|trillion|bn|mn|亿\s*美元|万\s*美元|亿美元|万美元|美元|亿|万|\$)",
+            value,
+            re.IGNORECASE,
+        )
+    )

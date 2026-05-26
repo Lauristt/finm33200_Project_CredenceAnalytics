@@ -69,6 +69,8 @@ class EvidenceExtractor:
                 source_tier=source.source_tier,
                 domain=source.domain,
                 published_at=result.published_at,
+                license_tag=source.license_tag,
+                is_official_primary=source.is_official_primary,
                 source_authority=source.authority_score,
                 recency_score=recency_score,
                 relevance_score=relevance,

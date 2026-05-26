@@ -7,14 +7,23 @@ from typing import Any, Callable
 
 from .aggregation import aggregate_scores
 from .argument import classify_argument_type
+from .audit import build_audit_trace as run_build_audit_trace
+from .claim_verification import verify_atomic_claims
+from .claims import decompose_claims
 from .config import ToolkitConfig
 from .data_sources import FreeDataSourceClient
+from .entity import resolve_entity as run_resolve_entity
+from .entity_extraction import extract_entities_from_memo as run_extract_entities_from_memo
 from .extraction import EvidenceExtractor
+from .facts import canonicalize_evidence, canonicalize_search_results
 from .judges import create_judge
 from .models import (
     ArgumentType,
+    CanonicalFact,
     Evidence,
+    EntityResolution,
     SearchResult,
+    LicenseTag,
     SourceTier,
     SourceType,
     SupportLabel,
@@ -22,7 +31,9 @@ from .models import (
 )
 from .modes.agentic import AgenticCredibilityRunner
 from .price_history import format_price_history_summary, summarize_price_history
+from .routing import route_sources as run_route_sources
 from .search import SearchClient
+from .source_selection import select_sources_for_claims as run_select_sources_for_claims
 from .sources import assess_source
 from .tool_registry import get_registered_tool
 from .toolkit import FinancialCredibilityToolkit
@@ -50,12 +61,21 @@ def execute_tool(
 def _executors() -> dict[str, ToolExecutor]:
     return {
         "classify_claim": _execute_classify_claim,
+        "extract_entities": _execute_extract_entities,
+        "decompose_claims": _execute_decompose_claims,
+        "resolve_entity": _execute_resolve_entity,
+        "route_sources": _execute_route_sources,
+        "select_sources": _execute_select_sources,
         "get_sec_company_facts": _execute_get_sec_company_facts,
         "get_recent_filings": _execute_get_recent_filings,
+        "get_canonical_facts": _execute_get_canonical_facts,
         "get_company_fundamentals": _execute_get_company_fundamentals,
         "get_historical_prices": _execute_get_historical_prices,
         "compare_stock_performance": _execute_compare_stock_performance,
         "retrieve_evidence": _execute_retrieve_evidence,
+        "verify_atomic_claim": _execute_verify_atomic_claim,
+        "calibrate_uncertainty": _execute_calibrate_uncertainty,
+        "build_audit_trace": _execute_build_audit_trace,
         "verify_numeric_claim": _execute_verify_numeric_claim,
         "verify_logic_claim": _execute_verify_logic_claim,
         "verify_source_quality": _execute_verify_source_quality,
@@ -67,6 +87,48 @@ def _executors() -> dict[str, ToolExecutor]:
 def _execute_classify_claim(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
     classification = classify_argument_type(_required_str(args, "claim"))
     return to_plain(classification)
+
+
+def _execute_extract_entities(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    return run_extract_entities_from_memo(
+        memo=_required_str(args, "memo"),
+        config=config,
+        max_entities=int(args.get("max_entities", 8)),
+    )
+
+
+def _execute_decompose_claims(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    return {"claims": [to_plain(item) for item in decompose_claims(_required_str(args, "claim"))]}
+
+
+def _execute_resolve_entity(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    entity = run_resolve_entity(
+        ticker=_required_str(args, "ticker"),
+        evidence=_evidence_list_from_args(args),
+        search_results=_search_result_list_from_args(args),
+        cik=args.get("cik"),
+        lei=args.get("lei"),
+        figi=args.get("figi"),
+    )
+    return to_plain(entity)
+
+
+def _execute_route_sources(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    return run_route_sources(
+        claim=_required_str(args, "claim"),
+        official_only=bool(args.get("official_only", True)),
+    )
+
+
+def _execute_select_sources(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    selections = run_select_sources_for_claims(
+        claims=_required_str(args, "claim"),
+        config=config,
+        candidate_limit=int(args.get("candidate_limit", 6)),
+        max_selected=int(args.get("max_selected", 4)),
+        include_planned=bool(args.get("include_planned_sources", False)),
+    )
+    return {"selections": selections}
 
 
 def _execute_get_sec_company_facts(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
@@ -82,6 +144,26 @@ def _execute_get_recent_filings(args: dict[str, Any], config: ToolkitConfig) -> 
     client = FreeDataSourceClient(config)
     results = client.sec_recent_filings(_required_str(args, "ticker"))
     return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
+def _execute_get_canonical_facts(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    evidence = _evidence_list_from_args(args)
+    search_results = _search_result_list_from_args(args)
+    entity = run_resolve_entity(
+        ticker=ticker,
+        evidence=evidence,
+        search_results=search_results,
+        cik=args.get("cik"),
+        lei=args.get("lei"),
+    )
+    facts = canonicalize_search_results(search_results, ticker, entity)
+    if not facts:
+        facts = canonicalize_evidence(evidence, ticker, entity)
+    return {
+        "entity_resolution": to_plain(entity),
+        "canonical_facts": [to_plain(item) for item in facts],
+    }
 
 
 def _execute_get_company_fundamentals(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
@@ -176,6 +258,53 @@ def _execute_retrieve_evidence(args: dict[str, Any], config: ToolkitConfig) -> d
         "search_notes": search_notes,
         "extraction_notes": extraction_notes,
     }
+
+
+def _execute_verify_atomic_claim(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    evidence = _evidence_list_from_args(args)
+    facts = _canonical_fact_list_from_args(args)
+    entity = run_resolve_entity(ticker=ticker, evidence=evidence, cik=args.get("cik"), lei=args.get("lei"))
+    if not facts:
+        facts = canonicalize_evidence(evidence, ticker, entity)
+    results = verify_atomic_claims(
+        claim=_required_str(args, "claim"),
+        evidence=evidence,
+        canonical_facts=facts,
+        entity_resolution=entity,
+        judge=create_judge(config),
+    )
+    return {"atomic_claims": [to_plain(item) for item in results]}
+
+
+def _execute_calibrate_uncertainty(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    return _execute_verify_atomic_claim(args, config)
+
+
+def _execute_build_audit_trace(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    claim = _required_str(args, "claim")
+    as_of_date = str(args.get("as_of_date") or date.today().isoformat())
+    search_results = _search_result_list_from_args(args)
+    evidence = _evidence_list_from_args(args)
+    facts = _canonical_fact_list_from_args(args)
+    entity = run_resolve_entity(ticker=ticker, evidence=evidence, search_results=search_results)
+    if not facts:
+        facts = canonicalize_search_results(search_results, ticker, entity) or canonicalize_evidence(evidence, ticker, entity)
+    atomic_results = verify_atomic_claims(claim, evidence, facts, entity, create_judge(config))
+    trace = run_build_audit_trace(
+        claim=claim,
+        ticker=ticker,
+        as_of_date=as_of_date,
+        search_results=search_results,
+        evidence=evidence,
+        canonical_facts=facts,
+        entity_resolution=entity,
+        atomic_results=atomic_results,
+        search_notes=[],
+        extraction_notes=[],
+    )
+    return to_plain(trace)
 
 
 def _execute_verify_numeric_claim(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
@@ -295,6 +424,14 @@ def _evidence_list_from_args(args: dict[str, Any]) -> list[Evidence]:
     return [_evidence_from_dict(item) for item in args.get("evidence", [])]
 
 
+def _search_result_list_from_args(args: dict[str, Any]) -> list[SearchResult]:
+    return [_search_result_from_dict(item) for item in args.get("search_results", [])]
+
+
+def _canonical_fact_list_from_args(args: dict[str, Any]) -> list[CanonicalFact]:
+    return [_canonical_fact_from_dict(item) for item in args.get("canonical_facts", [])]
+
+
 def _evidence_from_dict(item: dict[str, Any]) -> Evidence:
     source = assess_source(str(item.get("url", "")), str(item.get("title", "")))
     source_type = _enum_value(SourceType, item.get("source_type"), source.source_type)
@@ -308,6 +445,8 @@ def _evidence_from_dict(item: dict[str, Any]) -> Evidence:
         source_tier=source_tier,
         domain=str(item.get("domain") or source.domain),
         published_at=item.get("published_at"),
+        license_tag=_enum_value(LicenseTag, item.get("license_tag"), source.license_tag),
+        is_official_primary=bool(item.get("is_official_primary", source.is_official_primary)),
         source_authority=float(item.get("source_authority", source.authority_score)),
         recency_score=float(item.get("recency_score", 0.0)),
         relevance_score=float(item.get("relevance_score", 0.0)),
@@ -325,8 +464,43 @@ def _search_result_to_dict(item: SearchResult) -> dict[str, Any]:
     return to_plain(item)
 
 
+def _search_result_from_dict(item: dict[str, Any]) -> SearchResult:
+    return SearchResult(
+        title=str(item.get("title", "")),
+        url=str(item.get("url") or item.get("link") or ""),
+        snippet=str(item.get("snippet") or item.get("text") or ""),
+        published_at=item.get("published_at") or item.get("date"),
+        source=item.get("source"),
+        raw=dict(item.get("raw") or {k: v for k, v in item.items() if k not in {"title", "url", "snippet", "text"}}),
+    )
+
+
 def _evidence_to_dict(item: Evidence) -> dict[str, Any]:
     return to_plain(item)
+
+
+def _canonical_fact_from_dict(item: dict[str, Any]) -> CanonicalFact:
+    return CanonicalFact(
+        fact_id=str(item.get("fact_id", "")),
+        source_type=_enum_value(SourceType, item.get("source_type"), SourceType.UNKNOWN),
+        authority_tier=_enum_value(SourceTier, item.get("authority_tier"), SourceTier.T4),
+        license_tag=_enum_value(LicenseTag, item.get("license_tag"), LicenseTag.UNKNOWN),
+        entity_id=str(item.get("entity_id", "")),
+        ticker=str(item.get("ticker", "")).upper(),
+        cik=item.get("cik"),
+        lei=item.get("lei"),
+        report_period=item.get("report_period"),
+        filing_date=item.get("filing_date"),
+        observation_date=item.get("observation_date"),
+        vintage_date=item.get("vintage_date"),
+        unit=item.get("unit"),
+        currency=item.get("currency"),
+        fact_name=item.get("fact_name"),
+        value=item.get("value"),
+        provenance_locator=str(item.get("provenance_locator", "")),
+        parser_confidence=float(item.get("parser_confidence", 0.0)),
+        raw=dict(item.get("raw") or {}),
+    )
 
 
 def _dedupe_results(results: list[SearchResult]) -> list[SearchResult]:

@@ -17,6 +17,18 @@ For simple factual claims:
 build_evidence_pack(claim, ticker)
 ```
 
+For multi-claim official verification:
+
+```text
+extract_entities(memo)
+decompose_claims(claim)
+resolve_entity(ticker, search_results/evidence)
+select_sources(atomic_claim)
+get_canonical_facts(ticker, search_results/evidence)
+verify_atomic_claim(claim, ticker, evidence, canonical_facts)
+build_audit_trace(claim, ticker, search_results, evidence, canonical_facts)
+```
+
 For vague performance or price-action claims:
 
 ```text
@@ -61,6 +73,103 @@ None.
 
 Limitations:
 Rule-based routing. It is not a truth assessment.
+
+### decompose_claims
+
+Purpose:
+Split a memo, paragraph, or compound sentence into atomic verifiable claims.
+
+Outputs:
+
+- `claims`: claim id, text, argument type, classification confidence, signals.
+
+### extract_entities
+
+Purpose:
+Extract public companies, issuers, securities, and ticker hints from an
+investment memo. Uses an optional OpenAI/Anthropic extractor plus deterministic
+fallbacks. The high-level report UI calls this automatically when the entity
+field is blank.
+
+Outputs:
+
+- `entities`
+- `tickers`
+- `unresolved_entities`
+- `method`
+- `notes`
+
+### resolve_entity
+
+Purpose:
+Resolve ticker, CIK, LEI, FIGI, and evidence metadata into one entity mapping.
+
+Outputs:
+
+- `entity_id`
+- `cik`
+- `lei`
+- `confidence`
+- `issues`
+
+### route_sources
+
+Purpose:
+Choose official source adapters for an atomic claim.
+
+Outputs:
+
+- `routes`
+- `reasons`
+
+### select_sources
+
+Purpose:
+Choose source ids from the governed source catalog with progressive disclosure.
+The first pass shows only compact source cards. For the selected sources only,
+the runtime loads local `source_descriptions/*.md` detail files and optionally
+asks the configured OpenAI or Anthropic selector to refine the choice. The policy
+validator then filters unknown ids and adds official primary sources when needed.
+
+Outputs:
+
+- `selections`
+- `candidate_sources`
+- `disclosure_stages`
+- `selected_sources`
+- `selected_source_details`
+- `selected_provider_names`
+- `rationale`
+- `policy_notes`
+
+### get_canonical_facts
+
+Purpose:
+Normalize SEC/FRED-style structured results or official evidence into canonical
+facts with provenance and license metadata.
+
+Outputs:
+
+- `entity_resolution`
+- `canonical_facts`
+
+### verify_atomic_claim
+
+Purpose:
+Return claim-level verdicts with evidence keys, canonical fact ids, numeric
+derivations, confidence components, and human-review flags.
+
+### calibrate_uncertainty
+
+Purpose:
+Expose the same claim-level confidence decomposition and human-review triggers
+used by `verify_atomic_claim`.
+
+### build_audit_trace
+
+Purpose:
+Build a replayable audit trace for manual atomic workflows. The high-level
+`build_evidence_pack` output already includes `audit_trace`.
 
 ### get_sec_company_facts
 
