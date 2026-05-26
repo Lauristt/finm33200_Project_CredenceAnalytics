@@ -133,6 +133,8 @@ class FreeDataSourceClient:
         if cik is None:
             return []
         data = self._get_json(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json", sec=True)
+        from datetime import date
+
         facts_by_taxonomy = data.get("facts", {})
         concept_names = self._concepts_for_claim(claim)
         snippets = []
@@ -143,18 +145,40 @@ class FreeDataSourceClient:
                 continue
             units = concept_data.get("units", {})
             for unit_name, values in units.items():
-                clean_values = [
-                    value
-                    for value in values
-                    if value.get("val") is not None and value.get("filed")
-                ]
-                clean_values.sort(key=lambda value: value.get("filed", ""), reverse=True)
-                for value in clean_values[:2]:
+                # Surface full-year AND single-quarter figures, de-duplicated by reporting
+                # period (end date + period kind), so the value for the period a claim refers
+                # to is present. Previously only the 2 most-recently-FILED values were kept,
+                # which let recent quarters crowd out the relevant fiscal-year value.
+                by_period: dict[tuple, dict] = {}
+                for value in values:
+                    end = value.get("end")
+                    if value.get("val") is None or not value.get("filed") or not end:
+                        continue
+                    start = value.get("start")
+                    if start:
+                        try:
+                            span = (date.fromisoformat(end) - date.fromisoformat(start)).days
+                        except ValueError:
+                            continue
+                        if 350 <= span <= 380:
+                            kind = "fiscal year"
+                        elif 80 <= span <= 100:
+                            kind = "fiscal quarter"
+                        else:
+                            continue  # skip overlapping half-year / nine-month periods
+                    elif value.get("form") == "10-K":
+                        kind = "fiscal year"
+                    else:
+                        continue
+                    key = (end, kind)
+                    prev = by_period.get(key)
+                    if prev is None or value.get("filed", "") > prev.get("filed", ""):
+                        by_period[key] = value
+                for (end, kind), value in sorted(by_period.items(), key=lambda kv: kv[0][0], reverse=True)[:8]:
                     latest_date = max(latest_date or "", value.get("filed", "")) or latest_date
-                    frame = f" frame {value.get('frame')}" if value.get("frame") else ""
                     snippets.append(
-                        f"{concept} ({unit_name}) {value.get('fy', '')} {value.get('fp', '')}: "
-                        f"{value.get('val')} filed {value.get('filed')} form {value.get('form')}{frame}"
+                        f"{concept} ({unit_name}) for {kind} ending {end}: "
+                        f"{value.get('val')} (form {value.get('form')})"
                     )
 
         if not snippets:
@@ -165,7 +189,7 @@ class FreeDataSourceClient:
             SearchResult(
                 title=f"SEC Company Facts for {ticker.upper()}",
                 url=url,
-                snippet="; ".join(snippets[:8]),
+                snippet="; ".join(snippets[:30]),
                 published_at=latest_date,
                 source="SEC EDGAR",
                 raw={"provider": "sec_company_facts", "cik": cik},

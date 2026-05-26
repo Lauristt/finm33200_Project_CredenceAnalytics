@@ -1,0 +1,114 @@
+﻿id,statement,source,asset_class,entity,claim_type,label,perturbation
+S1,"Nvidia reported first-quarter revenue of $81.62 billion, beating analyst estimates of $79.18 billion.",yahoo: nvidia-q1-earnings-takeaways,stock,NVDA,numeric,true,none
+S1n,Nvidia reported first-quarter revenue of $61.62 billion.,perturbed from S1,stock,NVDA,numeric,false,number
+S2,Nvidia's data center revenue rose 92% year over year in the first quarter.,yahoo: nvidia-q1-earnings-takeaways,stock,NVDA,numeric,true,none
+S2n,Nvidia's data center revenue rose 19% year over year in the first quarter.,perturbed from S2,stock,NVDA,numeric,false,number
+S9,"Nvidia posted adjusted earnings of $1.87 per share, beating estimates of $1.77.",yahoo: nvidia-q1-earnings-takeaways,stock,NVDA,numeric,true,none
+S9n,Nvidia posted adjusted earnings of $2.87 per share.,perturbed from S9,stock,NVDA,numeric,false,number
+S6,Nvidia guided to second-quarter revenue of between $89.1 billion and $92.8 billion.,yahoo: nvidia-strong-outlook,stock,NVDA,forecast,na,none
+S7,Nvidia's strong revenue outlook makes it the most attractive AI stock to own right now.,yahoo: nvidia-strong-outlook (analyst view),stock,NVDA,opinion,na,none
+Sc1,Nvidia's growth was driven by surging data center demand.,yahoo: nvidia-q1-earnings-takeaways,stock,NVDA,causal,true,none
+S3,"Apple reported second-quarter revenue of $111.2 billion, above estimates of $109.66 billion.",yahoo: apple-beats-q2-earnings,stock,AAPL,numeric,true,none
+S3d,"Apple reported fourth-quarter revenue of $111.2 billion, above estimates.",perturbed from S3,stock,AAPL,numeric,false,date
+S4,Apple's Greater China revenue was $20.50 billion in the second quarter.,yahoo: apple-beats-q2-earnings,stock,AAPL,numeric,true,none
+S4n,Apple's Greater China revenue was $30.50 billion in the second quarter.,perturbed from S4,stock,AAPL,numeric,false,number
+S5,"Apple posted adjusted earnings per share of $2.01, beating estimates of $1.96.",yahoo: apple-beats-q2-earnings,stock,AAPL,numeric,true,none
+S8,Apple's iPhone revenue was $56.99 billion in the second quarter.,yahoo: apple-beats-q2-earnings,stock,AAPL,numeric,true,none
+S8n,Apple's iPhone revenue was $46.99 billion in the second quarter.,perturbed from S8,stock,AAPL,numeric,false,number
+Sc2,Apple's revenue beat was driven by strong iPhone and China sales.,yahoo: apple-beats-q2-earnings,stock,AAPL,causal,true,none
+MS1,"Microsoft reported adjusted earnings per share of $4.27, beating consensus by $0.21.",yahoo: amazon-vs-microsoft-earnings,stock,MSFT,numeric,true,none
+MS1n,Microsoft reported adjusted earnings per share of $3.27.,perturbed from MS1,stock,MSFT,numeric,false,number
+MS2,"Microsoft reported revenue of $82.89 billion, beating estimates by about $1.5 billion.",yahoo: amazon-vs-microsoft-earnings,stock,MSFT,numeric,true,none
+MS2n,Microsoft reported revenue of $92.89 billion.,perturbed from MS2,stock,MSFT,numeric,false,number
+MS3,Microsoft guided to Azure revenue growth of 39% to 40% for the current quarter.,yahoo: amazon-vs-microsoft-earnings,stock,MSFT,forecast,na,none
+MSc,Microsoft's revenue grew because of strong Azure and cloud demand.,yahoo: amazon-vs-microsoft-earnings,stock,MSFT,causal,true,none
+MSo,Microsoft is the safest mega-cap AI investment today.,market commentary,stock,MSFT,opinion,na,none
+AM1,"Amazon reported earnings per share of $2.78, beating estimates by $1.10.",yahoo: amazon-vs-microsoft-earnings,stock,AMZN,numeric,true,none
+AM1n,Amazon reported earnings per share of $1.78.,perturbed from AM1,stock,AMZN,numeric,false,number
+AM2,"Amazon reported revenue of $181.5 billion, beating estimates by over $4 billion.",yahoo: amazon-vs-microsoft-earnings,stock,AMZN,numeric,true,none
+AM2n,Amazon reported revenue of $151.5 billion.,perturbed from AM2,stock,AMZN,numeric,false,number
+AM3,Amazon Web Services revenue rose 24% to $35.6 billion in the fourth quarter of 2025.,yahoo: magnificent-seven-earnings,stock,AMZN,numeric,true,none
+AM3d,Amazon Web Services revenue rose 24% to $35.6 billion in the first quarter of 2025.,perturbed from AM3,stock,AMZN,numeric,false,date
+AMo,Amazon looks like a better buy than Microsoft after this earnings season.,yahoo: amazon-vs-microsoft-earnings (opinion),stock,AMZN,opinion,na,none
+AMf,Amazon's AWS growth will keep accelerating through 2026.,market forecast,stock,AMZN,forecast,na,none
+GO1,"Alphabet reported adjusted earnings per share of $2.62, missing estimates by a penny.",yahoo: magnificent-seven-earnings,stock,GOOGL,numeric,true,none
+GO1d,Alphabet reported fourth-quarter adjusted earnings per share of $2.62.,perturbed from GO1,stock,GOOGL,numeric,false,date
+GO2,"Alphabet reported revenue of nearly $110 billion, beating estimates by $2.7 billion.",yahoo: magnificent-seven-earnings,stock,GOOGL,numeric,true,none
+GO2n,Alphabet reported revenue of nearly $140 billion.,perturbed from GO2,stock,GOOGL,numeric,false,number
+GO3,Google Cloud revenue soared 63% year over year.,yahoo: magnificent-seven-earnings,stock,GOOGL,numeric,true,none
+GO3n,Google Cloud revenue soared 33% year over year.,perturbed from GO3,stock,GOOGL,numeric,false,number
+GOo,Alphabet is the best buy among the mega-cap tech stocks.,yahoo: alphabet-microsoft-amazon-meta-best-buy (opinion),stock,GOOGL,opinion,na,none
+TS1,"Tesla posted first-quarter revenue of $22.39 billion, topping the consensus estimate of $21.92 billion.",yahoo: tesla-tsla-since-earnings,stock,TSLA,numeric,true,none
+TS1n,Tesla posted first-quarter revenue of $32.39 billion.,perturbed from TS1,stock,TSLA,numeric,false,number
+TS2,Tesla reported first-quarter adjusted earnings of 41 cents per share.,yahoo: tesla-tsla-since-earnings,stock,TSLA,numeric,true,none
+TS2n,Tesla reported first-quarter adjusted earnings of 81 cents per share.,perturbed from TS2,stock,TSLA,numeric,false,number
+TS3,Tesla's services and other revenue climbed to $3.75 billion from $2.64 billion a year earlier.,yahoo: tesla-tsla-since-earnings,stock,TSLA,numeric,true,none
+TS4,Tesla expects 2026 capital expenditure of over $25 billion and negative free cash flow for the rest of the year.,yahoo: tesla-tsla-since-earnings,stock,TSLA,forecast,na,none
+TS5,Tesla's Optimus robots are on track for end-of-year production.,yahoo: tesla-stock-climbs-q4-optimus,stock,TSLA,forecast,na,none
+TSo,Tesla stock will plunge 60% from current levels.,yahoo: jpmorgan-betting-tesla-plunge (analyst view),stock,TSLA,forecast,na,none
+ME1,Meta's first-quarter revenue beat was driven by strength in advertising.,yahoo: tesla-meta-ai-race,stock,META,causal,true,none
+ME2,Meta's CFO said the company will fund its AI ambitions primarily with cash rather than debt.,yahoo: tesla-meta-ai-race,stock,META,factual,true,none
+MEo,Meta is winning the AI race among big tech companies.,yahoo: tesla-meta-ai-race (opinion),stock,META,opinion,na,none
+JP1,JPMorgan generated fourth-quarter net income of $14.7 billion excluding a significant item.,yahoo/sec: jpmorgan-4q25,stock,JPM,numeric,true,none
+JP1n,JPMorgan generated fourth-quarter net income of $24.7 billion.,perturbed from JP1,stock,JPM,numeric,false,number
+JP2,"JPMorgan reported fourth-quarter net revenue of $46.8 billion, up 7%.",yahoo/sec: jpmorgan-4q25,stock,JPM,numeric,true,none
+JP2n,JPMorgan reported fourth-quarter net revenue of $66.8 billion.,perturbed from JP2,stock,JPM,numeric,false,number
+JP3,"JPMorgan reported net interest income of $25.1 billion in the fourth quarter, up 7%.",yahoo/sec: jpmorgan-4q25,stock,JPM,numeric,true,none
+JP3n,JPMorgan reported net interest income of $15.1 billion in the fourth quarter.,perturbed from JP3,stock,JPM,numeric,false,number
+M1,"U.S. consumer prices rose 3.8% over the 12 months ending in April 2026, the fastest annual pace since May 2023.",yahoo: u-cpi-rose-3-8,macro,CPI,numeric,true,none
+M1n,U.S. consumer prices rose 1.9% over the 12 months ending in April 2026.,perturbed from M1,macro,CPI,numeric,false,number
+M1d,"U.S. consumer prices rose 3.8% over the 12 months ending in April 2026, the fastest pace since May 2019.",perturbed from M1,macro,CPI,numeric,false,date
+M2,The 12-month energy index gain reached 17.9% in the April 2026 inflation report.,yahoo: u-cpi-rose-3-8,macro,CPI_energy,numeric,true,none
+M2n,The 12-month energy index gain reached 7.9% in the April 2026 inflation report.,perturbed from M2,macro,CPI_energy,numeric,false,number
+M3,U.S. GDP grew at a 2.1% pace in 2025.,yahoo: iran-wars-economic-hit,macro,GDP,numeric,true,none
+M3n,U.S. GDP grew at a 3.4% pace in 2025.,perturbed from M3,macro,GDP,numeric,false,number
+M4,The U.S. economy is heading into a period of mild stagflation.,yahoo: mild-stagflation-bofa (opinion),macro,US_economy,opinion,na,none
+M5,"Headline inflation is forecast to reach 3.6% in 2026, up from 2.8%.",yahoo: iran-wars-economic-hit,macro,inflation,forecast,na,none
+M6,The Iran war could slow U.S. GDP growth to 1.8% this year.,yahoo: iran-wars-economic-hit (EY forecast),macro,GDP,forecast,na,none
+M7,Energy costs tied to the war with Iran drove U.S. inflation higher in April 2026.,yahoo: u-cpi-rose-3-8,macro,CPI,causal,true,none
+M8,Hotter-than-expected inflation has raised the odds of a Fed rate hike.,yahoo: hot-cpi-fed-on-guard,rates,Fed,opinion,na,none
+C1,"Brent crude was trading around $105 a barrel, up 44% since before the Iran war started.",yahoo: iran-wars-economic-hit,commodity,Brent,numeric,true,none
+C1n,Brent crude was trading around $135 a barrel.,perturbed from C1,commodity,Brent,numeric,false,number
+C2,Oil prices will stay above $100 a barrel for all of 2026.,yahoo: mild-stagflation-bofa (BofA forecast),commodity,oil,forecast,na,none
+C3,Gold remains the ultimate safe-haven asset in times of war.,market commentary,commodity,gold,opinion,na,none
+C4,Oil prices rose because the Iran war tightened global crude supply.,yahoo: iran-wars-economic-hit,commodity,oil,causal,true,none
+IX1,"The S&P 500 closed at a record 7,501.24 on May 15, 2026.",yahoo: stock-market-news-may-15,index,SPX,numeric,true,none
+IX1n,"The S&P 500 closed at 6,501.24 on May 15, 2026.",perturbed from IX1,index,SPX,numeric,false,number
+IX2,"The S&P 500 closed above the 7,500 mark for the first time in its history.",yahoo: stock-market-news-may-15,index,SPX,factual,true,none
+IX3,The S&P 500 was on track for its longest weekly winning streak since 2023.,yahoo: sp-500-longest-weekly-win-streak,index,SPX,factual,true,none
+IXf,The AI trade will keep pushing U.S. stocks to fresh record highs.,yahoo: ai-trade-roars-back (opinion/forecast),index,SPX,forecast,na,none
+FX1,"EUR/USD was trading at about 1.1637, down slightly on the day.",yahoo: eurusd-live,fx,EURUSD,numeric,true,none
+FX1n,EUR/USD was trading at about 1.2637.,perturbed from FX1,fx,EURUSD,numeric,false,number
+FX2,Standard Chartered raised its EUR/USD forecast to 1.16.,yahoo: stanchart-weaker-dollar,fx,EURUSD,forecast,na,none
+FXo,The euro looks set to grind higher against the U.S. dollar.,yahoo: eur-usd-forecast-grind-higher (opinion),fx,EURUSD,opinion,na,none
+FXc,The euro has risen on expectations the Fed will ease policy faster than the ECB.,yahoo: eur-usd-forecast (analysis),fx,EURUSD,causal,na,none
+CG1,"Gold was trading at $4,879.60 an ounce, up 1.48% on the day.",yahoo: gold-quote,commodity,gold,numeric,true,none
+CG1n,"Gold was trading at $3,879.60 an ounce.",perturbed from CG1,commodity,gold,numeric,false,number
+CC1,Copper was trading around $6.11 per pound.,yahoo: copper-quote,commodity,copper,numeric,true,none
+CC1n,Copper was trading around $9.11 per pound.,perturbed from CC1,commodity,copper,numeric,false,number
+CNG1,Natural gas was trading around $2.67 per million BTU.,yahoo: natgas-quote,commodity,natgas,numeric,true,none
+CCo,Copper's 2026 rally is unsustainable.,yahoo: copper-unsustainable-rally,commodity,copper,opinion,na,none
+CCc,Soaring copper prices often signal economic strength.,yahoo: copper-prices-soaring-signals,commodity,copper,causal,na,none
+IXD1,"The Dow Jones Industrial Average closed at 50,579.70, up 0.58%.",yahoo: dow-record,index,DJI,numeric,true,none
+IXD1n,"The Dow Jones Industrial Average closed at 40,579.70.",perturbed from IXD1,index,DJI,numeric,false,number
+IXN1,"The Nasdaq Composite closed at 26,343.97, up 0.19%.",yahoo: nasdaq-close,index,IXIC,numeric,true,none
+IXN1n,"The Nasdaq Composite closed at 29,343.97.",perturbed from IXN1,index,IXIC,numeric,false,number
+R1,The 10-year Treasury yield was about 4.26%.,yahoo: tnx-quote,rates,UST10Y,numeric,true,none
+R1n,The 10-year Treasury yield was about 6.26%.,perturbed from R1,rates,UST10Y,numeric,false,number
+R2,The 10-year Treasury yield rose to its highest level in 10 months on hotter-than-expected inflation.,yahoo: 10-year-yield-highest-10-months,rates,UST10Y,causal,true,none
+Rf,Markets are pricing in the next Fed interest-rate cut for mid-to-late 2027.,yahoo: surprising-jobs-report-fed,rates,Fed,forecast,na,none
+Ro,The Fed should hold off on additional rate cuts given labor-market strength.,yahoo: us-job-strength-fed,rates,Fed,opinion,na,none
+J1,"The U.S. added 115,000 nonfarm payrolls in April 2026.",yahoo: april-2026-jobs-report,macro,payrolls,numeric,true,none
+J1n,"The U.S. added 315,000 nonfarm payrolls in April 2026.",perturbed from J1,macro,payrolls,numeric,false,number
+J2,The U.S. unemployment rate was unchanged at 4.3% in April 2026.,yahoo: april-2026-jobs-report,macro,unemployment,numeric,true,none
+J2n,The U.S. unemployment rate was 6.3% in April 2026.,perturbed from J2,macro,unemployment,numeric,false,number
+J3,"The U.S. lost 92,000 nonfarm payrolls in February 2026, with unemployment climbing to 4.4%.",yahoo: february-2026-jobs-report,macro,payrolls,numeric,true,none
+J3d,"The U.S. lost 92,000 nonfarm payrolls in April 2026.",perturbed from J3,macro,payrolls,numeric,false,date
+Jc,Stronger-than-expected jobs data pushed back expectations for Fed rate cuts.,yahoo: surprising-jobs-report-fed,macro,payrolls,causal,true,none
+FXJ,USD/JPY was trading at about 159.24.,yahoo: usdjpy-quote,fx,USDJPY,numeric,true,none
+FXJn,USD/JPY was trading at about 129.24.,perturbed from FXJ,fx,USDJPY,numeric,false,number
+FXG,GBP/JPY was trading at about 214.82.,yahoo: gbpjpy-quote,fx,GBPJPY,numeric,true,none
+BT1,"Bitcoin was trading at about $81,240, up 0.35% over 24 hours.",yahoo: btc-usd-quote,crypto,BTC,numeric,true,none
+BT1n,"Bitcoin was trading at about $61,240.",perturbed from BT1,crypto,BTC,numeric,false,number
+BTo,Bitcoin is digital gold and the ultimate inflation hedge.,market commentary,crypto,BTC,opinion,na,none
+BTf,"Bitcoin will reach $150,000 by the end of 2026.",market forecast,crypto,BTC,forecast,na,none
