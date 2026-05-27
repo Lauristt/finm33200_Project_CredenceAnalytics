@@ -11,9 +11,10 @@ agent's genuine errors from one deliberate design choice — that it checks trut
   rates, crypto and five claim types (numeric, factual, opinion, forecast, causal). Factual
   statements are labeled `true` and **each cross-checked against SEC/FRED**; a perturbed copy
   (changed number/date) makes a matched `false`. Opinion/forecast carry no truth value.
-- **Why real news, not figures from a database:** the job is to judge whether a *real-world*
-  statement is accurate. Perturbing numbers taken from the same database the agent queries would
-  be too easy and overstate performance — so we use real statements with verified labels.
+- **Design decision — robustness vs. retrieval.** Perturbing figures taken from the *same*
+  database the agent queries would only test **retrieval** (can it fetch a row it was handed?).
+  Feeding it **real, independently-sourced news** tests **real-world verification** (can it judge
+  a statement as a human would encounter it?). We deliberately chose the harder, more meaningful test.
 
 ## 2. What we measured
 
@@ -28,7 +29,7 @@ agent's genuine errors from one deliberate design choice — that it checks trut
 | Metric | Real news |
 |---|---|
 | Overall accuracy | **≈36%** |
-| True claims confirmed (`supported`) | **1 / 50** |
+| True claims confirmed (`verified`/`supported`) | **1 / 50** |
 | False claims caught (`contradicted`) | ≈30 / 36 |
 | Confidence AUC (true vs false) | **0.34** |
 
@@ -42,15 +43,24 @@ fetches the *latest* data. That is a reasonable choice for a "is this currently 
 do **not** count it as a bug. (It does limit dated/historical statements — see §6.) The genuine
 problems are below.
 
-### Cause 1 — Even when the data matches, it won't commit to "true" (systemic — the core problem)
-Across 50 true statements it confirmed exactly **one**. The verdict caps at `partially_supported` and
-almost never reaches `supported`. Example: NVIDIA's reported revenue matched the filing **exactly**,
-yet the verdict was `partially_supported`, not `supported`. This has nothing to do with data freshness —
-the number lined up and it still would not affirm. The logic is structured *not* to say "true": matching
-evidence yields "partial", and only a rare configuration produces a clean "supported". The AUC of 0.34
-confirms it: confidence does not separate true claims from false ones.
+### Cause 1 — Systemic conservatism: it confirms only if *every* number matches (the core problem)
+This is a **design-level logic gap, not an AI failure.** In code (`verification.py`), a claim is marked
+`verified` **only when every material number in the sentence is independently found in the evidence**
+(`len(matches) == len(claim_numbers)`); otherwise it is downgraded to `partially_verified`. Real news
+sentences bundle several numbers, but official sources can confirm only the headline fact — so true
+claims almost always fall short of "all matched."
 
-### Cause 2 — SEC: it compares against the wrong reporting period
+> **Example.** *"Nvidia reported first-quarter revenue of $81.62 billion, beating analyst estimates of
+> $79.18 billion."* The SEC filing confirms **$81.62B exactly** — but the **analyst estimate $79.18B**
+> isn't in any official source, by definition. Because the rule requires *both* numbers to match, this
+> true claim is downgraded to `partially_verified`, never `verified`.
+
+The effect is a **false-negative bias**: to avoid affirming something unproven, the logic under-confirms,
+so across 50 true statements it fully confirmed exactly **one**. The AUC of 0.34 reflects the same thing —
+confidence does not separate true claims from false ones. *Note this is not "too high a confidence
+threshold" — there is no such gate; it is the all-or-nothing matching rule.*
+
+### Cause 2 — Temporal granularity mismatch (SEC): it compares against the wrong reporting period
 A company files the *same* metric for many overlapping windows at once. Apple's revenue, for example:
 
 | period (≈ ending 2026-03-28) | value |
@@ -60,11 +70,11 @@ A company files the *same* metric for many overlapping windows at once. Apple's 
 | prior **quarter** (Dec) | $143.8B |
 | full **fiscal year** | $416.2B |
 
-(Note $143.8B + $111.2B ≈ $254.9B — these are the *same metric over different-length windows*, all correct.)
+(Note $143.8B + $111.2B ≈ $254.9B — the *same metric over different-length windows*, all correct.)
 Fed the true claim *"Apple's Q2 revenue was $111.2 billion,"* the agent compared $111.2B against a
 **different period's** figure (e.g. the half-year $254.9B), saw they differed, and judged the true claim
 **`contradicted`**. **This is not a freshness issue** — Q2, the half-year and the full year all coexist as
-current data; the agent has to *match the period* (read the "Q2" and pick that row), and it doesn't.
+current data; the agent has to *match the granularity* (read the "Q2" and pick that row), and it doesn't.
 
 ### Cause 3 — (secondary) misclassification, unmapped metrics & wrong unit
 - Some real reported figures (e.g. *"Microsoft reported revenue of $82.89B"*) were classified as
@@ -74,26 +84,34 @@ current data; the agent has to *match the period* (read the "Q2" and pick that r
 - For year-over-year claims (*"U.S. consumer prices rose 3.8%"*) the agent compares "3.8" against the CPI
   **index level** (332.4) — a **unit** mismatch it can never reconcile.
 
-## 4. Does AI help? (per stage)
-- **Entity extraction — yes** (80.5% → 89.4% with the LLM).
+## 4. Does AI help? (per stage) — value-add is perception, not logic
+- **Entity extraction — yes** (80.5% → 89.4%). The LLM reads *unstructured context* — which token is the
+  asset, which is an action, which is a number — that regex/keyword rules can't disentangle. This is real,
+  AI-only value.
 - **Classification — n/a** (rule-based; AI not used).
-- **Verdict — AI is not the bottleneck;** the failure is a reluctant verdict rule (won't say "true") and
-  period/unit matching, not the model. AI is necessary but not sufficient here.
+- **Verdict — AI is not the bottleneck.** The failure is the *verdict logic* (all-or-nothing matching) and
+  period/unit alignment, not the model. The agent's AI value-add is therefore **limited to perception
+  (reading the claim), not to the logic (judging it).**
 
 ## 5. Bottom line
-The agent's front end works reasonably and AI improves extraction, but the **verdict stage almost never
-confirms a true claim** (1/50; AUC 0.34) — and, crucially, **it won't do so even when the data matches
-exactly** (NVIDIA). That, plus comparing a claim against the wrong SEC reporting period, is the real
-weakness. The agent's "check as of now" design is itself reasonable; the gap is that even correct, current
-matches don't get affirmed.
+The front end works reasonably and AI improves *perception*, but the **verdict stage almost never confirms
+a true claim** (1/50; AUC 0.34) — and, crucially, **it won't do so even when the headline number matches
+exactly** (NVIDIA), because the logic requires *every* number to match. That, plus comparing against the
+wrong SEC reporting period, is the real weakness.
+
+> **Human vs. agent.** A human analyst reads *"Q1 revenue of $81.62B, beating estimates of $79.18B,"*
+> checks the $81.62B against the filing, and calls it **true** — knowing the $79.18B estimate isn't an
+> official figure. The agent demands that *both* numbers match its evidence, so the one number official
+> sources cannot contain drags a true claim down to "partially verified." The gap is judgment, not data.
 
 ## 6. Limitations & future work
 - Verdict accuracy is evaluated on US-equity/macro claims the sources actually cover; opinion/forecast have
   no ground truth (we only check classification); crypto/exotic facts are out of scope.
+- **Replace the hard-coded verdict rule with LLM reasoning.** The all-or-nothing matcher is brittle; an LLM
+  judge could decide that "$81.62B matches; $79.18B is an estimate, not an official figure" and confirm the
+  claim — exactly the judgment the rule lacks.
 - **By design it verifies as-of-now.** *Usability improvement:* add **as-of-date** matching so dated/historical
   statements (e.g. *"the S&P 500 closed at 7,501.24 on May 15"*) are checked against that date rather than the
-  latest value, and add **unit** matching (e.g. `units=pc1` for "rose X%").
-- **Period matching (SEC):** read the claim's fiscal period (Q2 / half-year / FY) and pick the matching
+  latest value, plus **unit** matching (e.g. `units=pc1` for "rose X%").
+- **Granularity matching (SEC):** read the claim's fiscal period (Q2 / half-year / FY) and pick the matching
   reporting window instead of an arbitrary one.
-- **Let matches count:** allow a confirmed period+value match to reach `supported`, instead of capping at
-  `partially_supported` — this is what would actually raise true-claim accuracy.
