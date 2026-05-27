@@ -1,0 +1,142 @@
+Running toolkit on 100 claims (live SEC) | judge = OpenAIJudge
+
+  [ 1/100] true  AAPL  annual revenue     -> label=Low        numeric=not_found
+  [ 2/100] false AAPL  annual revenue     -> label=Low        numeric=not_found
+  [ 3/100] false AAPL  annual revenue     -> label=Low        numeric=not_found
+  [ 4/100] false AAPL  annual revenue     -> label=Low        numeric=not_found
+  [ 5/100] false AAPL  annual revenue     -> label=Low        numeric=not_found
+  [ 6/100] true  AAPL  annual net income  -> label=Low        numeric=not_found
+  [ 7/100] false AAPL  annual net income  -> label=Low        numeric=not_found
+  [ 8/100] false AAPL  annual net income  -> label=Low        numeric=not_found
+  [ 9/100] false AAPL  annual net income  -> label=Low        numeric=not_found
+  [10/100] false AAPL  annual net income  -> label=Low        numeric=not_found
+  [11/100] true  MSFT  annual revenue     -> label=Low        numeric=not_found
+  [12/100] false MSFT  annual revenue     -> label=Low        numeric=not_found
+  [13/100] false MSFT  annual revenue     -> label=Low        numeric=not_found
+  [14/100] false MSFT  annual revenue     -> label=Low        numeric=not_found
+  [15/100] false MSFT  annual revenue     -> label=Low        numeric=not_found
+  [16/100] true  MSFT  annual net income  -> label=Low        numeric=not_found
+  [17/100] false MSFT  annual net income  -> label=Low        numeric=not_found
+  [18/100] false MSFT  annual net income  -> label=Low        numeric=not_found
+  [19/100] false MSFT  annual net income  -> label=Low        numeric=not_found
+  [20/100] false MSFT  annual net income  -> label=Low        numeric=not_found
+  [21/100] true  NVDA  annual revenue     -> label=Medium     numeric=verified
+  [22/100] false NVDA  annual revenue     -> label=Medium     numeric=verified
+  [23/100] false NVDA  annual revenue     -> label=Medium     numeric=verified
+  [24/100] false NVDA  annual revenue     -> label=Medium     numeric=verified
+  [25/100] false NVDA  annual revenue     -> label=Low        numeric=not_found
+  [26/100] true  NVDA  annual net income  -> label=Medium     numeric=verified
+  [27/100] false NVDA  annual net income  -> label=Medium     numeric=verified
+  [28/100] false NVDA  annual net income  -> label=Medium     numeric=verified
+  [29/100] false NVDA  annual net income  -> label=Medium     numeric=verified
+  [30/100] false NVDA  annual net income  -> label=Low        numeric=not_found
+  [31/100] true  GOOGL annual revenue     -> label=Very High  numeric=verified
+  [32/100] false GOOGL annual revenue     -> label=Medium     numeric=verified
+  [33/100] false GOOGL annual revenue     -> label=Medium     numeric=verified
+  [34/100] false GOOGL annual revenue     -> label=Very High  numeric=verified
+  [35/100] false GOOGL annual revenue     -> label=Medium     numeric=not_found
+  [36/100] true  GOOGL annual net income  -> label=Medium     numeric=not_found
+  [37/100] false GOOGL annual net income  -> label=Medium     numeric=not_found
+  [38/100] false GOOGL annual net income  -> label=Low        numeric=not_found
+  [39/100] false GOOGL annual net income  -> label=Medium     numeric=not_found
+  [40/100] false GOOGL annual net income  -> label=Medium     numeric=not_found
+  [41/100] true  AMZN  annual revenue     -> label=Low        numeric=not_found
+  [42/100] false AMZN  annual revenue     -> label=Low        numeric=not_found
+  [43/100] false AMZN  annual revenue     -> label=Low        numeric=not_found
+  [44/100] false AMZN  annual revenue     -> label=Low        numeric=not_found
+  [45/100] false AMZN  annual revenue     -> label=Low        numeric=not_found
+  [46/100] true  AMZN  annual net income  -> label=Contradicted numeric=contradicted
+  [47/100] false AMZN  annual net income  -> label=Medium     numeric=not_found
+  [48/100] false AMZN  annual net income  -> label=Contradicted numeric=contradicted
+  [49/100] false AMZN  annual net income  -> label=Contradicted numeric=contradicted
+  [50/100] false AMZN  annual net income  -> label=Contradicted numeric=contradicted
+  [51/100] true  META  annual revenue     -> label=Medium     numeric=verified
+  [52/100] false META  annual revenue     -> label=Very High  numeric=verified
+  [53/100] false META  annual revenue     -> label=Very High  numeric=verified
+  [54/100] false META  annual revenue     -> label=Very High  numeric=verified
+  [55/100] false META  annual revenue     -> label=Medium     numeric=verified
+  [56/100] true  META  annual net income  -> label=Contradicted numeric=contradicted
+  [57/100] false META  annual net income  -> label=Medium     numeric=not_found
+  [58/100] false META  annual net income  -> label=Medium     numeric=not_found
+  [59/100] false META  annual net income  -> label=Contradicted numeric=contradicted
+  [60/100] false META  annual net income  -> label=Low        numeric=not_found
+  [61/100] true  TSLA  annual revenue     -> label=Low        numeric=not_found
+  [62/100] false TSLA  annual revenue     -> label=Low        numeric=not_found
+  [63/100] false TSLA  annual revenue     -> label=Low        numeric=not_found
+  [64/100] false TSLA  annual revenue     -> label=Low        numeric=not_found
+  [65/100] false TSLA  annual revenue     -> label=Low        numeric=not_found
+  [66/100] true  TSLA  annual net income  -> label=Low        numeric=not_found
+  [67/100] false TSLA  annual net income  -> label=Low        numeric=not_found
+  [68/100] false TSLA  annual net income  -> label=Low        numeric=not_found
+  [69/100] false TSLA  annual net income  -> label=Low        numeric=not_found
+  [70/100] false TSLA  annual net income  -> label=Low        numeric=not_found
+  [71/100] true  NFLX  annual revenue     -> label=Contradicted numeric=contradicted
+  [72/100] false NFLX  annual revenue     -> label=Medium     numeric=not_found
+  [73/100] false NFLX  annual revenue     -> label=Medium     numeric=not_found
+  [74/100] false NFLX  annual revenue     -> label=Medium     numeric=not_found
+  [75/100] false NFLX  annual revenue     -> label=Low        numeric=not_found
+  [76/100] true  NFLX  annual net income  -> label=Contradicted numeric=contradicted
+  [77/100] false NFLX  annual net income  -> label=Contradicted numeric=contradicted
+  [78/100] false NFLX  annual net income  -> label=Contradicted numeric=contradicted
+  [79/100] false NFLX  annual net income  -> label=Contradicted numeric=contradicted
+  [80/100] false NFLX  annual net income  -> label=Medium     numeric=not_found
+  [81/100] true  JPM   annual revenue     -> label=Very High  numeric=verified
+  [82/100] false JPM   annual revenue     -> label=Very High  numeric=verified
+  [83/100] false JPM   annual revenue     -> label=Very High  numeric=verified
+  [84/100] false JPM   annual revenue     -> label=Very High  numeric=verified
+  [85/100] false JPM   annual revenue     -> label=Contradicted numeric=contradicted
+  [86/100] true  JPM   annual net income  -> label=Medium     numeric=not_found
+  [87/100] false JPM   annual net income  -> label=Medium     numeric=not_found
+  [88/100] false JPM   annual net income  -> label=Medium     numeric=not_found
+  [89/100] false JPM   annual net income  -> label=Contradicted numeric=contradicted
+  [90/100] false JPM   annual net income  -> label=Medium     numeric=not_found
+  [91/100] true  XOM   annual revenue     -> label=Low        numeric=not_found
+  [92/100] false XOM   annual revenue     -> label=Low        numeric=not_found
+  [93/100] false XOM   annual revenue     -> label=Low        numeric=not_found
+  [94/100] false XOM   annual revenue     -> label=Low        numeric=not_found
+  [95/100] false XOM   annual revenue     -> label=Low        numeric=not_found
+  [96/100] true  XOM   annual net income  -> label=Low        numeric=not_found
+  [97/100] false XOM   annual net income  -> label=Low        numeric=not_found
+  [98/100] false XOM   annual net income  -> label=Low        numeric=not_found
+  [99/100] false XOM   annual net income  -> label=Low        numeric=not_found
+  [100/100] false XOM   annual net income  -> label=Low        numeric=not_found
+
+================================================================
+SCORECARD
+================================================================
+
+[1] Numeric verification (the core feature)
+    True claims correctly VERIFIED:        5/20  (  25%)
+    False claims correctly NOT verified:   64/80  (  80%)
+    False claims explicitly CONTRADICTED:  9/80  (  11%)
+
+[2] Overall-confidence separation (true vs false)
+    Mean confidence  true=0.521   false=0.473
+    AUC (1.0=perfect, 0.5=coin flip):      0.546
+
+[3] Final label distribution
+    label         true claims  false claims
+    Very High               2             7
+    Medium                  5            23
+    Low                     9            41
+    Contradicted            4             9
+
+[4] Tool vs simpler baseline  (accuracy on true/false detection)
+    Toolkit (full pipeline):               52/100  (  52%)
+    Baseline (number-in-evidence only):    80/100  (  80%)
+    Trivial (always 'credible'):           20/100  (  20%)
+
+[5] Per-falsification-type breakdown (false claims only)
+    type              n   caught  AUC vs true
+    number_big       20  15/20          0.539
+    number_small     20  15/20          0.541
+    wrong_company    20  15/20          0.477
+    wrong_time       20  19/20          0.626
+
+[6] Failure cases (where the tool was most wrong)
+    FALSE claim rated credible: GOOGL annual revenue -> Very High (0.89)
+    TRUE claim rated not-credible: TSLA annual revenue -> Low (0.25)
+
+    7 false claims slipped through; 13 true claims were wrongly rejected.
+
+Full per-claim results written to /Users/huangshixian/Desktop/26spring/ai/finm33200_Project_CredenceAnalytics/evaluation/results.json

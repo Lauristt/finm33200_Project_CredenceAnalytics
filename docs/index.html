@@ -15,6 +15,7 @@
   .sub { color:var(--muted); font-size:18px; margin:0 0 28px; }
   h2 { font-size:21px; margin:42px 0 12px; padding-top:14px; border-top:1px solid var(--line); }
   h3 { font-size:17px; margin:24px 0 6px; }
+  h4 { font-size:15px; margin:18px 0 4px; color:#33405a; }
   p { margin:11px 0; }
   code { background:#eef1f6; padding:1px 6px; border-radius:5px; font-size:13.5px;
          font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
@@ -32,7 +33,9 @@
   .bad-box { background:#fdeeec; border:1px solid #f6ccc5; border-left:4px solid var(--bad); }
   .note-box { background:#f4f7fb; border:1px solid #dde6f2; border-left:4px solid var(--muted); }
   .human-box { background:#eefaf2; border:1px solid #c7ecd6; border-left:4px solid var(--good); }
+  .dir-box { background:#fff7ed; border:1px solid #fadcb0; border-left:4px solid #d98324; border-radius:10px; padding:2px 18px 10px; margin:18px 0; }
   .ex { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:12px 0; }
+  blockquote { margin:12px 0; padding:8px 16px; border-left:3px solid var(--accent); color:#33405a; font-style:italic; }
   .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
   .tag { display:inline-block; background:#eef1f6; color:var(--muted); font-size:12px;
          padding:2px 9px; border-radius:999px; margin-right:6px; }
@@ -42,13 +45,13 @@
 <div class="wrap">
 
   <h1>Does the Credence Analytics agent work — and does AI help?</h1>
-  <p class="sub">A stage-by-stage evaluation on real, labeled data. The front end works; the verdict stage almost never confirms a true claim — because the logic confirms only if <em>every</em> number in the sentence matches.</p>
+  <p class="sub">A stage-by-stage evaluation on real, labeled data. The front end works; the verdict stage confirms only 1 of 50 true claims — and both error directions trace to one cause: comparing against the wrong moment.</p>
   <div><span class="tag">FINM 33200</span><span class="tag">agent use case</span><span class="tag">evaluation &amp; evidence</span></div>
 
   <div class="cards">
-    <div class="card"><div class="big down">≈36%</div><div class="lbl">verdict accuracy on real news</div></div>
-    <div class="card"><div class="big down">1 / 50</div><div class="lbl">true claims it confirms — even when the data matches</div></div>
-    <div class="card"><div class="big down">all-or-nothing</div><div class="lbl">systemic conservatism: confirms only if every number matches</div></div>
+    <div class="card"><div class="big down">≈36%</div><div class="lbl">verdict accuracy on real news (31/86)</div></div>
+    <div class="card"><div class="big down">1 / 50</div><div class="lbl">true claims it confirms</div></div>
+    <div class="card"><div class="big down">18 / 50</div><div class="lbl">true claims wrongly called false — time mismatch leads</div></div>
     <div class="card"><div class="big up">+9 pts</div><div class="lbl">entity extraction with the LLM (80.5% → 89.4%)</div></div>
   </div>
 
@@ -56,79 +59,83 @@
   <p><strong>113 real statements</strong> from Yahoo Finance across stocks, macro, commodities, FX, indices,
   rates, crypto and 5 claim types. Factual labels are cross-checked against SEC/FRED; a perturbed copy
   (changed number/date) gives a matched false. Opinion/forecast carry no truth value (they test classification).</p>
+  <div class="callout note-box">
+    <strong>113 total = 86 fact claims (50 true / 36 false) + 27 opinion/forecast/causal with no truth value.</strong>
+    Classification (§2.1) is scored on all 113; the verdict test (§2.2) only on the <strong>86</strong> with an
+    objective true/false answer — you can't grade a verdict on an opinion or a forecast.
+  </div>
   <p><strong>Design decision — robustness vs. retrieval.</strong> Perturbing figures from the <em>same</em>
   database the agent queries would only test <strong>retrieval</strong> (can it fetch a row it was handed?).
   Feeding it <strong>real, independently-sourced news</strong> tests <strong>real-world verification</strong>
   (can it judge a statement as a human would meet it?). We deliberately chose the harder, more meaningful test.</p>
 
   <h2>2. What we measured</h2>
-  <h3>(1) Can it classify a claim correctly?</h3>
+  <h3>(1) Can it classify a claim correctly? (all 113)</h3>
   <table>
     <tr><th>Stage</th><th class="num">Accuracy</th></tr>
     <tr><td>Entity / asset-class extraction</td><td class="num">80.5% → <strong>89.4%</strong> (with LLM)</td></tr>
     <tr><td>Claim-type classification</td><td class="num"><strong>84.5%</strong></td></tr>
     <tr><td>Fact-check routing (opinion/forecast skipped)</td><td class="num"><strong>84.1%</strong></td></tr>
   </table>
-  <h3>(2) For fact/numeric claims, is the verdict right?</h3>
+  <h3>(2) For the 86 fact claims, is the verdict right?</h3>
   <table>
-    <tr><th>Metric</th><th class="num">Real news</th></tr>
-    <tr><td>Overall accuracy</td><td class="num"><strong>≈36%</strong></td></tr>
+    <tr><th>Metric</th><th class="num">Real news (n=86)</th></tr>
+    <tr><td>Overall accuracy</td><td class="num"><strong>≈36%</strong> (31/86)</td></tr>
     <tr><td>True claims confirmed (<code>verified</code>/<code>supported</code>)</td><td class="num"><strong>1 / 50</strong></td></tr>
-    <tr><td>False claims caught (<code>contradicted</code>)</td><td class="num">≈30 / 36</td></tr>
+    <tr><td>False claims caught (<code>contradicted</code>)</td><td class="num">30 / 36</td></tr>
     <tr><td>Confidence AUC (true vs false)</td><td class="num"><strong>0.34</strong></td></tr>
   </table>
-  <div class="callout bad-box">
-    The agent <strong>almost never confirms a true claim</strong> (1/50) and can't separate true from false
-    (AUC ≈ 0.34) — fine at flagging false claims, but effectively useless at confirming a true one.
+
+  <h2>3. Where the errors come from — the two directions</h2>
+  <p>A fact-checker can fail two ways. We measured both, and they share one root cause.</p>
+
+  <div class="dir-box">
+  <h3>3A. Wrongly rejecting true claims (false rejection) — the big problem</h3>
+  <p>Of 50 true claims, only <strong>1</strong> was confirmed; <strong>18 (36%) were actively marked
+  <code>contradicted</code></strong> (declared false) and <strong>17 (34%) stalled at
+  <code>partially_supported</code></strong>. Three causes:</p>
+
+  <h4>(i) Time mismatch — the leading cause of the 18 wrong <code>contradicted</code> verdicts</h4>
+  <p>The agent fetches a value for the <em>wrong moment</em> and compares against that.</p>
+  <div class="ex"><em>"115,000 nonfarm payrolls were added in April 2026"</em> (true for April) →
+  <code>contradicted</code>, reason <em>"the evidence shows [a different month's figure]."</em> Same on
+  <em>"Brent crude ≈ $105 a barrel"</em> and <em>"copper at $6.11 per pound"</em> — the claim names a point in
+  time; the agent pulls the latest value.</div>
+  <p>A specific flavor is <strong>SEC time granularity</strong>: the same metric is filed for many overlapping
+  windows (Apple Q2 = <strong>$111.2B</strong>, half-year = $254.9B, full year = $416.2B), and the agent
+  compares <em>"Apple's Q2 revenue was $111.2 billion"</em> against the wrong window → <code>contradicted</code>.</p>
+  <div class="callout note-box"><strong>Partly by design:</strong> the agent judges truth <em>as of now</em>, so
+  fetching the latest value is reasonable; the gap is only for <strong>dated/historical</strong> claims.
+  <em>Future work:</em> add as-of-date &amp; fiscal-period control.</div>
+
+  <h4>(ii) Systemic conservatism — it won't confirm even when evidence matches (the 17 partial)</h4>
+  <p>On one true claim the agent's own log says <em>"All material numeric values in the claim were matched
+  directly in the evidence,"</em> yet it returned <code>partially_supported</code>, not <code>verified</code>.
+  Mechanism: <strong>all-or-nothing matching</strong> — <code>verified</code> requires <em>every</em> material
+  number to match. <em>"Nvidia reported Q1 revenue of $81.62 billion, beating estimates of $79.18 billion"</em>:
+  $81.62B is in the filing, but the estimate $79.18B is in no official source, so the rule never sees "all matched."</p>
+
+  <h4>(iii) Misclassification</h4>
+  <p><strong>12 (24%)</strong> true claims were tagged <code>forecast</code>/<code>opinion</code> and skipped
+  (e.g. <em>"Microsoft reported revenue of $82.89B"</em>); segment metrics (iPhone, AWS, Greater China) aren't mapped.</p>
   </div>
 
-  <h2>3. Where the errors come from</h2>
-  <div class="callout note-box">
-    <strong>A scoping note first.</strong> By design the agent checks whether a statement is true
-    <em>right now</em>, so it fetches the <em>latest</em> data. That's a reasonable choice for a
-    "is this currently true?" checker, so we don't count it as a bug — it just limits dated/historical
-    statements (see §6). The genuine problems are below.
+  <div class="dir-box">
+  <h3>3B. Failing to catch false claims (false acceptance) — smaller, but revealing</h3>
+  <p>The agent catches false claims fairly well — <strong>30 of 36 (83%)</strong> are <code>contradicted</code>.
+  But the <strong>6 it misses</strong> (5 <code>partially_supported</code>, <strong>1 wrongly
+  <code>supported</code></strong>) fail for the <strong>same time-mismatch reason, in reverse</strong>: a false
+  number coincidentally lines up with a <em>different period's</em> real value.</p>
+  <div class="ex">A false <strong>Alphabet</strong> claim was rated <code>supported</code> — the agent matched it
+  against <em>"the fiscal year ending 2023-12-31 … approximately $307.39 billion"</em> (the <strong>wrong
+  year</strong>). On two other false claims it logged <em>"All material numeric values … were matched
+  directly"</em>, because the false figures happened to appear somewhere in the multi-number evidence.</div>
   </div>
 
-  <h3>Cause 1 — Systemic conservatism: it confirms only if <em>every</em> number matches (the core problem)</h3>
-  <p>This is a <strong>design-level logic gap, not an AI failure.</strong> In code, a claim is marked
-  <code>verified</code> <strong>only when every material number in the sentence is found in the evidence</strong>
-  (<code>len(matches) == len(claim_numbers)</code>); otherwise it drops to <code>partially_verified</code>.
-  Real news sentences bundle several numbers, but official sources confirm only the headline fact — so true
-  claims rarely reach "all matched."</p>
-  <div class="ex"><em>"Nvidia reported first-quarter revenue of <strong>$81.62 billion</strong>, beating analyst
-  estimates of <strong>$79.18 billion</strong>."</em> The SEC filing confirms <strong>$81.62B exactly</strong> —
-  but the analyst estimate <strong>$79.18B isn't in any official source, by definition</strong>. Because the
-  rule needs <em>both</em> numbers to match, this true claim is downgraded to <code>partially_verified</code>,
-  never <code>verified</code>.</div>
-  <p>The effect is a <strong>false-negative bias</strong>: to avoid affirming the unproven, the logic
-  under-confirms — across 50 true statements it fully confirmed exactly <strong>one</strong>, and AUC 0.34 says
-  confidence can't tell true from false. (Note: this is <em>not</em> "too high a confidence threshold" — there
-  is no such gate; it's the all-or-nothing matching rule.)</p>
-
-  <h3>Cause 2 — Temporal granularity mismatch (SEC): it compares against the wrong reporting period</h3>
-  <p>A company files the <em>same</em> metric for many overlapping windows at once. Apple's revenue:</p>
-  <table>
-    <tr><th>period (≈ ending 2026-03-28)</th><th class="num">value</th></tr>
-    <tr><td>fiscal <strong>Q2</strong> (3 months)</td><td class="num"><strong>$111.2B</strong></td></tr>
-    <tr><td>first <strong>half-year</strong> (Q1+Q2, 6 months)</td><td class="num">$254.9B</td></tr>
-    <tr><td>prior <strong>quarter</strong> (Dec)</td><td class="num">$143.8B</td></tr>
-    <tr><td>full <strong>fiscal year</strong></td><td class="num">$416.2B</td></tr>
-  </table>
-  <div class="ex">Fed <em>"Apple's Q2 revenue was $111.2 billion"</em> (true), the agent compared $111.2B against
-  a <strong>different period's</strong> figure (e.g. the half-year $254.9B), saw they differed, and judged the
-  true claim <code>contradicted</code>. <strong>Not a freshness issue</strong> — Q2, the half-year and the full
-  year all coexist as current data; the agent has to <em>match the granularity</em> (read the "Q2" and pick that
-  row), and it doesn't.</div>
-
-  <h3>Cause 3 — (secondary) misclassification, unmapped metrics &amp; wrong unit</h3>
-  <ul>
-    <li>Some real reported figures (<em>"Microsoft reported revenue of $82.89B"</em>) were classified as
-      <code>forecast</code>/<code>opinion</code> and never fact-checked.</li>
-    <li>Segment metrics (iPhone revenue, AWS) aren't in the agent's mapped concepts — nothing to compare against.</li>
-    <li>For "rose X%" claims (<em>"CPI rose 3.8%"</em>) the agent compares "3.8" against the CPI <strong>index
-      level</strong> (332.4) — a <strong>unit</strong> mismatch it can't reconcile.</li>
-  </ul>
+  <div class="callout"><strong>The punchline:</strong> the <em>same</em> root cause — comparing against the
+  wrong moment — drives errors in <strong>both</strong> directions. Misaligned time turns a true claim into a
+  <code>contradicted</code> (3A) and lets a false claim slip through as <code>supported</code> (3B).
+  <strong>Time alignment is the linchpin.</strong></div>
 
   <h2>4. Does AI help? Value-add is perception, not logic</h2>
   <ul>
@@ -137,35 +144,32 @@
       disentangle. Real, AI-only value.</li>
     <li><strong>Classification — n/a</strong> (rule-based).</li>
     <li><strong>Verdict — AI is not the bottleneck.</strong> The failure is the verdict <em>logic</em>
-      (all-or-nothing matching) and period/unit alignment, not the model. So the AI's value-add is
-      <strong>limited to perception (reading the claim), not the logic (judging it)</strong>.</li>
+      (time alignment + all-or-nothing matching), not the model. So the AI's value-add is <strong>limited to
+      perception (reading the claim), not the logic (judging it)</strong>.</li>
   </ul>
 
   <h2>5. Bottom line</h2>
-  <p>The front end works reasonably and AI improves <em>perception</em>, but the <strong>verdict stage almost
-  never confirms a true claim</strong> (1/50; AUC 0.34) — and, crucially, <strong>it won't do so even when the
-  headline number matches exactly</strong> (NVIDIA), because the logic requires <em>every</em> number to match.
-  That, plus comparing against the wrong SEC reporting period, is the real weakness.</p>
+  <p>The front end works reasonably and AI improves <em>perception</em>, but the <strong>verdict stage confirms
+  only 1 of 50 true claims</strong> and can't tell true from false (AUC 0.34). Both error directions trace to one
+  root cause — <strong>comparing the claim against the wrong moment</strong> — compounded by an
+  <strong>all-or-nothing rule that won't confirm</strong> unless every number matches. The "check as of now"
+  design is reasonable; the gap is turning correct, time-aligned evidence into a correct verdict.</p>
   <div class="callout human-box">
-    <strong>Human vs. agent.</strong> A human analyst reads <em>"Q1 revenue of $81.62B, beating estimates of
-    $79.18B,"</em> checks the $81.62B against the filing, and calls it <strong>true</strong> — knowing the
-    $79.18B estimate isn't an official figure. The agent demands that <em>both</em> numbers match its evidence,
-    so the one number official sources cannot contain drags a true claim down to "partially verified."
-    <strong>The gap is judgment, not data.</strong>
+    <strong>Human vs. agent.</strong> A human reads <em>"115,000 payrolls added in April"</em> and looks up
+    <em>April</em>; reads <em>"Q1 revenue of $81.62B, beating estimates of $79.18B"</em> and confirms the
+    $81.62B while ignoring the estimate. The agent pulls the latest value (wrong moment) and demands
+    <em>every</em> number match. <strong>The gap is judgment, not data.</strong>
   </div>
 
   <h2>6. Limitations &amp; future work</h2>
   <ul>
     <li>Verdict accuracy is evaluated on claims the sources actually cover (US equity / macro); opinion/forecast
       have no ground truth (we only check classification); crypto/exotic out of scope.</li>
-    <li><strong>Replace the hard-coded verdict rule with LLM reasoning.</strong> The all-or-nothing matcher is
-      brittle; an LLM judge could decide "$81.62B matches; $79.18B is an estimate, not an official figure" and
-      confirm the claim — exactly the judgment the rule lacks.</li>
-    <li><strong>By design it verifies as-of-now.</strong> <em>Usability improvement:</em> add
-      <strong>as-of-date</strong> matching so dated statements (<em>"the S&amp;P 500 closed at 7,501.24 on May 15"</em>)
-      are checked against that date, plus <strong>unit</strong> matching (<code>units=pc1</code> for "rose X%").</li>
-    <li><strong>Granularity matching (SEC):</strong> read the claim's fiscal period (Q2 / half-year / FY) and pick
-      the matching reporting window instead of an arbitrary one.</li>
+    <li><strong>As-of-date + fiscal-period control (the time-alignment fix)</strong> — fixes <em>both</em> error
+      directions: query the claim's <em>date</em> (<code>observation_start/end</code>) and unit
+      (<code>units=pc1</code> for "rose X%"), and match the SEC period (Q2 / half-year / FY).</li>
+    <li><strong>Replace the all-or-nothing matcher with LLM reasoning,</strong> so a claim whose official figure
+      matches can be confirmed even when it also mentions a non-official number (e.g. an analyst estimate).</li>
   </ul>
 
   <div class="footer">

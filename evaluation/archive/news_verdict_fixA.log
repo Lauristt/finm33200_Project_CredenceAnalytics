@@ -1,0 +1,111 @@
+Verdict eval on 86 claims | judge=OpenAIJudge | file=claims_news.json
+
+  [  1/86] true  stock          -> partially_supported
+  [  2/86] false stock          -> contradicted
+  [  3/86] true  stock          -> partially_supported
+  [  4/86] false stock          -> partially_supported
+  [  5/86] true  stock          -> not_applicable
+  [  6/86] false stock          -> contradicted
+  [  7/86] true  stock          -> not_applicable
+  [  8/86] true  stock          -> partially_supported
+  [  9/86] false stock          -> partially_supported
+  [ 10/86] true  stock          -> contradicted
+  [ 11/86] false stock          -> contradicted
+  [ 12/86] true  stock          -> not_applicable
+  [ 13/86] true  stock          -> contradicted
+  [ 14/86] false stock          -> contradicted
+  [ 15/86] true  stock          -> insufficient
+  [ 16/86] true  stock          -> supported
+  [ 17/86] false stock          -> contradicted
+  [ 18/86] true  stock          -> not_applicable
+  [ 19/86] false stock          -> contradicted
+  [ 20/86] true  stock          -> partially_supported
+  [ 21/86] true  stock          -> not_applicable
+  [ 22/86] false stock          -> contradicted
+  [ 23/86] true  stock          -> not_applicable
+  [ 24/86] false stock          -> contradicted
+  [ 25/86] true  stock          -> partially_supported
+  [ 26/86] false stock          -> contradicted
+  [ 27/86] true  stock          -> not_applicable
+  [ 28/86] false stock          -> partially_supported
+  [ 29/86] true  stock          -> not_applicable
+  [ 30/86] false stock          -> supported
+  [ 31/86] true  stock          -> partially_supported
+  [ 32/86] false stock          -> partially_supported
+  [ 33/86] true  stock          -> partially_supported
+  [ 34/86] false stock          -> contradicted
+  [ 35/86] true  stock          -> contradicted
+  [ 36/86] false stock          -> contradicted
+  [ 37/86] true  stock          -> contradicted
+  [ 38/86] true  stock          -> partially_supported
+  [ 39/86] true  stock          -> not_applicable
+  [ 40/86] true  stock          -> partially_supported
+  [ 41/86] false stock          -> contradicted
+  [ 42/86] true  stock          -> contradicted
+  [ 43/86] false stock          -> contradicted
+  [ 44/86] true  stock          -> contradicted
+  [ 45/86] false stock          -> partially_supported
+  [ 46/86] true  macro          -> contradicted
+  [ 47/86] false macro          -> contradicted
+  [ 48/86] false macro          -> contradicted
+  [ 49/86] true  macro          -> contradicted
+  [ 50/86] false macro          -> contradicted
+  [ 51/86] true  macro          -> contradicted
+  [ 52/86] false macro          -> contradicted
+  [ 53/86] true  macro          -> partially_supported
+  [ 54/86] true  commodity      -> contradicted
+  [ 55/86] false commodity      -> contradicted
+  [ 56/86] true  commodity      -> not_applicable
+  [ 57/86] true  index          -> contradicted
+  [ 58/86] false index          -> contradicted
+  [ 59/86] true  index          -> contradicted
+  [ 60/86] true  index          -> contradicted
+  [ 61/86] true  fx             -> insufficient
+  [ 62/86] false fx             -> insufficient
+  [ 63/86] true  commodity      -> contradicted
+  [ 64/86] false commodity      -> contradicted
+  [ 65/86] true  commodity      -> contradicted
+  [ 66/86] false commodity      -> contradicted
+  [ 67/86] true  commodity      -> insufficient
+  [ 68/86] true  index          -> contradicted
+  [ 69/86] false index          -> contradicted
+  [ 70/86] true  index          -> contradicted
+  [ 71/86] false index          -> contradicted
+  [ 72/86] true  rates          -> partially_supported
+  [ 73/86] false rates          -> contradicted
+  [ 74/86] true  rates          -> not_applicable
+  [ 75/86] true  macro          -> contradicted
+  [ 76/86] false macro          -> contradicted
+  [ 77/86] true  macro          -> contradicted
+  [ 78/86] false macro          -> contradicted
+  [ 79/86] true  macro          -> partially_supported
+  [ 80/86] false macro          -> contradicted
+  [ 81/86] true  macro          -> not_applicable
+  [ 82/86] true  fx             -> contradicted
+  [ 83/86] false fx             -> contradicted
+  [ 84/86] true  fx             -> contradicted
+  [ 85/86] true  crypto         -> contradicted
+  [ 86/86] false crypto         -> contradicted
+
+============================================================
+VERDICT-ACCURACY SCORECARD
+============================================================
+
+[1] Overall accuracy: 30/86 ( 34.9%)
+    True  rated supported(credible):  1/50
+    False rated contradicted:         29/36
+
+[2] Confidence AUC (true vs false): 0.338
+
+[3] Accuracy by group (falsification type or asset class)
+    commodity       3/8
+    crypto          1/2
+    fx              1/5
+    index           3/8
+    macro           7/15
+    rates           1/3
+    stock           14/45
+
+[4] Human-review flags: 69/86; of those, wrong = 40/69
+
+Per-claim -> evaluation/results_news_verdict_fixA.csv

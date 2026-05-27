@@ -1,0 +1,140 @@
+Running toolkit on 100 claims (live SEC) | judge = OpenAIJudge (AI)
+
+  [ 1/100] true  AAPL  none          -> Very High    numeric=verified
+  [ 2/100] false AAPL  number_big    -> Contradicted numeric=contradicted
+  [ 3/100] false AAPL  number_small  -> Contradicted numeric=contradicted
+  [ 4/100] false AAPL  wrong_company -> Contradicted numeric=contradicted
+  [ 5/100] false AAPL  wrong_time    -> Contradicted numeric=contradicted
+  [ 6/100] true  AAPL  none          -> Very High    numeric=verified
+  [ 7/100] false AAPL  number_big    -> Contradicted numeric=contradicted
+  [ 8/100] false AAPL  number_small  -> Contradicted numeric=contradicted
+  [ 9/100] false AAPL  wrong_company -> Contradicted numeric=contradicted
+  [10/100] false AAPL  wrong_time    -> Contradicted numeric=contradicted
+  [11/100] true  MSFT  none          -> Very High    numeric=verified
+  [12/100] false MSFT  number_big    -> Contradicted numeric=contradicted
+  [13/100] false MSFT  number_small  -> Contradicted numeric=contradicted
+  [14/100] false MSFT  wrong_company -> Contradicted numeric=contradicted
+  [15/100] false MSFT  wrong_time    -> Contradicted numeric=contradicted
+  [16/100] true  MSFT  none          -> Very High    numeric=verified
+  [17/100] false MSFT  number_big    -> Contradicted numeric=contradicted
+  [18/100] false MSFT  number_small  -> Contradicted numeric=contradicted
+  [19/100] false MSFT  wrong_company -> Contradicted numeric=contradicted
+  [20/100] false MSFT  wrong_time    -> Contradicted numeric=contradicted
+  [21/100] true  NVDA  none          -> Very High    numeric=verified
+  [22/100] false NVDA  number_big    -> Contradicted numeric=contradicted
+  [23/100] false NVDA  number_small  -> Contradicted numeric=contradicted
+  [24/100] false NVDA  wrong_company -> Contradicted numeric=contradicted
+  [25/100] false NVDA  wrong_time    -> Contradicted numeric=contradicted
+  [26/100] true  NVDA  none          -> Very High    numeric=verified
+  [27/100] false NVDA  number_big    -> Contradicted numeric=contradicted
+  [28/100] false NVDA  number_small  -> Contradicted numeric=contradicted
+  [29/100] false NVDA  wrong_company -> Contradicted numeric=contradicted
+  [30/100] false NVDA  wrong_time    -> Contradicted numeric=contradicted
+  [31/100] true  GOOGL none          -> Very High    numeric=verified
+  [32/100] false GOOGL number_big    -> Contradicted numeric=contradicted
+  [33/100] false GOOGL number_small  -> Contradicted numeric=contradicted
+  [34/100] false GOOGL wrong_company -> Contradicted numeric=contradicted
+  [35/100] false GOOGL wrong_time    -> Contradicted numeric=contradicted
+  [36/100] true  GOOGL none          -> Very High    numeric=verified
+  [37/100] false GOOGL number_big    -> Contradicted numeric=contradicted
+  [38/100] false GOOGL number_small  -> Contradicted numeric=contradicted
+  [39/100] false GOOGL wrong_company -> Contradicted numeric=contradicted
+  [40/100] false GOOGL wrong_time    -> Contradicted numeric=contradicted
+  [41/100] true  AMZN  none          -> Very High    numeric=verified
+  [42/100] false AMZN  number_big    -> Contradicted numeric=contradicted
+  [43/100] false AMZN  number_small  -> Contradicted numeric=contradicted
+  [44/100] false AMZN  wrong_company -> Contradicted numeric=contradicted
+  [45/100] false AMZN  wrong_time    -> Contradicted numeric=contradicted
+  [46/100] true  AMZN  none          -> Very High    numeric=verified
+  [47/100] false AMZN  number_big    -> Contradicted numeric=contradicted
+  [48/100] false AMZN  number_small  -> Contradicted numeric=contradicted
+  [49/100] false AMZN  wrong_company -> Contradicted numeric=contradicted
+  [50/100] false AMZN  wrong_time    -> Contradicted numeric=contradicted
+  [51/100] true  META  none          -> Very High    numeric=verified
+  [52/100] false META  number_big    -> Contradicted numeric=contradicted
+  [53/100] false META  number_small  -> Contradicted numeric=contradicted
+  [54/100] false META  wrong_company -> Contradicted numeric=contradicted
+  [55/100] false META  wrong_time    -> Contradicted numeric=contradicted
+  [56/100] true  META  none          -> Very High    numeric=verified
+  [57/100] false META  number_big    -> Contradicted numeric=contradicted
+  [58/100] false META  number_small  -> Contradicted numeric=contradicted
+  [59/100] false META  wrong_company -> Contradicted numeric=contradicted
+  [60/100] false META  wrong_time    -> Contradicted numeric=contradicted
+  [61/100] true  TSLA  none          -> Very High    numeric=verified
+  [62/100] false TSLA  number_big    -> Contradicted numeric=contradicted
+  [63/100] false TSLA  number_small  -> Contradicted numeric=contradicted
+  [64/100] false TSLA  wrong_company -> Contradicted numeric=contradicted
+  [65/100] false TSLA  wrong_time    -> Contradicted numeric=contradicted
+  [66/100] true  TSLA  none          -> Very High    numeric=verified
+  [67/100] false TSLA  number_big    -> Contradicted numeric=contradicted
+  [68/100] false TSLA  number_small  -> Contradicted numeric=contradicted
+  [69/100] false TSLA  wrong_company -> Contradicted numeric=contradicted
+  [70/100] false TSLA  wrong_time    -> Contradicted numeric=contradicted
+  [71/100] true  NFLX  none          -> Very High    numeric=verified
+  [72/100] false NFLX  number_big    -> Contradicted numeric=contradicted
+  [73/100] false NFLX  number_small  -> Contradicted numeric=contradicted
+  [74/100] false NFLX  wrong_company -> Contradicted numeric=contradicted
+  [75/100] false NFLX  wrong_time    -> Contradicted numeric=contradicted
+  [76/100] true  NFLX  none          -> Very High    numeric=verified
+  [77/100] false NFLX  number_big    -> Contradicted numeric=contradicted
+  [78/100] false NFLX  number_small  -> Contradicted numeric=contradicted
+  [79/100] false NFLX  wrong_company -> Contradicted numeric=contradicted
+  [80/100] false NFLX  wrong_time    -> Contradicted numeric=contradicted
+  [81/100] true  JPM   none          -> Very High    numeric=verified
+  [82/100] false JPM   number_big    -> Contradicted numeric=contradicted
+  [83/100] false JPM   number_small  -> Contradicted numeric=contradicted
+  [84/100] false JPM   wrong_company -> Contradicted numeric=contradicted
+  [85/100] false JPM   wrong_time    -> Contradicted numeric=contradicted
+  [86/100] true  JPM   none          -> Very High    numeric=verified
+  [87/100] false JPM   number_big    -> Contradicted numeric=contradicted
+  [88/100] false JPM   number_small  -> Contradicted numeric=contradicted
+  [89/100] false JPM   wrong_company -> Contradicted numeric=contradicted
+  [90/100] false JPM   wrong_time    -> Contradicted numeric=contradicted
+  [91/100] true  XOM   none          -> Very High    numeric=verified
+  [92/100] false XOM   number_big    -> Contradicted numeric=contradicted
+  [93/100] false XOM   number_small  -> Contradicted numeric=contradicted
+  [94/100] false XOM   wrong_company -> Contradicted numeric=contradicted
+  [95/100] false XOM   wrong_time    -> Contradicted numeric=contradicted
+  [96/100] true  XOM   none          -> Very High    numeric=verified
+  [97/100] false XOM   number_big    -> Contradicted numeric=contradicted
+  [98/100] false XOM   number_small  -> Contradicted numeric=contradicted
+  [99/100] false XOM   wrong_company -> Contradicted numeric=contradicted
+  [100/100] false XOM   wrong_time    -> Contradicted numeric=contradicted
+
+================================================================
+SCORECARD
+================================================================
+
+[1] Numeric verification (the core feature)
+    True claims correctly VERIFIED:        20/20  ( 100%)
+    False claims correctly NOT verified:   80/80  ( 100%)
+    False claims explicitly CONTRADICTED:  80/80  ( 100%)
+
+[2] Overall-confidence separation (true vs false)
+    Mean confidence  true=0.926   false=0.050
+    AUC (1.0=perfect, 0.5=coin flip):      1.000
+
+[3] Final label distribution
+    label         true claims  false claims
+    Very High              20             0
+    Contradicted            0            80
+
+[4] Tool vs simpler baseline  (accuracy on true/false detection)
+    Toolkit (full pipeline):               100/100  ( 100%)
+    Baseline (number-in-evidence only):    80/100  (  80%)
+    Trivial (always 'credible'):           20/100  (  20%)
+
+[5] LAYER 1 - accuracy by claim type
+    type              n   correct  AUC vs true
+    true             20  20/20      --   
+    number_big       20  20/20          1.000
+    number_small     20  20/20          1.000
+    wrong_company    20  20/20          1.000
+    wrong_time       20  20/20          1.000
+
+[6] LAYER 2 - error breakdown
+    correct:               100/100
+
+[7] LAYER 3 - every claim is traceable in:
+    /Users/huangshixian/Desktop/26spring/ai/finm33200_Project_CredenceAnalytics/evaluation/results_ai_fixed.csv   (open in Excel)
+    /Users/huangshixian/Desktop/26spring/ai/finm33200_Project_CredenceAnalytics/evaluation/results_ai_fixed.json   (full JSON)

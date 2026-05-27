@@ -1,0 +1,29 @@
+Entity extraction mode: heuristic + LLM
+
+============================================================
+NEWS-CLAIM CLASSIFICATION SCORECARD  (113 statements)
+============================================================
+
+[A] Entity / asset-class extraction:  101/113  ( 89.4%)
+    asset class    n     found
+    commodity     12  11/12  
+    crypto         4   4/4   
+    fx             8   5/8   
+    index          9   6/9   
+    macro         18  16/18  
+    rates          6   3/6   
+    stock         56  56/56  
+
+[B] Claim-type classification:  87/103  ( 84.5%)
+    (causal excluded: the pipeline has no 'causal' class)
+    my type      n   correct
+    numeric     75  68/75  
+    factual      3   2/3   
+    opinion     12   8/12  
+    forecast    13   9/13  
+
+[C] Fact-check routing:  95/113  ( 84.1%)
+    opinion/forecast correctly NOT fact-checked: 21/25  ( 84.0%)
+    factual/numeric/causal correctly fact-checked: 74/88  ( 84.1%)
+
+Per-statement results -> /Users/huangshixian/Desktop/26spring/ai/credence_latest/evaluation/eval_news_results.csv

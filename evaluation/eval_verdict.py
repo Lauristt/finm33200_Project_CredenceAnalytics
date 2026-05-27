@@ -1,12 +1,12 @@
 """Verdict-accuracy evaluation on the teammate's pipeline.
 
-Uses the SEC-anchored claim set (objective true/false labels) and reads the
-pipeline's real per-claim verdict (atomic_claims[].verdict), then scores how
-often that verdict matches the known truth.
+Uses the real-news benchmark (claims_news.json, true/false labels verified
+against SEC/FRED) and reads the pipeline's real per-claim verdict
+(atomic_claims[].verdict), then scores how often that verdict matches the truth.
 
 Usage:
-    python3 evaluation/eval_verdict.py                  # default claims.json
-    CLAIMS_FILE=evaluation/claims_v2.json python3 evaluation/eval_verdict.py
+    python3 evaluation/eval_verdict.py        # -> results_news_verdict.{json,csv}
+    # override the dataset with CLAIMS_FILE=... and the output tag with RUN_TAG=...
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from financial_credibility import FinancialCredibilityToolkit  # noqa: E402
 from financial_credibility import data_sources  # noqa: E402
 
-CLAIMS = Path(os.getenv("CLAIMS_FILE") or (Path(__file__).resolve().parent / "claims.json"))
+CLAIMS = Path(os.getenv("CLAIMS_FILE") or (Path(__file__).resolve().parent / "claims_news.json"))
 
 # her atomic verdict vocabulary -> a true/false-detection decision
 CREDIBLE = {"supported"}
@@ -93,7 +93,7 @@ def run():
         grp_lbl = c.get("falsification") or c.get("asset_class") or "-"
         print(f"  [{i:>3}/{len(claims)}] {c['label']:<5} {grp_lbl:<14} -> {verdict}")
 
-    tag = os.getenv("RUN_TAG") or "verdict"
+    tag = os.getenv("RUN_TAG") or "news_verdict"
     out_json = CLAIMS.parent / f"results_{tag}.json"
     out_csv = CLAIMS.parent / f"results_{tag}.csv"
     out_json.write_text(json.dumps(rows, indent=2, ensure_ascii=False), encoding="utf-8")

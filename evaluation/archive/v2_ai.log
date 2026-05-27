@@ -1,0 +1,122 @@
+Running toolkit on 80 claims (live SEC) | judge = OpenAIJudge (AI)
+
+  [ 1/80] true  AAPL  direction     -> Very High    numeric=not_applicable
+  [ 2/80] false AAPL  direction     -> Very High    numeric=not_applicable
+  [ 3/80] true  AAPL  paraphrase    -> Very High    numeric=verified
+  [ 4/80] false AAPL  paraphrase    -> Contradicted numeric=contradicted
+  [ 5/80] true  AAPL  direction     -> Very High    numeric=not_applicable
+  [ 6/80] false AAPL  direction     -> Very High    numeric=not_applicable
+  [ 7/80] true  AAPL  paraphrase    -> Very High    numeric=verified
+  [ 8/80] false AAPL  paraphrase    -> Contradicted numeric=contradicted
+  [ 9/80] true  MSFT  direction     -> Very High    numeric=not_applicable
+  [10/80] false MSFT  direction     -> Very High    numeric=not_applicable
+  [11/80] true  MSFT  paraphrase    -> Very High    numeric=verified
+  [12/80] false MSFT  paraphrase    -> Contradicted numeric=contradicted
+  [13/80] true  MSFT  direction     -> Very High    numeric=not_applicable
+  [14/80] false MSFT  direction     -> Very High    numeric=not_applicable
+  [15/80] true  MSFT  paraphrase    -> Very High    numeric=verified
+  [16/80] false MSFT  paraphrase    -> Contradicted numeric=contradicted
+  [17/80] true  NVDA  direction     -> Very High    numeric=not_applicable
+  [18/80] false NVDA  direction     -> Very High    numeric=not_applicable
+  [19/80] true  NVDA  paraphrase    -> Very High    numeric=verified
+  [20/80] false NVDA  paraphrase    -> Contradicted numeric=contradicted
+  [21/80] true  NVDA  direction     -> Very High    numeric=not_applicable
+  [22/80] false NVDA  direction     -> Very High    numeric=not_applicable
+  [23/80] true  NVDA  paraphrase    -> Very High    numeric=verified
+  [24/80] false NVDA  paraphrase    -> Contradicted numeric=contradicted
+  [25/80] true  GOOGL direction     -> Very High    numeric=not_applicable
+  [26/80] false GOOGL direction     -> Very High    numeric=not_applicable
+  [27/80] true  GOOGL paraphrase    -> Very High    numeric=verified
+  [28/80] false GOOGL paraphrase    -> Contradicted numeric=contradicted
+  [29/80] true  GOOGL direction     -> Very High    numeric=not_applicable
+  [30/80] false GOOGL direction     -> Very High    numeric=not_applicable
+  [31/80] true  GOOGL paraphrase    -> Very High    numeric=verified
+  [32/80] false GOOGL paraphrase    -> Contradicted numeric=contradicted
+  [33/80] true  AMZN  direction     -> Very High    numeric=not_applicable
+  [34/80] false AMZN  direction     -> Very High    numeric=not_applicable
+  [35/80] true  AMZN  paraphrase    -> Very High    numeric=verified
+  [36/80] false AMZN  paraphrase    -> Contradicted numeric=contradicted
+  [37/80] true  AMZN  direction     -> Very High    numeric=not_applicable
+  [38/80] false AMZN  direction     -> Very High    numeric=not_applicable
+  [39/80] true  AMZN  paraphrase    -> Very High    numeric=verified
+  [40/80] false AMZN  paraphrase    -> Contradicted numeric=contradicted
+  [41/80] true  META  direction     -> Very High    numeric=not_applicable
+  [42/80] false META  direction     -> Very High    numeric=not_applicable
+  [43/80] true  META  paraphrase    -> Very High    numeric=verified
+  [44/80] false META  paraphrase    -> Contradicted numeric=contradicted
+  [45/80] false META  direction     -> Very High    numeric=not_applicable
+  [46/80] true  META  direction     -> Very High    numeric=not_applicable
+  [47/80] true  META  paraphrase    -> Very High    numeric=verified
+  [48/80] false META  paraphrase    -> Contradicted numeric=contradicted
+  [49/80] false TSLA  direction     -> Very High    numeric=not_applicable
+  [50/80] true  TSLA  direction     -> Very High    numeric=not_applicable
+  [51/80] true  TSLA  paraphrase    -> Very High    numeric=verified
+  [52/80] false TSLA  paraphrase    -> Contradicted numeric=contradicted
+  [53/80] false TSLA  direction     -> Very High    numeric=not_applicable
+  [54/80] true  TSLA  direction     -> Very High    numeric=not_applicable
+  [55/80] true  TSLA  paraphrase    -> Very High    numeric=verified
+  [56/80] false TSLA  paraphrase    -> Contradicted numeric=contradicted
+  [57/80] true  NFLX  direction     -> Very High    numeric=not_applicable
+  [58/80] false NFLX  direction     -> Very High    numeric=not_applicable
+  [59/80] true  NFLX  paraphrase    -> Very High    numeric=verified
+  [60/80] false NFLX  paraphrase    -> Contradicted numeric=contradicted
+  [61/80] true  NFLX  direction     -> Very High    numeric=not_applicable
+  [62/80] false NFLX  direction     -> Very High    numeric=not_applicable
+  [63/80] true  NFLX  paraphrase    -> Very High    numeric=verified
+  [64/80] false NFLX  paraphrase    -> Contradicted numeric=contradicted
+  [65/80] true  JPM   direction     -> Very High    numeric=not_applicable
+  [66/80] false JPM   direction     -> Very High    numeric=not_applicable
+  [67/80] true  JPM   paraphrase    -> Very High    numeric=verified
+  [68/80] false JPM   paraphrase    -> Contradicted numeric=contradicted
+  [69/80] false JPM   direction     -> Very High    numeric=not_applicable
+  [70/80] true  JPM   direction     -> Very High    numeric=not_applicable
+  [71/80] true  JPM   paraphrase    -> Very High    numeric=verified
+  [72/80] false JPM   paraphrase    -> Contradicted numeric=contradicted
+  [73/80] false XOM   direction     -> Very High    numeric=not_applicable
+  [74/80] true  XOM   direction     -> Very High    numeric=not_applicable
+  [75/80] true  XOM   paraphrase    -> Very High    numeric=verified
+  [76/80] false XOM   paraphrase    -> Contradicted numeric=contradicted
+  [77/80] false XOM   direction     -> Very High    numeric=not_applicable
+  [78/80] true  XOM   direction     -> Very High    numeric=not_applicable
+  [79/80] true  XOM   paraphrase    -> Very High    numeric=verified
+  [80/80] false XOM   paraphrase    -> Contradicted numeric=contradicted
+
+================================================================
+SCORECARD
+================================================================
+
+[1] Numeric verification (the core feature)
+    True claims correctly VERIFIED:        20/40  (  50%)
+    False claims correctly NOT verified:   20/40  (  50%)
+    False claims explicitly CONTRADICTED:  20/40  (  50%)
+
+[2] Overall-confidence separation (true vs false)
+    Mean confidence  true=0.940   false=0.463
+    AUC (1.0=perfect, 0.5=coin flip):      0.985
+
+[3] Final label distribution
+    label         true claims  false claims
+    Very High              40            20
+    Contradicted            0            20
+
+[4] Tool vs simpler baseline  (accuracy on true/false detection)
+    Toolkit (full pipeline):               60/80  (  75%)
+    Baseline (number-in-evidence only):    44/80  (  55%)
+    Trivial (always 'credible'):           40/80  (  50%)
+
+[5] LAYER 1 - accuracy by claim type
+    type              n   correct      AUC
+    direction        40  20/40      0.949
+    paraphrase       40  40/40      1.000
+
+[6] LAYER 2 - error breakdown
+    correct:               60/80
+    false_passed          20  (false claim called credible)
+
+[7] LAYER 3 - every claim is traceable in:
+    evaluation/results_v2_ai.csv   (open in Excel)
+    evaluation/results_v2_ai.json   (full JSON)
+    sample wrong rows:
+      AAPL  direction     truth=false -> Very High    [false_passed] 
+      AAPL  direction     truth=false -> Very High    [false_passed] 
+      MSFT  direction     truth=false -> Very High    [false_passed] 

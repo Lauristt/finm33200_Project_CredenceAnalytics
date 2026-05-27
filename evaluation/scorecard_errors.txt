@@ -1,0 +1,91 @@
+Analyzing 50 TRUE claims | judge=OpenAIJudge
+
+  [ 1/50] stock     ev=4 partially_supported uncategorized
+  [ 2/50] stock     ev=4 contradicted     B. Concept-mapping gap (segment me
+  [ 3/50] stock     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [ 4/50] stock     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [ 5/50] stock     ev=4 contradicted     A. Period coverage / over-escalati
+  [ 6/50] stock     ev=4 contradicted     B. Concept-mapping gap (segment me
+  [ 7/50] stock     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [ 8/50] stock     ev=4 contradicted     B. Concept-mapping gap (segment me
+  [ 9/50] stock     ev=4 partially_supported B. Concept-mapping gap (segment me
+  [10/50] stock     ev=4 contradicted     B. Concept-mapping gap (segment me
+  [11/50] stock     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [12/50] stock     ev=4 contradicted     B. Concept-mapping gap (segment me
+  [13/50] stock     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [14/50] stock     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [15/50] stock     ev=2 contradicted     B. Concept-mapping gap (segment me
+  [16/50] stock     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [17/50] stock     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [18/50] stock     ev=3 contradicted     B. Concept-mapping gap (segment me
+  [19/50] stock     ev=4 partially_supported uncategorized
+  [20/50] stock     ev=4 contradicted     B. Concept-mapping gap (segment me
+  [21/50] stock     ev=4 contradicted     B. Concept-mapping gap (segment me
+  [22/50] stock     ev=1 partially_supported uncategorized
+  [23/50] stock     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [24/50] stock     ev=1 partially_supported uncategorized
+  [25/50] stock     ev=1 contradicted     A. Period coverage / over-escalati
+  [26/50] stock     ev=1 contradicted     B. Concept-mapping gap (segment me
+  [27/50] macro     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [28/50] macro     ev=1 contradicted     A. Period coverage / over-escalati
+  [29/50] macro     ev=1 not_applicable   E. Classified as non-factual and s
+  [30/50] macro     ev=1 not_applicable   E. Classified as non-factual and s
+  [31/50] commodity ev=0 contradicted     C. No evidence retrieved (routing 
+  [32/50] commodity ev=0 not_applicable   C. No evidence retrieved (routing 
+  [33/50] index     ev=0 contradicted     C. No evidence retrieved (routing 
+  [34/50] index     ev=0 contradicted     C. No evidence retrieved (routing 
+  [35/50] index     ev=0 contradicted     C. No evidence retrieved (routing 
+  [36/50] fx        ev=0 insufficient     C. No evidence retrieved (routing 
+  [37/50] commodity ev=2 contradicted     A. Period coverage / over-escalati
+  [38/50] commodity ev=0 contradicted     C. No evidence retrieved (routing 
+  [39/50] commodity ev=0 insufficient     C. No evidence retrieved (routing 
+  [40/50] index     ev=0 contradicted     C. No evidence retrieved (routing 
+  [41/50] index     ev=0 contradicted     D. Entity / asset-class not extrac
+  [42/50] rates     ev=1 partially_supported uncategorized
+  [43/50] rates     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [44/50] macro     ev=0 not_applicable   C. No evidence retrieved (routing 
+  [45/50] macro     ev=1 not_applicable   E. Classified as non-factual and s
+  [46/50] macro     ev=1 not_applicable   E. Classified as non-factual and s
+  [47/50] macro     ev=0 not_applicable   D. Entity / asset-class not extrac
+  [48/50] fx        ev=0 contradicted     C. No evidence retrieved (routing 
+  [49/50] fx        ev=0 contradicted     D. Entity / asset-class not extrac
+  [50/50] crypto    ev=3 contradicted     A. Period coverage / over-escalati
+
+==============================================================
+FAILURE TAXONOMY — true claims confirmed 0/50; 50 failed and were attributed below
+==============================================================
+
+  C. No evidence retrieved (routing / data-source miss)  —  22 claims
+     · [stock] Nvidia posted adjusted earnings of $1.87 per share, beatin  (ev=0, not_applicable)
+     · [stock] Nvidia's growth was driven by surging data center demand.  (ev=0, not_applicable)
+     · [stock] Apple posted adjusted earnings per share of $2.01, beating  (ev=0, not_applicable)
+
+  B. Concept-mapping gap (segment metric / EPS not a mapped concept)  —  11 claims
+     · [stock] Nvidia's data center revenue rose 92% year over year in th  (ev=4, contradicted)
+     · [stock] Apple's Greater China revenue was $20.50 billion in the se  (ev=4, contradicted)
+     · [stock] Apple's iPhone revenue was $56.99 billion in the second qu  (ev=4, contradicted)
+
+  uncategorized  —  5 claims
+     · [stock] Nvidia reported first-quarter revenue of $81.62 billion, b  (ev=4, partially_supported)
+     · [stock] Tesla posted first-quarter revenue of $22.39 billion, topp  (ev=4, partially_supported)
+     · [stock] Meta's first-quarter revenue beat was driven by strength i  (ev=1, partially_supported)
+
+  A. Period coverage / over-escalation (the Fix A class)  —  5 claims
+     · [stock] Apple reported second-quarter revenue of $111.2 billion, a  (ev=4, contradicted)
+     · [stock] JPMorgan reported fourth-quarter net revenue of $46.8 bill  (ev=1, contradicted)
+     · [macro] The 12-month energy index gain reached 17.9% in the April   (ev=1, contradicted)
+
+  E. Classified as non-factual and skipped  —  4 claims
+     · [macro] U.S. GDP grew at a 2.1% pace in 2025.  (ev=1, not_applicable)
+     · [macro] Energy costs tied to the war with Iran drove U.S. inflatio  (ev=1, not_applicable)
+     · [macro] The U.S. unemployment rate was unchanged at 4.3% in April   (ev=1, not_applicable)
+
+  D. Entity / asset-class not extracted  —  3 claims
+     · [index] The Nasdaq Composite closed at 26,343.97, up 0.19%.  (ev=0, contradicted)
+     · [macro] Stronger-than-expected jobs data pushed back expectations   (ev=0, not_applicable)
+     · [fx] GBP/JPY was trading at about 214.82.  (ev=0, contradicted)
+
+Reading: if multiple buckets are non-trivial, the pre-fix errors had MULTIPLE
+distinct causes — Fix A only addressed bucket A.
+
+Per-claim -> /Users/huangshixian/Desktop/26spring/ai/credence_latest/evaluation/error_analysis_results.csv

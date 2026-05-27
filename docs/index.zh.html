@@ -15,6 +15,7 @@
   .sub { color:var(--muted); font-size:17px; margin:0 0 28px; }
   h2 { font-size:20px; margin:42px 0 12px; padding-top:14px; border-top:1px solid var(--line); }
   h3 { font-size:16px; margin:24px 0 6px; }
+  h4 { font-size:14.5px; margin:18px 0 4px; color:#33405a; }
   p { margin:11px 0; }
   code { background:#eef1f6; padding:1px 6px; border-radius:5px; font-size:13.5px;
          font-family:ui-monospace,Menlo,Consolas,monospace; }
@@ -32,7 +33,9 @@
   .bad-box { background:#fdeeec; border:1px solid #f6ccc5; border-left:4px solid var(--bad); }
   .note-box { background:#f4f7fb; border:1px solid #dde6f2; border-left:4px solid var(--muted); }
   .human-box { background:#eefaf2; border:1px solid #c7ecd6; border-left:4px solid var(--good); }
+  .dir-box { background:#fff7ed; border:1px solid #fadcb0; border-left:4px solid #d98324; border-radius:10px; padding:2px 18px 10px; margin:18px 0; }
   .ex { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:12px 0; }
+  blockquote { margin:12px 0; padding:8px 16px; border-left:3px solid var(--accent); color:#33405a; font-style:italic; }
   .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
   .tag { display:inline-block; background:#eef1f6; color:var(--muted); font-size:12px;
          padding:2px 9px; border-radius:999px; margin-right:6px; }
@@ -42,110 +45,111 @@
 <div class="wrap">
 
   <h1>这个金融声明核查 agent 行不行 —— AI 帮上忙了吗?</h1>
-  <p class="sub">在真实、带标签的数据上逐阶段评估。前端能用,但判定环节几乎不确认任何真话——因为它的逻辑要求句子里<em>每一个</em>数字都对上才肯确认。</p>
+  <p class="sub">在真实、带标签的数据上逐阶段评估。前端能用,但判定环节 50 条真话只确认 1 条——两个方向的错误都源于同一个原因:比到了错误的时点。</p>
   <div><span class="tag">FINM 33200</span><span class="tag">智能体用例</span><span class="tag">评估与证据</span></div>
 
   <div class="cards">
-    <div class="card"><div class="big down">≈36%</div><div class="lbl">真实新闻上的判定准确率</div></div>
-    <div class="card"><div class="big down">1 / 50</div><div class="lbl">它确认的真话——即便数据已对上</div></div>
-    <div class="card"><div class="big down">全有或全无</div><div class="lbl">系统性保守:每个数字都对上才肯确认</div></div>
+    <div class="card"><div class="big down">≈36%</div><div class="lbl">真实新闻上的判定准确率(31/86)</div></div>
+    <div class="card"><div class="big down">1 / 50</div><div class="lbl">它确认的真话</div></div>
+    <div class="card"><div class="big down">18 / 50</div><div class="lbl">真话被冤判成假——时间错配是头号原因</div></div>
     <div class="card"><div class="big up">+9 分</div><div class="lbl">实体提取加 LLM(80.5% → 89.4%)</div></div>
   </div>
 
   <h2>1. 怎么评估的 —— 真实新闻基准</h2>
   <p><strong>113 条真实语句</strong>,从 Yahoo Finance 抓取,覆盖股票/宏观/商品/FX/指数/利率/加密,以及 5 种 claim 类型。
   事实类标签对 SEC/FRED 核验过,再改数字/日期造出配对假话;观点/预测无真假(用来测分类)。</p>
+  <div class="callout note-box">
+    <strong>113 条 = 86 条事实类(50 真 / 36 假)+ 27 条观点/预测/因果(无真假)。</strong>
+    分类(§2.1)在全部 113 条上算;真假判定(§2.2)只在有客观答案的 <strong>86</strong> 条上算
+    ——观点和预测本身没有"对/错",不能拿来打真假分。
+  </div>
   <p><strong>设计取舍——robustness vs. retrieval(稳健性 vs. 检索)。</strong>如果从 agent <em>自己也查</em>的同一数据库里
-  拿数字来扰动造题,那只是在测 <strong>检索(retrieval)</strong>(它能不能把递给它的那行取回来?);
-  喂它 <strong>真实、独立来源的新闻</strong>,才是在测 <strong>真实世界验证(real-world verification)</strong>
-  (它能不能像人一样判断一句话?)。我们刻意选了更难、更有意义的那种测法。</p>
+  拿数字来扰动造题,那只是在测 <strong>检索</strong>;喂它 <strong>真实、独立来源的新闻</strong>,
+  才是在测 <strong>真实世界验证</strong>。我们刻意选了更难、更有意义的那种测法。</p>
 
   <h2>2. 评什么(两个标准)</h2>
-  <h3>(1) 能不能正确分类一句话?</h3>
+  <h3>(1) 能不能正确分类一句话?(全部 113 条)</h3>
   <table>
     <tr><th>阶段</th><th class="num">准确率</th></tr>
     <tr><td>实体 / 资产类别提取</td><td class="num">80.5% → <strong>89.4%</strong>(加 LLM)</td></tr>
     <tr><td>claim 类型分类</td><td class="num"><strong>84.5%</strong></td></tr>
     <tr><td>核查路由(观点/预测被正确跳过)</td><td class="num"><strong>84.1%</strong></td></tr>
   </table>
-  <h3>(2) 对事实/数字类,真假判定对不对?</h3>
+  <h3>(2) 对那 86 条事实类,真假判定对不对?</h3>
   <table>
-    <tr><th>指标</th><th class="num">真实新闻</th></tr>
-    <tr><td>总准确率</td><td class="num"><strong>≈36%</strong></td></tr>
+    <tr><th>指标</th><th class="num">真实新闻(n=86)</th></tr>
+    <tr><td>总准确率</td><td class="num"><strong>≈36%</strong>(31/86)</td></tr>
     <tr><td>真话被确认(<code>verified</code>/<code>supported</code>)</td><td class="num"><strong>1 / 50</strong></td></tr>
-    <tr><td>假话被抓出(<code>contradicted</code>)</td><td class="num">≈30 / 36</td></tr>
+    <tr><td>假话被抓出(<code>contradicted</code>)</td><td class="num">30 / 36</td></tr>
     <tr><td>置信度 AUC(真 vs 假)</td><td class="num"><strong>0.34</strong></td></tr>
   </table>
-  <div class="callout bad-box">
-    它<strong>几乎不确认任何真话</strong>(1/50),真假也分不开(AUC ≈ 0.34)——擅长"否定",但几乎不会"确认"一条真话。
+
+  <h2>3. 错误出在哪 —— 两个方向</h2>
+  <p>一个核查器会从两个方向出错。我们两边都测了,而它们指向同一个根因。</p>
+
+  <div class="dir-box">
+  <h3>3A. 把真的冤枉成假(false rejection)—— 大头</h3>
+  <p>50 条真话里只有 <strong>1</strong> 条被确认;<strong>18 条(36%)被判成 <code>contradicted</code></strong>(说成假的)、
+  <strong>17 条(34%)卡在 <code>partially_supported</code></strong>。三个原因:</p>
+
+  <h4>(i) 时间错配 —— 那 18 条冤判成假的头号原因</h4>
+  <p>agent 取了<em>错误时点</em>的值去比。</p>
+  <div class="ex"><em>"2026 年 4 月新增 115,000 非农就业"</em>(对 4 月是真的)→ <code>contradicted</code>,理由
+  <em>"证据显示的是另一个月的数字"</em>。同样的毛病出现在 <em>"布伦特原油约 $105/桶"</em>、<em>"铜价 $6.11/磅"</em>
+  ——claim 指的是某个时点,agent 却取了最新值。</div>
+  <p>一个特定变种是 <strong>SEC 时间颗粒度</strong>:同一指标按很多重叠窗口同时申报(苹果 Q2 = <strong>$111.2B</strong>、
+  半年 = $254.9B、全年 = $416.2B),agent 把 <em>"苹果 Q2 营收 $111.2B"</em> 拿去和错误窗口比 → <code>contradicted</code>。</p>
+  <div class="callout note-box"><strong>这部分是设计如此:</strong>agent 判的是<em>当下</em>是否属实,取最新值合理;
+  问题只出在<strong>带历史日期</strong>的陈述上。<em>future work:</em> 加 as-of-date 与财年期间控制。</div>
+
+  <h4>(ii) 系统性保守 —— 数据对上也不肯确认(那 17 条 partial)</h4>
+  <p>某条真话上 agent 自己写着 <em>"句子里的全部实质数字都已在证据中直接匹配"</em>,却仍返回 <code>partially_supported</code>,
+  而非 <code>verified</code>。机制是<strong>全有或全无匹配</strong>——只有<em>每一个</em>实质数字都匹配才判 <code>verified</code>。
+  <em>"英伟达 Q1 营收 $81.62B,超预期 $79.18B"</em>:$81.62B 在财报里,但预期 $79.18B 任何官方源都没有,于是规则永远看不到"全部对上"。</p>
+
+  <h4>(iii) 分类错误</h4>
+  <p><strong>12 条(24%)</strong>真话被判成 <code>forecast</code>/<code>opinion</code> 而跳过(如 <em>"微软营收 $82.89B"</em>);
+  细分指标(iPhone、AWS、大中华区)不在映射概念里。</p>
   </div>
 
-  <h2>3. 错误出在哪</h2>
-  <div class="callout note-box">
-    <strong>先说一个边界。</strong>这个 agent 的设计就是核查一句话<em>当下</em>是否属实,所以它取的是<em>最新</em>数据。
-    对一个"判断当下真假"的工具来说这是合理的,所以我们<strong>不</strong>把它算作 bug——它只是限制了带历史日期的陈述(见 §6)。
-    真正的问题在下面。
+  <div class="dir-box">
+  <h3>3B. 把假的没抓到(false acceptance)—— 更小,但很说明问题</h3>
+  <p>抓假话其实还行——<strong>36 条里抓出 30 条(83%)</strong>判 <code>contradicted</code>。但<strong>漏掉的 6 条</strong>
+  (5 条 <code>partially_supported</code>、<strong>1 条被错判为 <code>supported</code></strong>)栽在<strong>同一个时间错配上,只是反过来</strong>:
+  一个假数字凑巧和<em>另一个期间</em>的真值对上了。</p>
+  <div class="ex">一条假的 <strong>Alphabet</strong> 声明被判 <code>supported</code>——agent 把它对到了
+  <em>"截止 2023-12-31 财年营收约 $307.39 billion"</em>(<strong>错的年份</strong>)。另两条假话上它写
+  <em>"全部实质数字都已直接匹配"</em>,因为那些假数字恰好出现在多数字的证据里某处。</div>
   </div>
 
-  <h3>原因 1 —— 系统性保守:每个数字都对上才肯确认(核心问题)</h3>
-  <p>这是<strong>设计层面的逻辑断层,不是 AI 的锅。</strong>代码里(<code>verification.py</code>),一条声明只有在
-  <strong>句子里每一个实质数字都在证据中被找到</strong>(<code>len(matches) == len(claim_numbers)</code>)时才判
-  <code>verified</code>;否则降级为 <code>partially_verified</code>。真实新闻一句话里塞了好几个数字,但官方源只能确认
-  那个核心事实——于是真话几乎到不了"全部对上"。</p>
-  <div class="ex"><em>"英伟达一季度营收 <strong>$81.62 billion</strong>,超出分析师预期的 <strong>$79.18 billion</strong>。"</em>
-  SEC 财报里 <strong>$81.62B 完全对得上</strong>——但分析师预期 <strong>$79.18B 按定义就不在任何官方源里</strong>。
-  因为规则要求<em>两个</em>数字都对上,这条真话被降级成 <code>partially_verified</code>,到不了 <code>verified</code>。</div>
-  <p>其效果是一种<strong>假阴性偏差(false-negative bias)</strong>:为了不去肯定没被证实的东西,逻辑选择"少确认"
-  ——50 条真话只完整确认了<strong>一条</strong>,AUC 0.34 也说明置信度分不开真假。(注意:这<em>不是</em>"置信度阈值定太高"
-  ——根本没有这道闸;是"全有或全无"的匹配规则。)</p>
-
-  <h3>原因 2 —— 时间粒度失配(SEC):比到了错误的报告期间</h3>
-  <p>同一个指标,公司会按很多重叠窗口、同时申报。以苹果营收为例:</p>
-  <table>
-    <tr><th>期间(≈ 截止 2026-03-28)</th><th class="num">数值</th></tr>
-    <tr><td>财年 <strong>Q2</strong>(3 个月)</td><td class="num"><strong>$111.2B</strong></td></tr>
-    <tr><td>上<strong>半年</strong>(Q1+Q2,6 个月)</td><td class="num">$254.9B</td></tr>
-    <tr><td>上<strong>一季度</strong>(12月)</td><td class="num">$143.8B</td></tr>
-    <tr><td>整<strong>财年</strong></td><td class="num">$416.2B</td></tr>
-  </table>
-  <div class="ex">喂进真话 <em>"苹果 Q2 营收 $111.2 billion"</em>,agent 把 $111.2B 拿去和<strong>别的期间</strong>的数
-  (如半年 $254.9B)比,发现不一样,就把这条真话判成 <code>contradicted</code>。<strong>这不是新旧问题</strong>
-  ——Q2、半年、全年都是同样新、同时存在的数据;agent 必须<em>匹配粒度</em>(读懂"Q2"再挑对的那一行),而它没做到。</div>
-
-  <h3>原因 3 —— (次要)分类错 + 概念缺失 + 口径错</h3>
-  <ul>
-    <li>有些已发生的事实(如 <em>"微软营收 $82.89B"</em>)被判成 <code>forecast</code>/<code>opinion</code>,根本没去核查。</li>
-    <li>细分指标(iPhone 营收、AWS)不在映射概念里,没东西可比。</li>
-    <li>"涨 X%" 类(如 <em>"CPI 涨 3.8%"</em>),agent 拿"3.8"去比 CPI <strong>指数水平值</strong>(332.4)——<strong>口径</strong>不一致,永远配不上。</li>
-  </ul>
+  <div class="callout"><strong>关键洞察:</strong>同一个根因——比到了错误的时点——驱动了<strong>两个方向</strong>的错误:
+  时间错配把真话变成 <code>contradicted</code>(3A),也让假话蒙混成 <code>supported</code>(3B)。<strong>时间对齐是命门。</strong></div>
 
   <h2>4. AI 有没有用?价值在"感知",不在"逻辑"</h2>
   <ul>
-    <li><strong>实体提取——有用</strong>(80.5% → 89.4%)。LLM 能读懂<em>非结构化的语境</em>——哪个词是资产、哪个是动作、
-      哪个是数字——这是正则/关键词规则拆不开的。这是 AI 独有的真实价值。</li>
+    <li><strong>实体提取——有用</strong>(80.5% → 89.4%)。LLM 能读懂<em>非结构化语境</em>——哪个词是资产、哪个是动作、
+      哪个是数字——这是正则/关键词规则拆不开的。AI 独有的真实价值。</li>
     <li><strong>分类——不适用</strong>(纯规则)。</li>
-    <li><strong>判定——AI 不是瓶颈。</strong>失败在判定<em>逻辑</em>(全有或全无的匹配)和期间/口径对齐,不在模型。
+    <li><strong>判定——AI 不是瓶颈。</strong>失败在判定<em>逻辑</em>(时间对齐 + 全有或全无),不在模型。
       所以 AI 的价值<strong>只到"感知(读懂这句话)",没到"逻辑(判断这句话)"</strong>。</li>
   </ul>
 
   <h2>5. 结论</h2>
-  <p>前端基本能用、AI 提升了<em>感知</em>,但<strong>判定环节几乎不确认任何真话</strong>(1/50;AUC 0.34)——而且关键是,
-  <strong>就算核心数字完全对上也不肯确认</strong>(NVIDIA),因为逻辑要求<em>每一个</em>数字都对上。这一点,
-  加上把声明比到了错误的 SEC 报告期间,才是真正的弱点。</p>
+  <p>前端基本能用、AI 提升了<em>感知</em>,但<strong>判定环节 50 条真话只确认 1 条</strong>,且分不开真假(AUC 0.34)。
+  两个方向的错误都追到同一根因——<strong>比到了错误的时点</strong>——再叠加<strong>"全有或全无、不肯确认"的规则</strong>。
+  "判当下"的设计本身合理;缺口在于把"正确、对齐了时间的证据"转成"正确的判定"。</p>
   <div class="callout human-box">
-    <strong>人 vs. agent。</strong>人类分析师读到 <em>"一季度营收 $81.62B,超预期 $79.18B"</em>,会拿 $81.62B 对一下财报、
-    判它<strong>为真</strong>——心里清楚 $79.18B 那个预期本来就不是官方数字。而 agent 非要<em>两个</em>数字都在证据里对上,
-    于是那个官方源根本不可能有的数字,把一条真话拖成了"部分确认"。<strong>差距在判断力,不在数据。</strong>
+    <strong>人 vs. agent。</strong>人读到 <em>"4 月新增 115,000 非农"</em> 会去查 <em>4 月</em>;读到
+    <em>"Q1 营收 $81.62B,超预期 $79.18B"</em> 会拿 $81.62B 对财报、忽略那个预期。而 agent 取了最新值(错的月份)、
+    还非要<em>每个</em>数字都对上。<strong>差距在判断力,不在数据。</strong>
   </div>
 
   <h2>6. 局限 & 可改进(future work)</h2>
   <ul>
     <li>判定准确率在数据源能覆盖的 claim 上评估(美股/宏观);观点/预测无真假(只测分类);加密/冷门超出范围。</li>
-    <li><strong>用 LLM 推理替换硬编码的判定规则。</strong>"全有或全无"的匹配器太脆;让 LLM 判官来判断
-      "$81.62B 对上了;$79.18B 是预期、不是官方数字",就能确认这条声明——这正是规则缺的判断力。</li>
-    <li><strong>设计上它核查"当下"。</strong><em>可用性改进:</em>加入 <strong>as-of-date</strong> 匹配,让带日期的陈述
-      (如 <em>"标普 5/15 收于 7,501.24"</em>)按那天去查;再加 <strong>口径</strong>匹配("涨 X%" 用 <code>units=pc1</code>)。</li>
-    <li><strong>粒度匹配(SEC):</strong>读懂声明里的财年期间(Q2 / 半年 / 全年),挑出对应的报告窗口,而不是随便选一个。</li>
+    <li><strong>as-of-date + 财年期间控制(时间对齐的修法)</strong>——能同时修好<em>两个</em>方向:按 claim 的<em>日期</em>查
+      (<code>observation_start/end</code>)、按口径查("涨 X%" 用 <code>units=pc1</code>),并匹配 SEC 期间(Q2 / 半年 / 全年)。</li>
+    <li><strong>用 LLM 推理替换"全有或全无"匹配器,</strong>让官方数字对上的 claim 即使还提了一个非官方数字(如分析师预期)也能被确认。</li>
   </ul>
 
   <div class="footer">

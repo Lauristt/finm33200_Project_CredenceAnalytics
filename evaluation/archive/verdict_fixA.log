@@ -1,0 +1,123 @@
+Verdict eval on 100 claims | judge=OpenAIJudge | file=claims.json
+
+  [  1/100] true  none           -> partially_supported
+  [  2/100] false number_big     -> contradicted
+  [  3/100] false number_small   -> contradicted
+  [  4/100] false wrong_company  -> contradicted
+  [  5/100] false wrong_time     -> contradicted
+  [  6/100] true  none           -> partially_supported
+  [  7/100] false number_big     -> contradicted
+  [  8/100] false number_small   -> contradicted
+  [  9/100] false wrong_company  -> partially_supported
+  [ 10/100] false wrong_time     -> contradicted
+  [ 11/100] true  none           -> partially_supported
+  [ 12/100] false number_big     -> contradicted
+  [ 13/100] false number_small   -> contradicted
+  [ 14/100] false wrong_company  -> contradicted
+  [ 15/100] false wrong_time     -> contradicted
+  [ 16/100] true  none           -> partially_supported
+  [ 17/100] false number_big     -> contradicted
+  [ 18/100] false number_small   -> contradicted
+  [ 19/100] false wrong_company  -> contradicted
+  [ 20/100] false wrong_time     -> contradicted
+  [ 21/100] true  none           -> partially_supported
+  [ 22/100] false number_big     -> contradicted
+  [ 23/100] false number_small   -> contradicted
+  [ 24/100] false wrong_company  -> contradicted
+  [ 25/100] false wrong_time     -> contradicted
+  [ 26/100] true  none           -> partially_supported
+  [ 27/100] false number_big     -> contradicted
+  [ 28/100] false number_small   -> contradicted
+  [ 29/100] false wrong_company  -> contradicted
+  [ 30/100] false wrong_time     -> contradicted
+  [ 31/100] true  none           -> partially_supported
+  [ 32/100] false number_big     -> contradicted
+  [ 33/100] false number_small   -> contradicted
+  [ 34/100] false wrong_company  -> contradicted
+  [ 35/100] false wrong_time     -> contradicted
+  [ 36/100] true  none           -> partially_supported
+  [ 37/100] false number_big     -> contradicted
+  [ 38/100] false number_small   -> contradicted
+  [ 39/100] false wrong_company  -> contradicted
+  [ 40/100] false wrong_time     -> contradicted
+  [ 41/100] true  none           -> partially_supported
+  [ 42/100] false number_big     -> contradicted
+  [ 43/100] false number_small   -> contradicted
+  [ 44/100] false wrong_company  -> contradicted
+  [ 45/100] false wrong_time     -> contradicted
+  [ 46/100] true  none           -> partially_supported
+  [ 47/100] false number_big     -> contradicted
+  [ 48/100] false number_small   -> contradicted
+  [ 49/100] false wrong_company  -> contradicted
+  [ 50/100] false wrong_time     -> contradicted
+  [ 51/100] true  none           -> partially_supported
+  [ 52/100] false number_big     -> contradicted
+  [ 53/100] false number_small   -> contradicted
+  [ 54/100] false wrong_company  -> contradicted
+  [ 55/100] false wrong_time     -> contradicted
+  [ 56/100] true  none           -> partially_supported
+  [ 57/100] false number_big     -> contradicted
+  [ 58/100] false number_small   -> contradicted
+  [ 59/100] false wrong_company  -> contradicted
+  [ 60/100] false wrong_time     -> contradicted
+  [ 61/100] true  none           -> partially_supported
+  [ 62/100] false number_big     -> contradicted
+  [ 63/100] false number_small   -> contradicted
+  [ 64/100] false wrong_company  -> contradicted
+  [ 65/100] false wrong_time     -> contradicted
+  [ 66/100] true  none           -> partially_supported
+  [ 67/100] false number_big     -> contradicted
+  [ 68/100] false number_small   -> contradicted
+  [ 69/100] false wrong_company  -> contradicted
+  [ 70/100] false wrong_time     -> contradicted
+  [ 71/100] true  none           -> partially_supported
+  [ 72/100] false number_big     -> contradicted
+  [ 73/100] false number_small   -> contradicted
+  [ 74/100] false wrong_company  -> contradicted
+  [ 75/100] false wrong_time     -> contradicted
+  [ 76/100] true  none           -> partially_supported
+  [ 77/100] false number_big     -> contradicted
+  [ 78/100] false number_small   -> contradicted
+  [ 79/100] false wrong_company  -> contradicted
+  [ 80/100] false wrong_time     -> contradicted
+  [ 81/100] true  none           -> partially_supported
+  [ 82/100] false number_big     -> contradicted
+  [ 83/100] false number_small   -> contradicted
+  [ 84/100] false wrong_company  -> contradicted
+  [ 85/100] false wrong_time     -> contradicted
+  [ 86/100] true  none           -> partially_supported
+  [ 87/100] false number_big     -> contradicted
+  [ 88/100] false number_small   -> contradicted
+  [ 89/100] false wrong_company  -> contradicted
+  [ 90/100] false wrong_time     -> contradicted
+  [ 91/100] true  none           -> partially_supported
+  [ 92/100] false number_big     -> contradicted
+  [ 93/100] false number_small   -> contradicted
+  [ 94/100] false wrong_company  -> contradicted
+  [ 95/100] false wrong_time     -> contradicted
+  [ 96/100] true  none           -> partially_supported
+  [ 97/100] false number_big     -> contradicted
+  [ 98/100] false number_small   -> contradicted
+  [ 99/100] false wrong_company  -> contradicted
+  [100/100] false wrong_time     -> contradicted
+
+============================================================
+VERDICT-ACCURACY SCORECARD
+============================================================
+
+[1] Overall accuracy: 79/100 ( 79.0%)
+    True  rated supported(credible):  0/20
+    False rated contradicted:         79/80
+
+[2] Confidence AUC (true vs false): 0.831
+
+[3] Accuracy by group (falsification type or asset class)
+    none            0/20
+    number_big      20/20
+    number_small    20/20
+    wrong_company   19/20
+    wrong_time      20/20
+
+[4] Human-review flags: 56/100; of those, wrong = 1/56
+
+Per-claim -> /Users/huangshixian/Desktop/26spring/ai/credence_latest/evaluation/results_her_verdict_fixA.csv
