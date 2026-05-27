@@ -115,6 +115,39 @@
     (documented as Fix B).
   </div>
 
+  <h3>…but Fix A's benefit is dataset-dependent (the honest catch)</h3>
+  <table>
+    <tr><th>Benchmark</th><th class="num">Before Fix A</th><th class="num">After Fix A</th></tr>
+    <tr><td>Constructed (<code>claims.json</code> — all plain annual revenue/income)</td><td class="num">74% · AUC 0.50</td><td class="num"><strong>79% · AUC 0.83</strong></td></tr>
+    <tr><td>Real news (<code>claims_news</code> — mixed metrics/assets)</td><td class="num">36% · AUC 0.345</td><td class="num"><strong>35% · AUC 0.338</strong></td></tr>
+  </table>
+  <div class="callout bad-box">
+    On the constructed set Fix A looks transformative; on real news it is <strong>nearly flat</strong>
+    — it reduces true-claim contradictions (30 → 22) but accuracy and AUC barely move, because the
+    A-class it fixes is only ~10% of real failures. The dramatic gain was largely an artifact of a
+    homogeneous, self-built benchmark — the same lesson as 74%-vs-36%, now applied to the fix itself.
+  </div>
+
+  <h2>Failure taxonomy — multiple causes, not one</h2>
+  <p>We attributed every pre-fix failure (50 true news claims, all unconfirmed) to a distinct
+  mechanism by inspecting the pipeline's internal signals.</p>
+  <table>
+    <tr><th>Cause</th><th class="num">Claims</th><th class="num">Fix A?</th><th>Example</th></tr>
+    <tr><td>C. No evidence retrieved (routing miss / classified-skip)</td><td class="num">22 (44%)</td><td class="num">no</td><td>"EPS $1.87", "data center demand" → 0 evidence</td></tr>
+    <tr><td>B. Concept-mapping gap (segment metric / EPS)</td><td class="num">11 (22%)</td><td class="num">no</td><td>iPhone revenue, Greater China, AWS</td></tr>
+    <tr><td>A. Period coverage / over-escalation</td><td class="num">5 (10%)</td><td class="num"><strong>yes</strong></td><td>Apple Q2 $111.2B, JPM Q4</td></tr>
+    <tr><td>near-miss (<code>partially_supported</code>)</td><td class="num">5 (10%)</td><td class="num">partly</td><td>NVDA $81.62B, TSLA $22.39B</td></tr>
+    <tr><td>E. Classified non-factual, skipped</td><td class="num">4 (8%)</td><td class="num">no</td><td>GDP, unemployment, causal</td></tr>
+    <tr><td>D. Entity not extracted</td><td class="num">3 (6%)</td><td class="num">no</td><td>Nasdaq, GBP/JPY</td></tr>
+  </table>
+  <div class="callout">
+    <strong>The dominant cause depends on the claim mix.</strong> On clean annual revenue/income
+    claims the period bug (A) dominates and Fix A resolves ~19/20. On realistic news, A is only
+    ~10% — the real bottlenecks are retrieval coverage (C, 44%) and segment-metric concept gaps
+    (B, 22%), which Fix A does not touch. A homogeneous, self-built benchmark overstates <em>both</em>
+    the failure rate and the benefit of any single fix.
+  </div>
+
   <h2>Does AI help? (per stage)</h2>
   <ul>
     <li><strong>Entity extraction — yes.</strong> The LLM layer lifts accuracy 80.5% → 89.4%.</li>

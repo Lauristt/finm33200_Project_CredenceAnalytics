@@ -106,6 +106,35 @@
     还剩一个残留:真话目前停在 <code>partially_supported</code> 而非 <code>supported</code>(记为 Fix B)。
   </div>
 
+  <h3>…但 Fix A 的效果依赖数据集(诚实的反转)</h3>
+  <table>
+    <tr><th>数据集</th><th class="num">修复前</th><th class="num">修复后 Fix A</th></tr>
+    <tr><td>自造题(<code>claims.json</code> — 全是普通年度营收/净利润)</td><td class="num">74% · AUC 0.50</td><td class="num"><strong>79% · AUC 0.83</strong></td></tr>
+    <tr><td>真实新闻(<code>claims_news</code> — 混合指标/资产)</td><td class="num">36% · AUC 0.345</td><td class="num"><strong>35% · AUC 0.338</strong></td></tr>
+  </table>
+  <div class="callout bad-box">
+    在自造题上 Fix A 看着脱胎换骨;但在真实新闻上<strong>几乎纹丝不动</strong>——它把真话冤判从 30 降到 22,
+    但准确率和 AUC 基本不变,因为它修的 A 类只占真实失败的 ~10%。那个惊人的提升,基本是同质化自造题制造的假象
+    ——和 74% vs 36% 是同一个教训,只是这次落到了"修复本身"上。
+  </div>
+
+  <h2>失败归因 —— 多个原因,不止一个</h2>
+  <p>我们把修复前的每条失败(50 条真话全部未确认)通过查看 pipeline 内部信号,逐条归到具体机制:</p>
+  <table>
+    <tr><th>原因</th><th class="num">条数</th><th class="num">Fix A 管?</th><th>例子</th></tr>
+    <tr><td>C. 检索不到证据(路由漏 / 被判非事实而没去查)</td><td class="num">22 (44%)</td><td class="num">否</td><td>“EPS $1.87”“data center 需求” → 0 证据</td></tr>
+    <tr><td>B. 概念映射缺失(细分指标 / EPS)</td><td class="num">11 (22%)</td><td class="num">否</td><td>iPhone 营收、大中华区、AWS</td></tr>
+    <tr><td>A. 期间覆盖 / 过激判定</td><td class="num">5 (10%)</td><td class="num"><strong>是</strong></td><td>Apple Q2 $111.2B、JPM Q4</td></tr>
+    <tr><td>near-miss(<code>partially_supported</code>)</td><td class="num">5 (10%)</td><td class="num">部分</td><td>NVDA $81.62B、TSLA $22.39B</td></tr>
+    <tr><td>E. 被判成非事实而跳过</td><td class="num">4 (8%)</td><td class="num">否</td><td>GDP、失业率、因果句</td></tr>
+    <tr><td>D. 实体没提取到</td><td class="num">3 (6%)</td><td class="num">否</td><td>纳指、GBP/JPY</td></tr>
+  </table>
+  <div class="callout">
+    <strong>主要失败原因取决于题目构成。</strong>在干净的年度营收/净利润题上,期间 bug(A)占主导,
+    Fix A 修掉 ~19/20;但在真实新闻上 A 只占 ~10%——真正的瓶颈是检索覆盖(C,44%)和细分指标概念缺失
+    (B,22%),Fix A 都不碰。<em>同质化的自造题会同时高估失败率和单个修复的效果。</em>
+  </div>
+
   <h2>AI 有没有用?(分阶段)</h2>
   <ul>
     <li><strong>实体提取——有用。</strong>LLM 层把准确率从 80.5% 提到 89.4%。</li>
