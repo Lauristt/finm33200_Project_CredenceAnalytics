@@ -41,7 +41,6 @@ class CliTests(unittest.TestCase):
             fake_result = {"summary": {"total": 1, "succeeded": 1, "failed": 0}, "results": [], "errors": []}
             with (
                 patch("sys.argv", argv),
-                patch("financial_credibility.cli.run_batch", return_value=fake_result),
                 contextlib.redirect_stdout(io.StringIO()),
             ):
                 main()
@@ -76,6 +75,45 @@ class CliTests(unittest.TestCase):
 
         self.assertIn("summary", payload)
         self.assertEqual(payload["summary"]["total"], 1)
+
+    def test_cli_demo_preset_marks_single_claim_output(self):
+        argv = [
+            "financial_credibility",
+            "Apple revenue grew 6% year over year.",
+            "--ticker",
+            "AAPL",
+            "--mode",
+            "strict",
+            "--demo-preset",
+            "equity_supported",
+            "--pretty",
+        ]
+
+        with patch("sys.argv", argv), contextlib.redirect_stdout(io.StringIO()) as output:
+            main()
+
+        payload = json.loads(output.getvalue())
+        self.assertTrue(payload["demo_mode"])
+        self.assertEqual(payload["demo_preset"], "equity_supported")
+        self.assertEqual(payload["evidence_mode"], "prefetched")
+
+    def test_cli_auto_report_extracts_entities_without_ticker(self):
+        argv = [
+            "financial_credibility",
+            "Apple revenue grew 6% year over year while CPI rose.",
+            "--auto-report",
+            "--demo-preset",
+            "equity_supported",
+            "--pretty",
+        ]
+
+        with patch("sys.argv", argv), contextlib.redirect_stdout(io.StringIO()) as output:
+            main()
+
+        payload = json.loads(output.getvalue())
+        self.assertTrue(payload["demo_mode"])
+        self.assertIn("summary", payload)
+        self.assertIn("coverage_summary", payload)
 
 
 if __name__ == "__main__":

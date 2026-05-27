@@ -1,6 +1,7 @@
 import unittest
 
-from financial_credibility.webapp import HTML, _statement_from_payload
+from financial_credibility.config import ToolkitConfig
+from financial_credibility.webapp import HTML, _handler, _statement_from_payload
 
 
 class WebappTests(unittest.TestCase):
@@ -49,6 +50,21 @@ class WebappTests(unittest.TestCase):
             "Apple revenue grew.",
         )
         self.assertEqual(_statement_from_payload({"memo": "legacy"}), "legacy")
+
+    def test_web_report_loads_demo_preset_from_payload(self):
+        handler_cls = _handler(ToolkitConfig())
+        handler = object.__new__(handler_cls)
+        payload = {
+            "statement": "Apple revenue grew 6% year over year.",
+            "tickers": ["AAPL"],
+            "demo_preset": "equity_supported",
+        }
+
+        report = handler._build_report(payload)
+
+        self.assertTrue(report["demo_mode"])
+        self.assertEqual(report["demo_preset"], "equity_supported")
+        self.assertEqual(report["input"]["evidence_mode"], "prefetched")
 
 
 if __name__ == "__main__":
