@@ -60,16 +60,36 @@ SEC_CONCEPTS = {
     "cash": ["CashAndCashEquivalentsAtCarryingValue", "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents"],
 }
 
+# Keyword -> FRED series. Ordered specific-first; includes EN/ZH synonyms and aliases so
+# routing matches real phrasing ("consumer prices", "Brent", "S&P 500"), not just "cpi"/"gdp".
+# Over-broad bare words ("rate", "dow") are intentionally excluded to avoid mis-routing.
 FRED_SERIES = {
-    "inflation": "CPIAUCSL",
-    "cpi": "CPIAUCSL",
-    "interest": "FEDFUNDS",
-    "fed funds": "FEDFUNDS",
-    "rate": "FEDFUNDS",
-    "gdp": "GDP",
-    "unemployment": "UNRATE",
-    "treasury": "DGS10",
-    "yield": "DGS10",
+    # prices / inflation
+    "consumer price": "CPIAUCSL", "consumer prices": "CPIAUCSL", "cpi": "CPIAUCSL",
+    "inflation": "CPIAUCSL", "通胀": "CPIAUCSL", "消费物价": "CPIAUCSL", "物价": "CPIAUCSL",
+    # jobs
+    "nonfarm": "PAYEMS", "non-farm": "PAYEMS", "payroll": "PAYEMS", "非农": "PAYEMS",
+    "unemployment": "UNRATE", "jobless": "UNRATE", "失业": "UNRATE",
+    # growth
+    "gross domestic product": "GDP", "gdp": "GDP", "国内生产总值": "GDP",
+    # rates
+    "10-year": "DGS10", "10 year": "DGS10", "ten-year": "DGS10", "treasury yield": "DGS10",
+    "treasury": "DGS10", "国债": "DGS10", "美债": "DGS10", "yield": "DGS10",
+    "fed funds": "FEDFUNDS", "federal funds": "FEDFUNDS", "interest rate": "FEDFUNDS",
+    "policy rate": "FEDFUNDS", "利率": "FEDFUNDS",
+    # commodities
+    "brent": "DCOILBRENTEU", "布伦特": "DCOILBRENTEU",
+    "wti": "DCOILWTICO", "west texas": "DCOILWTICO", "crude": "DCOILWTICO",
+    "oil price": "DCOILWTICO", "原油": "DCOILWTICO", "石油": "DCOILWTICO",
+    # equity indices
+    "s&p 500": "SP500", "s&p500": "SP500", "sp500": "SP500", "s & p 500": "SP500",
+    "standard & poor": "SP500", "标普": "SP500",
+    "dow jones": "DJIA", "道琼斯": "DJIA", "道指": "DJIA",
+    "nasdaq": "NASDAQCOM", "纳斯达克": "NASDAQCOM", "纳指": "NASDAQCOM",
+    # FX
+    "eur/usd": "DEXUSEU", "eurusd": "DEXUSEU", "euro": "DEXUSEU", "欧元": "DEXUSEU",
+    "usd/jpy": "DEXJPUS", "usdjpy": "DEXJPUS", "yen": "DEXJPUS", "日元": "DEXJPUS",
+    "gbp/usd": "DEXUSUK", "pound": "DEXUSUK", "英镑": "DEXUSUK",
 }
 
 

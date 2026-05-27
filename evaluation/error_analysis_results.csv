@@ -1,0 +1,51 @@
+﻿id,asset_class,claim_type,entity,statement,entity_ok,arg_type,n_evidence,numeric_verdict,atomic_verdict,segment_metric,confirmed,bucket
+S1,stock,numeric,NVDA,"Nvidia reported first-quarter revenue of $81.62 billion, beating analyst estimates of $79.18 billion.",True,metric_fact,4,partially_verified,partially_supported,False,False,uncategorized
+S2,stock,numeric,NVDA,Nvidia's data center revenue rose 92% year over year in the first quarter.,True,metric_fact,4,not_found,contradicted,True,False,B_concept_gap
+S9,stock,numeric,NVDA,"Nvidia posted adjusted earnings of $1.87 per share, beating estimates of $1.77.",True,forecast,0,not_applicable,not_applicable,True,False,C_no_evidence
+Sc1,stock,causal,NVDA,Nvidia's growth was driven by surging data center demand.,True,opinion_analysis,0,not_applicable,not_applicable,True,False,C_no_evidence
+S3,stock,numeric,AAPL,"Apple reported second-quarter revenue of $111.2 billion, above estimates of $109.66 billion.",True,metric_fact,4,contradicted,contradicted,False,False,A_period_or_escalation
+S4,stock,numeric,AAPL,Apple's Greater China revenue was $20.50 billion in the second quarter.,True,metric_fact,4,not_found,contradicted,True,False,B_concept_gap
+S5,stock,numeric,AAPL,"Apple posted adjusted earnings per share of $2.01, beating estimates of $1.96.",True,forecast,0,not_applicable,not_applicable,True,False,C_no_evidence
+S8,stock,numeric,AAPL,Apple's iPhone revenue was $56.99 billion in the second quarter.,True,metric_fact,4,contradicted,contradicted,True,False,B_concept_gap
+Sc2,stock,causal,AAPL,Apple's revenue beat was driven by strong iPhone and China sales.,True,metric_fact,4,not_applicable,partially_supported,True,False,B_concept_gap
+MS1,stock,numeric,MSFT,"Microsoft reported adjusted earnings per share of $4.27, beating consensus by $0.21.",True,metric_fact,4,contradicted,contradicted,True,False,B_concept_gap
+MS2,stock,numeric,MSFT,"Microsoft reported revenue of $82.89 billion, beating estimates by about $1.5 billion.",True,forecast,0,insufficient,not_applicable,False,False,C_no_evidence
+MSc,stock,causal,MSFT,Microsoft's revenue grew because of strong Azure and cloud demand.,True,metric_fact,4,not_applicable,contradicted,True,False,B_concept_gap
+AM1,stock,numeric,AMZN,"Amazon reported earnings per share of $2.78, beating estimates by $1.10.",True,forecast,0,not_applicable,not_applicable,True,False,C_no_evidence
+AM2,stock,numeric,AMZN,"Amazon reported revenue of $181.5 billion, beating estimates by over $4 billion.",True,forecast,0,insufficient,not_applicable,False,False,C_no_evidence
+AM3,stock,numeric,AMZN,Amazon Web Services revenue rose 24% to $35.6 billion in the fourth quarter of 2025.,True,metric_fact,2,not_found,contradicted,True,False,B_concept_gap
+GO1,stock,numeric,GOOGL,"Alphabet reported adjusted earnings per share of $2.62, missing estimates by a penny.",True,forecast,0,not_applicable,not_applicable,True,False,C_no_evidence
+GO2,stock,numeric,GOOGL,"Alphabet reported revenue of nearly $110 billion, beating estimates by $2.7 billion.",True,forecast,0,insufficient,not_applicable,False,False,C_no_evidence
+GO3,stock,numeric,GOOGL,Google Cloud revenue soared 63% year over year.,True,metric_fact,3,partially_verified,contradicted,True,False,B_concept_gap
+TS1,stock,numeric,TSLA,"Tesla posted first-quarter revenue of $22.39 billion, topping the consensus estimate of $21.92 billion.",True,metric_fact,4,partially_verified,partially_supported,False,False,uncategorized
+TS2,stock,numeric,TSLA,Tesla reported first-quarter adjusted earnings of 41 cents per share.,True,metric_fact,4,contradicted,contradicted,True,False,B_concept_gap
+TS3,stock,numeric,TSLA,Tesla's services and other revenue climbed to $3.75 billion from $2.64 billion a year earlier.,True,metric_fact,4,not_found,contradicted,True,False,B_concept_gap
+ME1,stock,causal,META,Meta's first-quarter revenue beat was driven by strength in advertising.,True,metric_fact,1,not_applicable,partially_supported,False,False,uncategorized
+ME2,stock,factual,META,Meta's CFO said the company will fund its AI ambitions primarily with cash rather than debt.,True,forecast,0,not_applicable,not_applicable,False,False,C_no_evidence
+JP1,stock,numeric,JPM,JPMorgan generated fourth-quarter net income of $14.7 billion excluding a significant item.,True,metric_fact,1,verified,partially_supported,False,False,uncategorized
+JP2,stock,numeric,JPM,"JPMorgan reported fourth-quarter net revenue of $46.8 billion, up 7%.",True,metric_fact,1,not_found,contradicted,False,False,A_period_or_escalation
+JP3,stock,numeric,JPM,"JPMorgan reported net interest income of $25.1 billion in the fourth quarter, up 7%.",True,metric_fact,1,not_found,contradicted,True,False,B_concept_gap
+M1,macro,numeric,CPI,"U.S. consumer prices rose 3.8% over the 12 months ending in April 2026, the fastest annual pace since May 2023.",True,metric_fact,0,insufficient,not_applicable,False,False,C_no_evidence
+M2,macro,numeric,CPI_energy,The 12-month energy index gain reached 17.9% in the April 2026 inflation report.,True,metric_fact,1,not_found,contradicted,False,False,A_period_or_escalation
+M3,macro,numeric,GDP,U.S. GDP grew at a 2.1% pace in 2025.,True,metric_fact,1,contradicted,not_applicable,False,False,E_classified_skip
+M7,macro,causal,CPI,Energy costs tied to the war with Iran drove U.S. inflation higher in April 2026.,True,metric_fact,1,not_applicable,not_applicable,False,False,E_classified_skip
+C1,commodity,numeric,Brent,"Brent crude was trading around $105 a barrel, up 44% since before the Iran war started.",True,metric_fact,0,insufficient,contradicted,False,False,C_no_evidence
+C4,commodity,causal,oil,Oil prices rose because the Iran war tightened global crude supply.,True,opinion_analysis,0,not_applicable,not_applicable,False,False,C_no_evidence
+IX1,index,numeric,SPX,"The S&P 500 closed at a record 7,501.24 on May 15, 2026.",True,metric_fact,0,insufficient,contradicted,False,False,C_no_evidence
+IX2,index,factual,SPX,"The S&P 500 closed above the 7,500 mark for the first time in its history.",True,metric_fact,0,insufficient,contradicted,False,False,C_no_evidence
+IX3,index,factual,SPX,The S&P 500 was on track for its longest weekly winning streak since 2023.,True,metric_fact,0,insufficient,contradicted,False,False,C_no_evidence
+FX1,fx,numeric,EURUSD,"EUR/USD was trading at about 1.1637, down slightly on the day.",True,metric_fact,0,not_applicable,insufficient,False,False,C_no_evidence
+CG1,commodity,numeric,gold,"Gold was trading at $4,879.60 an ounce, up 1.48% on the day.",True,metric_fact,2,not_found,contradicted,False,False,A_period_or_escalation
+CC1,commodity,numeric,copper,Copper was trading around $6.11 per pound.,True,metric_fact,0,insufficient,contradicted,False,False,C_no_evidence
+CNG1,commodity,numeric,natgas,Natural gas was trading around $2.67 per million BTU.,True,metric_fact,0,not_applicable,insufficient,False,False,C_no_evidence
+IXD1,index,numeric,DJI,"The Dow Jones Industrial Average closed at 50,579.70, up 0.58%.",True,metric_fact,0,insufficient,contradicted,False,False,C_no_evidence
+IXN1,index,numeric,IXIC,"The Nasdaq Composite closed at 26,343.97, up 0.19%.",False,metric_fact,0,insufficient,contradicted,False,False,D_entity_miss
+R1,rates,numeric,UST10Y,The 10-year Treasury yield was about 4.26%.,True,metric_fact,1,partially_verified,partially_supported,False,False,uncategorized
+R2,rates,causal,UST10Y,The 10-year Treasury yield rose to its highest level in 10 months on hotter-than-expected inflation.,True,forecast,0,insufficient,not_applicable,False,False,C_no_evidence
+J1,macro,numeric,payrolls,"The U.S. added 115,000 nonfarm payrolls in April 2026.",True,metric_fact,0,insufficient,not_applicable,False,False,C_no_evidence
+J2,macro,numeric,unemployment,The U.S. unemployment rate was unchanged at 4.3% in April 2026.,True,metric_fact,1,not_found,not_applicable,False,False,E_classified_skip
+J3,macro,numeric,payrolls,"The U.S. lost 92,000 nonfarm payrolls in February 2026, with unemployment climbing to 4.4%.",True,metric_fact,1,partially_verified,not_applicable,False,False,E_classified_skip
+Jc,macro,causal,payrolls,Stronger-than-expected jobs data pushed back expectations for Fed rate cuts.,False,forecast,0,not_applicable,not_applicable,False,False,D_entity_miss
+FXJ,fx,numeric,USDJPY,USD/JPY was trading at about 159.24.,True,metric_fact,0,insufficient,contradicted,False,False,C_no_evidence
+FXG,fx,numeric,GBPJPY,GBP/JPY was trading at about 214.82.,False,metric_fact,0,insufficient,contradicted,False,False,D_entity_miss
+BT1,crypto,numeric,BTC,"Bitcoin was trading at about $81,240, up 0.35% over 24 hours.",True,metric_fact,3,not_found,contradicted,False,False,A_period_or_escalation

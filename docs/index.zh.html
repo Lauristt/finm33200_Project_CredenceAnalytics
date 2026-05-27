@@ -9,28 +9,30 @@
           --good:#138a4e; --bad:#c0392b; --bg:#fbfcfe; }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--ink);
-         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif; }
-  .wrap { max-width:860px; margin:0 auto; padding:48px 22px 80px; }
-  h1 { font-size:28px; line-height:1.3; margin:0 0 8px; letter-spacing:-.01em; }
+         font:16px/1.75 -apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:48px 22px 80px; }
+  h1 { font-size:26px; line-height:1.3; margin:0 0 8px; }
   .sub { color:var(--muted); font-size:17px; margin:0 0 28px; }
   h2 { font-size:20px; margin:42px 0 12px; padding-top:14px; border-top:1px solid var(--line); }
-  h3 { font-size:16px; margin:26px 0 8px; }
-  p { margin:12px 0; }
+  h3 { font-size:16px; margin:24px 0 6px; }
+  p { margin:11px 0; }
   code { background:#eef1f6; padding:1px 6px; border-radius:5px; font-size:13.5px;
-         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+         font-family:ui-monospace,Menlo,Consolas,monospace; }
   table { border-collapse:collapse; width:100%; margin:16px 0; font-size:14.5px; }
   th,td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
   th { background:#f3f6fb; font-weight:600; }
   td.num,th.num { text-align:right; white-space:nowrap; }
   .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:14px; margin:26px 0 8px; }
   .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; }
-  .card .big { font-size:25px; font-weight:700; letter-spacing:-.02em; }
+  .card .big { font-size:22px; font-weight:700; }
   .card .lbl { color:var(--muted); font-size:13px; margin-top:3px; }
   .up { color:var(--good); } .down { color:var(--bad); }
   .callout { background:#eef4ff; border:1px solid #cfe0ff; border-left:4px solid var(--accent);
              border-radius:10px; padding:14px 16px; margin:18px 0; }
   .bad-box { background:#fdeeec; border:1px solid #f6ccc5; border-left:4px solid var(--bad); }
-  .good-box{ background:#ecf8f1; border:1px solid #c7ecd5; border-left:4px solid var(--good); }
+  .note-box { background:#f4f7fb; border:1px solid #dde6f2; border-left:4px solid var(--muted); }
+  .human-box { background:#eefaf2; border:1px solid #c7ecd6; border-left:4px solid var(--good); }
+  .ex { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:12px 0; }
   .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
   .tag { display:inline-block; background:#eef1f6; color:var(--muted); font-size:12px;
          padding:2px 9px; border-radius:999px; margin-right:6px; }
@@ -39,107 +41,115 @@
 <body>
 <div class="wrap">
 
-  <h1>这个金融声明核查 agent 真的有用吗 —— AI 又帮上了多少忙?</h1>
-  <p class="sub">在真实、带标签的数据上,对该 agent 逐阶段做的评估。</p>
+  <h1>这个金融声明核查 agent 行不行 —— AI 帮上忙了吗?</h1>
+  <p class="sub">在真实、带标签的数据上逐阶段评估。前端能用,但判定环节几乎不确认任何真话——因为它的逻辑要求句子里<em>每一个</em>数字都对上才肯确认。</p>
   <div><span class="tag">FINM 33200</span><span class="tag">智能体用例</span><span class="tag">评估与证据</span></div>
 
   <div class="cards">
-    <div class="card"><div class="big up">+9 分</div><div class="lbl">加上 LLM 层后,实体提取 80.5% → 89.4%</div></div>
-    <div class="card"><div class="big down">74% → 36%</div><div class="lbl">判定准确率:简单 benchmark vs 真实新闻</div></div>
-    <div class="card"><div class="big down">19 → 0</div><div class="lbl">被冤判为“假”的真话(修复后)</div></div>
-    <div class="card"><div class="big up">0.50 → 0.83</div><div class="lbl">修复后真假区分能力(AUC)</div></div>
+    <div class="card"><div class="big down">≈36%</div><div class="lbl">真实新闻上的判定准确率</div></div>
+    <div class="card"><div class="big down">1 / 50</div><div class="lbl">它确认的真话——即便数据已对上</div></div>
+    <div class="card"><div class="big down">全有或全无</div><div class="lbl">系统性保守:每个数字都对上才肯确认</div></div>
+    <div class="card"><div class="big up">+9 分</div><div class="lbl">实体提取加 LLM(80.5% → 89.4%)</div></div>
   </div>
 
-  <h2>这个 agent 在做什么</h2>
-  <p>给定一句金融声明,流程为:<strong>提取实体/资产类别 → 判定 claim 类型 → 路由到数据源 →
-  检索证据 → 给出判定(verdict)、置信度、人工复核标记</strong>。我们对每个阶段分别评估。</p>
+  <h2>1. 怎么评估的 —— 真实新闻基准</h2>
+  <p><strong>113 条真实语句</strong>,从 Yahoo Finance 抓取,覆盖股票/宏观/商品/FX/指数/利率/加密,以及 5 种 claim 类型。
+  事实类标签对 SEC/FRED 核验过,再改数字/日期造出配对假话;观点/预测无真假(用来测分类)。</p>
+  <p><strong>设计取舍——robustness vs. retrieval(稳健性 vs. 检索)。</strong>如果从 agent <em>自己也查</em>的同一数据库里
+  拿数字来扰动造题,那只是在测 <strong>检索(retrieval)</strong>(它能不能把递给它的那行取回来?);
+  喂它 <strong>真实、独立来源的新闻</strong>,才是在测 <strong>真实世界验证(real-world verification)</strong>
+  (它能不能像人一样判断一句话?)。我们刻意选了更难、更有意义的那种测法。</p>
 
-  <h2>方法</h2>
-  <p><strong>Benchmark 1 — 真实新闻(113 条)。</strong>从 Yahoo Finance 抓取真实语句,覆盖
-  <strong>股票、宏观、商品、FX、指数、利率、加密货币</strong>,以及 5 种 claim 类型(numeric、
-  factual、opinion、forecast、causal)。事实类语句默认标为 <code>true</code>(来自权威来源),
-  且<strong>每条都对 SEC / FRED 核验过</strong>;再各复制一份、改数字或日期,造出配对的
-  <code>false</code>。观点/预测无真假,用来测分类。</p>
-  <p><strong>Benchmark 2 — SEC 锚定(100 条)。</strong>数字直接取自 SEC 财报、扰动造假——标签客观,
-  但“太简单”(标签来自 agent 也会去查的同一个数据源)。两个 benchmark 对比,能看出简单设置把
-  表现夸大了多少。每条结果都可在公开的逐条 CSV 里追溯。</p>
-
-  <h2>按流程阶段看结果</h2>
+  <h2>2. 评什么(两个标准)</h2>
+  <h3>(1) 能不能正确分类一句话?</h3>
   <table>
-    <tr><th>阶段</th><th class="num">准确率</th><th>备注</th></tr>
-    <tr><td>实体 / 资产类别提取</td><td class="num"><strong>80.5% → 89.4%</strong></td><td>规则 → 规则+LLM;AI 有帮助,尤其公司名和宏观;FX/指数/利率仍弱</td></tr>
-    <tr><td>claim 类型分类</td><td class="num">84.5%</td><td>纯规则(不用 LLM);观点/预测分类偏弱</td></tr>
-    <tr><td>fact-check 路由</td><td class="num">84.1%</td><td>观点/预测被正确跳过;宏观有时没路由到 FRED</td></tr>
-    <tr><td>判定准确率</td><td class="num">见下</td><td>最关键的环节——出厂时带着系统性 bug</td></tr>
+    <tr><th>阶段</th><th class="num">准确率</th></tr>
+    <tr><td>实体 / 资产类别提取</td><td class="num">80.5% → <strong>89.4%</strong>(加 LLM)</td></tr>
+    <tr><td>claim 类型分类</td><td class="num"><strong>84.5%</strong></td></tr>
+    <tr><td>核查路由(观点/预测被正确跳过)</td><td class="num"><strong>84.1%</strong></td></tr>
   </table>
-
-  <h3>判定:简单 vs 真实,以及一个系统性 bug</h3>
+  <h3>(2) 对事实/数字类,真假判定对不对?</h3>
   <table>
-    <tr><th>指标</th><th class="num">SEC 锚定(简单)</th><th class="num">真实新闻</th></tr>
-    <tr><td>总准确率</td><td class="num">74%</td><td class="num"><strong>36%</strong></td></tr>
-    <tr><td>真话被确认(<code>supported</code>)</td><td class="num">0 / 20</td><td class="num"><strong>0 / 50</strong></td></tr>
-    <tr><td>假话被抓出(<code>contradicted</code>)</td><td class="num">74 / 80</td><td class="num">31 / 36</td></tr>
-    <tr><td>置信度 AUC(真 vs 假)</td><td class="num">0.50</td><td class="num"><strong>0.345</strong></td></tr>
+    <tr><th>指标</th><th class="num">真实新闻</th></tr>
+    <tr><td>总准确率</td><td class="num"><strong>≈36%</strong></td></tr>
+    <tr><td>真话被确认(<code>verified</code>/<code>supported</code>)</td><td class="num"><strong>1 / 50</strong></td></tr>
+    <tr><td>假话被抓出(<code>contradicted</code>)</td><td class="num">≈30 / 36</td></tr>
+    <tr><td>置信度 AUC(真 vs 假)</td><td class="num"><strong>0.34</strong></td></tr>
   </table>
   <div class="callout bad-box">
-    该 pipeline <strong>一条真话都没确认</strong>,还把大多数真话判成 <code>contradicted</code>——
-    连和 SEC 一字不差的语句也是(NVIDIA Q1 营收 $81.62B = SEC $81,615M;Apple Q2 营收 $111.2B =
-    SEC $111,184M)。一个“永远说假”的笨基线(80%)都能赢它;AUC ≈ 0.5 说明它根本分不出真假。
-    而“简单”benchmark(74%)严重高估了它。
+    它<strong>几乎不确认任何真话</strong>(1/50),真假也分不开(AUC ≈ 0.34)——擅长"否定",但几乎不会"确认"一条真话。
   </div>
 
-  <h2>根因与修复 —— 由评估定位</h2>
-  <p><strong>根因。</strong>SEC 取数器每个指标只保留最近<em>申报</em>的 2 个值,于是近期季度数把
-  <strong>声明真正引用的那个财务期间值</strong>挤掉了。要核对的数字根本不在证据里 →
-  <code>not_found</code> → 判定逻辑又把它升级成 <code>contradicted</code>(把真话判成假)。</p>
-  <p><strong>Fix A。</strong>同时列出年度与季度数值,按报告期间(期末日 + 期间类型)去重,并标注
-  <code>for fiscal year/quarter ending YYYY-MM-DD</code>,确保声明对应期间的值出现在证据里。</p>
+  <h2>3. 错误出在哪</h2>
+  <div class="callout note-box">
+    <strong>先说一个边界。</strong>这个 agent 的设计就是核查一句话<em>当下</em>是否属实,所以它取的是<em>最新</em>数据。
+    对一个"判断当下真假"的工具来说这是合理的,所以我们<strong>不</strong>把它算作 bug——它只是限制了带历史日期的陈述(见 §6)。
+    真正的问题在下面。
+  </div>
+
+  <h3>原因 1 —— 系统性保守:每个数字都对上才肯确认(核心问题)</h3>
+  <p>这是<strong>设计层面的逻辑断层,不是 AI 的锅。</strong>代码里(<code>verification.py</code>),一条声明只有在
+  <strong>句子里每一个实质数字都在证据中被找到</strong>(<code>len(matches) == len(claim_numbers)</code>)时才判
+  <code>verified</code>;否则降级为 <code>partially_verified</code>。真实新闻一句话里塞了好几个数字,但官方源只能确认
+  那个核心事实——于是真话几乎到不了"全部对上"。</p>
+  <div class="ex"><em>"英伟达一季度营收 <strong>$81.62 billion</strong>,超出分析师预期的 <strong>$79.18 billion</strong>。"</em>
+  SEC 财报里 <strong>$81.62B 完全对得上</strong>——但分析师预期 <strong>$79.18B 按定义就不在任何官方源里</strong>。
+  因为规则要求<em>两个</em>数字都对上,这条真话被降级成 <code>partially_verified</code>,到不了 <code>verified</code>。</div>
+  <p>其效果是一种<strong>假阴性偏差(false-negative bias)</strong>:为了不去肯定没被证实的东西,逻辑选择"少确认"
+  ——50 条真话只完整确认了<strong>一条</strong>,AUC 0.34 也说明置信度分不开真假。(注意:这<em>不是</em>"置信度阈值定太高"
+  ——根本没有这道闸;是"全有或全无"的匹配规则。)</p>
+
+  <h3>原因 2 —— 时间粒度失配(SEC):比到了错误的报告期间</h3>
+  <p>同一个指标,公司会按很多重叠窗口、同时申报。以苹果营收为例:</p>
   <table>
-    <tr><th>指标(SEC 锚定,同一 pipeline)</th><th class="num">修复前</th><th class="num">修复后 Fix A</th></tr>
-    <tr><td>真话被判 <code>contradicted</code></td><td class="num">19 / 20</td><td class="num"><strong>0 / 20</strong></td></tr>
-    <tr><td>置信度 AUC(真 vs 假)</td><td class="num">0.50</td><td class="num"><strong>0.83</strong></td></tr>
-    <tr><td>假话被抓出</td><td class="num">74 / 80</td><td class="num">79 / 80</td></tr>
-    <tr><td>人工复核精度(被标记里判错的)</td><td class="num">15 / 69</td><td class="num"><strong>1 / 56</strong></td></tr>
+    <tr><th>期间(≈ 截止 2026-03-28)</th><th class="num">数值</th></tr>
+    <tr><td>财年 <strong>Q2</strong>(3 个月)</td><td class="num"><strong>$111.2B</strong></td></tr>
+    <tr><td>上<strong>半年</strong>(Q1+Q2,6 个月)</td><td class="num">$254.9B</td></tr>
+    <tr><td>上<strong>一季度</strong>(12月)</td><td class="num">$143.8B</td></tr>
+    <tr><td>整<strong>财年</strong></td><td class="num">$416.2B</td></tr>
   </table>
-  <div class="callout good-box">
-    Fix A 消除了最严重的问题——真话不再被判成假——并让置信度能干净地区分真假(AUC 0.50 → 0.83)。
-    还剩一个残留:真话目前停在 <code>partially_supported</code> 而非 <code>supported</code>(记为 Fix B)。
+  <div class="ex">喂进真话 <em>"苹果 Q2 营收 $111.2 billion"</em>,agent 把 $111.2B 拿去和<strong>别的期间</strong>的数
+  (如半年 $254.9B)比,发现不一样,就把这条真话判成 <code>contradicted</code>。<strong>这不是新旧问题</strong>
+  ——Q2、半年、全年都是同样新、同时存在的数据;agent 必须<em>匹配粒度</em>(读懂"Q2"再挑对的那一行),而它没做到。</div>
+
+  <h3>原因 3 —— (次要)分类错 + 概念缺失 + 口径错</h3>
+  <ul>
+    <li>有些已发生的事实(如 <em>"微软营收 $82.89B"</em>)被判成 <code>forecast</code>/<code>opinion</code>,根本没去核查。</li>
+    <li>细分指标(iPhone 营收、AWS)不在映射概念里,没东西可比。</li>
+    <li>"涨 X%" 类(如 <em>"CPI 涨 3.8%"</em>),agent 拿"3.8"去比 CPI <strong>指数水平值</strong>(332.4)——<strong>口径</strong>不一致,永远配不上。</li>
+  </ul>
+
+  <h2>4. AI 有没有用?价值在"感知",不在"逻辑"</h2>
+  <ul>
+    <li><strong>实体提取——有用</strong>(80.5% → 89.4%)。LLM 能读懂<em>非结构化的语境</em>——哪个词是资产、哪个是动作、
+      哪个是数字——这是正则/关键词规则拆不开的。这是 AI 独有的真实价值。</li>
+    <li><strong>分类——不适用</strong>(纯规则)。</li>
+    <li><strong>判定——AI 不是瓶颈。</strong>失败在判定<em>逻辑</em>(全有或全无的匹配)和期间/口径对齐,不在模型。
+      所以 AI 的价值<strong>只到"感知(读懂这句话)",没到"逻辑(判断这句话)"</strong>。</li>
+  </ul>
+
+  <h2>5. 结论</h2>
+  <p>前端基本能用、AI 提升了<em>感知</em>,但<strong>判定环节几乎不确认任何真话</strong>(1/50;AUC 0.34)——而且关键是,
+  <strong>就算核心数字完全对上也不肯确认</strong>(NVIDIA),因为逻辑要求<em>每一个</em>数字都对上。这一点,
+  加上把声明比到了错误的 SEC 报告期间,才是真正的弱点。</p>
+  <div class="callout human-box">
+    <strong>人 vs. agent。</strong>人类分析师读到 <em>"一季度营收 $81.62B,超预期 $79.18B"</em>,会拿 $81.62B 对一下财报、
+    判它<strong>为真</strong>——心里清楚 $79.18B 那个预期本来就不是官方数字。而 agent 非要<em>两个</em>数字都在证据里对上,
+    于是那个官方源根本不可能有的数字,把一条真话拖成了"部分确认"。<strong>差距在判断力,不在数据。</strong>
   </div>
 
-  <h2>AI 有没有用?(分阶段)</h2>
+  <h2>6. 局限 & 可改进(future work)</h2>
   <ul>
-    <li><strong>实体提取——有用。</strong>LLM 层把准确率从 80.5% 提到 89.4%。</li>
-    <li><strong>分类——不适用。</strong>纯规则,这里不用 AI。</li>
-    <li><strong>判定——AI 不是瓶颈。</strong>失败源于一个确定性的数据覆盖 bug,而非 LLM judge;
-      修好确定性取数后,价值才释放出来(AUC 0.50 → 0.83)。</li>
+    <li>判定准确率在数据源能覆盖的 claim 上评估(美股/宏观);观点/预测无真假(只测分类);加密/冷门超出范围。</li>
+    <li><strong>用 LLM 推理替换硬编码的判定规则。</strong>"全有或全无"的匹配器太脆;让 LLM 判官来判断
+      "$81.62B 对上了;$79.18B 是预期、不是官方数字",就能确认这条声明——这正是规则缺的判断力。</li>
+    <li><strong>设计上它核查"当下"。</strong><em>可用性改进:</em>加入 <strong>as-of-date</strong> 匹配,让带日期的陈述
+      (如 <em>"标普 5/15 收于 7,501.24"</em>)按那天去查;再加 <strong>口径</strong>匹配("涨 X%" 用 <code>units=pc1</code>)。</li>
+    <li><strong>粒度匹配(SEC):</strong>读懂声明里的财年期间(Q2 / 半年 / 全年),挑出对应的报告窗口,而不是随便选一个。</li>
   </ul>
-  <p><strong>结论:</strong>AI 是必要但不充分的——在这个任务上,数据覆盖与期间对齐比模型本身更关键。</p>
-
-  <h2>失败案例</h2>
-  <ol>
-    <li><strong>真话被判成假</strong>(修复前):NVIDIA $81.62B、Apple $111.2B——都与 SEC 吻合,却都被判 <code>contradicted</code>。</li>
-    <li><strong>宏观路由漏洞:</strong>“美国 CPI 上涨 3.8%”检索到 0 条证据,因为没被路由到 FRED。</li>
-    <li><strong>季度期间混淆:</strong>SEC 含重叠期间(季度/半年/年度);比错期间就产生了假矛盾。</li>
-  </ol>
-
-  <h2>局限</h2>
-  <ul>
-    <li>判定准确率主要对<strong>美股</strong>可信(SEC,免 key);宏观/商品/FX 依赖 FRED 路由,
-      部分是覆盖盲点而非判断错误。</li>
-    <li>加密货币/冷门信用资产的事实,agent 的数据源无法可靠核验——超出范围。</li>
-    <li>观点/预测没有客观真假;只评估它们是否被正确分类并<strong>不</strong>去核查。</li>
-    <li>新闻“真”标签已对 SEC/FRED 核验,但季度数与措辞仍是已知的标签噪声来源。</li>
-  </ul>
-
-  <h2>结论</h2>
-  <p>该 agent 的<strong>前端(实体提取、分类、路由)基本能用,AI 还提升了提取</strong>,但其
-  <strong>判定环节出厂带着一个系统性 bug,会把真话拒判为假</strong>——在简单 benchmark 上看不出来,
-  被真实新闻数据暴露。我们定位了根因、修复了它(AUC 0.50 → 0.83;真话冤判 19 → 0),并记录了余下工作。
-  <em>在这个任务上,真正的提升来自修数据管线,而不是 AI 模型本身。</em></p>
 
   <div class="footer">
-    FINM 33200 期末项目 · 评估部分。benchmark、脚本、逐条结果在项目的 <code>evaluation/</code> 目录;
-    所有数字均可从提交的数据复现。
+    FINM 33200 期末项目 · 评估部分。benchmark、脚本、逐条结果在 <code>evaluation/</code> 目录;所有数字均可从提交的数据复现。
   </div>
 
 </div>
