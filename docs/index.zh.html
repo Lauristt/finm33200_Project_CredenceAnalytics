@@ -122,7 +122,8 @@
   <p>我们把修复前的每条失败(50 条真话全部未确认)通过查看 pipeline 内部信号,逐条归到具体机制:</p>
   <table>
     <tr><th>原因</th><th class="num">条数</th><th class="num">Fix A 管?</th><th>例子</th></tr>
-    <tr><td>C. 检索不到证据(路由漏 / 被判非事实而没去查)</td><td class="num">22 (44%)</td><td class="num">否</td><td>“EPS $1.87”“data center 需求” → 0 证据</td></tr>
+    <tr><td>C1. 被误分类成预测/观点 → 跳过检索(股票)</td><td class="num">9 (18%)</td><td class="num">否</td><td>"微软营收 $82.89B" 被标成 <code>forecast</code> → 根本没去查 SEC</td></tr>
+    <tr><td>C2. 没路由到数据源(宏观/商品/指数/FX/利率)</td><td class="num">13 (26%)</td><td class="num">否</td><td>CPI、布伦特、标普500、EUR/USD → 没映射到 FRED / 没接行情源</td></tr>
     <tr><td>B. 概念映射缺失(细分指标 / EPS)</td><td class="num">11 (22%)</td><td class="num">否</td><td>iPhone 营收、大中华区、AWS</td></tr>
     <tr><td>A. 期间覆盖 / 过激判定</td><td class="num">5 (10%)</td><td class="num"><strong>是</strong></td><td>Apple Q2 $111.2B、JPM Q4</td></tr>
     <tr><td>near-miss(<code>partially_supported</code>)</td><td class="num">5 (10%)</td><td class="num">部分</td><td>NVDA $81.62B、TSLA $22.39B</td></tr>
@@ -134,6 +135,9 @@
     Fix A 修掉 ~19/20;但在真实新闻上 A 只占 ~10%——真正的瓶颈是检索覆盖(C,44%)和细分指标概念缺失
     (B,22%),Fix A 都不碰。<em>同质化的自造题会同时高估失败率和单个修复的效果。</em>
   </div>
+  <p><strong>"没拿到数据"基本不是缺 key 的问题。</strong>SEC 免 key、FRED 也配了——真正原因是
+  (C1)事实被误判成预测/观点,系统就没去查 SEC;(C2)宏观/商品/指数/FX 类没被路由到数据源
+  (很多其实 FRED 里有,只是关键词没映射过去)。</p>
 
   <h2>AI 有没有用?(分阶段)</h2>
   <ul>

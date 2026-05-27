@@ -100,7 +100,8 @@ count, numeric/atomic verdict):
 
 | Cause | Claims | Fixed by Fix A? | Example |
 |---|---|---|---|
-| C. No evidence retrieved (routing miss / classified-skip → no retrieval) | 22 (44%) | no | "EPS $1.87", "data center demand" → 0 evidence |
+| C1. **Misclassified** as forecast/opinion → retrieval skipped (stock) | 9 (18%) | no | "MSFT revenue $82.89B" labeled `forecast` → SEC never queried (no key needed; it just didn't look) |
+| C2. **No source routed** (macro/commodity/index/FX/rates) | 13 (26%) | no | CPI, Brent, S&P 500, EUR/USD → not mapped to FRED / no price source |
 | B. Concept-mapping gap (segment metric / EPS not a mapped concept) | 11 (22%) | no | iPhone revenue, Greater China, AWS |
 | A. Period coverage / over-escalation | 5 (10%) | **yes** | Apple Q2 $111.2B, JPM Q4 net revenue |
 | near-miss (`partially_supported`) | 5 (10%) | partly | NVDA $81.62B, TSLA $22.39B |
@@ -112,6 +113,13 @@ claims (Benchmark 2) the period bug (A) dominates and Fix A resolves ~19/20. On 
 (Benchmark 1), A is only ~10%; the real bottlenecks are **retrieval coverage (C, 44%)** and
 **segment-metric concept gaps (B, 22%)**, which Fix A does not touch. So a homogeneous,
 self-constructed benchmark overstates *both* the failure rate and the benefit of any single fix.
+
+**Why the "no evidence" failures happen — it is NOT a missing-key problem.** SEC needs no API key
+and FRED is configured. The two real reasons: (C1) factual statements were *misclassified* as
+forecast/opinion, so the pipeline decided not to fact-check them and never queried SEC; and (C2)
+macro/commodity/index/FX/rates claims were never *routed* to a source — many exist in FRED
+(CPI, payrolls, WTI, S&P 500, EUR/USD) but the keyword routing did not map them, and no dedicated
+price source is wired for commodities/indices/FX.
 
 ## Does AI help? (per stage)
 

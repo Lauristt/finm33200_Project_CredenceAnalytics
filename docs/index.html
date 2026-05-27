@@ -127,13 +127,18 @@
     A-class it fixes is only ~10% of real failures. The dramatic gain was largely an artifact of a
     homogeneous, self-built benchmark — the same lesson as 74%-vs-36%, now applied to the fix itself.
   </div>
+  <p><strong>The "no evidence" failures are not a missing-key problem.</strong> SEC needs no key and
+  FRED is configured — they are (C1) factual claims misclassified as forecast/opinion so the pipeline
+  never queried SEC, and (C2) macro/commodity/index/FX claims never routed to a source (many exist in
+  FRED but the keyword routing didn't map them).</p>
 
   <h2>Failure taxonomy — multiple causes, not one</h2>
   <p>We attributed every pre-fix failure (50 true news claims, all unconfirmed) to a distinct
   mechanism by inspecting the pipeline's internal signals.</p>
   <table>
     <tr><th>Cause</th><th class="num">Claims</th><th class="num">Fix A?</th><th>Example</th></tr>
-    <tr><td>C. No evidence retrieved (routing miss / classified-skip)</td><td class="num">22 (44%)</td><td class="num">no</td><td>"EPS $1.87", "data center demand" → 0 evidence</td></tr>
+    <tr><td>C1. Misclassified as forecast/opinion → retrieval skipped (stock)</td><td class="num">9 (18%)</td><td class="num">no</td><td>"MSFT revenue $82.89B" labeled <code>forecast</code> → SEC never queried</td></tr>
+    <tr><td>C2. No source routed (macro/commodity/index/FX/rates)</td><td class="num">13 (26%)</td><td class="num">no</td><td>CPI, Brent, S&amp;P 500, EUR/USD → not mapped to FRED / no price source</td></tr>
     <tr><td>B. Concept-mapping gap (segment metric / EPS)</td><td class="num">11 (22%)</td><td class="num">no</td><td>iPhone revenue, Greater China, AWS</td></tr>
     <tr><td>A. Period coverage / over-escalation</td><td class="num">5 (10%)</td><td class="num"><strong>yes</strong></td><td>Apple Q2 $111.2B, JPM Q4</td></tr>
     <tr><td>near-miss (<code>partially_supported</code>)</td><td class="num">5 (10%)</td><td class="num">partly</td><td>NVDA $81.62B, TSLA $22.39B</td></tr>
