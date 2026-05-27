@@ -20,9 +20,13 @@ def route_sources(claim: str | AtomicClaim, official_only: bool = True) -> dict[
     if _contains(lower, "xbrl", "ixbrl", "inline xbrl", "taxonomy", "dimensions", "ferc"):
         routes.extend(["xbrl_us_api", "arelle"])
         reasons.append("structured XBRL claim")
-    if _contains(lower, "inflation", "cpi", "fed funds", "interest rate", "unemployment", "gdp", "treasury yield"):
+    if _contains(lower, "inflation", "cpi", "consumer price", "fed funds", "interest rate",
+                 "unemployment", "jobless", "payroll", "nonfarm", "gdp", "treasury yield",
+                 "10-year", "10 year", "brent", "wti", "crude", "oil price", "gold",
+                 "copper", "natural gas", "s&p 500", "s&p500", "dow jones", "nasdaq",
+                 "eur/usd", "euro", "usd/jpy", "yen", "gbp/usd"):
         routes.append("fred")
-        reasons.append("macro time-series claim")
+        reasons.append("macro / commodity / index / FX time-series claim (FRED)")
     if _contains(lower, "bea", "nipa", "personal income", "regional gdp", "industry accounts", "balance of payments"):
         routes.append("bea_api")
         reasons.append("BEA economic accounts claim")
