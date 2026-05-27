@@ -49,15 +49,17 @@ We attributed all 50 true-claim failures on real news to a mechanism:
 ### a. It couldn't get the data — **44%** (the biggest cause)
 - **Which data:** macro (CPI, payrolls), commodities (Brent, copper), indices (S&P 500,
   Dow), FX (EUR/USD), plus some misrouted stock claims.
-- **Why — and it is NOT a missing API key** (SEC needs none; FRED is configured):
-  1. **The source isn't implemented.** The system *declares* 25 data sources (BLS, BEA, ECB,
-     CFTC, IMF, World Bank, …) but only ~12 have real fetchers — the rest are menu "cards"
-     with no code. So non-equity assets have almost no working source except FRED.
-  2. **Routing is too narrow.** FRED actually *has* CPI, payrolls, WTI, S&P 500, EUR/USD, but
-     the keyword map only knows "cpi"/"inflation"/"gdp" — it never matches "consumer prices",
-     "payrolls", or "Brent", so it never queries.
-  - So in almost every case the data *exists in a covered source* but is **not wired/routed**;
-    it is rarely that the data genuinely doesn't exist (only crypto truly lacks a source).
+- **Why — neither a missing key nor a missing source** (the right source is implemented and
+  contains the data; SEC needs no key, FRED is configured):
+  1. **Routing too narrow (≈13 claims: macro / commodity / index / FX).** These were never sent
+     to FRED — even though FRED is implemented and *has* CPI, payrolls, WTI, S&P 500, EUR/USD
+     (verified). Its keyword map only knows "cpi"/"inflation"/"gdp", so "consumer prices",
+     "Brent", "S&P 500" never matched → FRED was never queried.
+  2. **Misclassified → retrieval skipped (≈9 claims: stock).** Statements labeled
+     `forecast`/`opinion`, so the agent decided "not a fact" and never queried SEC (implemented,
+     and it has the data).
+  - So the 44% is a **routing + classification** failure against sources the agent *already has* —
+    not a missing source, and not a missing key.
 
 ### b. It matched the wrong time period — **10%** (a bug we found and fixed: "Fix A")
 SEC reports overlapping periods (quarter / half-year / annual). The check compared the claim's
@@ -84,17 +86,23 @@ confirming true claims.
   model. AI is necessary but not sufficient here.
 
 ## 5. Limitations
-- Verdict accuracy is trustworthy mainly for US equities (SEC). Macro/commodity/FX coverage is
-  limited by unimplemented sources + narrow routing, not by keys.
-- The system advertises broad multi-asset coverage (25 declared sources) but only ~12 are
-  actually implemented — much of the "coverage" is a menu without a backend.
+- On this benchmark, macro/commodity/index/FX failures are a **routing/classification** problem
+  (the data is in FRED, just not queried), not missing data or keys.
 - Opinion/forecast have no ground truth; we only check that they are classified and *not*
   fact-checked. Crypto/exotic facts are out of scope.
+
+## What would improve it (future work)
+- **Expand FRED routing** — map "consumer prices"→CPI, "payrolls"→PAYEMS, "Brent"→Brent, "S&P 500"→SP500,
+  "EUR/USD"→DEXUSEU, … (or route by the extracted asset/entity). FRED already has these series, so this
+  closes most of the "no data" failures cheaply.
+- **Fix the factual-vs-forecast classifier** so real reported figures aren't skipped.
+- (Lower priority, broader coverage) implement the declared-but-unimplemented sources (BLS/BEA/ECB/…).
 
 ## 6. Bottom line
 The agent's **front end (entity extraction, classification, routing) works reasonably, and AI
 improves extraction**. The **verdict stage is unreliable on realistic claims** — but there is
-**no single root cause**: ~44% of failures are "couldn't get the data" (sources not implemented
-or not routed — not a key problem), ~22% are concept gaps, only ~10% are the period bug we fixed,
+**no single root cause**: ~44% of failures are "couldn't get the data" — the agent never queried a
+source it already has (routing + classification, not a key or a missing source), ~22% are concept
+gaps, only ~10% are the period bug we fixed,
 and a systemic conservatism keeps it from confirming true claims. *The reliability bottleneck is
 data coverage, not one bug.*

@@ -85,20 +85,17 @@
   <h2>3. Where the errors come from — multiple causes, no single root cause</h2>
   <p>We attributed all 50 true-claim failures on real news to a mechanism:</p>
   <ol class="causes">
-    <li><strong>a. It couldn't get the data — 44% (the biggest cause).</strong> Which data: macro
-      (CPI, payrolls), commodities (Brent, copper), indices (S&amp;P 500, Dow), FX (EUR/USD), plus some
-      misrouted stock. <strong>Why — and it is NOT a missing key</strong> (SEC needs none; FRED is
-      configured):
+    <li><strong>a. It couldn't get the data — 44% (biggest) — it never queried a source it already has.</strong>
+      The data was reachable; the agent just didn't fetch it. <strong>Not a missing key, not a missing source:</strong>
       <ul>
-        <li><em>Source not implemented:</em> the system declares 25 data sources (BLS, BEA, ECB, CFTC…)
-          but only ~12 have real fetchers — the rest are menu "cards" with no code, so non-equity has
-          almost no working source except FRED.</li>
-        <li><em>Routing too narrow:</em> FRED actually has CPI/payrolls/WTI/S&amp;P 500/EUR-USD, but its
-          keyword map only knows "cpi"/"inflation"/"gdp" — it never matches "consumer prices", "payrolls",
-          or "Brent", so it never queries.</li>
+        <li><em>Routing too narrow (≈13: macro/commodity/index/FX):</em> never sent to FRED — even though FRED is
+          implemented and <em>has</em> CPI, payrolls, WTI, S&amp;P 500, EUR/USD (verified). Its keyword map only knows
+          "cpi"/"inflation"/"gdp", so "consumer prices", "Brent", "S&amp;P 500" never matched.</li>
+        <li><em>Misclassified → retrieval skipped (≈9: stock):</em> labeled <code>forecast</code>/<code>opinion</code>,
+          so the agent decided "not a fact" and never queried SEC (which has the data).</li>
       </ul>
-      So the data usually <em>exists in a covered source</em> but is not wired/routed — it is rarely that
-      the data genuinely doesn't exist (only crypto truly lacks a source).</li>
+      So the 44% is a routing + classification failure against sources it <em>already has</em> — not a missing source,
+      and not a missing key.</li>
     <li><strong>b. It matched the wrong time period — 10% (a bug we found and fixed, "Fix A").</strong> SEC
       reports overlapping periods (quarter/half-year/annual); the check compared a true claim to the wrong
       one → contradicted it. Fix A (surface values tagged by period) resolved this class — but it is only
@@ -122,18 +119,24 @@
 
   <h2>5. Limitations</h2>
   <ul>
-    <li>Verdict accuracy is trustworthy mainly for US equities (SEC); non-equity coverage is limited by
-      unimplemented sources + narrow routing, not by keys.</li>
-    <li>The system advertises 25 data sources but only ~12 are implemented — much of the "coverage" is a
-      menu without a backend.</li>
+    <li>On this benchmark, macro/commodity/index/FX failures are a <strong>routing/classification</strong>
+      problem (the data is in FRED, just not queried), not missing data or keys.</li>
     <li>Opinion/forecast have no ground truth (we only check classification + routing); crypto/exotic
       facts are out of scope.</li>
+  </ul>
+  <h3>What would improve it (future work)</h3>
+  <ul>
+    <li><strong>Expand FRED routing</strong> (map "consumer prices"→CPI, "payrolls"→PAYEMS, "Brent"→Brent,
+      "S&amp;P 500"→SP500, "EUR/USD"→DEXUSEU, … or route by the extracted asset/entity) — FRED already has
+      these series, so this closes most "no data" failures cheaply.</li>
+    <li><strong>Fix the factual-vs-forecast classifier</strong> so real reported figures aren't skipped.</li>
+    <li>(Lower priority, broader coverage) implement the declared-but-unimplemented sources (BLS/BEA/ECB/…).</li>
   </ul>
 
   <h2>6. Bottom line</h2>
   <p>The front end (entity extraction, classification, routing) works reasonably and AI improves extraction.
   The verdict stage is unreliable on realistic claims, but there is <strong>no single root cause</strong>:
-  ~44% of failures are "couldn't get the data" (sources not implemented or not routed — not a key problem),
+  ~44% of failures are "couldn't get the data" — the agent never queried a source it already has (routing + classification, not a key or a missing source),
   ~22% are concept gaps, only ~10% are the period bug we fixed, and a systemic conservatism keeps it from
   confirming true claims. <em>The reliability bottleneck is data coverage, not one bug.</em></p>
 
