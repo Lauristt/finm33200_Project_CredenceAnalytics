@@ -51,14 +51,15 @@
     <div class="card"><div class="big up">+9 pts</div><div class="lbl">entity extraction with the LLM (80.5% → 89.4%)</div></div>
   </div>
 
-  <h2>1. How we evaluated — two benchmarks</h2>
-  <p><strong>Benchmark 1 — real news (113):</strong> real Yahoo Finance statements across stocks,
-  macro, commodities, FX, indices, rates, crypto and 5 claim types. Factual labels are
-  cross-checked against SEC/FRED; a perturbed copy (changed number/date) gives a matched false.
-  Opinion/forecast carry no truth value (they test classification).</p>
-  <p><strong>Benchmark 2 — SEC-anchored (100):</strong> numbers taken straight from SEC filings,
-  perturbed for false twins — objective but "easy" (same source the agent queries). The contrast
-  shows how much the easy set overstates performance.</p>
+  <h2>1. How we evaluated — a real-news benchmark</h2>
+  <p><strong>113 real statements</strong> from Yahoo Finance across stocks, macro, commodities, FX,
+  indices, rates, crypto and 5 claim types. Factual labels are cross-checked against SEC/FRED; a
+  perturbed copy (changed number/date) gives a matched false. Opinion/forecast carry no truth value
+  (they test classification).</p>
+  <p><strong>Why real news, not figures from a database:</strong> the job is to judge whether a
+  <em>real-world</em> statement is accurate. Perturbing numbers taken from the same database the agent
+  queries would be too easy and overstate performance — so we evaluate on real statements, with labels
+  verified against the primary sources.</p>
 
   <h2>2. What we measured</h2>
   <h3>(1) Can it classify a claim correctly?</h3>
@@ -70,16 +71,15 @@
   </table>
   <h3>(2) For fact/numeric claims, is the true/false verdict right?</h3>
   <table>
-    <tr><th>Metric</th><th class="num">Real news (realistic)</th><th class="num">SEC-anchored (easy)</th></tr>
-    <tr><td>Overall accuracy</td><td class="num"><strong>≈35%</strong></td><td class="num">74% → 79%</td></tr>
-    <tr><td>True claims confirmed (<code>supported</code>)</td><td class="num"><strong>1 / 50</strong></td><td class="num">0 / 20</td></tr>
-    <tr><td>False claims caught (<code>contradicted</code>)</td><td class="num">≈30 / 36</td><td class="num">79 / 80</td></tr>
-    <tr><td>Confidence AUC (true vs false)</td><td class="num"><strong>0.34</strong></td><td class="num">0.50 → 0.83</td></tr>
+    <tr><th>Metric</th><th class="num">Real news</th></tr>
+    <tr><td>Overall accuracy</td><td class="num"><strong>≈35%</strong></td></tr>
+    <tr><td>True claims confirmed (<code>supported</code>)</td><td class="num"><strong>1 / 50</strong></td></tr>
+    <tr><td>False claims caught (<code>contradicted</code>)</td><td class="num">≈30 / 36</td></tr>
+    <tr><td>Confidence AUC (true vs false)</td><td class="num"><strong>0.34</strong></td></tr>
   </table>
   <div class="callout bad-box">
-    On realistic data the agent <strong>almost never confirms a true claim</strong> (1/50) and can't
-    separate true from false (AUC ≈ 0.34). The 74–79% on the constructed set is misleading — that set
-    is homogeneous (all plain annual revenue/income).
+    The agent <strong>almost never confirms a true claim</strong> (1/50) and can't separate true from
+    false (AUC ≈ 0.34) — decent at flagging false claims, but effectively useless at confirming a true one.
   </div>
 
   <h2>3. Where the errors come from — multiple causes, no single root cause</h2>
@@ -99,10 +99,10 @@
       </ul>
       So the data usually <em>exists in a covered source</em> but is not wired/routed — it is rarely that
       the data genuinely doesn't exist (only crypto truly lacks a source).</li>
-    <li><strong>b. It matched the wrong time period — 10% (the bug we fixed, "Fix A").</strong> SEC reports
-      overlapping periods (quarter/half-year/annual); the check compared a true claim to the wrong one →
-      contradicted it. Fix A (surface values tagged by period) resolved this — but it is only ~10% of real
-      failures, so it lifted the easy benchmark a lot (74→79%) yet barely moved real news (36→35%).</li>
+    <li><strong>b. It matched the wrong time period — 10% (a bug we found and fixed, "Fix A").</strong> SEC
+      reports overlapping periods (quarter/half-year/annual); the check compared a true claim to the wrong
+      one → contradicted it. Fix A (surface values tagged by period) resolved this class — but it is only
+      ~10% of real failures, so real-news accuracy stayed ≈35%: the bottleneck is elsewhere (data coverage).</li>
     <li><strong>c. It found the data but wouldn't commit to "true" — systemic.</strong> Even when the figure
       matches, the verdict caps at <code>partially_supported</code> and almost never reaches
       <code>supported</code> (true confirmed 1/50). The verdict logic is too conservative.</li>
@@ -135,8 +135,7 @@
   The verdict stage is unreliable on realistic claims, but there is <strong>no single root cause</strong>:
   ~44% of failures are "couldn't get the data" (sources not implemented or not routed — not a key problem),
   ~22% are concept gaps, only ~10% are the period bug we fixed, and a systemic conservatism keeps it from
-  confirming true claims. <em>The reliability bottleneck is data coverage, not one bug — and a homogeneous,
-  self-built benchmark overstates both the failure rate and the value of any single fix.</em></p>
+  confirming true claims. <em>The reliability bottleneck is data coverage, not one bug.</em></p>
 
   <div class="footer">
     FINM 33200 final project — evaluation track. Benchmarks, scripts, and per-claim results are in the

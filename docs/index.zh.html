@@ -50,11 +50,11 @@
     <div class="card"><div class="big up">+9 分</div><div class="lbl">实体提取加 LLM 后(80.5% → 89.4%)</div></div>
   </div>
 
-  <h2>1. 怎么评估的 —— 两个基准</h2>
-  <p><strong>基准 1 — 真实新闻(113 条):</strong>从 Yahoo Finance 抓的真实语句,覆盖股票/宏观/商品/FX/指数/利率/加密,
-  以及 5 种 claim 类型。事实类标签对 SEC/FRED 核验过,再改数字/日期造出配对假话;观点/预测无真假(用来测分类)。</p>
-  <p><strong>基准 2 — SEC 锚定(100 条):</strong>数字直接取自 SEC 财报、扰动造假——客观但"太简单"(标签来自 agent
-  也会查的同一个源)。两者对比,能看出简单基准把表现夸大了多少。</p>
+  <h2>1. 怎么评估的 —— 真实新闻基准</h2>
+  <p><strong>113 条真实语句</strong>,从 Yahoo Finance 抓取,覆盖股票/宏观/商品/FX/指数/利率/加密,以及 5 种
+  claim 类型。事实类标签对 SEC/FRED 核验过,再改数字/日期造出配对假话;观点/预测无真假(用来测分类)。</p>
+  <p><strong>为什么用真实新闻、而非从数据库拉数据改:</strong>这项目的任务是判断<em>真实世界</em>的 statement 准不准。
+  拿 agent 也会查的同一个数据库里的数字来扰动造题,太简单、会高估表现——所以用真实语句,标签对权威源核验。</p>
 
   <h2>2. 评什么(两个标准)</h2>
   <h3>(1) 能不能正确分类一句话?</h3>
@@ -66,15 +66,15 @@
   </table>
   <h3>(2) 对事实/数字类,真假判定对不对?</h3>
   <table>
-    <tr><th>指标</th><th class="num">真实新闻</th><th class="num">SEC 锚定(简单)</th></tr>
-    <tr><td>总准确率</td><td class="num"><strong>≈35%</strong></td><td class="num">74% → 79%</td></tr>
-    <tr><td>真话被确认(<code>supported</code>)</td><td class="num"><strong>1 / 50</strong></td><td class="num">0 / 20</td></tr>
-    <tr><td>假话被抓出(<code>contradicted</code>)</td><td class="num">≈30 / 36</td><td class="num">79 / 80</td></tr>
-    <tr><td>置信度 AUC(真 vs 假)</td><td class="num"><strong>0.34</strong></td><td class="num">0.50 → 0.83</td></tr>
+    <tr><th>指标</th><th class="num">真实新闻</th></tr>
+    <tr><td>总准确率</td><td class="num"><strong>≈35%</strong></td></tr>
+    <tr><td>真话被确认(<code>supported</code>)</td><td class="num"><strong>1 / 50</strong></td></tr>
+    <tr><td>假话被抓出(<code>contradicted</code>)</td><td class="num">≈30 / 36</td></tr>
+    <tr><td>置信度 AUC(真 vs 假)</td><td class="num"><strong>0.34</strong></td></tr>
   </table>
   <div class="callout bad-box">
-    在真实数据上,它<strong>几乎不确认任何真话</strong>(1/50),真假也分不开(AUC ≈ 0.34)。
-    简单基准上的 74–79% 有误导性——那套题太单一(全是普通年度营收/净利润)。
+    它<strong>几乎不确认任何真话</strong>(1/50),真假也分不开(AUC ≈ 0.34)——擅长"否定"(假话大多能标出),
+    但几乎不会"确认"一条真话。
   </div>
 
   <h2>3. 错误出在哪 —— 多个原因,没有单一根本原因</h2>
@@ -90,9 +90,9 @@
           认不出 "consumer prices""payrolls""Brent" → 压根没去查。</li>
       </ul>
       所以多数情况是"<em>数据在一个被覆盖的源里、但没被接通/路由</em>",而不是"数据本来就没有"(只有加密货币是真没源)。</li>
-    <li><strong>b. 把时间期间比错了 —— 10%(就是我们修的 Fix A)。</strong>SEC 同时有季度/半年/年度等重叠期间;
-      它拿真话去比错了期间 → 判成矛盾。Fix A(按期间标注列值)修好了这个——但它只占真实失败的 ~10%,
-      所以在简单基准上大涨(74→79%),在真实新闻上几乎没动(36→35%)。</li>
+    <li><strong>b. 把时间期间比错了 —— 10%(我们发现并修的 Fix A)。</strong>SEC 同时有季度/半年/年度等重叠期间;
+      它拿真话去比错了期间 → 判成矛盾。Fix A(按期间标注列值)修好了这一类——但它只占真实失败的 ~10%,
+      所以真实新闻准确率仍 ≈35%:瓶颈在别处(数据覆盖)。</li>
     <li><strong>c. 数据找到了也不敢判"真" —— 系统性。</strong>即便数字对上,判定也停在 <code>partially_supported</code>,
       几乎到不了 <code>supported</code>(真话只确认 1/50)。判定逻辑过于保守。</li>
     <li><strong>d. 分类错 + 概念缺失。</strong>事实被标成 <code>forecast</code>/<code>opinion</code> → 不去核查(9 条);
@@ -116,8 +116,7 @@
   <h2>6. 结论</h2>
   <p>前端(实体提取、分类、路由)基本能用,AI 还提升了提取。判定环节在真实声明上不可靠,但<strong>没有单一根本原因</strong>:
   ~44% 是"没拿到数据"(源没实现或没路由——不是缺 key),~22% 是概念缺失,只有 ~10% 是我们修的期间 bug,
-  还有一种系统性的保守让它不敢确认真话。<em>可靠性瓶颈在数据覆盖,不是某个单点 bug;而同质化的自造题会同时
-  高估失败率和单个修复的价值。</em></p>
+  还有一种系统性的保守让它不敢确认真话。<em>可靠性瓶颈在数据覆盖,不是某个单点 bug。</em></p>
 
   <div class="footer">
     FINM 33200 期末项目 · 评估部分。benchmark、脚本、逐条结果在 <code>evaluation/</code> 目录;所有数字均可从提交的数据复现。
