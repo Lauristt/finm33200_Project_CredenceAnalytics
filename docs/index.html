@@ -30,6 +30,7 @@
   .callout { background:#eef4ff; border:1px solid #cfe0ff; border-left:4px solid var(--accent);
              border-radius:10px; padding:14px 16px; margin:18px 0; }
   .bad-box { background:#fdeeec; border:1px solid #f6ccc5; border-left:4px solid var(--bad); }
+  .note-box { background:#f4f7fb; border:1px solid #dde6f2; border-left:4px solid var(--muted); }
   .ex { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:12px 0; }
   .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
   .tag { display:inline-block; background:#eef1f6; color:var(--muted); font-size:12px;
@@ -40,13 +41,13 @@
 <div class="wrap">
 
   <h1>Does the Credence Analytics agent work — and does AI help?</h1>
-  <p class="sub">A stage-by-stage evaluation on real, labeled data. The front end works; the verdict stage almost never confirms a true claim — and the core reason is one deep weakness: time/period alignment.</p>
+  <p class="sub">A stage-by-stage evaluation on real, labeled data. The front end works; the verdict stage almost never confirms a true claim — and the core reason is that it won't say "true" even when the data matches.</p>
   <div><span class="tag">FINM 33200</span><span class="tag">agent use case</span><span class="tag">evaluation &amp; evidence</span></div>
 
   <div class="cards">
     <div class="card"><div class="big down">≈36%</div><div class="lbl">verdict accuracy on real news</div></div>
-    <div class="card"><div class="big down">1 / 50</div><div class="lbl">true claims it actually confirms</div></div>
-    <div class="card"><div class="big down">right #, wrong period</div><div class="lbl">the core failure: value found, matched to the wrong period/unit</div></div>
+    <div class="card"><div class="big down">1 / 50</div><div class="lbl">true claims it confirms — even when the data matches</div></div>
+    <div class="card"><div class="big down">won't say "true"</div><div class="lbl">the core failure: verdict caps at "partially supported"</div></div>
     <div class="card"><div class="big up">+9 pts</div><div class="lbl">entity extraction with the LLM (80.5% → 89.4%)</div></div>
   </div>
 
@@ -80,70 +81,74 @@
   </div>
 
   <h2>3. Where the errors come from</h2>
+  <div class="callout note-box">
+    <strong>A scoping note first.</strong> By design the agent checks whether a statement is true
+    <em>right now</em>, so it fetches the <em>latest</em> data. That's a reasonable choice for a
+    "is this currently true?" checker, so we don't count it as a bug — it just limits dated/historical
+    statements (see §6). The genuine problems are below.
+  </div>
 
-  <h3>Cause 1 — Time / period mismatch (the core weakness)</h3>
-  <p>The agent usually finds the right metric, but <strong>lines it up against the wrong point in time</strong>,
-  so a true claim's number "doesn't match" and is rejected. It shows up two ways:</p>
+  <h3>Cause 1 — Even when the data matches, it won't commit to "true" (the core problem)</h3>
+  <p>Across 50 true statements it confirmed exactly <strong>one</strong>. The verdict caps at
+  <code>partially_supported</code> and almost never reaches <code>supported</code>.</p>
+  <div class="ex">NVIDIA's reported revenue matched the filing <strong>exactly</strong>, yet the verdict was
+  <code>partially_supported</code>, not <code>supported</code>. This has nothing to do with data freshness —
+  the number lined up and it still wouldn't affirm.</div>
+  <p>The logic is structured <em>not</em> to say "true": matching evidence yields "partial", and only a rare
+  configuration produces a clean "supported". The AUC of 0.34 confirms it — confidence doesn't separate true
+  claims from false ones.</p>
 
-  <p><strong>(a) SEC: overlapping reporting periods.</strong> A company files the <em>same</em> metric for many
-  overlapping windows. Apple's revenue, for example:</p>
+  <h3>Cause 2 — SEC: it compares against the wrong reporting period</h3>
+  <p>A company files the <em>same</em> metric for many overlapping windows at once. Apple's revenue:</p>
   <table>
     <tr><th>period (≈ ending 2026-03-28)</th><th class="num">value</th></tr>
     <tr><td>fiscal <strong>Q2</strong> (3 months)</td><td class="num"><strong>$111.2B</strong></td></tr>
-    <tr><td>first <strong>half-year</strong> (6 months)</td><td class="num">$254.9B</td></tr>
+    <tr><td>first <strong>half-year</strong> (Q1+Q2, 6 months)</td><td class="num">$254.9B</td></tr>
     <tr><td>prior <strong>quarter</strong> (Dec)</td><td class="num">$143.8B</td></tr>
     <tr><td>full <strong>fiscal year</strong></td><td class="num">$416.2B</td></tr>
   </table>
-  <div class="ex">Fed the true claim <em>"Apple's Q2 revenue was $111.2 billion,"</em> the agent compared
-  $111.2B against a <strong>different period's</strong> figure (the half-year $254.9B / the annual $416.2B),
-  saw they differed, and judged the true claim <code>contradicted</code>. The number was right; it was
-  matched to the wrong period.</div>
+  <div class="ex">Fed <em>"Apple's Q2 revenue was $111.2 billion"</em> (true), the agent compared $111.2B against
+  a <strong>different period's</strong> figure (e.g. the half-year $254.9B), saw they differed, and judged the
+  true claim <code>contradicted</code>. <strong>Not a freshness issue</strong> — Q2, the half-year and the full
+  year all coexist as current data; the agent has to <em>match the period</em> (read the "Q2" and pick that row),
+  and it doesn't.</div>
 
-  <p><strong>(b) FRED: the fetch is date- and unit-blind.</strong> For macro/market series the agent always
-  pulls the <em>latest</em> observation and the <em>raw level</em> — never the claim's date or unit:</p>
-  <div class="ex"><em>"The S&amp;P 500 closed at 7,501.24 on May 15, 2026."</em> (true for May 15) → the agent
-  fetched FRED's <strong>latest</strong> value (7,473.47 on <strong>May 22</strong>) and compared against that,
-  never looking up May 15 → mismatch.</div>
-  <div class="ex"><em>"U.S. consumer prices rose 3.8% over 12 months."</em> (a year-over-year <strong>percent</strong>)
-  → the agent fetched the CPI <strong>index level</strong> (332.4) and compared "3.8" against "332.4" → a
-  <strong>unit</strong> mismatch it can never reconcile.</div>
-  <p>→ Whether the source is SEC or FRED, the same failure recurs: <strong>the value is found, but aligned to
-  the wrong period or unit, so a true claim is rejected.</strong> This is the single biggest weakness.</p>
-
-  <h3>Cause 2 — Found the data but won't commit to "true" (systemic)</h3>
-  <p>Even when the figure <em>does</em> line up, the verdict tops out at <code>partially_supported</code> and
-  almost never reaches <code>supported</code> — across 50 true statements it confirmed exactly <strong>one</strong>.
-  Example: NVIDIA's reported revenue matched the filing exactly, yet the verdict was <code>partially_supported</code>,
-  not <code>supported</code>. The logic is built <em>not</em> to affirm.</p>
-
-  <h3>Cause 3 — (secondary) misclassification &amp; unmapped metrics</h3>
-  <p>A few failures are upstream: some real reported figures (e.g. <em>"Microsoft reported revenue of $82.89B"</em>)
-  were classified as <code>forecast</code>/<code>opinion</code> and never fact-checked; and segment metrics
-  (iPhone revenue, AWS) aren't in the agent's mapped concepts, so there's nothing to compare against.</p>
+  <h3>Cause 3 — (secondary) misclassification, unmapped metrics &amp; wrong unit</h3>
+  <ul>
+    <li>Some real reported figures (<em>"Microsoft reported revenue of $82.89B"</em>) were classified as
+      <code>forecast</code>/<code>opinion</code> and never fact-checked.</li>
+    <li>Segment metrics (iPhone revenue, AWS) aren't in the agent's mapped concepts — nothing to compare against.</li>
+    <li>For "rose X%" claims (<em>"CPI rose 3.8%"</em>) the agent compares "3.8" against the CPI <strong>index
+      level</strong> (332.4) — a <strong>unit</strong> mismatch it can't reconcile.</li>
+  </ul>
 
   <h2>4. Does AI help? (per stage)</h2>
   <ul>
     <li><strong>Entity extraction — yes</strong> (80.5% → 89.4%).</li>
     <li><strong>Classification — n/a</strong> (rule-based).</li>
-    <li><strong>Verdict — AI is not the bottleneck;</strong> the failure is time/period alignment and a reluctant
-      verdict rule, not the model.</li>
+    <li><strong>Verdict — AI is not the bottleneck;</strong> the failure is a reluctant verdict rule (won't say
+      "true") and period/unit matching, not the model.</li>
   </ul>
 
   <h2>5. Bottom line</h2>
   <p>The front end works reasonably and AI improves extraction, but the <strong>verdict stage almost never
-  confirms a true claim</strong> (1/50; AUC 0.34). The dominant cause is <strong>time/period mismatch</strong> —
-  the right number aligned to the wrong reporting period (SEC) or only the latest/raw value (FRED) — and even when
-  the number matches, the logic refuses to escalate past <code>partially_supported</code>. <em>The core problem
-  is temporal alignment of evidence, not the AI model.</em></p>
+  confirms a true claim</strong> (1/50; AUC 0.34) — and, crucially, <strong>it won't do so even when the data
+  matches exactly</strong> (NVIDIA). That, plus comparing a claim against the wrong SEC reporting period, is the
+  real weakness. The agent's "check as of now" design is itself reasonable; the gap is that even correct, current
+  matches don't get affirmed.</p>
 
   <h2>6. Limitations &amp; future work</h2>
   <ul>
     <li>Verdict accuracy is evaluated on claims the sources actually cover (US equity / macro); opinion/forecast
       have no ground truth (we only check classification); crypto/exotic out of scope.</li>
-    <li><strong>Future work (the fix that matters):</strong> make verification <strong>period- and unit-aware</strong>
-      — for SEC, match the claim's fiscal period to the right window; for FRED, query the claim's <em>date</em>
-      (<code>observation_start/end</code>) and unit (<code>units=pc1</code> for "rose X%"). Then let a confirmed
-      period+value match reach <code>supported</code>, instead of capping at <code>partially_supported</code>.</li>
+    <li><strong>By design it verifies as-of-now.</strong> <em>Usability improvement:</em> add <strong>as-of-date</strong>
+      matching so dated/historical statements (e.g. <em>"the S&amp;P 500 closed at 7,501.24 on May 15"</em>) are
+      checked against that date rather than the latest value, plus <strong>unit</strong> matching
+      (<code>units=pc1</code> for "rose X%").</li>
+    <li><strong>Period matching (SEC):</strong> read the claim's fiscal period (Q2 / half-year / FY) and pick the
+      matching reporting window instead of an arbitrary one.</li>
+    <li><strong>Let matches count:</strong> allow a confirmed period+value match to reach <code>supported</code>,
+      instead of capping at <code>partially_supported</code> — this is what would actually raise true-claim accuracy.</li>
   </ul>
 
   <div class="footer">

@@ -30,6 +30,7 @@
   .callout { background:#eef4ff; border:1px solid #cfe0ff; border-left:4px solid var(--accent);
              border-radius:10px; padding:14px 16px; margin:18px 0; }
   .bad-box { background:#fdeeec; border:1px solid #f6ccc5; border-left:4px solid var(--bad); }
+  .note-box { background:#f4f7fb; border:1px solid #dde6f2; border-left:4px solid var(--muted); }
   .ex { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:12px 0; }
   .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
   .tag { display:inline-block; background:#eef1f6; color:var(--muted); font-size:12px;
@@ -40,13 +41,13 @@
 <div class="wrap">
 
   <h1>这个金融声明核查 agent 行不行 —— AI 帮上忙了吗?</h1>
-  <p class="sub">在真实、带标签的数据上逐阶段评估。前端能用,但判定环节几乎不确认任何真话——核心原因是一个深层缺陷:时间/期间对齐。</p>
+  <p class="sub">在真实、带标签的数据上逐阶段评估。前端能用,但判定环节几乎不确认任何真话——核心原因是:就算数据对上了,它也不肯判"真"。</p>
   <div><span class="tag">FINM 33200</span><span class="tag">智能体用例</span><span class="tag">评估与证据</span></div>
 
   <div class="cards">
     <div class="card"><div class="big down">≈36%</div><div class="lbl">真实新闻上的判定准确率</div></div>
-    <div class="card"><div class="big down">1 / 50</div><div class="lbl">它真正确认的真话</div></div>
-    <div class="card"><div class="big down">数对了,期间错了</div><div class="lbl">核心失败:值找到了,却比到了错误的期间/口径</div></div>
+    <div class="card"><div class="big down">1 / 50</div><div class="lbl">它确认的真话——即便数据已对上</div></div>
+    <div class="card"><div class="big down">不肯判"真"</div><div class="lbl">核心失败:判定卡在"部分支持"上不去</div></div>
     <div class="card"><div class="big up">+9 分</div><div class="lbl">实体提取加 LLM(80.5% → 89.4%)</div></div>
   </div>
 
@@ -77,54 +78,59 @@
   </div>
 
   <h2>3. 错误出在哪</h2>
+  <div class="callout note-box">
+    <strong>先说一个边界。</strong>这个 agent 的设计就是核查一句话<em>当下</em>是否属实,所以它取的是<em>最新</em>数据。
+    对一个"判断当下真假"的工具来说这是合理的,所以我们<strong>不</strong>把它算作 bug——它只是限制了带历史日期的陈述(见 §6)。
+    真正的问题在下面。
+  </div>
 
-  <h3>原因 1 —— 时间/期间比错(核心缺陷)</h3>
-  <p>它通常能找到对的指标,但<strong>把它比到了错误的时间点上</strong>,于是真话的数字"对不上"、被否掉。表现为两种:</p>
+  <h3>原因 1 —— 数据对上了也不肯判"真"(核心问题)</h3>
+  <p>50 条真话只确认了<strong>一条</strong>。判定卡在 <code>partially_supported</code>,几乎到不了 <code>supported</code>。</p>
+  <div class="ex">NVIDIA 的营收和财报<strong>完全一致</strong>,判定却是 <code>partially_supported</code> 而非 <code>supported</code>。
+  这跟数据新旧<strong>没关系</strong>——数字都对上了,它还是不肯确认。</div>
+  <p>它的逻辑天生<em>不</em>肯说"真":证据匹配只给"部分",只有罕见情形才输出干净的"supported"。AUC = 0.34 也印证了这点——
+  置信度根本分不开真话和假话。</p>
 
-  <p><strong>(a) SEC:重叠的报告期间。</strong>同一个指标,公司会按很多重叠窗口申报。以苹果营收为例:</p>
+  <h3>原因 2 —— SEC:比到了错误的报告期间</h3>
+  <p>同一个指标,公司会按很多重叠窗口、同时申报。以苹果营收为例:</p>
   <table>
     <tr><th>期间(≈ 截止 2026-03-28)</th><th class="num">数值</th></tr>
     <tr><td>财年 <strong>Q2</strong>(3 个月)</td><td class="num"><strong>$111.2B</strong></td></tr>
-    <tr><td>上<strong>半年</strong>(6 个月)</td><td class="num">$254.9B</td></tr>
+    <tr><td>上<strong>半年</strong>(Q1+Q2,6 个月)</td><td class="num">$254.9B</td></tr>
     <tr><td>上<strong>一季度</strong>(12月)</td><td class="num">$143.8B</td></tr>
     <tr><td>整<strong>财年</strong></td><td class="num">$416.2B</td></tr>
   </table>
-  <div class="ex">喂进真话 <em>"苹果 Q2 营收 $111.2 billion"</em>,agent 却把 $111.2B 拿去和<strong>别的期间</strong>的数
-  (半年 $254.9B / 全年 $416.2B)比,发现不一样,就把这条真话判成 <code>contradicted</code>。数是对的,只是比错了期间。</div>
+  <div class="ex">喂进真话 <em>"苹果 Q2 营收 $111.2 billion"</em>,agent 把 $111.2B 拿去和<strong>别的期间</strong>的数
+  (如半年 $254.9B)比,发现不一样,就把这条真话判成 <code>contradicted</code>。<strong>这不是新旧问题</strong>
+  ——Q2、半年、全年都是同样新、同时存在的数据;agent 必须<em>按期间挑对那一行</em>(读懂"Q2"再挑),而它没做到。</div>
 
-  <p><strong>(b) FRED:取数无视日期和口径。</strong>对宏观/市场序列,它永远只拿<em>最新</em>观测、<em>原始水平值</em>——不看声明那天、也不看口径:</p>
-  <div class="ex"><em>"S&amp;P 500 在 5/15 收于 7,501.24。"</em>(对 5/15 是真的)→ agent 取的是 FRED <strong>最新</strong>值
-  (5/22 的 7,473.47)拿去比,从没查 5/15 → 对不上。</div>
-  <div class="ex"><em>"美国 CPI 同比涨 3.8%。"</em>(同比<strong>百分比</strong>)→ agent 取的是 CPI <strong>指数水平值</strong>
-  (332.4),拿"3.8"去比"332.4" → <strong>口径</strong>不一致,永远配不上。</div>
-  <p>→ 无论 SEC 还是 FRED,同一种失败反复出现:<strong>值找到了,却被对齐到错误的期间/口径,于是真话被否。</strong>这是最大的单一缺陷。</p>
-
-  <h3>原因 2 —— 数据找到了也不敢判"真"(系统性)</h3>
-  <p>即便数字<em>确实</em>对上,判定也停在 <code>partially_supported</code>,几乎到不了 <code>supported</code>——50 条真话只确认了<strong>一条</strong>。
-  例:NVIDIA 的营收和财报完全一致,判定却是 <code>partially_supported</code> 而非 <code>supported</code>。它的逻辑天生<em>不</em>肯下"确认"。</p>
-
-  <h3>原因 3 —— (次要)分类错 + 概念缺失</h3>
-  <p>少数失败在上游:有些已发生的事实(如 <em>"微软营收 $82.89B"</em>)被判成 <code>forecast</code>/<code>opinion</code>,根本没去核查;
-  细分指标(iPhone 营收、AWS)不在映射概念里,没东西可比。</p>
+  <h3>原因 3 —— (次要)分类错 + 概念缺失 + 口径错</h3>
+  <ul>
+    <li>有些已发生的事实(如 <em>"微软营收 $82.89B"</em>)被判成 <code>forecast</code>/<code>opinion</code>,根本没去核查。</li>
+    <li>细分指标(iPhone 营收、AWS)不在映射概念里,没东西可比。</li>
+    <li>"涨 X%" 类(如 <em>"CPI 涨 3.8%"</em>),agent 拿"3.8"去比 CPI <strong>指数水平值</strong>(332.4)——<strong>口径</strong>不一致,永远配不上。</li>
+  </ul>
 
   <h2>4. AI 有没有用?(分阶段)</h2>
   <ul>
     <li><strong>实体提取——有用</strong>(80.5% → 89.4%)。</li>
     <li><strong>分类——不适用</strong>(纯规则)。</li>
-    <li><strong>判定——AI 不是瓶颈</strong>;失败在时间/期间对齐和"不肯确认"的判定规则,不在模型。</li>
+    <li><strong>判定——AI 不是瓶颈</strong>;失败在"不肯判真"的判定规则和期间/口径匹配,不在模型。</li>
   </ul>
 
   <h2>5. 结论</h2>
-  <p>前端基本能用、AI 还提升了提取,但<strong>判定环节几乎不确认任何真话</strong>(1/50;AUC 0.34)。主因是<strong>时间/期间比错</strong>
-  ——数对了却比到了错误的报告期间(SEC)、或只拿最新/原始值(FRED);而且即便数字对上,逻辑也不肯升到 <code>supported</code>。
-  <em>核心问题是证据的时间对齐,不是 AI 模型。</em></p>
+  <p>前端基本能用、AI 还提升了提取,但<strong>判定环节几乎不确认任何真话</strong>(1/50;AUC 0.34)——而且关键是,
+  <strong>就算数据完全对上也不肯确认</strong>(NVIDIA)。这一点,加上把声明比到了错误的 SEC 报告期间,才是真正的弱点。
+  agent"核查当下"的设计本身合理;问题在于即便是正确、当下的匹配,也得不到"确认"。</p>
 
   <h2>6. 局限 & 可改进(future work)</h2>
   <ul>
     <li>判定准确率在数据源能覆盖的 claim 上评估(美股/宏观);观点/预测无真假(只测分类);加密/冷门超出范围。</li>
-    <li><strong>真正该修的:</strong>让核查<strong>期间 + 口径感知</strong>——SEC 要把声明的财年对齐到正确的报告窗口;
-      FRED 要按声明的<em>日期</em>查(<code>observation_start/end</code>)、按口径查("涨 X%"用 <code>units=pc1</code>);
-      然后让"期间+数值都对上"的真话能升到 <code>supported</code>,而不是卡在 <code>partially_supported</code>。</li>
+    <li><strong>设计上它核查"当下"。</strong><em>可用性改进:</em>加入 <strong>as-of-date</strong> 匹配,让带历史日期的陈述
+      (如 <em>"标普 5/15 收于 7,501.24"</em>)按那天去查、而不是拿最新值比;再加 <strong>口径</strong>匹配("涨 X%" 用 <code>units=pc1</code>)。</li>
+    <li><strong>期间匹配(SEC):</strong>读懂声明里的财年期间(Q2 / 半年 / 全年),挑出对应的报告窗口,而不是随便选一个。</li>
+    <li><strong>让"对上"算数:</strong>允许"期间+数值都对上"的真话升到 <code>supported</code>,而不是卡在
+      <code>partially_supported</code>——这才是真正能提升真话准确率的关键。</li>
   </ul>
 
   <div class="footer">
