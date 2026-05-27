@@ -11,11 +11,11 @@
   body { margin:0; background:var(--bg); color:var(--ink);
          font:16px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC",sans-serif; }
   .wrap { max-width:860px; margin:0 auto; padding:48px 22px 80px; }
-  h1 { font-size:30px; line-height:1.25; margin:0 0 8px; letter-spacing:-.01em; }
+  h1 { font-size:29px; line-height:1.25; margin:0 0 8px; letter-spacing:-.01em; }
   .sub { color:var(--muted); font-size:18px; margin:0 0 28px; }
   h2 { font-size:21px; margin:42px 0 12px; padding-top:14px; border-top:1px solid var(--line); }
-  h3 { font-size:17px; margin:26px 0 8px; }
-  p { margin:12px 0; }
+  h3 { font-size:17px; margin:24px 0 6px; }
+  p { margin:11px 0; }
   code { background:#eef1f6; padding:1px 6px; border-radius:5px; font-size:13.5px;
          font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
   table { border-collapse:collapse; width:100%; margin:16px 0; font-size:14.5px; }
@@ -23,14 +23,15 @@
   th { background:#f3f6fb; font-weight:600; }
   td.num,th.num { text-align:right; white-space:nowrap; }
   .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:14px; margin:26px 0 8px; }
-  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px; }
-  .card .big { font-size:26px; font-weight:700; letter-spacing:-.02em; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .card .big { font-size:25px; font-weight:700; letter-spacing:-.02em; }
   .card .lbl { color:var(--muted); font-size:13px; margin-top:3px; }
   .up { color:var(--good); } .down { color:var(--bad); }
   .callout { background:#eef4ff; border:1px solid #cfe0ff; border-left:4px solid var(--accent);
              border-radius:10px; padding:14px 16px; margin:18px 0; }
   .bad-box { background:#fdeeec; border:1px solid #f6ccc5; border-left:4px solid var(--bad); }
   .good-box{ background:#ecf8f1; border:1px solid #c7ecd5; border-left:4px solid var(--good); }
+  ol.causes > li { margin:14px 0; }
   .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
   .tag { display:inline-block; background:#eef1f6; color:var(--muted); font-size:12px;
          padding:2px 9px; border-radius:999px; margin-right:6px; }
@@ -39,164 +40,107 @@
 <body>
 <div class="wrap">
 
-  <h1>Does the Credence Analytics agent actually work — and does AI help?</h1>
-  <p class="sub">A stage-by-stage evaluation of a financial-claim verification agent on real, labeled data.</p>
+  <h1>Does the Credence Analytics agent work — and does AI help?</h1>
+  <p class="sub">A stage-by-stage evaluation on real, labeled data. There is no single root cause for the errors — they come from several mechanisms, dominated by data coverage.</p>
   <div><span class="tag">FINM 33200</span><span class="tag">agent use case</span><span class="tag">evaluation &amp; evidence</span></div>
 
   <div class="cards">
-    <div class="card"><div class="big up">+9 pts</div><div class="lbl">entity extraction with the LLM layer (80.5% → 89.4%)</div></div>
-    <div class="card"><div class="big down">74% → 36%</div><div class="lbl">verdict accuracy: easy benchmark vs. realistic news</div></div>
-    <div class="card"><div class="big down">19 → 0</div><div class="lbl">true claims wrongly judged <em>false</em>, after our fix</div></div>
-    <div class="card"><div class="big up">0.50 → 0.83</div><div class="lbl">true-vs-false separation (AUC) after our fix</div></div>
+    <div class="card"><div class="big down">≈35%</div><div class="lbl">verdict accuracy on real news (the realistic number)</div></div>
+    <div class="card"><div class="big down">1 / 50</div><div class="lbl">true claims it actually confirms</div></div>
+    <div class="card"><div class="big down">44%</div><div class="lbl">of failures = "couldn't get the data" (not a key issue)</div></div>
+    <div class="card"><div class="big up">+9 pts</div><div class="lbl">entity extraction with the LLM (80.5% → 89.4%)</div></div>
   </div>
 
-  <h2>What the agent does</h2>
-  <p>Given a financial statement, the pipeline <strong>extracts the entity / asset class →
-  classifies the claim type → routes it to a data source → retrieves evidence → produces a
-  verdict, a confidence, and a human-review flag</strong>. We evaluate each stage.</p>
+  <h2>1. How we evaluated — two benchmarks</h2>
+  <p><strong>Benchmark 1 — real news (113):</strong> real Yahoo Finance statements across stocks,
+  macro, commodities, FX, indices, rates, crypto and 5 claim types. Factual labels are
+  cross-checked against SEC/FRED; a perturbed copy (changed number/date) gives a matched false.
+  Opinion/forecast carry no truth value (they test classification).</p>
+  <p><strong>Benchmark 2 — SEC-anchored (100):</strong> numbers taken straight from SEC filings,
+  perturbed for false twins — objective but "easy" (same source the agent queries). The contrast
+  shows how much the easy set overstates performance.</p>
 
-  <h2>Method</h2>
-  <p><strong>Benchmark 1 — real news (113 statements).</strong> Real statements from Yahoo
-  Finance across <strong>stocks, macro, commodities, FX, indices, rates, crypto</strong> and
-  five claim types (numeric, factual, opinion, forecast, causal). Factual statements are
-  labeled <code>true</code> from authoritative sources and <strong>each cross-checked against
-  SEC / FRED</strong>; a copy of each is perturbed (changed number or date) to make a matched
-  <code>false</code>. Opinion/forecast carry no truth value and test classification only.</p>
-  <p><strong>Benchmark 2 — SEC-anchored (100 statements).</strong> Numbers taken straight from
-  SEC filings, perturbed for false twins — objective but "easy" (the labels come from the same
-  source the agent queries). Comparing the two benchmarks shows how much the easy setup
-  overstates performance. Every claim is traceable in the published per-claim CSVs.</p>
-
-  <h2>Results by pipeline stage</h2>
+  <h2>2. What we measured</h2>
+  <h3>(1) Can it classify a claim correctly?</h3>
   <table>
-    <tr><th>Stage</th><th class="num">Accuracy</th><th>Notes</th></tr>
-    <tr><td>Entity / asset-class extraction</td><td class="num"><strong>80.5% → 89.4%</strong></td><td>rules → rules + LLM; AI helps, esp. company names &amp; macro; FX/index/rates stay weak</td></tr>
-    <tr><td>Claim-type classification</td><td class="num">84.5%</td><td>rule-based (no LLM); opinion/forecast weaker</td></tr>
-    <tr><td>Fact-check routing</td><td class="num">84.1%</td><td>opinion/forecast correctly skipped; macro sometimes not routed to FRED</td></tr>
-    <tr><td>Verdict accuracy</td><td class="num">see below</td><td>the critical stage — shipped with a systematic bug</td></tr>
+    <tr><th>Stage</th><th class="num">Accuracy</th></tr>
+    <tr><td>Entity / asset-class extraction</td><td class="num">80.5% → <strong>89.4%</strong> (with LLM)</td></tr>
+    <tr><td>Claim-type classification (numeric/factual/opinion/forecast/causal)</td><td class="num"><strong>84.5%</strong></td></tr>
+    <tr><td>Fact-check routing (opinion/forecast correctly skipped)</td><td class="num"><strong>84.1%</strong></td></tr>
   </table>
-
-  <h3>Verdict: easy vs. realistic, and a systematic bug</h3>
+  <h3>(2) For fact/numeric claims, is the true/false verdict right?</h3>
   <table>
-    <tr><th>Metric</th><th class="num">SEC-anchored (easy)</th><th class="num">Real news (realistic)</th></tr>
-    <tr><td>Overall accuracy</td><td class="num">74%</td><td class="num"><strong>36%</strong></td></tr>
-    <tr><td>True claims confirmed (<code>supported</code>)</td><td class="num">0 / 20</td><td class="num"><strong>0 / 50</strong></td></tr>
-    <tr><td>False claims caught (<code>contradicted</code>)</td><td class="num">74 / 80</td><td class="num">31 / 36</td></tr>
-    <tr><td>Confidence AUC (true vs false)</td><td class="num">0.50</td><td class="num"><strong>0.345</strong></td></tr>
+    <tr><th>Metric</th><th class="num">Real news (realistic)</th><th class="num">SEC-anchored (easy)</th></tr>
+    <tr><td>Overall accuracy</td><td class="num"><strong>≈35%</strong></td><td class="num">74% → 79%</td></tr>
+    <tr><td>True claims confirmed (<code>supported</code>)</td><td class="num"><strong>1 / 50</strong></td><td class="num">0 / 20</td></tr>
+    <tr><td>False claims caught (<code>contradicted</code>)</td><td class="num">≈30 / 36</td><td class="num">79 / 80</td></tr>
+    <tr><td>Confidence AUC (true vs false)</td><td class="num"><strong>0.34</strong></td><td class="num">0.50 → 0.83</td></tr>
   </table>
   <div class="callout bad-box">
-    The pipeline <strong>never confirmed a single true claim</strong> and rated most true claims
-    <code>contradicted</code> — even statements that match SEC to the dollar (NVIDIA Q1 revenue
-    $81.62B = SEC&nbsp;$81,615M; Apple Q2 revenue $111.2B = SEC&nbsp;$111,184M). A trivial
-    "always say false" baseline (80%) beats it, and AUC ≈ 0.5 means it could not tell true from
-    false. The "easy" benchmark (74%) badly overstated this.
+    On realistic data the agent <strong>almost never confirms a true claim</strong> (1/50) and can't
+    separate true from false (AUC ≈ 0.34). The 74–79% on the constructed set is misleading — that set
+    is homogeneous (all plain annual revenue/income).
   </div>
 
-  <h2>Root cause &amp; fix — found via the evaluation</h2>
-  <p><strong>Root cause.</strong> The SEC fact extractor kept only the two <em>most-recently-filed</em>
-  values per metric, so recent quarterly figures crowded out the <strong>specific fiscal-period
-  value a claim refers to</strong>. The figure to verify was simply absent from the evidence →
-  <code>not_found</code> → the verdict logic escalated that to <code>contradicted</code> (a true
-  claim judged false).</p>
-  <p><strong>Fix A.</strong> Surface full-year <em>and</em> quarterly figures, de-duplicated by
-  reporting period (end date + period kind) and tagged <code>for fiscal year/quarter ending
-  YYYY-MM-DD</code>, so the claim's period value is present.</p>
-  <table>
-    <tr><th>Metric (SEC-anchored, same pipeline)</th><th class="num">Before</th><th class="num">After Fix A</th></tr>
-    <tr><td>True claims judged <code>contradicted</code></td><td class="num">19 / 20</td><td class="num"><strong>0 / 20</strong></td></tr>
-    <tr><td>Confidence AUC (true vs false)</td><td class="num">0.50</td><td class="num"><strong>0.83</strong></td></tr>
-    <tr><td>False claims caught</td><td class="num">74 / 80</td><td class="num">79 / 80</td></tr>
-    <tr><td>Human-review precision (flagged &amp; wrong)</td><td class="num">15 / 69</td><td class="num"><strong>1 / 56</strong></td></tr>
-  </table>
-  <div class="callout good-box">
-    Fix A eliminated the catastrophic behavior — true claims are no longer judged false — and made
-    confidence cleanly separate true from false (AUC 0.50 → 0.83). One residual remains: true
-    claims now top out at <code>partially_supported</code> rather than <code>supported</code>
-    (documented as Fix B).
-  </div>
-
-  <h3>…but Fix A's benefit is dataset-dependent (the honest catch)</h3>
-  <table>
-    <tr><th>Benchmark</th><th class="num">Before Fix A</th><th class="num">After Fix A</th></tr>
-    <tr><td>Constructed (<code>claims.json</code> — all plain annual revenue/income)</td><td class="num">74% · AUC 0.50</td><td class="num"><strong>79% · AUC 0.83</strong></td></tr>
-    <tr><td>Real news (<code>claims_news</code> — mixed metrics/assets)</td><td class="num">36% · AUC 0.345</td><td class="num"><strong>35% · AUC 0.338</strong></td></tr>
-  </table>
-  <div class="callout bad-box">
-    On the constructed set Fix A looks transformative; on real news it is <strong>nearly flat</strong>
-    — it reduces true-claim contradictions (30 → 22) but accuracy and AUC barely move, because the
-    A-class it fixes is only ~10% of real failures. The dramatic gain was largely an artifact of a
-    homogeneous, self-built benchmark — the same lesson as 74%-vs-36%, now applied to the fix itself.
-  </div>
-  <p><strong>The "no evidence" failures are not a missing-key problem.</strong> SEC needs no key and
-  FRED is configured — they are (C1) factual claims misclassified as forecast/opinion so the pipeline
-  never queried SEC, and (C2) macro/commodity/index/FX claims never routed to a source (many exist in
-  FRED but the keyword routing didn't map them).</p>
-
-  <h2>Failure taxonomy — multiple causes, not one</h2>
-  <p>We attributed every pre-fix failure (50 true news claims, all unconfirmed) to a distinct
-  mechanism by inspecting the pipeline's internal signals.</p>
-  <table>
-    <tr><th>Cause</th><th class="num">Claims</th><th class="num">Fix A?</th><th>Example</th></tr>
-    <tr><td>C1. Misclassified as forecast/opinion → retrieval skipped (stock)</td><td class="num">9 (18%)</td><td class="num">no</td><td>"MSFT revenue $82.89B" labeled <code>forecast</code> → SEC never queried</td></tr>
-    <tr><td>C2. No source routed (macro/commodity/index/FX/rates)</td><td class="num">13 (26%)</td><td class="num">no</td><td>CPI, Brent, S&amp;P 500, EUR/USD → not mapped to FRED / no price source</td></tr>
-    <tr><td>B. Concept-mapping gap (segment metric / EPS)</td><td class="num">11 (22%)</td><td class="num">no</td><td>iPhone revenue, Greater China, AWS</td></tr>
-    <tr><td>A. Period coverage / over-escalation</td><td class="num">5 (10%)</td><td class="num"><strong>yes</strong></td><td>Apple Q2 $111.2B, JPM Q4</td></tr>
-    <tr><td>near-miss (<code>partially_supported</code>)</td><td class="num">5 (10%)</td><td class="num">partly</td><td>NVDA $81.62B, TSLA $22.39B</td></tr>
-    <tr><td>E. Classified non-factual, skipped</td><td class="num">4 (8%)</td><td class="num">no</td><td>GDP, unemployment, causal</td></tr>
-    <tr><td>D. Entity not extracted</td><td class="num">3 (6%)</td><td class="num">no</td><td>Nasdaq, GBP/JPY</td></tr>
-  </table>
-  <div class="callout">
-    <strong>The dominant cause depends on the claim mix.</strong> On clean annual revenue/income
-    claims the period bug (A) dominates and Fix A resolves ~19/20. On realistic news, A is only
-    ~10% — the real bottlenecks are retrieval coverage (C, 44%) and segment-metric concept gaps
-    (B, 22%), which Fix A does not touch. A homogeneous, self-built benchmark overstates <em>both</em>
-    the failure rate and the benefit of any single fix.
-  </div>
-
-  <h2>Does AI help? (per stage)</h2>
-  <ul>
-    <li><strong>Entity extraction — yes.</strong> The LLM layer lifts accuracy 80.5% → 89.4%.</li>
-    <li><strong>Classification — n/a.</strong> Rule-based; AI is not used here.</li>
-    <li><strong>Verdict — AI was not the bottleneck.</strong> The failure came from a deterministic
-      data-coverage bug, not the LLM judge. Fixing the deterministic extraction unlocked most of
-      the value (AUC 0.50 → 0.83).</li>
-  </ul>
-  <p><strong>Conclusion:</strong> AI is necessary but not sufficient — on this task, data coverage
-  and period alignment mattered more than the model.</p>
-
-  <h2>Failure cases</h2>
-  <ol>
-    <li><strong>True claims judged false</strong> (pre-fix): NVIDIA $81.62B, Apple $111.2B — both
-      match SEC, both rated <code>contradicted</code>.</li>
-    <li><strong>Macro routing gap:</strong> "U.S. CPI rose 3.8%" returned zero evidence because the
-      claim was not routed to FRED.</li>
-    <li><strong>Quarterly period confusion:</strong> SEC reports overlapping periods (quarter /
-      half-year / annual); matching the wrong one produced false contradictions.</li>
+  <h2>3. Where the errors come from — multiple causes, no single root cause</h2>
+  <p>We attributed all 50 true-claim failures on real news to a mechanism:</p>
+  <ol class="causes">
+    <li><strong>a. It couldn't get the data — 44% (the biggest cause).</strong> Which data: macro
+      (CPI, payrolls), commodities (Brent, copper), indices (S&amp;P 500, Dow), FX (EUR/USD), plus some
+      misrouted stock. <strong>Why — and it is NOT a missing key</strong> (SEC needs none; FRED is
+      configured):
+      <ul>
+        <li><em>Source not implemented:</em> the system declares 25 data sources (BLS, BEA, ECB, CFTC…)
+          but only ~12 have real fetchers — the rest are menu "cards" with no code, so non-equity has
+          almost no working source except FRED.</li>
+        <li><em>Routing too narrow:</em> FRED actually has CPI/payrolls/WTI/S&amp;P 500/EUR-USD, but its
+          keyword map only knows "cpi"/"inflation"/"gdp" — it never matches "consumer prices", "payrolls",
+          or "Brent", so it never queries.</li>
+      </ul>
+      So the data usually <em>exists in a covered source</em> but is not wired/routed — it is rarely that
+      the data genuinely doesn't exist (only crypto truly lacks a source).</li>
+    <li><strong>b. It matched the wrong time period — 10% (the bug we fixed, "Fix A").</strong> SEC reports
+      overlapping periods (quarter/half-year/annual); the check compared a true claim to the wrong one →
+      contradicted it. Fix A (surface values tagged by period) resolved this — but it is only ~10% of real
+      failures, so it lifted the easy benchmark a lot (74→79%) yet barely moved real news (36→35%).</li>
+    <li><strong>c. It found the data but wouldn't commit to "true" — systemic.</strong> Even when the figure
+      matches, the verdict caps at <code>partially_supported</code> and almost never reaches
+      <code>supported</code> (true confirmed 1/50). The verdict logic is too conservative.</li>
+    <li><strong>d. Misclassification &amp; concept gaps.</strong> Factual statements labeled
+      <code>forecast</code>/<code>opinion</code> → never fact-checked (9 claims); segment metrics
+      (iPhone revenue, AWS) aren't mapped SEC concepts → not retrievable (11 claims); some entities
+      (Nasdaq, GBP/JPY) not extracted (3 claims).</li>
   </ol>
 
-  <h2>Limitations</h2>
+  <h2>4. Does AI help? (per stage)</h2>
   <ul>
-    <li>Verdict accuracy is trustworthy mainly for <strong>US equities</strong> (SEC, no key);
-      macro/commodity/FX verdicts depend on FRED routing and are partly a coverage gap, not a
-      judgment error.</li>
-    <li>Crypto / exotic credit facts are not reliably checkable by the agent's sources — out of scope.</li>
-    <li>Opinion/forecast have no ground truth; we evaluate only whether they are correctly
-      classified and <strong>not</strong> fact-checked.</li>
-    <li>News "true" labels were cross-checked against SEC/FRED, but quarterly figures and phrasing
-      remain a known source of label noise.</li>
+    <li><strong>Entity extraction — yes</strong> (80.5% → 89.4% with the LLM).</li>
+    <li><strong>Classification — n/a</strong> (rule-based; AI not used).</li>
+    <li><strong>Verdict — AI was not the bottleneck;</strong> the failures are data coverage and routing,
+      not the model. AI is necessary but not sufficient here.</li>
   </ul>
 
-  <h2>Bottom line</h2>
-  <p>The agent's <strong>front end (entity extraction, classification, routing) works reasonably
-  and AI improves extraction</strong>, but its <strong>verdict stage shipped with a systematic bug
-  that made it reject true claims</strong> — invisible on an easy benchmark, exposed by realistic
-  news data. We located the cause, fixed it (AUC 0.50 → 0.83; true-claim contradictions 19 → 0),
-  and documented the rest. <em>On this task, the win came from fixing the data pipeline, not from
-  the AI model.</em></p>
+  <h2>5. Limitations</h2>
+  <ul>
+    <li>Verdict accuracy is trustworthy mainly for US equities (SEC); non-equity coverage is limited by
+      unimplemented sources + narrow routing, not by keys.</li>
+    <li>The system advertises 25 data sources but only ~12 are implemented — much of the "coverage" is a
+      menu without a backend.</li>
+    <li>Opinion/forecast have no ground truth (we only check classification + routing); crypto/exotic
+      facts are out of scope.</li>
+  </ul>
+
+  <h2>6. Bottom line</h2>
+  <p>The front end (entity extraction, classification, routing) works reasonably and AI improves extraction.
+  The verdict stage is unreliable on realistic claims, but there is <strong>no single root cause</strong>:
+  ~44% of failures are "couldn't get the data" (sources not implemented or not routed — not a key problem),
+  ~22% are concept gaps, only ~10% are the period bug we fixed, and a systemic conservatism keeps it from
+  confirming true claims. <em>The reliability bottleneck is data coverage, not one bug — and a homogeneous,
+  self-built benchmark overstates both the failure rate and the value of any single fix.</em></p>
 
   <div class="footer">
-    FINM 33200 final project — evaluation track. Benchmarks, scripts, and per-claim results are in
-    the project's <code>evaluation/</code> folder. All numbers are reproducible from the committed data.
+    FINM 33200 final project — evaluation track. Benchmarks, scripts, and per-claim results are in the
+    project's <code>evaluation/</code> folder; all numbers are reproducible from the committed data.
   </div>
 
 </div>
