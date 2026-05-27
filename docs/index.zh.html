@@ -11,7 +11,7 @@
   body { margin:0; background:var(--bg); color:var(--ink);
          font:16px/1.75 -apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif; }
   .wrap { max-width:880px; margin:0 auto; padding:48px 22px 80px; }
-  h1 { font-size:27px; line-height:1.3; margin:0 0 8px; }
+  h1 { font-size:26px; line-height:1.3; margin:0 0 8px; }
   .sub { color:var(--muted); font-size:17px; margin:0 0 28px; }
   h2 { font-size:20px; margin:42px 0 12px; padding-top:14px; border-top:1px solid var(--line); }
   h3 { font-size:16px; margin:24px 0 6px; }
@@ -24,13 +24,13 @@
   td.num,th.num { text-align:right; white-space:nowrap; }
   .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:14px; margin:26px 0 8px; }
   .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; }
-  .card .big { font-size:23px; font-weight:700; }
+  .card .big { font-size:22px; font-weight:700; }
   .card .lbl { color:var(--muted); font-size:13px; margin-top:3px; }
   .up { color:var(--good); } .down { color:var(--bad); }
   .callout { background:#eef4ff; border:1px solid #cfe0ff; border-left:4px solid var(--accent);
              border-radius:10px; padding:14px 16px; margin:18px 0; }
   .bad-box { background:#fdeeec; border:1px solid #f6ccc5; border-left:4px solid var(--bad); }
-  ol.causes>li, ul.imp>li { margin:13px 0; }
+  .ex { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:12px 0; }
   .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
   .tag { display:inline-block; background:#eef1f6; color:var(--muted); font-size:12px;
          padding:2px 9px; border-radius:999px; margin-right:6px; }
@@ -40,13 +40,13 @@
 <div class="wrap">
 
   <h1>这个金融声明核查 agent 行不行 —— AI 帮上忙了吗?</h1>
-  <p class="sub">在真实、带标签的数据上逐阶段评估。我们修了两个真 bug——却发现都没动真实准确率,因为失败是<em>一摞</em>问题,不是单一根因。</p>
+  <p class="sub">在真实、带标签的数据上逐阶段评估。前端能用,但判定环节几乎不确认任何真话——核心原因是一个深层缺陷:时间/期间对齐。</p>
   <div><span class="tag">FINM 33200</span><span class="tag">智能体用例</span><span class="tag">评估与证据</span></div>
 
   <div class="cards">
     <div class="card"><div class="big down">≈36%</div><div class="lbl">真实新闻上的判定准确率</div></div>
     <div class="card"><div class="big down">1 / 50</div><div class="lbl">它真正确认的真话</div></div>
-    <div class="card"><div class="big down">2 个修复 → 0 提升</div><div class="lbl">Fix A + 路由修复后准确率仍 ≈36%</div></div>
+    <div class="card"><div class="big down">数对了,期间错了</div><div class="lbl">核心失败:值找到了,却比到了错误的期间/口径</div></div>
     <div class="card"><div class="big up">+9 分</div><div class="lbl">实体提取加 LLM(80.5% → 89.4%)</div></div>
   </div>
 
@@ -73,61 +73,58 @@
     <tr><td>置信度 AUC(真 vs 假)</td><td class="num"><strong>0.34</strong></td></tr>
   </table>
   <div class="callout bad-box">
-    它<strong>几乎不确认任何真话</strong>(1/50),真假也分不开(AUC ≈ 0.34)——擅长"否定"(假话大多能标出),但几乎不会"确认"一条真话。
+    它<strong>几乎不确认任何真话</strong>(1/50),真假也分不开(AUC ≈ 0.34)——擅长"否定",但几乎不会"确认"一条真话。
   </div>
 
-  <h2>3. 错误出在哪 —— 多个原因,没有单一根因</h2>
-  <p>我们把 50 条真话的失败逐条归到机制:</p>
-  <ol class="causes">
-    <li><strong>a. 没拿到数据 —— 44% —— 它没去查它本来就有的源。</strong>不是缺 key、也不是缺源:
-      <em>(1) 路由太窄(≈13:宏观/商品/指数/FX)</em>——没被送去 FRED,可 FRED 有 CPI/非农/WTI/标普/EUR-USD;
-      <em>(2) 误分类→跳过检索(≈9:股票)</em>——被标成 <code>forecast</code>/<code>opinion</code>,SEC 压根没被查。</li>
-    <li><strong>b. 时间期间比错 —— 10%(我们修的 Fix A)。</strong>SEC 有季度/半年/年度等重叠期间;它拿真话比错了期间 → 判成矛盾。</li>
-    <li><strong>c. 数据找到了也不敢判"真" —— 系统性。</strong>即便数字对上,判定也停在 <code>partially_supported</code>,几乎到不了 <code>supported</code>。</li>
-    <li><strong>d. 分类错 + 概念缺失。</strong>事实被标成 forecast/opinion(9);细分指标如 iPhone/AWS 营收没映射(11);部分实体没提取(3)。</li>
-  </ol>
+  <h2>3. 错误出在哪</h2>
 
-  <h2>4. 我们做的改进(路由 + Fix A)—— 以及结果</h2>
-  <p><strong>Fix A——按期间取 SEC 数。</strong>取数器每个指标只留最近 2 个值,声明对应那个财年的值经常缺 → <code>not_found</code> →
-  升级成 <code>contradicted</code>。改法:年度与季度值都按报告期间列出(标注期末日),保证对应期间的值在证据里。</p>
-  <p><strong>路由修复——把宏观/商品/指数/FX 送去 FRED。</strong>两层路由(选源 + FRED 关键词)都只认几个词。改法:都扩成中英同义词/别名
-  (consumer prices、Brent、S&amp;P 500、EUR/USD…),让这些 claim 路由到 FRED——FRED 本来就有这些序列。</p>
+  <h3>原因 1 —— 时间/期间比错(核心缺陷)</h3>
+  <p>它通常能找到对的指标,但<strong>把它比到了错误的时间点上</strong>,于是真话的数字"对不上"、被否掉。表现为两种:</p>
+
+  <p><strong>(a) SEC:重叠的报告期间。</strong>同一个指标,公司会按很多重叠窗口申报。以苹果营收为例:</p>
   <table>
-    <tr><th>阶段</th><th class="num">准确率</th><th class="num">真话确认</th><th class="num">AUC</th></tr>
-    <tr><td>基线</td><td class="num">36%</td><td class="num">0 / 50</td><td class="num">0.345</td></tr>
-    <tr><td>+ Fix A</td><td class="num">35%</td><td class="num">1 / 50</td><td class="num">0.338</td></tr>
-    <tr><td>+ 路由修复</td><td class="num">36%</td><td class="num">1 / 50</td><td class="num">0.343</td></tr>
+    <tr><th>期间(≈ 截止 2026-03-28)</th><th class="num">数值</th></tr>
+    <tr><td>财年 <strong>Q2</strong>(3 个月)</td><td class="num"><strong>$111.2B</strong></td></tr>
+    <tr><td>上<strong>半年</strong>(6 个月)</td><td class="num">$254.9B</td></tr>
+    <tr><td>上<strong>一季度</strong>(12月)</td><td class="num">$143.8B</td></tr>
+    <tr><td>整<strong>财年</strong></td><td class="num">$416.2B</td></tr>
   </table>
-  <div class="callout bad-box">
-    <strong>两个修复都没动真实准确率。</strong>各自修好了一层(Fix A 去掉了期间错配的误判;路由修复让之前取不到的数据<em>能取到</em>了),
-    但 verdict 仍 ≈36%,因为下一层立刻挡住:
-    <ul>
-      <li><strong>FRED 取数无视日期/口径</strong>(就是"取到了但比错"的根因):<code>fred()</code> 永远只返回<em>最新</em>原始观测值,
-        不看声明那天、也不算同比。于是"S&amp;P 500 在 5/15 收于 7,501"被拿去和 FRED 最新值(5/22 的 7,473)比,"CPI 涨 3.8%"被拿去和
-        指数<em>水平值</em>(332)比、而不是同比% → 对不上。</li>
-      <li>CPI / 非农还被<strong>误分类→跳过</strong>检索。</li>
-    </ul>
-    失败是<strong>一摞</strong>——路由 → 取数无视日期/口径 → 分类 → 判定保守。修好一层只露出下一层:这是"没有单一根因"最有力的证据。
-  </div>
+  <div class="ex">喂进真话 <em>"苹果 Q2 营收 $111.2 billion"</em>,agent 却把 $111.2B 拿去和<strong>别的期间</strong>的数
+  (半年 $254.9B / 全年 $416.2B)比,发现不一样,就把这条真话判成 <code>contradicted</code>。数是对的,只是比错了期间。</div>
 
-  <h2>5. AI 有没有用?(分阶段)</h2>
+  <p><strong>(b) FRED:取数无视日期和口径。</strong>对宏观/市场序列,它永远只拿<em>最新</em>观测、<em>原始水平值</em>——不看声明那天、也不看口径:</p>
+  <div class="ex"><em>"S&amp;P 500 在 5/15 收于 7,501.24。"</em>(对 5/15 是真的)→ agent 取的是 FRED <strong>最新</strong>值
+  (5/22 的 7,473.47)拿去比,从没查 5/15 → 对不上。</div>
+  <div class="ex"><em>"美国 CPI 同比涨 3.8%。"</em>(同比<strong>百分比</strong>)→ agent 取的是 CPI <strong>指数水平值</strong>
+  (332.4),拿"3.8"去比"332.4" → <strong>口径</strong>不一致,永远配不上。</div>
+  <p>→ 无论 SEC 还是 FRED,同一种失败反复出现:<strong>值找到了,却被对齐到错误的期间/口径,于是真话被否。</strong>这是最大的单一缺陷。</p>
+
+  <h3>原因 2 —— 数据找到了也不敢判"真"(系统性)</h3>
+  <p>即便数字<em>确实</em>对上,判定也停在 <code>partially_supported</code>,几乎到不了 <code>supported</code>——50 条真话只确认了<strong>一条</strong>。
+  例:NVIDIA 的营收和财报完全一致,判定却是 <code>partially_supported</code> 而非 <code>supported</code>。它的逻辑天生<em>不</em>肯下"确认"。</p>
+
+  <h3>原因 3 —— (次要)分类错 + 概念缺失</h3>
+  <p>少数失败在上游:有些已发生的事实(如 <em>"微软营收 $82.89B"</em>)被判成 <code>forecast</code>/<code>opinion</code>,根本没去核查;
+  细分指标(iPhone 营收、AWS)不在映射概念里,没东西可比。</p>
+
+  <h2>4. AI 有没有用?(分阶段)</h2>
   <ul>
     <li><strong>实体提取——有用</strong>(80.5% → 89.4%)。</li>
     <li><strong>分类——不适用</strong>(纯规则)。</li>
-    <li><strong>判定——AI 不是瓶颈</strong>;失败在路由、取数对齐、分类,不在模型。</li>
+    <li><strong>判定——AI 不是瓶颈</strong>;失败在时间/期间对齐和"不肯确认"的判定规则,不在模型。</li>
   </ul>
 
-  <h2>6. 结论</h2>
-  <p>前端基本能用,AI 还提升了提取。判定环节在真实声明上不可靠,且<strong>没有单一根因</strong>:~44% 是"没去查它本来就有的源"、
-  ~22% 概念缺失、~10% 期间 bug,外加系统性保守。我们修了两层、<strong>真实准确率纹丝不动(≈36%)</strong>——每修一层就露出下一层。
-  <em>瓶颈是数据/判定管线的深度,不是某个单点 bug。</em></p>
+  <h2>5. 结论</h2>
+  <p>前端基本能用、AI 还提升了提取,但<strong>判定环节几乎不确认任何真话</strong>(1/50;AUC 0.34)。主因是<strong>时间/期间比错</strong>
+  ——数对了却比到了错误的报告期间(SEC)、或只拿最新/原始值(FRED);而且即便数字对上,逻辑也不肯升到 <code>supported</code>。
+  <em>核心问题是证据的时间对齐,不是 AI 模型。</em></p>
 
-  <h2>7. 局限 & 可改进(future work)</h2>
-  <ul class="imp">
-    <li>本基准上,判定失败是路由/取数对齐/分类问题(数据够得着),不是缺数据或缺 key。观点/预测无真假;加密/冷门超出范围。</li>
-    <li><strong>future work(按优先级):</strong>(1) 让 <code>fred()</code> <strong>日期/口径感知</strong>
-      (<code>observation_start/end</code>;"涨 X%"用 <code>units=pc1</code>)——"取到了但比错"的根因修复;
-      (2) 修事实/forecast 分类器;(3) 把声明了但没实现的源(BLS/BEA/ECB…)接上,优先级低。</li>
+  <h2>6. 局限 & 可改进(future work)</h2>
+  <ul>
+    <li>判定准确率在数据源能覆盖的 claim 上评估(美股/宏观);观点/预测无真假(只测分类);加密/冷门超出范围。</li>
+    <li><strong>真正该修的:</strong>让核查<strong>期间 + 口径感知</strong>——SEC 要把声明的财年对齐到正确的报告窗口;
+      FRED 要按声明的<em>日期</em>查(<code>observation_start/end</code>)、按口径查("涨 X%"用 <code>units=pc1</code>);
+      然后让"期间+数值都对上"的真话能升到 <code>supported</code>,而不是卡在 <code>partially_supported</code>。</li>
   </ul>
 
   <div class="footer">
