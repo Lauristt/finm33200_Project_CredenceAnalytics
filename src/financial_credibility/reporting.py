@@ -209,279 +209,59 @@ def build_verification_report(
 
 
 def render_markdown_report(payload: dict[str, Any]) -> str:
-    """Render a compact, portable Markdown report from a report payload."""
+    """Render a user-facing Markdown report, keeping internal trace noise out."""
     summary = payload.get("summary", {})
     lines = [
         "# Credence Verification Report",
         "",
-        "## Summary",
+        "## Bottom Line",
         "",
-        f"- Entities checked: {summary.get('entity_count', 0)}",
-        f"- Fact-checked claims: {summary.get('atomic_claim_count', 0)}",
-        f"- Skipped opinion/forecast claims: {summary.get('skipped_claim_count', 0)}",
-        f"- Human review required: {summary.get('human_review_count', 0)}",
-        f"- Average confidence: {_fmt_conf(summary.get('average_confidence'))}",
+        _bottom_line_sentence(summary),
         "",
     ]
-    coverage = payload.get("coverage_summary") or {}
-    coverage_rows = coverage.get("entities") or []
-    if coverage_rows:
-        lines.extend(
-            [
-                "## Verification Coverage",
-                "",
-                "| Entity | Asset Class | Status | Reason |",
-                "|---|---|---|---|",
-            ]
-        )
-        for item in coverage_rows:
-            lines.append(
-                "| "
-                + " | ".join(
-                    [
-                        _md_cell(item.get("label", "")),
-                        _md_cell(_asset_class_label(str(item.get("asset_class", "")))),
-                        _md_cell(item.get("verification_status", "")),
-                        _md_cell(item.get("reason", "")),
-                    ]
-                )
-                + " |"
-            )
-        if coverage.get("notes"):
-            lines.append("")
-            for note in coverage.get("notes", []):
-                lines.append(f"- {note}")
-        lines.append("")
-    extraction = (payload.get("input") or {}).get("entity_extraction") or {}
-    if extraction:
-        groups = extraction.get("asset_groups") or _group_entities_by_asset_class(extraction.get("entities", []))
-        if groups:
-            lines.extend(["## Detected Asset Classes", ""])
-            for asset_class, entities in groups.items():
-                labels = [_entity_label(entity) for entity in entities if _entity_label(entity)]
-                lines.append(f"- {_asset_class_label(asset_class)}: {', '.join(labels) or 'n/a'}")
-            lines.append("")
+
+    scope_note = _scope_note(payload)
+    if scope_note:
+        lines.extend(["## Scope", "", scope_note, ""])
+
     if payload.get("errors"):
         lines.extend(["## Errors", ""])
         for error in payload["errors"]:
             lines.append(f"- {error.get('ticker')}: {error.get('error')}")
         lines.append("")
-    agent_trace = payload.get("agent_trace") or {}
-    if agent_trace.get("tool_calls"):
-        lines.extend(
-            [
-                "## Multi-Tool Agent Trace",
-                "",
-                f"- Provider: {agent_trace.get('provider', 'n/a')}",
-                f"- Tool profile: {agent_trace.get('tool_profile', 'n/a')}",
-                f"- Termination: {agent_trace.get('termination_reason', 'n/a')}",
-                "",
-                "| Turn | Tool | Status | Duration ms | Error |",
-                "|---:|---|---|---:|---|",
-            ]
-        )
-        for call in agent_trace.get("tool_calls") or []:
-            lines.append(
-                "| "
-                + " | ".join(
-                    [
-                        _md_cell(call.get("turn_index", "")),
-                        _md_cell(call.get("tool_name", "")),
-                        _md_cell(call.get("status", "")),
-                        _md_cell(call.get("duration_ms", "")),
-                        _md_cell(call.get("error") or ""),
-                    ]
-                )
-                + " |"
-            )
-        lines.append("")
-    audit_report = payload.get("audit_report") or {}
-    if audit_report:
-        lines.extend(
-            [
-                "## Audit Report",
-                "",
-                f"- Verdict: {audit_report.get('verdict', 'n/a')}",
-                f"- Score: {_fmt_conf(audit_report.get('score'))}",
-                f"- Summary: {audit_report.get('summary', '')}",
-                "",
-            ]
-        )
-        findings = audit_report.get("findings") or []
-        if findings:
-            lines.extend(
-                [
-                    "| Severity | Category | Finding | Affected | Recommendation |",
-                    "|---|---|---|---|---|",
-                ]
-            )
-            for finding in findings:
-                lines.append(
-                    "| "
-                    + " | ".join(
-                        [
-                            _md_cell(finding.get("severity", "")),
-                            _md_cell(finding.get("category", "")),
-                            _md_cell(finding.get("summary", "")),
-                            _md_cell(finding.get("affected", "")),
-                            _md_cell(finding.get("recommendation", "")),
-                        ]
-                    )
-                    + " |"
-                )
-            lines.append("")
 
     for run in payload.get("runs", []):
         ticker = run.get("ticker", "")
-        lines.extend(
-            [
-                f"## {ticker}",
-                "",
-                f"- Overall: {run.get('overall_conclusion', {}).get('overall_label', 'n/a')}",
-                "",
-            ]
-        )
-        selections = (run.get("metadata") or {}).get("source_selection") or []
-        if selections:
-            lines.extend(["### Selected Sources", ""])
-            for selection in selections:
-                sources = ", ".join(selection.get("selected_sources") or [])
-                rationale = selection.get("rationale", "")
-                lines.append(f"- `{selection.get('claim_id') or 'claim'}`: {sources}. {rationale}")
-            lines.append("")
-        debug_rows = run.get("source_selection_debug") or []
-        if debug_rows:
-            lines.extend(
-                [
-                    "### Source Selection Explanation",
-                    "",
-                    "| Claim | Selected Sources | Policy Result | Rationale |",
-                    "|---|---|---|---|",
-                ]
-            )
-            for item in debug_rows:
-                lines.append(
-                    "| "
-                    + " | ".join(
-                        [
-                            _md_cell(item.get("claim_id", "")),
-                            _md_cell(", ".join(item.get("selected_sources") or []) or "n/a"),
-                            _md_cell(item.get("official_first_policy", "")),
-                            _md_cell(item.get("rationale", "")),
-                        ]
-                    )
-                    + " |"
-                )
-            lines.append("")
-        trace = run.get("audit_trace") or {}
-        if trace.get("events"):
-            lines.extend(["### Agent Trace", ""])
-            for event in trace.get("events", []):
-                lines.append(
-                    f"- `{event.get('step', 'step')}` [{event.get('status', 'n/a')}]: "
-                    f"{event.get('summary', '')}"
-                )
-            lines.append("")
+        lines.extend([f"## {ticker}", ""])
         checked_results = [result for result in run.get("atomic_claims", []) if not _is_skipped_result(result)]
         skipped_results = [result for result in run.get("atomic_claims", []) if _is_skipped_result(result)]
-        if checked_results:
-            lines.extend(
-                [
-                    "| Claim | Verdict | Confidence | Human Review | Evidence | Derivation |",
-                    "|---|---|---:|---|---|---|",
-                ]
-            )
+
+        explanations = {
+            item.get("claim_id"): item
+            for item in run.get("claim_explanations") or []
+            if item.get("claim_id")
+        }
+        evidence_by_url = {item.get("url", ""): item for item in run.get("evidence", []) if item.get("url")}
+        if not checked_results and not skipped_results:
+            lines.append("No fact-checkable claim was produced for this entity.")
+            lines.append("")
+
         for result in checked_results:
             claim = (result.get("atomic_claim") or {}).get("text", "")
-            components = result.get("confidence_components") or {}
-            confidence = _fmt_conf(components.get("final_confidence"))
-            review = ", ".join(result.get("review_reasons") or []) or "No"
-            evidence = ", ".join(result.get("evidence_keys") or result.get("evidence_urls") or []) or "n/a"
-            derivation = _format_derivation(result.get("numeric_derivation"))
-            lines.append(
-                "| "
-                + " | ".join(
-                    [
-                        _md_cell(claim),
-                        _md_cell(result.get("verdict", "")),
-                        _md_cell(confidence),
-                        _md_cell(review),
-                        _md_cell(evidence),
-                        _md_cell(derivation),
-                    ]
-                )
-                + " |"
-            )
-        lines.append("")
-        explanations = run.get("claim_explanations") or []
-        if explanations:
-            lines.extend(["### Claim Explanations", ""])
-            for explanation in explanations:
-                lines.extend(
-                    [
-                        f"#### {explanation.get('claim_id', 'claim')}",
-                        "",
-                        f"- Claim: {explanation.get('claim', '')}",
-                        f"- Verdict: {explanation.get('verdict', 'n/a')}",
-                        f"- Explanation: {explanation.get('summary', '')}",
-                        f"- Numeric check: {explanation.get('numeric_summary', '')}",
-                        f"- Source quality: {explanation.get('source_summary', '')}",
-                    ]
-                )
-                caveats = explanation.get("caveats") or []
-                if caveats:
-                    lines.append(f"- Caveats: {'; '.join(caveats)}")
-                lines.append("")
-        review_explanations = _review_explanations_for_run(run)
-        if review_explanations:
-            lines.extend(["### Human Review Explanations", ""])
-            for item in review_explanations:
-                lines.append(
-                    f"- `{item.get('code')}`: {item.get('description')} "
-                    f"Recommended action: {item.get('recommended_action')}"
-                )
-            lines.append("")
+            explanation = explanations.get((result.get("atomic_claim") or {}).get("claim_id"))
+            lines.append(_claim_result_sentence(claim, result, explanation, evidence_by_url))
+
         if skipped_results:
-            lines.extend(["### Not Fact-Checked", ""])
+            if checked_results:
+                lines.append("")
+            lines.append("Not fact-checked:")
             for result in skipped_results:
                 claim = (result.get("atomic_claim") or {}).get("text", "")
                 claim_type = (result.get("atomic_claim") or {}).get("argument_type", "n/a")
-                lines.append(f"- `{claim_type}`: {claim}")
-            lines.append("")
-        lines.extend(["### Evidence", ""])
-        for evidence in run.get("evidence", [])[:8]:
-            lines.append(
-                f"- [{evidence.get('source_tier')}] {evidence.get('title')} "
-                f"({evidence.get('domain')}) - {evidence.get('url')}"
-            )
+                lines.append(f"- Skipped `{claim_type}`: {claim}")
+
         lines.append("")
-        provenance = run.get("evidence_provenance") or []
-        if provenance:
-            lines.extend(
-                [
-                    "### Evidence Provenance",
-                    "",
-                    "| Source | Tier | Official | License | Date | Used By | URL |",
-                    "|---|---|---|---|---|---|---|",
-                ]
-            )
-            for item in provenance:
-                lines.append(
-                    "| "
-                    + " | ".join(
-                        [
-                            _md_cell(item.get("title", "")),
-                            _md_cell(item.get("source_tier", "")),
-                            _md_cell("Yes" if item.get("is_official_primary") else "No"),
-                            _md_cell(item.get("license_tag", "")),
-                            _md_cell(item.get("published_at") or "n/a"),
-                            _md_cell(", ".join(item.get("used_by_claims") or []) or "n/a"),
-                            _md_cell(item.get("url", "")),
-                        ]
-                    )
-                    + " |"
-                )
-            lines.append("")
+
     return "\n".join(lines).strip() + "\n"
 
 
@@ -612,6 +392,173 @@ def _review_explanations_for_run(run: dict[str, Any]) -> list[dict[str, str]]:
     for result in run.get("atomic_claims", []):
         codes.extend(result.get("review_reasons") or [])
     return explain_review_reasons(codes)
+
+
+def _bottom_line_sentence(summary: dict[str, Any]) -> str:
+    entities = int(summary.get("entity_count") or 0)
+    claims = int(summary.get("atomic_claim_count") or 0)
+    skipped = int(summary.get("skipped_claim_count") or 0)
+    review = int(summary.get("human_review_count") or 0)
+    pieces = [f"Checked {claims} fact-checkable claim{'s' if claims != 1 else ''} across {entities} entit{'ies' if entities != 1 else 'y'}."]
+    if skipped:
+        pieces.append(f"Skipped {skipped} opinion, forecast, or non-falsifiable statement{'s' if skipped != 1 else ''}.")
+    if review:
+        pieces.append(f"{review} claim{'s' if review != 1 else ''} {'need' if review != 1 else 'needs'} human review.")
+    else:
+        pieces.append("No claim was flagged for mandatory human review.")
+    return " ".join(pieces)
+
+
+def _scope_note(payload: dict[str, Any]) -> str:
+    coverage = payload.get("coverage_summary") or {}
+    detected_only = coverage.get("detected_only_entities") or []
+    if not detected_only:
+        return ""
+    grouped: dict[str, list[str]] = {}
+    for item in detected_only:
+        label = str(item.get("label") or item.get("symbol") or item.get("ticker") or "").strip()
+        asset_class = _asset_class_label(str(item.get("asset_class") or "other"))
+        if label:
+            grouped.setdefault(asset_class, []).append(label)
+    if not grouped:
+        return ""
+    fragments = [
+        f"{asset_class}: {', '.join(labels[:5])}{'...' if len(labels) > 5 else ''}"
+        for asset_class, labels in grouped.items()
+    ]
+    return "Detected but not fully checked in this run: " + "; ".join(fragments) + "."
+
+
+def _claim_result_sentence(
+    claim: str,
+    result: dict[str, Any],
+    explanation: dict[str, Any] | None,
+    evidence_by_url: dict[str, dict[str, Any]],
+) -> str:
+    verdict = _report_verdict_label(result.get("verdict"))
+    source = _best_evidence_for_result(result, evidence_by_url)
+    reason = _explanation_sentence(explanation)
+    review = _review_sentence(result.get("review_reasons") or [])
+    parts = [f"- **{verdict}.** {_sentence_text(claim)}"]
+    if source:
+        parts.append(f"Evidence: {_source_label(source)}.")
+    if reason:
+        parts.append(f"Reason: {reason}")
+    if review:
+        parts.append(review)
+    return " ".join(parts)
+
+
+def _sentence_text(value: str) -> str:
+    text = " ".join(str(value or "").split()).strip()
+    if not text:
+        return ""
+    return text if text.endswith((".", "!", "?", "。", "！", "？")) else text + "."
+
+
+def _report_verdict_label(value: Any) -> str:
+    text = str(value or "").lower()
+    if "contradict" in text:
+        return "Inconsistent"
+    if "insufficient" in text or "not_found" in text or "weak" in text:
+        return "Insufficient evidence"
+    if "partial" in text:
+        return "Partially consistent"
+    if "support" in text or "verified" in text:
+        return "Consistent"
+    if "not_applicable" in text:
+        return "Not fact-checkable"
+    return str(value or "n/a")
+
+
+def _best_evidence_for_result(result: dict[str, Any], evidence_by_url: dict[str, dict[str, Any]]) -> dict[str, Any] | None:
+    for url in result.get("evidence_urls") or []:
+        if url in evidence_by_url:
+            return evidence_by_url[url]
+    return None
+
+
+def _source_label(source: dict[str, Any]) -> str:
+    title = str(source.get("title") or source.get("domain") or "source")
+    domain = str(source.get("domain") or "").strip()
+    tier = str(source.get("source_tier") or "").strip()
+    suffix = f" ({domain})" if domain else ""
+    prefix = f"{tier} " if tier else ""
+    return f"{prefix}{title}{suffix}"
+
+
+def _explanation_sentence(explanation: dict[str, Any] | None) -> str:
+    if not explanation:
+        return ""
+    numeric = _clean_report_sentence(str(explanation.get("numeric_summary") or ""))
+    if numeric and not numeric.lower().startswith("no deterministic numeric"):
+        return numeric
+    summary = _clean_report_sentence(str(explanation.get("summary") or ""))
+    if summary:
+        return summary
+    source = _clean_report_sentence(str(explanation.get("source_summary") or ""))
+    if source and not source.lower().startswith("the main evidence is"):
+        return source
+    return ""
+
+
+def _clean_report_sentence(value: str) -> str:
+    text = " ".join(str(value or "").split())
+    blocked_fragments = (
+        "HTTP Error",
+        "fallback:",
+        "matched ",
+        "unmatched claim numbers:",
+        "numeric_match_summary",
+    )
+    if any(fragment in text for fragment in blocked_fragments):
+        return ""
+    if text.startswith("The claim is marked"):
+        return ""
+    import re
+
+    text = re.sub(r"\s+with confidence\s+\d+(?:\.\d+)?", "", text)
+    return text
+
+
+def _review_sentence(reasons: list[str]) -> str:
+    labels = [_review_reason_label(reason) for reason in reasons[:2]]
+    labels = [label for label in labels if label]
+    if not labels:
+        return ""
+    return "Needs human review: " + ", ".join(labels) + "."
+
+
+def _review_reason_label(value: str) -> str:
+    return {
+        "no_official_primary_source": "no official primary source was found",
+        "non_official_sources_only": "only non-official sources were available",
+        "official_source_conflict": "official sources conflict",
+        "amended_or_restatement_or_vintage_revision": "an amendment, restatement, or vintage revision may matter",
+        "low_entity_resolution_confidence": "entity resolution is uncertain",
+        "low_retrieval_sufficiency": "retrieved evidence is limited",
+        "ambiguous_unit_currency_or_period": "the unit, currency, or period is ambiguous",
+        "explanation_claim_needs_human_review": "the explanatory claim needs human judgment",
+    }.get(str(value), str(value).replace("_", " "))
+
+
+def _source_line_for_run(run: dict[str, Any], checked_results: list[dict[str, Any]]) -> str:
+    used_urls = {
+        url
+        for result in checked_results
+        for url in (result.get("evidence_urls") or [])
+    }
+    sources = [
+        source
+        for source in run.get("evidence", [])
+        if source.get("url") in used_urls
+    ]
+    if not sources:
+        sources = (run.get("evidence") or [])[:2]
+    if not sources:
+        return ""
+    labels = [_source_label(source) for source in sources[:3]]
+    return "Sources used: " + "; ".join(labels) + "."
 
 
 def _has_official_source(source_ids: list[str]) -> bool:

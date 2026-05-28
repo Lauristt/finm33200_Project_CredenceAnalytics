@@ -18,6 +18,10 @@ from .reporting import build_verification_report
 DEFAULT_PORT = 8765
 
 
+class ClientDisconnected(Exception):
+    """Raised when the browser cancels an in-flight streaming report."""
+
+
 def run_server(
     host: str = "127.0.0.1",
     port: int = DEFAULT_PORT,
@@ -101,8 +105,11 @@ def _handler(config: ToolkitConfig):
 
             def emit(message: dict[str, Any]) -> None:
                 data = json.dumps(message, ensure_ascii=False).encode("utf-8") + b"\n"
-                self.wfile.write(data)
-                self.wfile.flush()
+                try:
+                    self.wfile.write(data)
+                    self.wfile.flush()
+                except (BrokenPipeError, ConnectionResetError, OSError) as exc:
+                    raise ClientDisconnected from exc
 
             try:
                 report = self._build_report(
@@ -110,8 +117,13 @@ def _handler(config: ToolkitConfig):
                     progress_callback=lambda event: emit({"type": "trace", "event": event}),
                 )
                 emit({"type": "report", "report": report})
+            except ClientDisconnected:
+                return
             except Exception as exc:
-                emit({"type": "error", **error_payload(exc)})
+                try:
+                    emit({"type": "error", **error_payload(exc)})
+                except ClientDisconnected:
+                    return
 
         def _build_report(
             self,
@@ -295,6 +307,7 @@ HTML = r"""<!doctype html>
     button:hover { background: #1a2a31; }
     button.secondary { background: #eef1f2; color: var(--ink); }
     button:disabled { opacity: 0.55; cursor: wait; }
+    button[hidden] { display: none !important; }
     .status {
       font-size: 13px;
       color: var(--muted);
@@ -323,7 +336,7 @@ HTML = r"""<!doctype html>
       width: min(920px, 100%);
       margin: 0 auto;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 10px;
       align-items: end;
       background: rgba(251, 252, 253, 0.94);
@@ -346,6 +359,18 @@ HTML = r"""<!doctype html>
       min-width: 82px;
       height: 42px;
       align-self: end;
+    }
+    .stop-button {
+      min-width: 74px;
+      height: 42px;
+      align-self: end;
+      background: #f7dddd;
+      color: var(--red);
+      box-shadow: none;
+      border: 1px solid #efc1c1;
+    }
+    .stop-button:hover {
+      background: #f0caca;
     }
     .composer-wrap .status {
       width: min(920px, 100%);
@@ -777,7 +802,8 @@ HTML = r"""<!doctype html>
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
     .live-progress.done .pulse-dot,
-    .live-progress.error .pulse-dot {
+    .live-progress.error .pulse-dot,
+    .live-progress.stopped .pulse-dot {
       animation: none;
     }
     .pulse-dot {
@@ -808,13 +834,18 @@ HTML = r"""<!doctype html>
       animation: scan 1.05s ease-in-out infinite;
     }
     .live-progress.done .activity-bar::after,
-    .live-progress.error .activity-bar::after {
+    .live-progress.error .activity-bar::after,
+    .live-progress.stopped .activity-bar::after {
       animation: none;
       width: 100%;
     }
     .live-progress.error .pulse-dot,
     .live-progress.error .activity-bar::after {
       background: var(--red);
+    }
+    .live-progress.stopped .pulse-dot,
+    .live-progress.stopped .activity-bar::after {
+      background: var(--amber);
     }
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(34, 128, 111, 0.34); }
@@ -946,7 +977,7 @@ HTML = r"""<!doctype html>
       }
       .composer-wrap { padding: 12px; }
       .composer { grid-template-columns: minmax(0, 1fr); }
-      .send-button { width: 100%; }
+      .send-button, .stop-button { width: 100%; }
     }
   </style>
 </head>
@@ -970,17 +1001,20 @@ HTML = r"""<!doctype html>
         <label for="statement">Statement</label>
         <textarea id="statement" name="statement" rows="1" placeholder="Paste an investment note or financial statement for verification."></textarea>
         <button id="run" class="send-button" type="submit">Run</button>
+        <button id="stop" class="stop-button" type="button" hidden>Stop</button>
       </div>
     </form>
   </div>
   <script>
     const form = document.getElementById("form");
     const runButton = document.getElementById("run");
+    const stopButton = document.getElementById("stop");
     const statusEl = document.getElementById("status");
     const reportEl = document.getElementById("report");
     const statementEl = document.getElementById("statement");
     let liveTraceEvents = [];
     let liveTraceOpenDetails = new Set();
+    let currentRunController = null;
 
     statementEl.addEventListener("input", resizeComposer);
     statementEl.addEventListener("keydown", (event) => {
@@ -991,6 +1025,14 @@ HTML = r"""<!doctype html>
     });
     resizeComposer();
 
+    stopButton.addEventListener("click", () => {
+      if (!currentRunController) return;
+      currentRunController.abort();
+      stopButton.disabled = true;
+      statusEl.textContent = "Stopping";
+      setLiveTraceFinished("stopped", "Stopping run...");
+    });
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const statement = statementEl.value.trim();
@@ -999,7 +1041,13 @@ HTML = r"""<!doctype html>
         statementEl.focus();
         return;
       }
+      if (currentRunController) {
+        currentRunController.abort();
+      }
+      currentRunController = new AbortController();
       runButton.disabled = true;
+      stopButton.hidden = false;
+      stopButton.disabled = false;
       statementEl.disabled = true;
       statusEl.textContent = "Running";
       liveTraceEvents = [];
@@ -1013,24 +1061,33 @@ HTML = r"""<!doctype html>
         audit: true
       };
       try {
-        const data = await runStreamingReport(payload);
+        const data = await runStreamingReport(payload, currentRunController.signal);
         renderReport(data, statement);
         statusEl.textContent = "Ready";
       } catch (error) {
+        if (isAbortError(error)) {
+          setLiveTraceFinished("stopped", "Run stopped");
+          statusEl.textContent = "Stopped";
+          return;
+        }
         reportEl.innerHTML = renderUserMessage(statement, true) + `<div class="message assistant"><div class="section error">${escapeHtml(error.message)}</div></div>`;
         statusEl.textContent = "Error";
       } finally {
+        currentRunController = null;
         runButton.disabled = false;
+        stopButton.disabled = false;
+        stopButton.hidden = true;
         statementEl.disabled = false;
         statementEl.focus();
       }
     });
 
-    async function runStreamingReport(payload) {
+    async function runStreamingReport(payload, signal) {
       const response = await fetch("/api/report/stream", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
@@ -1040,7 +1097,8 @@ HTML = r"""<!doctype html>
         const fallback = await fetch("/api/report", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          signal
         });
         const data = await fallback.json();
         if (!fallback.ok) throw new Error(formatError(data.error || "Request failed"));
@@ -1052,6 +1110,7 @@ HTML = r"""<!doctype html>
       let buffer = "";
       let finalReport = null;
       while (true) {
+        if (signal && signal.aborted) throw abortError();
         const {value, done} = await reader.read();
         if (done) break;
         buffer += decoder.decode(value, {stream: true});
@@ -1076,6 +1135,16 @@ HTML = r"""<!doctype html>
       }
       if (!finalReport) throw new Error("Report stream ended before a final report was returned.");
       return finalReport;
+    }
+
+    function isAbortError(error) {
+      return Boolean(error && (error.name === "AbortError" || error.message === "Run stopped"));
+    }
+
+    function abortError() {
+      const error = new Error("Run stopped");
+      error.name = "AbortError";
+      return error;
     }
 
     function formatError(error) {
@@ -1164,7 +1233,7 @@ HTML = r"""<!doctype html>
         const label = last.step ? `${formatStepName(last.step)} - ${last.status || "running"}` : "Running verification";
         status.textContent = `${label} (${liveTraceEvents.length} event${liveTraceEvents.length === 1 ? "" : "s"})`;
       }
-      if (progress) progress.classList.remove("done", "error");
+      if (progress) progress.classList.remove("done", "error", "stopped");
       const last = liveTraceEvents[liveTraceEvents.length - 1] || {};
       statusEl.textContent = last.step ? `${last.step}: ${last.status || "running"}` : "Running";
     }
@@ -1173,7 +1242,7 @@ HTML = r"""<!doctype html>
       const progress = document.getElementById("liveTraceProgress");
       const status = document.getElementById("liveTraceStatus");
       if (progress) {
-        progress.classList.remove("done", "error");
+        progress.classList.remove("done", "error", "stopped");
         progress.classList.add(state);
       }
       if (status) status.textContent = label;
@@ -1629,7 +1698,7 @@ HTML = r"""<!doctype html>
       const sourceLines = source && source.text ? humanSourceLines(source.text) : [];
       const parts = [];
       if (priceLines.length) {
-        parts.push(`<div><strong>Price evidence</strong><br>${priceLines.map(escapeHtml).join("<br>")}</div>`);
+        parts.push(`<div><strong>Evidence summary</strong><br>${priceLines.map(escapeHtml).join("<br>")}</div>`);
         return parts.join("<br>");
       }
       if (factLines.length) {

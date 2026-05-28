@@ -44,8 +44,9 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(payload["summary"]["atomic_claim_count"], 1)
         self.assertEqual(payload["summary"]["skipped_claim_count"], 1)
         self.assertIn("Credence Verification Report", payload["report_markdown"])
-        self.assertIn("Not Fact-Checked", payload["report_markdown"])
-        self.assertIn("Agent Trace", payload["report_markdown"])
+        self.assertIn("Bottom Line", payload["report_markdown"])
+        self.assertIn("Not fact-checked", payload["report_markdown"])
+        self.assertNotIn("Agent Trace", payload["report_markdown"])
         self.assertNotIn("Audit trace:", payload["report_markdown"])
         self.assertNotIn("Entity:", payload["report_markdown"])
         self.assertEqual(payload["runs"][0]["ticker"], "AAPL")
@@ -73,14 +74,13 @@ class ReportingTests(unittest.TestCase):
 
         self.assertEqual(payload["input"]["tickers"], ["AAPL"])
         self.assertEqual(payload["input"]["entity_extraction"]["method"], "heuristic")
-        self.assertIn("Detected Asset Classes", payload["report_markdown"])
-        self.assertIn("Single-name equities", payload["report_markdown"])
         self.assertNotIn("Method:", payload["report_markdown"])
-        self.assertIn("Verification Coverage", payload["report_markdown"])
+        self.assertNotIn("Detected Asset Classes", payload["report_markdown"])
+        self.assertNotIn("Verification Coverage", payload["report_markdown"])
         self.assertEqual(payload["coverage_summary"]["fully_verified_entities"][0]["ticker"], "AAPL")
-        self.assertIn("Evidence Provenance", payload["report_markdown"])
-        self.assertIn("Claim Explanations", payload["report_markdown"])
-        self.assertIn("Source Selection Explanation", payload["report_markdown"])
+        self.assertNotIn("Evidence Provenance", payload["report_markdown"])
+        self.assertNotIn("Claim Explanations", payload["report_markdown"])
+        self.assertNotIn("Source Selection Explanation", payload["report_markdown"])
         self.assertTrue(payload["runs"][0]["source_selection_debug"])
         self.assertTrue(payload["runs"][0]["audit_export"]["download_ready"])
 
@@ -99,7 +99,7 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("Macro indicators", payload["report_markdown"])
         self.assertIn("Commodities", payload["report_markdown"])
         self.assertIn("FX", payload["report_markdown"])
-        self.assertIn("Verification Coverage", payload["report_markdown"])
+        self.assertNotIn("Verification Coverage", payload["report_markdown"])
         self.assertEqual(
             sorted(payload["coverage_summary"]["unsupported_asset_classes"]),
             ["commodity", "fx", "macro_indicator"],
@@ -197,7 +197,7 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(statuses["AAPL"], "fully_verified")
         self.assertEqual(statuses["CPI"], "detected_only")
         self.assertEqual(statuses["WTI"], "detected_only")
-        self.assertIn("Detected-only assets", payload["report_markdown"])
+        self.assertIn("Detected but not fully checked", payload["report_markdown"])
 
     def test_report_renders_human_review_explanations(self):
         payload = build_verification_report(
@@ -216,8 +216,9 @@ class ReportingTests(unittest.TestCase):
             ],
         )
 
-        self.assertIn("Human Review Explanations", payload["report_markdown"])
-        self.assertIn("Recommended action", payload["report_markdown"])
+        self.assertNotIn("Human Review Explanations", payload["report_markdown"])
+        self.assertNotIn("Recommended action", payload["report_markdown"])
+        self.assertIn("Needs human review", payload["report_markdown"])
 
     def test_sec_evidence_provenance_marks_official_primary(self):
         payload = build_verification_report(
