@@ -1,0 +1,25 @@
+# Credence Analytics — dependency manifest
+#
+# The core package (src/financial_credibility/) uses ONLY Python standard library.
+# No third-party package is required to run the web UI, CLI, or tests.
+#
+# Install optional integrations only for the features you need:
+
+# ── LLM providers ────────────────────────────────────────────────────────────
+# Required if you want LLM-backed entity extraction or semantic judging.
+# Set OPENAI_API_KEY + OPENAI_MODEL or ANTHROPIC_API_KEY + ANTHROPIC_MODEL in .env.
+#
+# openai>=1.0.0
+# anthropic>=0.20.0
+
+# ── Test runner ───────────────────────────────────────────────────────────────
+# Required to run `pytest`.
+#
+# pytest>=7.4.0
+
+# ── Install everything at once ────────────────────────────────────────────────
+# pip install openai>=1.0 anthropic>=0.20 pytest>=7.4
+#
+# Or use the editable install with optional extras (once pyproject.toml extras
+# are defined):
+#   pip install -e ".[dev]"
