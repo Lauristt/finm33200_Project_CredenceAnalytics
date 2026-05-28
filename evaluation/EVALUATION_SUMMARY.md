@@ -89,6 +89,16 @@ reverse: a false number coincidentally lines up with a *different period's* real
 directions. Misaligned time turns a true claim into a `contradicted` (3A) and lets a false claim slip through
 as `supported` (3B). Time alignment is the linchpin.
 
+### By asset class — no "good" asset; the mechanism splits by data source
+- **True-claim confirmation is ≈0 across all 7 asset classes** (equities, macro, commodities, indices, FX,
+  rates, crypto) — the failure is uniform, not concentrated in one corner. (Per-class *overall* accuracy ranges
+  31–47%, but that mostly reflects each class's true/false mix — the agent catches false and misses true — so it
+  is **not** a measure of which asset it "handles well.")
+- **What differs by asset is the failure mechanism, tied to the data source:**
+  - **Equities → SEC** → time granularity (Q2 / half-year / FY) + unmapped segment metrics (iPhone, AWS).
+  - **Macro / commodities / FX / indices / rates → FRED** → date mismatch (latest vs the claim's date) + unit
+    (% vs index level).
+
 ## 4. Does AI help? (per stage) — value-add is perception, not logic
 - **Entity extraction — yes** (80.5% → 89.4%). The LLM reads *unstructured context* — which token is the
   asset, which is an action, which is a number — that regex/keyword rules can't disentangle. Real, AI-only value.

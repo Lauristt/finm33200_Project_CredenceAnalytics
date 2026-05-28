@@ -140,6 +140,20 @@
   <code>contradicted</code> (3A) and lets a false claim slip through as <code>supported</code> (3B).
   <strong>Time alignment is the linchpin.</strong></div>
 
+  <h3>By asset class — no "good" asset; the mechanism splits by data source</h3>
+  <ul>
+    <li><strong>True-claim confirmation is ≈0 across all 7 asset classes</strong> (equities, macro, commodities,
+      indices, FX, rates, crypto) — the failure is uniform. Per-class <em>overall</em> accuracy ranges 31–47%,
+      but that mostly reflects each class's true/false mix (the agent catches false, misses true), so it is
+      <strong>not</strong> a measure of which asset it "handles well."</li>
+    <li><strong>What differs by asset is the mechanism, tied to the data source:</strong>
+      <ul>
+        <li><strong>Equities → SEC:</strong> time granularity (Q2 / half-year / FY) + unmapped segment metrics (iPhone, AWS).</li>
+        <li><strong>Macro / commodities / FX / indices / rates → FRED:</strong> date mismatch (latest vs the claim's date) + unit (% vs index level).</li>
+      </ul>
+    </li>
+  </ul>
+
   <h2>4. Does AI help? Value-add is perception, not logic</h2>
   <ul>
     <li><strong>Entity extraction — yes</strong> (80.5% → 89.4%). The LLM reads <em>unstructured context</em>

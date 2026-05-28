@@ -128,6 +128,19 @@
   <div class="callout"><strong>关键洞察:</strong>同一个根因——比到了错误的时点——驱动了<strong>两个方向</strong>的错误:
   时间错配把真话变成 <code>contradicted</code>(3A),也让假话蒙混成 <code>supported</code>(3B)。<strong>时间对齐是命门。</strong></div>
 
+  <h3>按资产类别 —— 没有"擅长"的资产;失败机制按数据源分</h3>
+  <ul>
+    <li><strong>真话确认率在全部 7 个资产类别上都 ≈0</strong>(股票、宏观、商品、指数、FX、利率、加密)——整条线统一失效。
+      各类<em>总</em>准确率在 31–47% 之间,但那主要反映每类的真/假题配比(agent 抓假准、确认真差),
+      <strong>不能</strong>当作"它在哪类资产上更强"。</li>
+    <li><strong>真正随资产不同的是失败机制,和数据源绑定:</strong>
+      <ul>
+        <li><strong>股票 → 走 SEC:</strong>栽在时间颗粒度(Q2 / 半年 / 全年)+ 细分指标缺失(iPhone、AWS)。</li>
+        <li><strong>宏观 / 商品 / FX / 指数 / 利率 → 走 FRED:</strong>栽在日期错配(最新 vs 指定日)+ 口径(% vs 指数水平值)。</li>
+      </ul>
+    </li>
+  </ul>
+
   <h2>4. AI 有没有用?价值在"感知",不在"逻辑"</h2>
   <ul>
     <li><strong>实体提取——有用</strong>(80.5% → 89.4%)。LLM 能读懂<em>非结构化语境</em>——哪个词是资产、哪个是动作、
