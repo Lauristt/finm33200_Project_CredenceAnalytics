@@ -1564,7 +1564,7 @@ HTML = r"""<!doctype html>
             </div>
             <div class="claim-field">
               <div class="claim-field-label">What The Source Says</div>
-              <div class="quote-box">${renderSourceSays(source, facts)}</div>
+              <div class="quote-box">${renderSourceSays(source, facts, result)}</div>
             </div>
             <div class="claim-field">
               <div class="claim-field-label">Does It Match The Claim?</div>
@@ -1619,14 +1619,19 @@ HTML = r"""<!doctype html>
       `;
     }
 
-    function renderSourceSays(source, facts) {
+    function renderSourceSays(source, facts, result) {
       const factLines = (facts || []).map(fact => {
         const value = formatFactValue(fact.value, fact.unit || fact.currency);
         const period = humanFactPeriod(fact.report_period || fact.observation_date);
         return `${humanFactName(fact.fact_name || "Fact")}: ${value}${period ? " for " + period : ""}`;
       });
+      const priceLines = source && source.text ? humanPriceHistoryLines(source, result) : [];
       const sourceLines = source && source.text ? humanSourceLines(source.text) : [];
       const parts = [];
+      if (priceLines.length) {
+        parts.push(`<div><strong>Price evidence</strong><br>${priceLines.map(escapeHtml).join("<br>")}</div>`);
+        return parts.join("<br>");
+      }
       if (factLines.length) {
         parts.push(`<div><strong>Structured values</strong><br>${factLines.map(escapeHtml).join("<br>")}</div>`);
       }
@@ -1646,6 +1651,119 @@ HTML = r"""<!doctype html>
       if (converted.length) return converted.slice(0, 5);
       const fallback = excerpt(text, 300);
       return fallback ? [fallback] : [];
+    }
+
+    function humanPriceHistoryLines(source, result) {
+      const parsed = parsePriceHistoryEvidence(source.text || "");
+      if (!parsed) return [];
+      const mode = parsed.windowSource === "single_session_context" ? "daily" : "total";
+      const pointChange = mode === "daily" ? parsed.latestDailyPointChange : parsed.totalPointChange;
+      const returnPct = mode === "daily" ? parsed.latestDailyReturnPct : parsed.totalReturnPct;
+      const startClose = mode === "daily" ? parsed.previousClose : parsed.startClose;
+      const provider = priceProviderName(source);
+      const claimText = ((result || {}).atomic_claim || {}).text || "";
+      const comparison = priceClaimComparison(claimText, pointChange, returnPct);
+      const lines = [
+        `Tool called: historical_prices adapter using ${provider}.`,
+        `Data retrieved: ${parsed.assetName} daily close prices from ${formatDateLabel(parsed.startDate)} to ${formatDateLabel(parsed.endDate)} (${parsed.windowLabel || "requested window"}; ${parsed.observations || "n/a"} observations).`,
+      ];
+      if (Number.isFinite(startClose) && Number.isFinite(parsed.endClose)) {
+        lines.push(
+          `Calculation: close moved from ${formatNumber(startClose)} to ${formatNumber(parsed.endClose)}, which equals ${signedNumber(pointChange)} points and ${signedPercent(returnPct)}.`
+        );
+      }
+      if (comparison) lines.push(comparison);
+      return lines;
+    }
+
+    function parsePriceHistoryEvidence(text) {
+      const value = String(text || "");
+      if (!/historical daily close prices/i.test(value)) return null;
+      const parts = value.split(";").map(item => item.trim()).filter(Boolean);
+      const parsed = {};
+      parts.forEach(part => {
+        let match;
+        if ((match = part.match(/^retrieval_window\s+(.+)$/i))) parsed.windowLabel = match[1];
+        else if ((match = part.match(/^window_source\s+(.+)$/i))) parsed.windowSource = match[1];
+        else if ((match = part.match(/^(.+?)\s+historical daily close prices over/i))) {
+          parsed.assetName = match[1];
+          const observations = part.match(/observations\s+(\d+)/i);
+          if (observations) parsed.observations = observations[1];
+        }
+        else if ((match = part.match(/^observations\s+(\d+)/i))) parsed.observations = match[1];
+        else if ((match = part.match(/^period\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i))) {
+          parsed.startDate = match[1];
+          parsed.endDate = match[2];
+        } else if ((match = part.match(/^start_close\s+(-?[\d.]+)/i))) parsed.startClose = Number(match[1]);
+        else if ((match = part.match(/^end_close\s+(-?[\d.]+)/i))) parsed.endClose = Number(match[1]);
+        else if ((match = part.match(/^latest_daily_calculation\s+previous_close\s+(-?[\d.]+|n\/a)\s+to\s+end_close\s+(-?[\d.]+)/i))) {
+          parsed.previousClose = match[1].toLowerCase() === "n/a" ? NaN : Number(match[1]);
+          parsed.endClose = Number(match[2]);
+        } else if ((match = part.match(/^latest_daily_point_change\s+(-?[\d.]+)/i))) parsed.latestDailyPointChange = Number(match[1]);
+        else if ((match = part.match(/^latest_daily_return_pct\s+(-?[\d.]+)%?/i))) parsed.latestDailyReturnPct = Number(match[1]);
+        else if ((match = part.match(/^total_point_change\s+(-?[\d.]+)/i))) parsed.totalPointChange = Number(match[1]);
+        else if ((match = part.match(/^total_return_pct\s+(-?[\d.]+)%?/i))) parsed.totalReturnPct = Number(match[1]);
+      });
+      if (!parsed.assetName || !parsed.startDate || !parsed.endDate) return null;
+      return parsed;
+    }
+
+    function priceClaimComparison(claimText, pointChange, returnPct) {
+      const claimedPoint = parseClaimedPointChange(claimText);
+      const claimedPct = parseClaimedPercent(claimText);
+      const pieces = [];
+      if (Number.isFinite(claimedPoint) && Number.isFinite(pointChange)) {
+        pieces.push(`claim says ${signedNumber(claimedPoint)} points; calculated ${signedNumber(pointChange)} points`);
+      }
+      if (Number.isFinite(claimedPct) && Number.isFinite(returnPct)) {
+        pieces.push(`claim says ${signedPercent(claimedPct)}; calculated ${signedPercent(returnPct)}`);
+      }
+      if (!pieces.length) return "";
+      const pointOk = !Number.isFinite(claimedPoint) || !Number.isFinite(pointChange) || nearlyEqual(claimedPoint, pointChange, 0.15, 0.005);
+      const pctOk = !Number.isFinite(claimedPct) || !Number.isFinite(returnPct) || nearlyEqual(claimedPct, returnPct, 0.15, 0.06);
+      const conclusion = pointOk && pctOk ? "the price evidence matches within rounding." : "the price evidence does not fully match the claim.";
+      return `Claim comparison: ${pieces.join("; ")}; ${conclusion}`;
+    }
+
+    function parseClaimedPointChange(text) {
+      const match = String(text || "").match(/(-?[\d,]+(?:\.\d+)?)\s+points?/i);
+      return match ? Number(match[1].replace(/,/g, "")) : NaN;
+    }
+
+    function parseClaimedPercent(text) {
+      const match = String(text || "").match(/(-?\d+(?:\.\d+)?)\s*%/);
+      return match ? Number(match[1]) : NaN;
+    }
+
+    function priceProviderName(source) {
+      const title = String((source || {}).title || "");
+      const match = title.match(/^(.+?)\s+\d+-month historical prices/i);
+      if (match) return match[1];
+      return (source || {}).domain || title || "historical price provider";
+    }
+
+    function nearlyEqual(left, right, absoluteTolerance, relativeTolerance) {
+      const diff = Math.abs(Number(left) - Number(right));
+      const scale = Math.max(Math.abs(Number(left)), Math.abs(Number(right)), 1);
+      return diff <= Math.max(absoluteTolerance, scale * relativeTolerance);
+    }
+
+    function signedNumber(value) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return "n/a";
+      return `${numeric > 0 ? "+" : ""}${formatNumber(numeric)}`;
+    }
+
+    function signedPercent(value) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return "n/a";
+      return `${numeric > 0 ? "+" : ""}${trimTrailingZeros(numeric.toFixed(2))}%`;
+    }
+
+    function formatNumber(value) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return "n/a";
+      return trimTrailingZeros(numeric.toLocaleString(undefined, { maximumFractionDigits: 2 }));
     }
 
     function humanSecFactLine(line) {
