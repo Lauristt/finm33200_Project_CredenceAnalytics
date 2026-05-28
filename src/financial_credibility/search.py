@@ -42,6 +42,8 @@ class SearchClient:
         """
         if prefetched_results is not None:
             return [_normalize_result(item) for item in prefetched_results][:max_sources], ["used prefetched results"]
+        if selected_sources == []:
+            return [], ["retrieval skipped because source selection found no compatible source"]
 
         results: list[SearchResult] = []
         notes: list[str] = []

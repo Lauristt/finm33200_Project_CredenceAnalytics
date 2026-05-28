@@ -7,12 +7,32 @@ from typing import Any, Callable
 
 from .config import ToolkitConfig
 from .claims import decompose_claims
-from .entity_extraction import extract_entities_from_memo
+from .entity_extraction import extract_entities_from_memo, is_contextual_non_ticker_token
 from .errors import UserFacingError
 from .explanations import build_claim_explanation, explain_review_reasons
 from .models import EvidencePack
 from .modes.agentic import AgenticCredibilityRunner
+from .price_history import PRICE_HISTORY_ASSET_CLASSES
+from .preprocessing import preprocess_statement
+from .time_context import infer_time_context
 from .toolkit import FinancialCredibilityToolkit
+
+
+_NON_TICKER_TOKENS = {
+    "THE",
+    "HOW",
+    "US",
+    "USA",
+    "AM",
+    "PM",
+}
+
+_PRICE_VERIFIABLE_REPORT_ASSET_CLASSES = {
+    "equity_index",
+    "equity_index_future",
+    "fund_etf",
+    "volatility_index",
+} & PRICE_HISTORY_ASSET_CLASSES
 
 
 def build_verification_report(
@@ -24,15 +44,43 @@ def build_verification_report(
     mode: str = "agentic",
     prefetched_results: list[dict[str, Any]] | None = None,
     progress_callback: Callable[[dict[str, Any]], None] | None = None,
+    tool_profile: str = "agent_core",
+    agent_max_steps: int = 12,
+    audit: bool = True,
 ) -> dict[str, Any]:
     """Run the verifier for each entity hint and return a report payload."""
     cfg = config or ToolkitConfig.from_env()
+    if _is_multi_tool_mode(mode):
+        from .multi_tool_agent import MultiToolAgentRunner
+
+        return MultiToolAgentRunner(cfg).run(
+            memo=memo,
+            tickers=tickers,
+            as_of_date=as_of_date,
+            max_steps=agent_max_steps,
+            tool_profile=tool_profile,
+            audit=audit,
+            prefetched_results=prefetched_results,
+            progress_callback=progress_callback,
+        )
+    original_memo = memo
+    preprocessed = preprocess_statement(memo)
+    memo = preprocessed.clean_text
     _emit_progress(
         progress_callback,
-        "receive_statement",
+        "preprocess_statement",
         "ok",
-        "Received statement and initialized verification report.",
-        outputs={"statement_length": len(memo), "manual_entity_hints": len(tickers)},
+        "Removed copied-page boilerplate before verification." if preprocessed.changed else "Input did not require preprocessing.",
+        outputs=preprocessed.to_dict(),
+    )
+    report_time_context = infer_time_context(memo, as_of_date)
+    effective_as_of_date = report_time_context.effective_as_of_date or as_of_date
+    _emit_progress(
+        progress_callback,
+        "infer_time_context",
+        "ok" if effective_as_of_date else "empty",
+        "Resolved the retrieval time context from the full statement.",
+        outputs=report_time_context.to_dict(),
     )
     manual_tickers = _clean_tickers(tickers)
     _emit_progress(
@@ -42,7 +90,7 @@ def build_verification_report(
         "Extracting financial entities and asset classes from the statement.",
     )
     entity_extraction = _manual_entity_extraction(manual_tickers) if manual_tickers else extract_entities_from_memo(memo, cfg)
-    clean_tickers = manual_tickers or entity_extraction.get("tickers", []) or infer_tickers(memo)
+    clean_tickers = manual_tickers or _verification_targets(entity_extraction) or infer_tickers(memo)
     _emit_progress(
         progress_callback,
         "extract_entities",
@@ -65,9 +113,13 @@ def build_verification_report(
         payload = {
             "input": {
                 "memo": memo,
+                "original_memo": original_memo,
+                "preprocessing": preprocessed.to_dict(),
                 "tickers": [],
                 "entity_extraction": entity_extraction,
-                "as_of_date": as_of_date,
+                "as_of_date": effective_as_of_date,
+                "requested_as_of_date": as_of_date,
+                "time_context": report_time_context.to_dict(),
                 "mode": mode,
                 "max_sources": max_sources,
             },
@@ -103,7 +155,7 @@ def build_verification_report(
                 toolkit=toolkit,
                 memo=scoped_memo,
                 ticker=ticker,
-                as_of_date=as_of_date,
+                as_of_date=effective_as_of_date,
                 max_sources=max_sources,
                 mode=mode,
                 prefetched_results=prefetched_results,
@@ -130,9 +182,13 @@ def build_verification_report(
     payload = {
         "input": {
             "memo": memo,
+            "original_memo": original_memo,
+            "preprocessing": preprocessed.to_dict(),
             "tickers": clean_tickers,
             "entity_extraction": entity_extraction,
-            "as_of_date": as_of_date,
+            "as_of_date": effective_as_of_date,
+            "requested_as_of_date": as_of_date,
+            "time_context": report_time_context.to_dict(),
             "mode": mode,
             "max_sources": max_sources,
         },
@@ -210,6 +266,70 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
         for error in payload["errors"]:
             lines.append(f"- {error.get('ticker')}: {error.get('error')}")
         lines.append("")
+    agent_trace = payload.get("agent_trace") or {}
+    if agent_trace.get("tool_calls"):
+        lines.extend(
+            [
+                "## Multi-Tool Agent Trace",
+                "",
+                f"- Provider: {agent_trace.get('provider', 'n/a')}",
+                f"- Tool profile: {agent_trace.get('tool_profile', 'n/a')}",
+                f"- Termination: {agent_trace.get('termination_reason', 'n/a')}",
+                "",
+                "| Turn | Tool | Status | Duration ms | Error |",
+                "|---:|---|---|---:|---|",
+            ]
+        )
+        for call in agent_trace.get("tool_calls") or []:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        _md_cell(call.get("turn_index", "")),
+                        _md_cell(call.get("tool_name", "")),
+                        _md_cell(call.get("status", "")),
+                        _md_cell(call.get("duration_ms", "")),
+                        _md_cell(call.get("error") or ""),
+                    ]
+                )
+                + " |"
+            )
+        lines.append("")
+    audit_report = payload.get("audit_report") or {}
+    if audit_report:
+        lines.extend(
+            [
+                "## Audit Report",
+                "",
+                f"- Verdict: {audit_report.get('verdict', 'n/a')}",
+                f"- Score: {_fmt_conf(audit_report.get('score'))}",
+                f"- Summary: {audit_report.get('summary', '')}",
+                "",
+            ]
+        )
+        findings = audit_report.get("findings") or []
+        if findings:
+            lines.extend(
+                [
+                    "| Severity | Category | Finding | Affected | Recommendation |",
+                    "|---|---|---|---|---|",
+                ]
+            )
+            for finding in findings:
+                lines.append(
+                    "| "
+                    + " | ".join(
+                        [
+                            _md_cell(finding.get("severity", "")),
+                            _md_cell(finding.get("category", "")),
+                            _md_cell(finding.get("summary", "")),
+                            _md_cell(finding.get("affected", "")),
+                            _md_cell(finding.get("recommendation", "")),
+                        ]
+                    )
+                    + " |"
+                )
+            lines.append("")
 
     for run in payload.get("runs", []):
         ticker = run.get("ticker", "")
@@ -391,9 +511,18 @@ def _build_coverage_summary(
         ticker = str(entity.get("ticker") or "").upper()
         asset_class = str(entity.get("asset_class") or "other")
         label = _entity_label(entity)
+        symbol = str(entity.get("symbol") or "").upper()
+        verified_key = ticker or symbol
         if ticker and ticker in verified_tickers and asset_class == "single_name_equity":
             status = "fully_verified"
             reason = "Public-company verification path was run for this entity."
+        elif (
+            asset_class in _PRICE_VERIFIABLE_REPORT_ASSET_CLASSES
+            and verified_key
+            and verified_key in verified_tickers
+        ):
+            status = "fully_verified"
+            reason = "Price/market-data verification path was run for this asset."
         elif asset_class == "single_name_equity" and ticker:
             status = "not_verified"
             reason = "The entity was detected but no successful verification run was produced."
@@ -507,11 +636,11 @@ def infer_tickers(text: str) -> list[str]:
         "SPX", "NDX", "DJIA", "RUT", "VIX", "ES", "NQ", "RTY", "CL", "GC", "SI", "HG", "NG",
         "DXY", "NFP", "SOFR", "DGS10", "DGS2", "BTC", "ETH", "SPY", "QQQ", "IWM", "HYG",
         "LQD", "TLT", "GLD", "USO", "WTI", "BRENT", "EUR", "JPY", "GBP", "CAD", "AUD",
-        "CHF", "CNY", "CNH", "HY", "IG",
+        "CHF", "CNY", "CNH", "HY", "IG", "THE", "HOW", "US",
     }
     for groups in candidates:
         token = next((item for item in groups if item), "")
-        if token and token not in stopwords:
+        if token and token not in stopwords and not is_contextual_non_ticker_token(token, text):
             tickers.append(token)
     return _clean_tickers(tickers)
 
@@ -557,6 +686,17 @@ def _manual_entity_extraction(tickers: list[str]) -> dict[str, Any]:
     }
 
 
+def _verification_targets(entity_extraction: dict[str, Any]) -> list[str]:
+    targets = []
+    targets.extend(entity_extraction.get("tickers") or [])
+    for entity in entity_extraction.get("entities", []):
+        asset_class = str(entity.get("asset_class") or "")
+        symbol = str(entity.get("symbol") or entity.get("ticker") or "").upper()
+        if asset_class in _PRICE_VERIFIABLE_REPORT_ASSET_CLASSES and symbol:
+            targets.append(symbol)
+    return _clean_tickers(targets)
+
+
 def _memo_for_ticker(memo: str, ticker: str, entity_extraction: dict[str, Any]) -> str:
     aliases = _aliases_for_ticker(ticker, entity_extraction)
     matched = [
@@ -570,10 +710,15 @@ def _memo_for_ticker(memo: str, ticker: str, entity_extraction: dict[str, Any]) 
 def _aliases_for_ticker(ticker: str, entity_extraction: dict[str, Any]) -> list[str]:
     aliases = [ticker]
     for entity in entity_extraction.get("entities", []):
-        if str(entity.get("ticker", "")).upper() != ticker.upper():
+        entity_ticker = str(entity.get("ticker") or "").upper()
+        entity_symbol = str(entity.get("symbol") or "").upper()
+        if ticker.upper() not in {entity_ticker, entity_symbol}:
             continue
         name = str(entity.get("name") or "").strip()
+        symbol = str(entity.get("symbol") or "").strip()
+        aliases.extend([symbol])
         aliases.extend(_name_aliases(name))
+        aliases.extend(_market_symbol_aliases(symbol or ticker))
     return list(dict.fromkeys(alias for alias in aliases if alias))
 
 
@@ -589,6 +734,16 @@ def _name_aliases(name: str) -> list[str]:
     if ".com" in cleaned.lower():
         aliases.append(cleaned.split(".com", 1)[0])
     return aliases
+
+
+def _market_symbol_aliases(symbol: str) -> list[str]:
+    return {
+        "SPX": ["S&P 500", "S and P 500"],
+        "NDQ": ["Nasdaq", "Nasdaq Composite"],
+        "NDX": ["Nasdaq 100"],
+        "DJIA": ["Dow", "Dow Jones", "Dow Jones Industrial Average"],
+        "RUT": ["Russell", "Russell 2000"],
+    }.get(str(symbol or "").upper(), [])
 
 
 def _strip_company_suffixes(value: str) -> str:
@@ -635,6 +790,10 @@ def _run_pack(
     if mode == "strict":
         return toolkit.build_evidence_pack(**kwargs, mode="strict", trace_callback=trace_callback)
     return AgenticCredibilityRunner(toolkit).run(**kwargs, trace_callback=trace_callback)
+
+
+def _is_multi_tool_mode(mode: str) -> bool:
+    return str(mode or "").replace("-", "_").lower() == "multi_tool"
 
 
 def _emit_progress(
@@ -721,7 +880,7 @@ def _clean_tickers(tickers: list[str]) -> list[str]:
     for ticker in tickers:
         for part in str(ticker).replace(";", ",").split(","):
             normalized = part.strip().upper().lstrip("$")
-            if normalized:
+            if normalized and normalized not in _NON_TICKER_TOKENS:
                 cleaned.append(normalized)
     return list(dict.fromkeys(cleaned))
 

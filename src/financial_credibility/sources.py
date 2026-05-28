@@ -17,6 +17,21 @@ DOMAIN_AUTHORITY: list[tuple[str, SourceType, SourceTier, float, str]] = [
     ("api.fiscaldata.treasury.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.95, "U.S. Treasury fiscal data API"),
     ("gleif.org", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.93, "GLEIF legal entity data"),
     ("api.gleif.org", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.93, "GLEIF legal entity API"),
+    ("cftc.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.94, "CFTC official derivatives market data"),
+    ("publicreporting.cftc.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.94, "CFTC Public Reporting Environment"),
+    ("data.ecb.europa.eu", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.94, "ECB Data Portal"),
+    ("data-api.ecb.europa.eu", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.94, "ECB Data Portal API"),
+    ("bis.org", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.92, "BIS official statistics"),
+    ("stats.bis.org", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.92, "BIS SDMX statistics API"),
+    ("bankofengland.co.uk", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.94, "Bank of England statistics"),
+    ("bls.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.95, "BLS official labor and price statistics"),
+    ("api.bls.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.95, "BLS Public Data API"),
+    ("bea.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.95, "BEA official economic accounts"),
+    ("apps.bea.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.95, "BEA API"),
+    ("eia.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.94, "EIA official energy statistics"),
+    ("api.eia.gov", SourceType.REGULATOR_EXCHANGE, SourceTier.T1, 0.94, "EIA Open Data API"),
+    ("openfigi.com", SourceType.DATA_VENDOR, SourceTier.T2, 0.78, "OpenFIGI identifier mapping"),
+    ("api.openfigi.com", SourceType.DATA_VENDOR, SourceTier.T2, 0.78, "OpenFIGI API"),
     ("nasdaq.com", SourceType.REGULATOR_EXCHANGE, SourceTier.T2, 0.82, "exchange/data source"),
     ("nyse.com", SourceType.REGULATOR_EXCHANGE, SourceTier.T2, 0.86, "exchange source"),
     ("reuters.com", SourceType.FINANCIAL_MEDIA, SourceTier.T3, 0.85, "major financial media"),
@@ -54,6 +69,21 @@ SOURCE_GOVERNANCE: dict[str, tuple[LicenseTag, bool]] = {
     "api.fiscaldata.treasury.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
     "gleif.org": (LicenseTag.CC0, True),
     "api.gleif.org": (LicenseTag.CC0, True),
+    "cftc.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "publicreporting.cftc.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "data.ecb.europa.eu": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "data-api.ecb.europa.eu": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "bis.org": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "stats.bis.org": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "bankofengland.co.uk": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "bls.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "api.bls.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "bea.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "apps.bea.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "eia.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "api.eia.gov": (LicenseTag.PUBLIC_OFFICIAL, True),
+    "openfigi.com": (LicenseTag.UNKNOWN, False),
+    "api.openfigi.com": (LicenseTag.UNKNOWN, False),
     "api.stlouisfed.org": (LicenseTag.THIRD_PARTY_RESTRICTED, True),
     "fred.stlouisfed.org": (LicenseTag.THIRD_PARTY_RESTRICTED, True),
     "worldbank.org": (LicenseTag.CC_BY, True),
@@ -195,11 +225,16 @@ def extract_numbers(text: str) -> list[str]:
 
 def extract_substantive_numbers(text: str) -> list[str]:
     """Extract numbers that look like financial facts, not lookback durations."""
+    return [value for value, _, _ in extract_substantive_number_spans(text)]
+
+
+def extract_substantive_number_spans(text: str) -> list[tuple[str, int, int]]:
+    """Extract substantive numeric strings with their source spans."""
     values = []
     for match in NUMBER_RE.finditer(text):
         value = re.sub(r"\s+", " ", match.group(0).strip().lower())
         if value and (_has_financial_numeric_unit(value) or not _is_temporal_duration(text, match.end())):
-            values.append(value)
+            values.append((value, match.start(), match.end()))
     return values
 
 

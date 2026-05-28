@@ -77,6 +77,44 @@ class CliTests(unittest.TestCase):
         self.assertIn("summary", payload)
         self.assertEqual(payload["summary"]["total"], 1)
 
+    def test_cli_multi_tool_writes_agent_trace(self):
+        prefetched = [
+            {
+                "title": "SEC Company Facts for AAPL",
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+                "snippet": "Revenues (USD) 2025 Q4: 102500000000 filed 2025-10-31 form 10-K",
+                "published_at": "2025-10-31",
+                "source": "SEC EDGAR",
+                "raw": {"provider": "sec_company_facts", "cik": 320193},
+            }
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            prefetched_path = Path(tmp) / "prefetched.json"
+            trace_path = Path(tmp) / "agent_trace.json"
+            prefetched_path.write_text(json.dumps(prefetched), encoding="utf-8")
+            argv = [
+                "financial_credibility",
+                "Apple revenue grew 6% year over year.",
+                "--ticker",
+                "AAPL",
+                "--mode",
+                "multi-tool",
+                "--prefetched-json",
+                str(prefetched_path),
+                "--agent-trace-out",
+                str(trace_path),
+            ]
+
+            with patch("sys.argv", argv), contextlib.redirect_stdout(io.StringIO()) as stdout:
+                main()
+
+            trace = json.loads(trace_path.read_text(encoding="utf-8"))
+            payload = json.loads(stdout.getvalue())
+
+        self.assertEqual(trace["tool_profile"], "agent_core")
+        self.assertIn("agent_trace", payload)
+        self.assertEqual(payload["input"]["mode"], "multi_tool")
+
 
 if __name__ == "__main__":
     unittest.main()

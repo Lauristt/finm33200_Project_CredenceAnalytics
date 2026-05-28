@@ -5,12 +5,22 @@ Official docs: https://apps.bea.gov/api/signup/
 Open data page: https://www.bea.gov/open-data
 Authority tier: T1 official primary
 License tag: public_official
-Adapter status: planned
+Adapter status: implemented
 
 Official description summary:
 - BEA's data API provides programmatic access to published BEA economic statistics and metadata.
 - BEA datasets include national accounts, GDP by industry, input-output, regional data, and international accounts.
 - API access requires a BEA UserID/API key.
+- Implemented reader uses mapped starter NIPA table requests for GDP, PCE price index, and personal income claims.
+
+API playbook:
+- Auth/env: requires `BEA_API_KEY`; BEA calls it a `UserID`.
+- Current endpoint: `GET https://apps.bea.gov/api/data`.
+- Current params: `UserID`, `method=GetData`, `DataSetName`, `TableName`, `Frequency`, `Year`, and `ResultFormat=JSON`. The adapter filters by `LineNumber` after retrieval when a mapped line is known.
+- Starter mappings: `GDP/real GDP -> NIPA/T10101/line 1/Q`, `PCE/core PCE -> NIPA/T20804/lines 1 or 25/M`, `personal income -> NIPA/T20600/line 1/M`.
+- Response schema: `BEAAPI.Results.Data[]` with fields such as `TimePeriod`, `LineNumber`, `LineDescription`, `DataValue`, `CL_UNIT`, and notes/release metadata when provided.
+- Time alignment: use the inferred year/as-of context to bound `Year`; for multi-year claims prefer explicit years over latest values.
+- Adapter output: return table/line/frequency and observation rows. If the table/line cannot be mapped, load BEA metadata first instead of guessing.
 
 Use for:
 - Official US GDP, NIPA, personal income, industry, regional, input-output, and international transactions claims.
@@ -28,4 +38,3 @@ Important metadata:
 Progressive-disclosure guidance:
 - First-pass card should only say BEA covers official US economic accounts and metadata.
 - Load this detail for GDP, NIPA, personal income, industry, regional, input-output, or international accounts claims.
-

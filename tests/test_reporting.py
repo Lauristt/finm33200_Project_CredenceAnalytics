@@ -8,6 +8,12 @@ class ReportingTests(unittest.TestCase):
     def test_infer_tickers_from_memo(self):
         self.assertEqual(infer_tickers("Apple ($AAPL) and Microsoft (MSFT) revenue grew."), ["AAPL", "MSFT"])
 
+    def test_infer_tickers_ignores_pm_time_suffix(self):
+        self.assertEqual(infer_tickers("Published 05/20/2026, 04:26 PM"), [])
+
+    def test_infer_tickers_ignores_news_stopwords(self):
+        self.assertEqual(infer_tickers("How major US stock indexes fared Tuesday"), [])
+
     def test_build_report_payload_contains_markdown_and_runs(self):
         progress = []
         payload = build_verification_report(
@@ -98,6 +104,51 @@ class ReportingTests(unittest.TestCase):
             sorted(payload["coverage_summary"]["unsupported_asset_classes"]),
             ["commodity", "fx", "macro_indicator"],
         )
+
+    def test_build_report_runs_price_verification_targets_for_equity_indexes(self):
+        payload = build_verification_report(
+            memo=(
+                "How major US stock indexes fared Tuesday 5/26/2026. "
+                "The S&P 500 added 0.6% Tuesday. "
+                "The Nasdaq composite climbed 1.2%. "
+                "The Dow Jones Industrial Average slipped 0.2%. "
+                "The Russell 2000 index rose 1.8%."
+            ),
+            tickers=[],
+            config=ToolkitConfig(),
+            as_of_date="2026-05-27",
+            prefetched_results=[],
+        )
+
+        self.assertEqual(payload["input"]["tickers"], ["SPX", "NDQ", "DJIA", "RUT"])
+        self.assertEqual([run["ticker"] for run in payload["runs"]], ["SPX", "NDQ", "DJIA", "RUT"])
+        self.assertNotIn("US", payload["input"]["tickers"])
+        self.assertNotIn("THE", payload["input"]["tickers"])
+        statuses = {
+            item["symbol"] or item["ticker"]: item["verification_status"]
+            for item in payload["coverage_summary"]["entities"]
+        }
+        self.assertEqual(statuses["SPX"], "fully_verified")
+        self.assertEqual(statuses["NDQ"], "fully_verified")
+        self.assertEqual(statuses["DJIA"], "fully_verified")
+        self.assertEqual(statuses["RUT"], "fully_verified")
+
+    def test_build_report_infers_event_date_as_retrieval_anchor(self):
+        payload = build_verification_report(
+            memo=(
+                "How major US stock indexes fared Tuesday 5/26/2026. "
+                "Published 05/27/2026, 04:26 PM. "
+                "The S&P 500 added 0.6% Tuesday."
+            ),
+            tickers=[],
+            config=ToolkitConfig(),
+            prefetched_results=[],
+        )
+
+        self.assertEqual(payload["input"]["as_of_date"], "2026-05-26")
+        self.assertEqual(payload["input"]["time_context"]["source"], "explicit_event_date")
+        self.assertTrue(payload["runs"])
+        self.assertEqual(payload["runs"][0]["as_of_date"], "2026-05-26")
 
     def test_auto_extracted_multi_entity_report_scopes_claims(self):
         payload = build_verification_report(

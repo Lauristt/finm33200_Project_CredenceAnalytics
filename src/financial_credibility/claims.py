@@ -13,13 +13,31 @@ _SOFT_AND_RE = re.compile(r"\s+(?:and|while|whereas|but)\s+", re.IGNORECASE)
 
 
 def decompose_claims(claim: str) -> list[AtomicClaim]:
-    """Split a user statement into stable, individually verifiable claims."""
+    """Split a user statement into stable, individually verifiable claims.
+
+    Objective, falsifiable asset properties can be fact-checked. Investor
+    reassurance, discussion/talk framing, and future business capability remain
+    classified as non-factual atoms rather than retrieval targets.
+    """
     pieces: list[str] = []
+    active_context: str | None = None
     for sentence in _CLAUSE_SPLIT_RE.split(claim):
         cleaned = _clean_claim_piece(sentence)
         if not cleaned:
             continue
-        pieces.extend(_split_compound_clause(cleaned))
+        context = _context_heading(cleaned)
+        if context:
+            active_context = context
+            continue
+        for part in _split_compound_clause(cleaned):
+            inline_context = _inline_context_marker(part)
+            if inline_context and _looks_financial_claim(part):
+                active_context = inline_context
+                pieces.append(part)
+            elif active_context and _looks_financial_claim(part) and not _has_context_marker(part, active_context):
+                pieces.append(f"{active_context}, {part}")
+            else:
+                pieces.append(part)
 
     if not pieces:
         pieces = [_clean_claim_piece(claim)]
@@ -59,6 +77,47 @@ def _looks_financial_claim(text: str) -> bool:
         )
         or re.search(r"[-+]?\$?\d", lower)
     )
+
+
+def _context_heading(text: str) -> str | None:
+    lower = text.lower().strip()
+    if re.fullmatch(r"(?:on\s+)?(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)", lower):
+        return text if lower.startswith("on ") else f"On {text}"
+    if re.fullmatch(r"for the year|year to date|ytd|this year", lower):
+        return "For the year"
+    if re.fullmatch(r"today|yesterday", lower):
+        return text.capitalize()
+    return None
+
+
+def _has_context_marker(text: str, context: str) -> bool:
+    lower = text.lower()
+    context_lower = context.lower()
+    if context_lower in lower:
+        return True
+    if context_lower.startswith("on "):
+        return context_lower[3:] in lower
+    if context_lower == "for the year":
+        return bool(re.search(r"\b(for the year|year to date|ytd|this year)\b", lower))
+    return False
+
+
+def _inline_context_marker(text: str) -> str | None:
+    lower = text.lower()
+    if re.search(r"\b(for the year|year to date|ytd|this year)\b", lower):
+        return "For the year"
+    weekday_matches = [
+        (match.start(), match.group(0))
+        for match in re.finditer(r"\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b", lower)
+    ]
+    if weekday_matches:
+        _position, weekday = min(weekday_matches, key=lambda item: item[0])
+        return f"On {weekday.capitalize()}"
+    if re.search(r"\byesterday\b", lower):
+        return "Yesterday"
+    if re.search(r"\btoday\b", lower):
+        return "Today"
+    return None
 
 
 def _clean_claim_piece(text: str) -> str:

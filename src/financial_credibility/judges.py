@@ -63,6 +63,12 @@ class HeuristicJudge(SemanticJudge):
         overlap = token_overlap(claim, combined)
         notes = [f"token overlap={overlap:.2f}"]
 
+        price_direction = _price_history_direction_support(claim, combined)
+        if price_direction == "supports":
+            return SupportLabel.SUPPORTS, 0.90, notes + ["price direction matched latest daily return"]
+        if price_direction == "contradicts":
+            return SupportLabel.CONTRADICTS, 0.82, notes + ["price direction contradicted latest daily return"]
+
         if _has_directional_contradiction(claim, combined):
             return SupportLabel.CONTRADICTS, 0.78, notes + ["directional contradiction marker"]
 
@@ -389,6 +395,9 @@ def _verification_prompt(
         "allowed_verdicts": [verdict.value for verdict in VerificationVerdict],
         "instruction": (
             "Return JSON with verdict, confidence_0_to_1, summary, and issues. "
+            "Do not convert forecasts, opinions, investment judgments, discussion questions, or vague market color "
+            "into factual verdicts. Vague 'beat', 'priced in', and 'beating quarter after quarter' commentary is "
+            "not fact-checkable unless a concrete metric, period, value, and comparison baseline are stated. "
             "For numeric_verification, check whether numbers/periods/units in the claim are supported. "
             "For logic_verification, check whether the reasoning or inference in the claim is supported."
         ),
@@ -487,3 +496,25 @@ def _has_directional_contradiction(claim: str, evidence: str) -> bool:
         bool(re.search(positive, claim_lower) and re.search(negative, evidence_lower))
         or bool(re.search(negative, claim_lower) and re.search(positive, evidence_lower))
     )
+
+
+def _price_history_direction_support(claim: str, evidence: str) -> str | None:
+    evidence_lower = evidence.lower()
+    if "latest_daily_return_pct" not in evidence_lower:
+        return None
+    match = re.search(r"latest_daily_return_pct\s+(-?\d+(?:\.\d+)?)%", evidence_lower)
+    if not match:
+        return None
+    latest_return = float(match.group(1))
+    claim_lower = claim.lower()
+    negative_claim = bool(re.search(r"\b(fell|falls|dropped|declined|lost|slid|tumbled|plunged|down)\b", claim_lower))
+    positive_claim = bool(re.search(r"\b(rose|rises|gained|jumped|surged|rallied|advanced|climbed|up)\b", claim_lower))
+    if negative_claim and latest_return < 0:
+        return "supports"
+    if positive_claim and latest_return > 0:
+        return "supports"
+    if negative_claim and latest_return > 0:
+        return "contradicts"
+    if positive_claim and latest_return < 0:
+        return "contradicts"
+    return None

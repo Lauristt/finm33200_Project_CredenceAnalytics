@@ -11,9 +11,18 @@ Official description summary:
 - FRED API v2 supports bulk retrieval for all series on a release and the entire release history.
 - ALFRED vintage/real-time-period fields are important for checking what was known at a historical date.
 
+API playbook:
+- Auth/env: requires `FRED_API_KEY`.
+- Observations endpoint: `GET https://api.stlouisfed.org/fred/series/observations`.
+- Required params: `series_id`, `api_key`, `file_type=json`. Current adapter also sends `sort_order=desc` and `limit=3`.
+- Time alignment: when article context has an as-of date, send `observation_end=YYYY-MM-DD`; for vintage checks add ALFRED real-time params in a future adapter expansion.
+- Response schema: top-level `observations[]` with `date`, `value`, `realtime_start`, and `realtime_end`.
+- Naming rules: map claim text to known `FRED_SERIES` IDs such as `SOFR`, `DGS2`, `DGS10`, `DGS30`, `FEDFUNDS`, `PCEPI`, `PCEPILFE`, `PAYEMS`, `UNRATE`, `BAMLH0A0HYM2`, `BAMLC0A0CM`, `DCOILWTICO`, `DCOILBRENTEU`, `GOLDAMGBD228NLBM`, `DEXUSEU`, `DEXJPUS`, `DEXUSUK`, `DEXCAUS`, `DEXCHUS`, `DEXUSAL`, and `DTWEXBGS`.
+- Adapter output: return the latest aligned observations and the FRED series page URL; prefer BLS/BEA/EIA direct APIs when the claim explicitly needs the original publishing agency.
+
 Use for:
 - US and global macroeconomic time-series checks available through FRED.
-- CPI, GDP, unemployment, policy rates, Treasury yields, monetary aggregates, and release-level economic data.
+- CPI, PCE/core PCE, GDP, payrolls, unemployment, SOFR, policy rates, Treasury yields, HY/IG OAS, WTI/Brent, gold, major FX, dollar-index proxy, monetary aggregates, and release-level economic data.
 - Vintage-aware checks through ALFRED-compatible real-time periods and vintage dates.
 
 Do not use for:

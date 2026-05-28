@@ -9,10 +9,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from .asset_universe import normalize_asset_class
 from .claims import decompose_claims
 from .config import ToolkitConfig
+from .entity_extraction import heuristic_asset_classes_from_text
 from .models import AtomicClaim, LicenseTag, SourceTier
 from .net import urlopen_request
+from .price_history import needs_historical_price_data
 from .routing import route_sources
 
 
@@ -106,11 +109,58 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         is_official_primary=True,
         brief_description="St. Louis Fed FRED/ALFRED economic time-series API for macro observations and vintage-aware checks.",
         detail_file="fred.md",
-        coverage=["inflation", "CPI", "interest rates", "fed funds", "GDP", "unemployment", "Treasury yields"],
-        best_for=["US macro time-series verification", "release/observation metadata"],
+        coverage=[
+            "inflation",
+            "CPI",
+            "PCE",
+            "SOFR",
+            "interest rates",
+            "fed funds",
+            "GDP",
+            "payrolls",
+            "unemployment",
+            "Treasury yields",
+            "credit spreads",
+            "oil",
+            "gold",
+            "major FX",
+        ],
+        best_for=["US macro, rates, credit, commodity, and FX time-series verification", "release/observation metadata"],
         not_for=["company financial statements"],
         required_inputs=["series_hint"],
-        keywords=["inflation", "cpi", "interest", "fed funds", "rate", "gdp", "unemployment", "yield"],
+        keywords=[
+            "inflation",
+            "cpi",
+            "pce",
+            "core pce",
+            "sofr",
+            "interest",
+            "fed funds",
+            "federal funds",
+            "rate",
+            "gdp",
+            "payrolls",
+            "nfp",
+            "unemployment",
+            "yield",
+            "treasury",
+            "oas",
+            "credit spread",
+            "corporate spread",
+            "corporate bond spread",
+            "high yield",
+            "investment grade",
+            "wti",
+            "brent",
+            "gold",
+            "natural gas",
+            "henry hub",
+            "fx",
+            "exchange rate",
+            "yen",
+            "sterling",
+            "dollar index",
+        ],
     ),
     SourceCatalogEntry(
         source_id="treasury_fiscal_data",
@@ -125,7 +175,7 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         best_for=["US federal debt and fiscal metric verification"],
         not_for=["company fundamentals", "equity prices"],
         required_inputs=["dataset_hint"],
-        keywords=["federal debt", "public debt", "fiscal", "treasury debt", "deficit", "surplus"],
+        keywords=["federal debt", "public debt", "fiscal deficit", "fiscal surplus", "treasury debt", "deficit", "surplus"],
     ),
     SourceCatalogEntry(
         source_id="gleif_entity",
@@ -156,8 +206,8 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["primary source when direct SEC evidence is sufficient", "macro series", "market prices"],
         required_inputs=["entity_or_cik", "concept_or_taxonomy_hint"],
         keywords=["xbrl", "taxonomy", "dimension", "ferc", "hypercube", "fact search"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="arelle",
@@ -207,8 +257,8 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["company filings", "ticker identity", "market prices"],
         required_inputs=["dataset_name", "table_or_series_hint", "period"],
         keywords=["bea", "gdp", "nipa", "personal income", "industry", "regional", "balance of payments", "input-output"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="bls_api",
@@ -224,8 +274,25 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["company financial statements", "securities identifiers", "Treasury debt"],
         required_inputs=["bls_series_id_or_topic", "period"],
         keywords=["bls", "cpi", "ppi", "jobs", "payroll", "wage", "employment", "unemployment", "jolts", "productivity"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
+    ),
+    SourceCatalogEntry(
+        source_id="eia_api",
+        name="EIA Open Data API",
+        provider_name="eia_api",
+        authority_tier=SourceTier.T1,
+        license_tag=LicenseTag.PUBLIC_OFFICIAL,
+        is_official_primary=True,
+        brief_description="U.S. Energy Information Administration APIv2 for official energy prices, inventories, production, consumption, and balances.",
+        detail_file="eia_api.md",
+        coverage=["crude oil", "Brent", "WTI", "natural gas", "petroleum inventories", "energy balances", "electricity"],
+        best_for=["official energy commodity checks", "oil and gas market fundamentals", "EIA route-level metadata verification"],
+        not_for=["company filings", "labor statistics", "security identifiers"],
+        required_inputs=["energy_route_or_series", "period"],
+        keywords=["eia", "wti", "brent", "crude oil", "oil price", "petroleum", "natural gas", "gasoline", "inventory", "energy"],
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="cftc_cot",
@@ -241,8 +308,8 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["cash equity fundamentals", "company filings", "macroeconomic aggregates"],
         required_inputs=["market_or_contract", "report_date"],
         keywords=["cftc", "cot", "commitments of traders", "futures", "open interest", "swaps", "positions"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="finra_query_api",
@@ -257,7 +324,7 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         best_for=["broker-dealer or fixed-income regulatory checks", "FINRA dataset queries", "large filtered regulatory datasets"],
         not_for=["company-reported financial statements", "macro series"],
         required_inputs=["dataset_group", "dataset_name", "filters"],
-        keywords=["finra", "trace", "broker", "dealer", "fixed income", "registration", "short interest"],
+        keywords=["finra", "trace", "broker", "dealer", "fixed income", "corporate bond", "bond trade", "registration", "short interest"],
         adapter_status="planned",
         is_runtime_selectable=False,
     ),
@@ -292,8 +359,8 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["financial statement values", "macro observations", "legal entity LEI records"],
         required_inputs=["identifier_type", "identifier_value"],
         keywords=["figi", "openfigi", "isin", "cusip", "sedol", "ticker mapping", "security identifier"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="ecb_data_portal",
@@ -309,8 +376,8 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["US company filings", "US labor data"],
         required_inputs=["dataflow", "sdmx_key", "period"],
         keywords=["ecb", "euro", "euro area", "hicp", "exchange rate", "banking", "payments", "sdmx"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="bis_data_portal",
@@ -326,8 +393,8 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["single-company SEC facts", "US labor statistics"],
         required_inputs=["dataflow", "sdmx_key", "period"],
         keywords=["bis", "international banking", "cross-border", "debt securities", "liquidity", "financial stability", "sdmx"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="imf_data_api",
@@ -343,8 +410,8 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["US SEC filing facts", "security identifiers"],
         required_inputs=["dataset_or_dataflow", "country_or_series_key", "period"],
         keywords=["imf", "weo", "balance of payments", "bop", "reserves", "fiscal monitor", "country", "sdmx"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="world_bank_indicators",
@@ -360,8 +427,8 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["company filings", "market prices"],
         required_inputs=["country", "indicator_id", "period"],
         keywords=["world bank", "wdi", "indicator", "country", "development", "international debt"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="esma_registers",
@@ -394,8 +461,8 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         not_for=["US company facts", "US fiscal data"],
         required_inputs=["series_or_topic", "period"],
         keywords=["bank of england", "boe", "uk", "sterling", "bank rate", "monetary", "exchange rate"],
-        adapter_status="planned",
-        is_runtime_selectable=False,
+        adapter_status="implemented",
+        is_runtime_selectable=True,
     ),
     SourceCatalogEntry(
         source_id="nasdaq_data_link",
@@ -427,7 +494,37 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         best_for=["price action and relative performance claims"],
         not_for=["reported fundamentals", "official filing facts"],
         required_inputs=["ticker", "date_window"],
-        keywords=["price", "stock", "return", "volatility", "oscillating", "range-bound", "underperformed", "outperformed"],
+        keywords=[
+            "price",
+            "stock",
+            "share",
+            "shares",
+            "return",
+            "daily return",
+            "fell",
+            "dropped",
+            "declined",
+            "lost",
+            "slid",
+            "tumbled",
+            "rose",
+            "gained",
+            "gains",
+            "jumped",
+            "surged",
+            "volatility",
+            "oscillating",
+            "range-bound",
+            "underperformed",
+            "outperformed",
+            "s&p 500",
+            "spx",
+            "nasdaq 100",
+            "record high",
+            "closing high",
+            "rally",
+            "selloff",
+        ],
     ),
     SourceCatalogEntry(
         source_id="company_fundamentals_vendor",
@@ -457,7 +554,7 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         best_for=["supplemental market price checks"],
         not_for=["primary official facts", "financial statement metrics"],
         required_inputs=["ticker"],
-        keywords=["latest price", "eod", "quote", "market price"],
+        keywords=["latest price", "eod", "quote", "market price", "market cap", "market value", "record high", "closing high", "etf"],
     ),
     SourceCatalogEntry(
         source_id="serper_web",
@@ -469,10 +566,26 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         brief_description="Supplemental web search for discovery when official structured APIs cannot directly answer a claim.",
         detail_file="serper_web.md",
         coverage=["web pages", "news", "company IR pages", "supplemental discovery"],
-        best_for=["finding secondary context or official page URLs when structured APIs are insufficient"],
+        best_for=[
+            "finding secondary context or official page URLs when structured APIs are insufficient",
+            "earnings-call, conference-call, transcript, attribution, and management quote discovery",
+        ],
         not_for=["primary evidence when a direct official API exists"],
         required_inputs=["query"],
-        keywords=["news", "memo", "statement", "reported by", "source"],
+        keywords=[
+            "news",
+            "memo",
+            "statement",
+            "reported by",
+            "source",
+            "said",
+            "conference call",
+            "earnings call",
+            "transcript",
+            "announced",
+            "press release",
+            "company ir",
+        ],
     ),
 ]
 
@@ -500,11 +613,11 @@ def load_source_detail(source_id: str) -> str:
         return ""
 
 
-def selected_source_details(source_ids: list[str]) -> list[dict[str, Any]]:
+def selected_source_details(source_ids: list[str], include_planned: bool = False) -> list[dict[str, Any]]:
     """Return detailed descriptions only for selected sources."""
     details = []
     for source_id in dict.fromkeys(str(item) for item in source_ids):
-        entry = _catalog_by_id().get(source_id)
+        entry = _catalog_by_id(include_planned=include_planned).get(source_id)
         if not entry:
             continue
         details.append(
@@ -518,22 +631,35 @@ def selected_source_details(source_ids: list[str]) -> list[dict[str, Any]]:
     return details
 
 
-def candidate_sources_for_claim(claim: str | AtomicClaim, top_k: int = 6) -> list[dict[str, Any]]:
+def candidate_sources_for_claim(
+    claim: str | AtomicClaim,
+    top_k: int = 6,
+    asset_classes: list[str] | tuple[str, ...] | set[str] | None = None,
+    entities: list[dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
     """Find likely source candidates from the source catalog."""
-    return candidate_sources_for_claim_with_options(claim, top_k=top_k)
+    return candidate_sources_for_claim_with_options(
+        claim,
+        top_k=top_k,
+        asset_classes=asset_classes,
+        entities=entities,
+    )
 
 
 def candidate_sources_for_claim_with_options(
     claim: str | AtomicClaim,
     top_k: int = 6,
     include_planned: bool = False,
+    asset_classes: list[str] | tuple[str, ...] | set[str] | None = None,
+    entities: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Find likely source candidates, optionally including planned-but-not-callable sources."""
     text = claim.text if isinstance(claim, AtomicClaim) else claim
-    route_ids = set(route_sources(text)["routes"])
+    detected_asset_classes = _asset_classes_for_source_selection(text, asset_classes, entities)
+    route_ids = set(route_sources(text, asset_classes=detected_asset_classes)["routes"])
     scored = []
     for entry in source_catalog(include_planned=include_planned):
-        score = _catalog_score(text, entry)
+        score = _catalog_score(text, entry, detected_asset_classes)
         has_relevance = score > 0
         if entry.source_id in route_ids or entry.provider_name in route_ids:
             score += 2.5
@@ -541,12 +667,13 @@ def candidate_sources_for_claim_with_options(
         if has_relevance:
             scored.append((score, entry))
     if not scored:
-        scored = [(0.2, entry) for entry in source_catalog(include_planned=include_planned) if entry.is_official_primary][:3]
+        return []
     scored.sort(key=lambda item: (item[0], item[1].is_official_primary, _tier_rank(item[1].authority_tier)), reverse=True)
     return [
         {
             **entry.to_prompt_dict(),
             "candidate_score": round(score, 3),
+            "detected_asset_classes": detected_asset_classes,
         }
         for score, entry in scored[:top_k]
     ]
@@ -558,6 +685,8 @@ def select_sources_for_claims(
     candidate_limit: int = 6,
     max_selected: int = 4,
     include_planned: bool = False,
+    asset_classes: list[str] | tuple[str, ...] | set[str] | None = None,
+    entities: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Select sources for each claim through LLM choice plus policy validation."""
     atoms = decompose_claims(claims) if isinstance(claims, str) else claims
@@ -568,6 +697,8 @@ def select_sources_for_claims(
             candidate_limit=candidate_limit,
             max_selected=max_selected,
             include_planned=include_planned,
+            asset_classes=asset_classes,
+            entities=entities,
         )
         for atom in atoms
     ]
@@ -579,11 +710,20 @@ def select_sources_for_claim(
     candidate_limit: int = 6,
     max_selected: int = 4,
     include_planned: bool = False,
+    asset_classes: list[str] | tuple[str, ...] | set[str] | None = None,
+    entities: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Select sources with brief-first, details-for-selected progressive disclosure."""
     text = claim.text if isinstance(claim, AtomicClaim) else claim
     claim_id = claim.claim_id if isinstance(claim, AtomicClaim) else None
-    candidates = candidate_sources_for_claim_with_options(text, top_k=candidate_limit, include_planned=include_planned)
+    detected_asset_classes = _asset_classes_for_source_selection(text, asset_classes, entities)
+    candidates = candidate_sources_for_claim_with_options(
+        text,
+        top_k=candidate_limit,
+        include_planned=include_planned,
+        asset_classes=detected_asset_classes,
+        entities=entities,
+    )
     cfg = config or ToolkitConfig.from_env()
     raw_selection, method, notes = _llm_or_fallback_selection(text, candidates, cfg, stage="brief")
     initial = validate_source_selection(text, candidates, raw_selection, max_selected=max_selected)
@@ -601,6 +741,7 @@ def select_sources_for_claim(
     return {
         "claim_id": claim_id,
         "claim": text,
+        "detected_asset_classes": detected_asset_classes,
         "candidates": candidates,
         "disclosure_stages": {
             "stage_1": "brief_candidate_cards",
@@ -649,6 +790,20 @@ def validate_source_selection(
         requested = [requested]
     selected = []
     policy_notes = []
+    if not candidates:
+        return {
+            "selected_sources": [],
+            "confidence": 0.15,
+            "rationale": "No source-catalog candidates matched the claim.",
+            "policy_notes": ["no_matching_source_candidates"],
+        }
+    if _explicit_empty_selection(raw_selection):
+        return {
+            "selected_sources": [],
+            "confidence": float(raw_selection.get("confidence", raw_selection.get("confidence_0_to_1", 0.20))),
+            "rationale": str(raw_selection.get("rationale") or "No compatible source was selected for this claim."),
+            "policy_notes": ["source_selection_returned_empty"],
+        }
     for source_id in requested:
         normalized = str(source_id)
         if normalized not in by_id:
@@ -720,6 +875,13 @@ def _llm_or_fallback_selection(
 
 
 def _fallback_selection(claim: str, candidates: list[dict[str, Any]]) -> dict[str, Any]:
+    if not candidates:
+        return {
+            "selected_sources": [],
+            "rationale": "No source-catalog candidates matched this claim closely enough for automated retrieval.",
+            "confidence": 0.15,
+            "needs_cross_check": False,
+        }
     selected = [str(item["source_id"]) for item in candidates[:3]]
     return {
         "selected_sources": selected,
@@ -743,6 +905,11 @@ def _openai_select(
                 "role": "system",
                 "content": (
                     "You select financial verification data sources. "
+                    "Only objective, falsifiable claims about an asset, issuer, security, or macro series should be fact-checked. "
+                    "Do not select sources for forecasts, opinions, investment judgments, discussion questions, "
+                    "management/investor communication purpose, reassurance framing, talk/discussion framing, "
+                    "or vague non-falsifiable market commentary such as 'priced in', 'another beat', or "
+                    "'beating quarter after quarter'. "
                     "Return only valid JSON. Select source_id values only from the provided candidates."
                 ),
             },
@@ -779,6 +946,11 @@ def _anthropic_select(
         "temperature": 0,
         "system": (
             "You select financial verification data sources. "
+            "Only objective, falsifiable claims about an asset, issuer, security, or macro series should be fact-checked. "
+            "Do not select sources for forecasts, opinions, investment judgments, discussion questions, "
+            "management/investor communication purpose, reassurance framing, talk/discussion framing, "
+            "or vague non-falsifiable market commentary such as 'priced in', 'another beat', or "
+            "'beating quarter after quarter'. "
             "Return only valid JSON. Select source_id values only from the provided candidates."
         ),
         "messages": [
@@ -844,8 +1016,12 @@ def _selector_payload(
 ) -> dict[str, Any]:
     instructions = [
         "Select 1-4 source_id values from candidate_sources only.",
+        "A fact-checkable claim must state an objective, falsifiable property of an asset, issuer, security, or macro series.",
+        "Choose sources from the combination of detected asset class and claim intent: price/return claims on equities, ETFs, and indexes can use historical_prices; macro, rates, FX, commodities, credit, fixed income, and derivatives should use their official time-series or regulatory sources.",
         "Prefer official primary sources for factual company, macro, fiscal, and entity claims.",
         "Use supplemental sources only when the claim requires market prices or official sources are insufficient.",
+        "If the statement is forecast/opinion/discussion/vague market color, investor reassurance, management communication purpose, or talk/discussion framing, select no sources and explain it is not fact-checkable.",
+        "Treat vague 'beat', 'priced in', and 'beating quarter after quarter' commentary as not fact-checkable unless it gives a concrete metric, period, value, and comparison baseline.",
         "Do not select planned-only sources unless they are explicitly present in candidate_sources and needed for planning.",
         "Return JSON with selected_sources, rationale, confidence_0_to_1, and needs_cross_check.",
     ]
@@ -882,20 +1058,78 @@ def _selection_with_validated_sources(raw_selection: dict[str, Any], selected_so
     return refined
 
 
-def _catalog_score(claim: str, entry: SourceCatalogEntry) -> float:
+def _catalog_score(
+    claim: str,
+    entry: SourceCatalogEntry,
+    asset_classes: list[str] | tuple[str, ...] | set[str] | None = None,
+) -> float:
+    if entry.source_id == "historical_prices" and not needs_historical_price_data(claim, asset_classes):
+        return 0.0
     text = claim.lower()
     score = 0.0
     for keyword in entry.keywords + entry.coverage + entry.best_for:
-        normalized = keyword.lower()
-        if normalized in text:
-            score += 1.0
-        else:
-            words = [word for word in re.split(r"[^a-z0-9]+", normalized) if len(word) > 2]
-            if words and any(word in text for word in words):
-                score += 0.25
+        score += _keyword_match_score(keyword, text)
     if score > 0 and entry.is_official_primary and _needs_official_primary(claim):
         score += 0.35
     return score
+
+
+def _asset_classes_for_source_selection(
+    text: str,
+    asset_classes: list[str] | tuple[str, ...] | set[str] | None = None,
+    entities: list[dict[str, Any]] | None = None,
+) -> list[str]:
+    explicit = [normalize_asset_class(item) for item in (asset_classes or []) if item]
+    entity_assets = [
+        normalize_asset_class(item.get("asset_class"), item.get("entity_type"))
+        for item in (entities or [])
+        if isinstance(item, dict) and (item.get("asset_class") or item.get("entity_type"))
+    ]
+    inferred = heuristic_asset_classes_from_text(text)
+    return list(dict.fromkeys([*explicit, *entity_assets, *inferred]))
+
+
+_GENERIC_CATALOG_WORDS = {
+    "api",
+    "company",
+    "data",
+    "datasets",
+    "financial",
+    "market",
+    "official",
+    "primary",
+    "public",
+    "recent",
+    "source",
+    "sources",
+    "statistics",
+    "structured",
+}
+
+
+def _keyword_match_score(keyword: str, lower_claim: str) -> float:
+    normalized = keyword.lower().strip()
+    if not normalized:
+        return 0.0
+    if _keyword_in_text(normalized, lower_claim):
+        return 1.0
+    words = [
+        word
+        for word in re.split(r"[^a-z0-9]+", normalized)
+        if len(word) > 2 and word not in _GENERIC_CATALOG_WORDS
+    ]
+    if len(words) >= 2 and all(_keyword_in_text(word, lower_claim) for word in words):
+        return 0.5
+    return 0.0
+
+
+def _keyword_in_text(keyword: str, lower_text: str) -> bool:
+    normalized = keyword.lower().strip()
+    if not normalized:
+        return False
+    if re.search(r"\W", normalized):
+        return normalized in lower_text
+    return re.search(rf"(?<![a-z0-9]){re.escape(normalized)}(?![a-z0-9])", lower_text) is not None
 
 
 def _needs_official_primary(claim: str) -> bool:
@@ -903,7 +1137,8 @@ def _needs_official_primary(claim: str) -> bool:
     return bool(
         re.search(
             r"\b(revenue|sales|income|eps|cash flow|debt|assets|liabilities|margin|buyback|"
-            r"repurchase|filed|filing|inflation|cpi|gdp|unemployment|federal debt|treasury|lei|legal entity)\b",
+            r"repurchase|filed|filing|inflation|cpi|gdp|unemployment|federal debt|treasury|lei|legal entity|"
+            r"cftc|cot|futures|open interest|ecb|euro area|bis|world bank|bank of england|boe)\b",
             lower,
         )
     )
@@ -927,6 +1162,16 @@ def _combined_method(first_pass: str, second_pass: str) -> str:
     if second_pass == "no_detail_refinement":
         return first_pass
     return f"{first_pass}+{second_pass}"
+
+
+def _explicit_empty_selection(raw_selection: dict[str, Any]) -> bool:
+    if "selected_sources" in raw_selection:
+        value = raw_selection.get("selected_sources")
+    elif "sources" in raw_selection:
+        value = raw_selection.get("sources")
+    else:
+        return False
+    return value == [] or value == ""
 
 
 def _loads_json_object(text: str) -> dict[str, Any]:

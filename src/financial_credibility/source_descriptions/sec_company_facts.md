@@ -11,6 +11,15 @@ Official description summary:
 - Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.
 - It is the default primary evidence source for US public-company financial-statement metric claims.
 
+API playbook:
+- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.
+- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.
+- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.
+- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.
+- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.
+- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.
+- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.
+
 Use for:
 - US public-company reported financial statement facts extracted from XBRL.
 - Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.

@@ -23,7 +23,11 @@ def derive_numeric_check(claim: str, facts: list[CanonicalFact], numeric_check: 
         return fuzzy
     if is_growth_claim:
         return None
-    if numeric_check.verdict == VerificationVerdict.NOT_APPLICABLE.value:
+    if numeric_check.verdict in {
+        VerificationVerdict.NOT_APPLICABLE.value,
+        VerificationVerdict.INSUFFICIENT.value,
+        VerificationVerdict.NOT_FOUND.value,
+    }:
         return None
     return NumericDerivation(
         expression="numeric_verification",

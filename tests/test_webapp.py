@@ -1,6 +1,7 @@
 import unittest
 
-from financial_credibility.webapp import HTML, _statement_from_payload
+from financial_credibility.config import ToolkitConfig
+from financial_credibility.webapp import HTML, _handler, _statement_from_payload
 
 
 class WebappTests(unittest.TestCase):
@@ -30,8 +31,17 @@ class WebappTests(unittest.TestCase):
         self.assertIn("Data Source Checked", HTML)
         self.assertIn("What The Source Says", HTML)
         self.assertIn("Does It Match The Claim?", HTML)
+        self.assertIn("humanFactName", HTML)
+        self.assertIn("RevenueFromContractWithCustomerExcludingAssessedTax: \"Revenue\"", HTML)
+        self.assertIn("formatFactValue", HTML)
+        self.assertIn("isDisplayableFact", HTML)
+        self.assertIn("/^SEC Company Facts", HTML)
         self.assertIn("Human Review", HTML)
         self.assertIn("needs-review", HTML)
+        self.assertIn("liveTraceOpenDetails", HTML)
+        self.assertIn("rememberLiveTraceDetailState", HTML)
+        self.assertIn("restoreLiveTraceDetailState", HTML)
+        self.assertIn("data-detail-key", HTML)
         self.assertIn("Selected Sources", HTML)
         self.assertNotIn("Why These Sources Were Selected", HTML)
         self.assertNotIn("Source routing", HTML)
@@ -49,6 +59,30 @@ class WebappTests(unittest.TestCase):
             "Apple revenue grew.",
         )
         self.assertEqual(_statement_from_payload({"memo": "legacy"}), "legacy")
+
+    def test_report_api_accepts_multi_tool_mode(self):
+        handler_cls = _handler(ToolkitConfig())
+        handler = object.__new__(handler_cls)
+        payload = handler._build_report(
+            {
+                "statement": "Apple revenue grew 6% year over year.",
+                "tickers": ["AAPL"],
+                "mode": "multi_tool",
+                "prefetched_results": [
+                    {
+                        "title": "SEC Company Facts for AAPL",
+                        "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+                        "snippet": "Revenues (USD) 2025 Q4: 102500000000 filed 2025-10-31 form 10-K",
+                        "published_at": "2025-10-31",
+                        "source": "SEC EDGAR",
+                        "raw": {"provider": "sec_company_facts", "cik": 320193},
+                    }
+                ],
+            }
+        )
+
+        self.assertIn("agent_trace", payload)
+        self.assertEqual(payload["input"]["mode"], "multi_tool")
 
 
 if __name__ == "__main__":

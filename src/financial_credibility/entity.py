@@ -8,6 +8,28 @@ from typing import Any
 from .models import EntityResolution, Evidence, SearchResult
 
 
+MARKET_SYMBOLS = {
+    "SPX",
+    "NDQ",
+    "NDX",
+    "DJIA",
+    "RUT",
+    "VIX",
+    "ES",
+    "NQ",
+    "RTY",
+    "SPY",
+    "QQQ",
+    "IWM",
+    "DIA",
+    "HYG",
+    "LQD",
+    "TLT",
+    "GLD",
+    "USO",
+}
+
+
 def resolve_entity(
     ticker: str,
     evidence: list[Evidence] | None = None,
@@ -36,10 +58,14 @@ def resolve_entity(
         sources.append("FIGI")
     if evidence and any(item.entity_match_score >= 0.75 for item in evidence):
         sources.append("evidence_entity_match")
+    if normalized_ticker in MARKET_SYMBOLS:
+        sources.append("asset_symbol_map")
 
     confidence = 0.55
     if normalized_ticker:
         confidence = 0.65
+    if normalized_ticker in MARKET_SYMBOLS:
+        confidence = max(confidence, 0.78)
     if discovered_cik:
         confidence = max(confidence, 0.85)
     if discovered_cik and discovered_lei:
@@ -49,7 +75,7 @@ def resolve_entity(
         issues.append("low_evidence_entity_match")
 
     entity_id = discovered_lei or (f"CIK{discovered_cik}" if discovered_cik else normalized_ticker)
-    if not discovered_cik and not discovered_lei:
+    if not discovered_cik and not discovered_lei and normalized_ticker not in MARKET_SYMBOLS:
         issues.append("ticker_only_entity_resolution")
 
     return EntityResolution(

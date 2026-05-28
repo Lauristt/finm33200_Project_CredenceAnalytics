@@ -2,9 +2,10 @@ import unittest
 from datetime import date
 from unittest.mock import patch
 
-from financial_credibility.adapters import export_anthropic_tools, export_openai_tools
+from financial_credibility.adapters import export_anthropic_tools, export_openai_response_tools, export_openai_tools
 from financial_credibility.config import ToolkitConfig
 from financial_credibility.price_history import PricePoint
+from financial_credibility.tool_profiles import tool_names_for_profile
 from financial_credibility.tool_registry import all_registered_tools, get_registered_tool
 from financial_credibility.tool_runtime import execute_tool
 
@@ -14,6 +15,7 @@ class ToolLayerTests(unittest.TestCase):
         names = {tool.name for tool in all_registered_tools()}
 
         self.assertIn("get_historical_prices", names)
+        self.assertIn("load_source_documentation", names)
         self.assertIn("verify_logic_claim", names)
         self.assertIn("build_evidence_pack", names)
         self.assertEqual(get_registered_tool("classify_claim").requires_keys, [])
@@ -26,6 +28,41 @@ class ToolLayerTests(unittest.TestCase):
         self.assertEqual(openai_tools[0]["type"], "function")
         self.assertIn("function", openai_tools[0])
         self.assertIn("input_schema", anthropic_tools[0])
+
+    def test_tool_profiles_keep_default_surface_narrow(self):
+        core = tool_names_for_profile("agent_core")
+        deep = tool_names_for_profile("retrieval_deep")
+        review = tool_names_for_profile("review")
+
+        self.assertIn("retrieve_evidence", core)
+        self.assertIn("load_source_documentation", core)
+        self.assertIn("get_sec_company_facts", deep)
+        self.assertNotIn("build_evidence_pack", core)
+        self.assertEqual(review, ["summarize_evidence_pack", "summarize_audit_report", "review_tool_surface"])
+
+    def test_response_schemas_include_guidance_and_non_strict_functions(self):
+        tools = export_openai_response_tools("agent_core")
+        descriptions = {tool["name"]: tool["description"] for tool in tools}
+
+        self.assertTrue(all(tool["strict"] is False for tool in tools))
+        self.assertIn("Use when:", descriptions["retrieve_evidence"])
+        self.assertIn("Do not use when:", descriptions["retrieve_evidence"])
+        self.assertIn("Recommended next tools:", descriptions["retrieve_evidence"])
+        self.assertIn("endpoint schemas", descriptions["load_source_documentation"])
+        self.assertNotIn("build_evidence_pack", descriptions)
+
+    def test_execute_load_source_documentation_returns_api_playbook(self):
+        result = execute_tool(
+            "load_source_documentation",
+            {"source_ids": ["historical_prices", "market_prices_vendor"]},
+            ToolkitConfig(),
+        )
+
+        self.assertEqual(result["missing_source_ids"], [])
+        docs = "\n".join(item["detail_markdown"] for item in result["details"])
+        self.assertIn("Financial Modeling Prep API playbook", docs)
+        self.assertIn("FMP_API_KEY", docs)
+        self.assertIn("^GSPC", docs)
 
     def test_execute_classify_claim(self):
         result = execute_tool(
@@ -67,6 +104,64 @@ class ToolLayerTests(unittest.TestCase):
         self.assertEqual(retrieved["argument_type"], "metric_fact")
         self.assertEqual(numeric["verdict"], "verified")
 
+    def test_retrieve_and_verify_skip_forecast_or_opinion_claims(self):
+        retrieved = execute_tool(
+            "retrieve_evidence",
+            {
+                "claim": "Nvidia revenue could accelerate into 2027.",
+                "ticker": "NVDA",
+                "prefetched_results": [
+                    {
+                        "title": "SEC Company Facts for NVDA",
+                        "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+                        "snippet": "Revenues (USD) 2026 Q1: 81620000000 filed 2026-05-20 form 10-Q",
+                        "source": "SEC EDGAR",
+                    }
+                ],
+            },
+            ToolkitConfig(),
+        )
+        verified = execute_tool(
+            "verify_atomic_claim",
+            {
+                "claim": "Intel has a weak AI moat versus competing silicon.",
+                "ticker": "INTC",
+                "evidence": [],
+                "canonical_facts": [],
+            },
+            ToolkitConfig(),
+        )
+
+        self.assertTrue(retrieved["skipped"])
+        self.assertEqual(retrieved["evidence"], [])
+        self.assertTrue(verified["skipped"])
+        self.assertEqual(verified["atomic_claims"][0]["verdict"], "not_applicable")
+
+    def test_retrieve_skips_investor_reassurance_framing(self):
+        retrieved = execute_tool(
+            "retrieve_evidence",
+            {
+                "claim": (
+                    "Nvidia CEO Jensen Huang aimed to assure investors that the world's most valuable "
+                    "company can keep up its blockbuster growth with the help of a broad base of customers."
+                ),
+                "ticker": "NVDA",
+                "prefetched_results": [
+                    {
+                        "title": "SEC Company Facts for NVDA",
+                        "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+                        "snippet": "Revenues (USD) 2026 Q1: 81620000000 filed 2026-05-20 form 10-Q",
+                        "source": "SEC EDGAR",
+                    }
+                ],
+            },
+            ToolkitConfig(),
+        )
+
+        self.assertTrue(retrieved["skipped"])
+        self.assertEqual(retrieved["classification"]["argument_type"], "opinion_analysis")
+        self.assertEqual(retrieved["evidence"], [])
+
     def test_execute_build_evidence_pack_with_prefetched_results(self):
         result = execute_tool(
             "build_evidence_pack",
@@ -89,6 +184,24 @@ class ToolLayerTests(unittest.TestCase):
         self.assertEqual(result["mode"], "agentic")
         self.assertIn("numeric_check", result)
         self.assertEqual(result["numeric_check"]["verdict"], "verified")
+
+    def test_execute_review_and_audit_tools(self):
+        review = execute_tool("review_tool_surface", {"profile": "agent_core"}, ToolkitConfig())
+        audit = execute_tool(
+            "audit_verification_chain",
+            {
+                "agent_trace": {
+                    "run_id": "trace_1",
+                    "tool_profile": "all",
+                    "tool_calls": [],
+                }
+            },
+            ToolkitConfig(),
+        )
+
+        self.assertEqual(review["profile"], "agent_core")
+        self.assertGreater(review["tool_count"], 1)
+        self.assertIn("tool_surface", {finding["category"] for finding in audit["findings"]})
 
     def test_get_historical_prices_passes_parameters_to_provider(self):
         calls = {}

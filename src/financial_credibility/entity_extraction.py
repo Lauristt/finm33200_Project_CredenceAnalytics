@@ -17,6 +17,7 @@ _TICKER_RE = re.compile(r"^[A-Z][A-Z0-9]{0,4}(?:[.-][A-Z])?$")
 _INLINE_TICKER_RE = re.compile(r"\$([A-Z]{1,5}(?:[.-][A-Z])?)\b|\(([A-Z]{1,5}(?:[.-][A-Z])?)\)")
 _UPPER_TOKEN_RE = re.compile(r"\b([A-Z]{2,5}(?:[.-][A-Z])?)\b")
 _AMBIGUOUS_TICKERS = {"AI", "PMI"}
+_TIME_SUFFIX_TICKERS = {"AM", "PM"}
 _AMBIGUOUS_TICKER_CONTEXT = {
     "AI": re.compile(
         r"\$AI\b|\(AI\)|\b(?:ticker|symbol|NYSE|NASDAQ)\s*[:=]?\s*AI\b|\bC3\.?\s*ai\b",
@@ -27,21 +28,38 @@ _AMBIGUOUS_TICKER_CONTEXT = {
         re.IGNORECASE,
     ),
 }
+_TIME_SUFFIX_RE = re.compile(r"(?:\b\d{1,2}:\d{2}(?::\d{2})?|\b\d{1,2})\s*$")
 _STOPWORDS = {
+    "THE",
+    "HOW",
+    "US",
     "CEO",
     "CFO",
     "CPI",
     "EPS",
     "EBITDA",
     "EDGAR",
+    "BEA",
+    "BIS",
+    "BLS",
+    "BOE",
+    "CFTC",
+    "ECB",
+    "EIA",
+    "FINRA",
     "FRED",
     "GAAP",
     "GDP",
+    "HICP",
+    "IMF",
     "IR",
     "LLM",
     "MD",
     "PMI",
     "SEC",
+    "SOFR",
+    "TRACE",
+    "WDI",
     "AUD",
     "CAD",
     "CHF",
@@ -54,17 +72,25 @@ _STOPWORDS = {
     "HY",
     "IG",
     "JPY",
+    "OAS",
+    "PCE",
+    "PPI",
+    "WTI",
 }
 
 _KNOWN_PUBLIC_COMPANIES = [
     (r"\bApple(?: Inc\.?)?\b", "Apple Inc.", "AAPL"),
     (r"\bMicrosoft(?: Corporation| Corp\.?)?\b", "Microsoft Corporation", "MSFT"),
     (r"\bNvidia(?: Corporation| Corp\.?)?\b", "NVIDIA Corporation", "NVDA"),
+    (r"\bQualcomm(?: Incorporated| Inc\.?)?\b", "QUALCOMM Incorporated", "QCOM"),
+    (r"\bMicron(?: Technology)?(?: Inc\.?)?\b", "Micron Technology, Inc.", "MU"),
+    (r"\bBroadcom(?: Inc\.?)?\b", "Broadcom Inc.", "AVGO"),
     (r"\bAmazon(?:\.com)?(?: Inc\.?)?\b", "Amazon.com, Inc.", "AMZN"),
     (r"\bAlphabet(?: Inc\.?)?\b|\bGoogle\b", "Alphabet Inc.", "GOOGL"),
     (r"\bMeta(?: Platforms)?(?: Inc\.?)?\b|\bFacebook\b", "Meta Platforms, Inc.", "META"),
     (r"\bTesla(?: Inc\.?)?\b", "Tesla, Inc.", "TSLA"),
     (r"\bNetflix(?: Inc\.?)?\b", "Netflix, Inc.", "NFLX"),
+    (r"\bPhilip Morris(?: International)?(?: Inc\.?)?\b", "Philip Morris International Inc.", "PM"),
     (r"\bJPMorgan Chase(?: & Co\.?)?\b|\bJP Morgan\b", "JPMorgan Chase & Co.", "JPM"),
     (r"\bBank of America(?: Corporation| Corp\.?)?\b", "Bank of America Corporation", "BAC"),
     (r"\bBerkshire Hathaway\b", "Berkshire Hathaway Inc.", "BRK.B"),
@@ -72,6 +98,7 @@ _KNOWN_PUBLIC_COMPANIES = [
 
 _KNOWN_SYMBOL_ASSETS = {
     "SPX": ("S&P 500 Index", "equity_index", "index"),
+    "NDQ": ("Nasdaq Composite Index", "equity_index", "index"),
     "NDX": ("Nasdaq 100 Index", "equity_index", "index"),
     "DJIA": ("Dow Jones Industrial Average", "equity_index", "index"),
     "RUT": ("Russell 2000 Index", "equity_index", "index"),
@@ -87,6 +114,7 @@ _KNOWN_SYMBOL_ASSETS = {
     "WTI": ("WTI Crude Oil", "commodity", "commodity"),
     "DXY": ("U.S. Dollar Index", "fx", "currency_index"),
     "PMI": ("Purchasing Managers' Index", "macro_indicator", "macro_indicator"),
+    "PPI": ("Producer Price Index", "macro_indicator", "macro_indicator"),
     "BTC": ("Bitcoin", "crypto", "cryptoasset"),
     "ETH": ("Ether", "crypto", "cryptoasset"),
     "SPY": ("SPDR S&P 500 ETF", "fund_etf", "etf"),
@@ -101,12 +129,16 @@ _KNOWN_SYMBOL_ASSETS = {
 
 _ASSET_PATTERNS = [
     (r"\bS&P\s*500\b|\bSPX\b", "S&P 500 Index", "SPX", "equity_index", "index"),
+    (r"\bNasdaq\s+Composite\b|\bNasdaq composite\b|\bNDQ\b", "Nasdaq Composite Index", "NDQ", "equity_index", "index"),
     (r"\bNasdaq\s*100\b|\bNDX\b", "Nasdaq 100 Index", "NDX", "equity_index", "index"),
-    (r"\bDow Jones(?: Industrial Average)?\b|\bDJIA\b", "Dow Jones Industrial Average", "DJIA", "equity_index", "index"),
+    (r"\bNasdaq\b", "Nasdaq Composite Index", "NDQ", "equity_index", "index"),
+    (r"\bDow Jones(?: Industrial Average)?\b|\bDJIA\b|\bthe\s+Dow\b", "Dow Jones Industrial Average", "DJIA", "equity_index", "index"),
     (r"\bRussell\s*2000\b|\bRUT\b", "Russell 2000 Index", "RUT", "equity_index", "index"),
     (r"\bVIX\b|\bvolatility index\b", "CBOE Volatility Index", "VIX", "volatility_index", "index"),
     (r"\bE-?mini S&P(?: 500)?\b|\bES futures?\b", "E-mini S&P 500 Futures", "ES", "equity_index_future", "future"),
     (r"\bE-?mini Nasdaq(?: 100)?\b|\bNQ futures?\b", "E-mini Nasdaq 100 Futures", "NQ", "equity_index_future", "future"),
+    (r"\bS&P\s*500 futures?\b|\bSPX futures?\b", "S&P 500 Futures", "ES", "equity_index_future", "future"),
+    (r"\bNasdaq(?:\s*100)? futures?\b|\bNDX futures?\b", "Nasdaq Futures", "NQ", "equity_index_future", "future"),
     (r"\bWTI\b|\bWest Texas Intermediate\b|\bcrude oil\b", "WTI Crude Oil", "WTI", "commodity", "commodity"),
     (r"\bBrent\b", "Brent Crude Oil", "BRENT", "commodity", "commodity"),
     (r"\bgold\b|\bXAU\b", "Gold", "XAU", "commodity", "commodity"),
@@ -116,9 +148,12 @@ _ASSET_PATTERNS = [
     (r"\bEUR/USD\b|\bEURUSD\b", "EUR/USD", "EUR/USD", "fx", "currency_pair"),
     (r"\bUSD/JPY\b|\bUSDJPY\b", "USD/JPY", "USD/JPY", "fx", "currency_pair"),
     (r"\bGBP/USD\b|\bGBPUSD\b", "GBP/USD", "GBP/USD", "fx", "currency_pair"),
+    (r"\bdollar\b.*\byen\b|\byen\b.*\bdollar\b", "USD/JPY", "USD/JPY", "fx", "currency_pair"),
+    (r"\beuro\b.*\bdollar\b|\bdollar\b.*\beuro\b", "EUR/USD", "EUR/USD", "fx", "currency_pair"),
     (r"\bDXY\b|\bU\.?S\.? Dollar Index\b|\bdollar index\b", "U.S. Dollar Index", "DXY", "fx", "currency_index"),
     (r"\bCPI\b|\bconsumer price index\b|\binflation\b", "Consumer Price Index", "CPI", "macro_indicator", "macro_indicator"),
     (r"\bcore CPI\b", "Core CPI", "CORE_CPI", "macro_indicator", "macro_indicator"),
+    (r"\bPPI\b|\bproducer price index\b", "Producer Price Index", "PPI", "macro_indicator", "macro_indicator"),
     (r"\bPCE\b|\bpersonal consumption expenditures\b", "PCE Price Index", "PCE", "macro_indicator", "macro_indicator"),
     (r"\b(?:manufacturing|services|composite)?\s*PMI\b|\bpurchasing managers'? index\b", "Purchasing Managers' Index", "PMI", "macro_indicator", "macro_indicator"),
     (r"\bGDP\b|\bgross domestic product\b", "Gross Domestic Product", "GDP", "macro_indicator", "macro_indicator"),
@@ -131,6 +166,8 @@ _ASSET_PATTERNS = [
     (r"\bhigh[- ]yield\b|\bHY spreads?\b|\bHYG\b", "High Yield Credit", "HY_CREDIT", "credit", "credit"),
     (r"\binvestment[- ]grade\b|\bIG spreads?\b|\bLQD\b", "Investment Grade Credit", "IG_CREDIT", "credit", "credit"),
     (r"\bCDX\b|\biTraxx\b|\bCDS\b|\bcredit default swap", "Credit Derivatives", "CREDIT_DERIVATIVES", "credit", "credit_derivative"),
+    (r"\bTRACE\b|\bfixed income\b|\bcorporate bonds?\b|\bbond trades?\b", "Fixed Income", "TRACE", "fixed_income", "fixed_income"),
+    (r"\bOTC derivatives?\b|\binterest[- ]rate derivatives?\b|\bFX derivatives?\b", "OTC Derivatives", "OTC_DERIV", "derivatives", "derivatives"),
     (r"\bBitcoin\b|\bBTC\b", "Bitcoin", "BTC", "crypto", "cryptoasset"),
     (r"\bEthereum\b|\bEther\b|\bETH\b", "Ether", "ETH", "crypto", "cryptoasset"),
 ]
@@ -186,6 +223,17 @@ def extract_entities_from_memo(
         "non_equity_entities": [item for item in entities if not _is_public_company_entity(item)],
         "notes": notes,
     }
+
+
+def heuristic_entities_from_text(memo: str, max_entities: int = 8) -> list[dict[str, Any]]:
+    """Return local, no-LLM entity guesses for routing and source selection."""
+    entities, _notes = _filter_ambiguous_entities(_merge_entities(_heuristic_entities(memo)), memo)
+    return entities[:max_entities]
+
+
+def heuristic_asset_classes_from_text(memo: str) -> list[str]:
+    """Return asset classes visible from local entity/pattern extraction only."""
+    return list(_asset_groups(heuristic_entities_from_text(memo)).keys())
 
 
 def _heuristic_entities(memo: str) -> list[dict[str, Any]]:
@@ -260,7 +308,8 @@ def _openai_extract_entities(memo: str, config: ToolkitConfig) -> list[dict[str,
                     "You extract public companies, issuers, securities, and tickers from investment memos. "
                     "Return only valid JSON. Prefer exchange tickers for public companies. "
                     "Classify assets across equities, indexes, futures, rates, credit, FX, commodities, macro indicators, ETFs, and crypto. "
-                    "Use null ticker for non-company instruments; put their display code in symbol. Do not invent low-confidence tickers."
+                    "Use null ticker for non-company instruments; put their display code in symbol. Do not invent low-confidence tickers. "
+                    "Read local context before treating short all-caps tokens as tickers; never extract AM or PM from timestamps like 04:26 PM."
                 ),
             },
             {"role": "user", "content": json.dumps(_entity_extraction_payload(memo))},
@@ -292,7 +341,8 @@ def _anthropic_extract_entities(memo: str, config: ToolkitConfig) -> list[dict[s
             "You extract public companies, issuers, securities, and tickers from investment memos. "
             "Return only valid JSON. Prefer exchange tickers for public companies. "
             "Classify assets across equities, indexes, futures, rates, credit, FX, commodities, macro indicators, ETFs, and crypto. "
-            "Use null ticker for non-company instruments; put their display code in symbol. Do not invent low-confidence tickers."
+            "Use null ticker for non-company instruments; put their display code in symbol. Do not invent low-confidence tickers. "
+            "Read local context before treating short all-caps tokens as tickers; never extract AM or PM from timestamps like 04:26 PM."
         ),
         "messages": [
             {
@@ -328,6 +378,7 @@ def _entity_extraction_payload(memo: str) -> dict[str, Any]:
         "instructions": [
             "Extract only entities that are explicitly mentioned in the memo.",
             "Return public-company tickers when confidently known.",
+            "Use surrounding context before treating short all-caps tokens as tickers; AM/PM in publication times or timestamps are not financial entities.",
             "For non-company instruments, set ticker to null and fill symbol with the instrument code or short label.",
             "Classify each item using asset_class: single_name_equity, equity_index, equity_index_future, fund_etf, commodity, commodity_future, fx, rates, credit, macro_indicator, crypto, fixed_income, or other.",
             "Return JSON with an entities array.",
@@ -459,11 +510,34 @@ def _filter_ambiguous_entities(entities: list[dict[str, Any]], memo: str) -> tup
             filtered.append(item)
             continue
         ticker = _normalize_ticker(item.get("ticker"))
+        if is_contextual_non_ticker_token(ticker, memo):
+            notes.append(f"filtered_contextual_non_ticker:{ticker}")
+            continue
         if ticker in _AMBIGUOUS_TICKERS and not _has_explicit_ambiguous_ticker_context(ticker, item, memo):
             notes.append(f"filtered_ambiguous_ticker:{ticker}")
             continue
         filtered.append(item)
     return filtered, _dedupe(notes)
+
+
+def is_contextual_non_ticker_token(token: Any, memo: str) -> bool:
+    """Return true for uppercase tokens that are clearly metadata, not symbols."""
+    ticker = _normalize_ticker(token)
+    if ticker not in _TIME_SUFFIX_TICKERS:
+        return False
+    matches = list(
+        re.finditer(
+            rf"(?<![A-Za-z0-9]){re.escape(ticker)}(?![A-Za-z0-9])",
+            memo,
+            flags=re.IGNORECASE,
+        )
+    )
+    return bool(matches) and all(_is_time_suffix_occurrence(memo, match.start()) for match in matches)
+
+
+def _is_time_suffix_occurrence(memo: str, token_start: int) -> bool:
+    left = memo[max(0, token_start - 16):token_start]
+    return bool(_TIME_SUFFIX_RE.search(left))
 
 
 def _has_explicit_ambiguous_ticker_context(ticker: str, entity: dict[str, Any], memo: str) -> bool:

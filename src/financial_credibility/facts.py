@@ -20,6 +20,14 @@ _SEC_FACT_RE = re.compile(
     re.IGNORECASE,
 )
 
+_SEC_FACT_PERIOD_RE = re.compile(
+    r"(?P<concept>[A-Za-z][A-Za-z0-9]+)\s+\((?P<unit>[^)]+)\)\s+"
+    r"for\s+(?P<period_kind>fiscal quarter|fiscal year)\s+ending\s+"
+    r"(?P<end>\d{4}-\d{2}-\d{2}):\s*"
+    r"(?P<value>[-+]?\d+(?:\.\d+)?)\s+\(form\s+(?P<form>[A-Za-z0-9/-]+)\)",
+    re.IGNORECASE,
+)
+
 _SERIES_OBS_RE = re.compile(r"(?P<date>\d{4}-\d{2}-\d{2}):\s*(?P<value>[-+]?\d+(?:\.\d+)?)")
 
 
@@ -56,6 +64,19 @@ def canonicalize_evidence(
         if not item.is_official_primary:
             continue
         source = assess_source(item.url, item.title)
+        sec_rows = _sec_company_fact_rows_from_text(
+            text=item.text,
+            url=item.url,
+            title=item.title,
+            ticker=ticker,
+            entity=entity,
+            filed=item.published_at,
+        )
+        if sec_rows:
+            facts.extend(sec_rows)
+            continue
+        if _looks_like_sec_company_facts(item):
+            continue
         number = extract_numbers(item.text)[:1]
         facts.append(
             CanonicalFact(
@@ -107,7 +128,63 @@ def _sec_company_fact_rows(result: SearchResult, ticker: str, entity: EntityReso
                 raw={"form": match.group("form"), "frame": match.group("frame"), "provider": result.raw.get("provider")},
             )
         )
+    rows.extend(
+        _sec_company_fact_rows_from_text(
+            text=result.snippet,
+            url=result.url,
+            title=result.title,
+            ticker=ticker,
+            entity=entity,
+            filed=result.published_at,
+        )
+    )
     return rows
+
+
+def _sec_company_fact_rows_from_text(
+    text: str,
+    url: str,
+    title: str,
+    ticker: str,
+    entity: EntityResolution,
+    filed: str | None,
+) -> list[CanonicalFact]:
+    rows = []
+    source = assess_source(url, title)
+    for match in _SEC_FACT_PERIOD_RE.finditer(text):
+        end = match.group("end")
+        unit = match.group("unit")
+        rows.append(
+            CanonicalFact(
+                fact_id=_fact_id(url, match.group("concept"), end, filed or "", match.group("value")),
+                source_type=source.source_type,
+                authority_tier=source.source_tier,
+                license_tag=source.license_tag,
+                entity_id=entity.entity_id,
+                ticker=ticker.upper(),
+                cik=entity.cik,
+                lei=entity.lei,
+                report_period=end,
+                filing_date=filed,
+                observation_date=end,
+                unit=unit,
+                currency="USD" if unit == "USD" else None,
+                fact_name=match.group("concept"),
+                value=_coerce_number(match.group("value")),
+                provenance_locator=url,
+                parser_confidence=0.88,
+                raw={
+                    "form": match.group("form"),
+                    "period_kind": match.group("period_kind").lower(),
+                    "provider": "sec_company_facts",
+                },
+            )
+        )
+    return rows
+
+
+def _looks_like_sec_company_facts(item: Evidence) -> bool:
+    return "companyfacts" in item.url.lower() or item.title.lower().startswith("sec company facts")
 
 
 def _fred_rows(result: SearchResult, ticker: str, entity: EntityResolution) -> list[CanonicalFact]:
@@ -168,6 +245,60 @@ def _fred_rows(result: SearchResult, ticker: str, entity: EntityResolution) -> l
 
 def _generic_structured_row(result: SearchResult, ticker: str, entity: EntityResolution) -> list[CanonicalFact]:
     source = assess_source(result.url, result.title)
+    provider = result.raw.get("provider")
+    rows = result.raw.get("rows")
+    if isinstance(rows, list):
+        facts = []
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            value = row.get("value")
+            if value in {None, "", "."}:
+                continue
+            observation_date = str(
+                row.get("date")
+                or row.get("period")
+                or row.get("TimePeriod")
+                or row.get("year")
+                or result.published_at
+                or ""
+            )
+            fact_name = str(
+                result.raw.get("series_id")
+                or result.raw.get("indicator")
+                or result.raw.get("table_name")
+                or result.raw.get("series_code")
+                or result.raw.get("key")
+                or result.title
+            )
+            facts.append(
+                CanonicalFact(
+                    fact_id=_fact_id(result.url, str(provider), fact_name, observation_date, str(value)),
+                    source_type=source.source_type,
+                    authority_tier=source.source_tier,
+                    license_tag=source.license_tag,
+                    entity_id=entity.entity_id,
+                    ticker=ticker.upper(),
+                    filing_date=result.published_at,
+                    observation_date=observation_date or result.published_at,
+                    unit=row.get("unit") or row.get("units"),
+                    fact_name=fact_name,
+                    value=_coerce_number(str(value)),
+                    provenance_locator=result.url,
+                    parser_confidence=0.82,
+                    raw={
+                        "provider": provider,
+                        "row": row,
+                        "series_id": result.raw.get("series_id"),
+                        "indicator": result.raw.get("indicator"),
+                        "table_name": result.raw.get("table_name"),
+                        "series_code": result.raw.get("series_code"),
+                        "key": result.raw.get("key"),
+                    },
+                )
+            )
+        if facts:
+            return facts
     numbers = extract_numbers(result.snippet)
     return [
         CanonicalFact(
@@ -185,7 +316,7 @@ def _generic_structured_row(result: SearchResult, ticker: str, entity: EntityRes
             value=numbers[0] if numbers else None,
             provenance_locator=result.url,
             parser_confidence=0.50 if numbers else 0.30,
-            raw={"provider": result.raw.get("provider")},
+            raw={"provider": provider},
         )
     ]
 

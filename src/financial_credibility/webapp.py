@@ -127,6 +127,9 @@ def _handler(config: ToolkitConfig):
                 mode=str(payload.get("mode") or "agentic"),
                 prefetched_results=payload.get("prefetched_results") or None,
                 progress_callback=progress_callback,
+                tool_profile=str(payload.get("tool_profile") or "agent_core"),
+                agent_max_steps=int(payload.get("agent_max_steps") or 12),
+                audit=bool(payload.get("audit", True)),
             )
 
     return CredenceHandler
@@ -977,6 +980,7 @@ HTML = r"""<!doctype html>
     const reportEl = document.getElementById("report");
     const statementEl = document.getElementById("statement");
     let liveTraceEvents = [];
+    let liveTraceOpenDetails = new Set();
 
     statementEl.addEventListener("input", resizeComposer);
     statementEl.addEventListener("keydown", (event) => {
@@ -999,8 +1003,15 @@ HTML = r"""<!doctype html>
       statementEl.disabled = true;
       statusEl.textContent = "Running";
       liveTraceEvents = [];
+      liveTraceOpenDetails = new Set();
       reportEl.innerHTML = renderUserMessage(statement, true) + renderLiveTraceShell();
-      const payload = {statement};
+      const payload = {
+        statement,
+        mode: "multi_tool",
+        tool_profile: "agent_core",
+        agent_max_steps: 12,
+        audit: true
+      };
       try {
         const data = await runStreamingReport(payload);
         renderReport(data, statement);
@@ -1141,7 +1152,9 @@ HTML = r"""<!doctype html>
       const status = document.getElementById("liveTraceStatus");
       const progress = document.getElementById("liveTraceProgress");
       if (list) {
-        list.innerHTML = liveTraceEvents.map(renderTraceEvent).join("");
+        rememberLiveTraceDetailState(list);
+        list.innerHTML = liveTraceEvents.map((traceEvent, index) => renderTraceEvent(traceEvent, index, true)).join("");
+        restoreLiveTraceDetailState(list);
       }
       if (raw) {
         raw.textContent = JSON.stringify(liveTraceEvents, null, 2);
@@ -1481,10 +1494,28 @@ HTML = r"""<!doctype html>
       `;
     }
 
-    function renderTraceEvent(event, index) {
+    function rememberLiveTraceDetailState(list) {
+      list.querySelectorAll("details.trace-details[data-detail-key]").forEach(detail => {
+        const key = detail.getAttribute("data-detail-key");
+        if (!key) return;
+        if (detail.open) liveTraceOpenDetails.add(key);
+        else liveTraceOpenDetails.delete(key);
+      });
+    }
+
+    function restoreLiveTraceDetailState(list) {
+      list.querySelectorAll("details.trace-details[data-detail-key]").forEach(detail => {
+        const key = detail.getAttribute("data-detail-key");
+        if (key && liveTraceOpenDetails.has(key)) detail.open = true;
+      });
+    }
+
+    function renderTraceEvent(event, index, preserveOpen = false) {
       const status = String(event.status || "").toLowerCase();
       const statusClass = status.includes("review") || status.includes("warn") ? "warn" : (status.includes("fail") || status.includes("error") ? "bad" : "");
       const outputs = event.outputs && Object.keys(event.outputs).length ? JSON.stringify(event.outputs, null, 2) : "";
+      const detailKey = `event-${index}-${event.step || "step"}`;
+      const detailOpen = preserveOpen && liveTraceOpenDetails.has(detailKey) ? " open" : "";
       return `
         <div class="trace-step ${statusClass}">
           <div class="trace-step-top">
@@ -1492,7 +1523,7 @@ HTML = r"""<!doctype html>
             <span class="subtle">${escapeHtml(event.status || "n/a")}</span>
           </div>
           <div>${escapeHtml(event.summary || "")}</div>
-          ${outputs ? `<details class="trace-details"><summary>Outputs</summary><pre class="trace-meta">${escapeHtml(outputs)}</pre></details>` : ""}
+          ${outputs ? `<details class="trace-details" data-detail-key="${escapeHtml(detailKey)}"${detailOpen}><summary>Outputs</summary><pre class="trace-meta">${escapeHtml(outputs)}</pre></details>` : ""}
         </div>
       `;
     }
@@ -1514,8 +1545,7 @@ HTML = r"""<!doctype html>
       const confidence = Number(components.final_confidence || 0);
       const source = bestSourceForClaim(result, run.evidence || []);
       const facts = factsForClaim(result, run.canonical_facts || []);
-      const derivation = formatDerivation(result.numeric_derivation);
-      const match = consistencySummary(result, derivation);
+      const match = consistencySummary(result);
       const review = humanReviewSummary(result);
       const needsReview = Boolean(result.human_review_required || (result.review_reasons || []).length);
       return `
@@ -1555,12 +1585,24 @@ HTML = r"""<!doctype html>
     function bestSourceForClaim(result, evidence) {
       const keys = new Set(result.evidence_keys || []);
       const urls = new Set(result.evidence_urls || []);
-      return evidence.find(item => keys.has(evidenceKey(item))) || evidence.find(item => urls.has(item.url)) || evidence[0] || null;
+      if (!keys.size && !urls.size) return null;
+      return evidence.find(item => keys.has(evidenceKey(item))) || evidence.find(item => urls.has(item.url)) || null;
     }
 
     function factsForClaim(result, facts) {
       const ids = new Set(result.canonical_fact_ids || []);
-      return facts.filter(fact => ids.has(fact.fact_id)).slice(0, 4);
+      return facts.filter(fact => ids.has(fact.fact_id)).filter(isDisplayableFact).slice(0, 4);
+    }
+
+    function isDisplayableFact(fact) {
+      const name = String(fact.fact_name || "");
+      if (!name) return false;
+      if (/^SEC Company Facts\b/i.test(name)) return false;
+      if ((fact.unit || fact.currency || "").toString().toUpperCase() === "") {
+        const numeric = Number(fact.value);
+        if (Number.isFinite(numeric) && numeric >= 1900 && numeric <= 2200) return false;
+      }
+      return fact.value !== null && fact.value !== undefined && fact.value !== "";
     }
 
     function evidenceKey(item) {
@@ -1583,31 +1625,131 @@ HTML = r"""<!doctype html>
 
     function renderSourceSays(source, facts) {
       const factLines = (facts || []).map(fact => {
-        const value = fact.value === null || fact.value === undefined ? "n/a" : fact.value;
-        const unit = fact.unit || fact.currency || "";
-        const period = fact.report_period || fact.observation_date || "period n/a";
-        return `${fact.fact_name || "Fact"}: ${value}${unit ? " " + unit : ""} (${period})`;
+        const value = formatFactValue(fact.value, fact.unit || fact.currency);
+        const period = humanFactPeriod(fact.report_period || fact.observation_date);
+        return `${humanFactName(fact.fact_name || "Fact")}: ${value}${period ? " for " + period : ""}`;
       });
-      const snippet = source && source.text ? excerpt(source.text, 360) : "";
+      const sourceLines = source && source.text ? humanSourceLines(source.text) : [];
       const parts = [];
       if (factLines.length) {
         parts.push(`<div><strong>Structured values</strong><br>${factLines.map(escapeHtml).join("<br>")}</div>`);
       }
-      if (snippet) {
-        parts.push(`<div><strong>Source excerpt</strong><br>${escapeHtml(snippet)}</div>`);
+      if (sourceLines.length && !factLines.length) {
+        parts.push(`<div><strong>Source excerpt</strong><br>${sourceLines.map(escapeHtml).join("<br>")}</div>`);
+      } else if (sourceLines.length) {
+        parts.push(
+          `<details class="raw-markdown"><summary>More source values</summary><div>${sourceLines.slice(0, 4).map(escapeHtml).join("<br>")}</div></details>`
+        );
       }
       return parts.join("<br>") || '<span class="subtle">No displayable source excerpt is attached to this claim.</span>';
     }
 
-    function consistencySummary(result, derivation) {
+    function humanSourceLines(text) {
+      const rawParts = String(text || "").split(";").map(item => item.trim()).filter(Boolean);
+      const converted = rawParts.map(humanSecFactLine).filter(Boolean);
+      if (converted.length) return converted.slice(0, 5);
+      const fallback = excerpt(text, 300);
+      return fallback ? [fallback] : [];
+    }
+
+    function humanSecFactLine(line) {
+      const match = String(line || "").match(/^(.+?) \(([^)]+)\) for (fiscal quarter|fiscal year) ending (\d{4}-\d{2}-\d{2}): (-?\d+(?:\.\d+)?) \(form ([^)]+)\)$/);
+      if (!match) return "";
+      const [_all, concept, unit, periodKind, endDate, rawValue, form] = match;
+      const label = humanFactName(concept);
+      const value = formatFactValue(rawValue, unit);
+      const period = `${periodKind} ended ${formatDateLabel(endDate)}`;
+      return `${label}: ${value} for ${period} (${form})`;
+    }
+
+    function humanFactName(name) {
+      const labels = {
+        RevenueFromContractWithCustomerExcludingAssessedTax: "Revenue",
+        SalesRevenueNet: "Revenue",
+        Revenues: "Revenue",
+        CostOfRevenue: "Cost of revenue",
+        CostOfGoodsAndServicesSold: "Cost of revenue",
+        GrossProfit: "Gross profit",
+        OperatingIncomeLoss: "Operating income",
+        NetIncomeLoss: "Net income",
+        EarningsPerShareBasic: "Basic EPS",
+        EarningsPerShareDiluted: "Diluted EPS",
+        Assets: "Total assets",
+        Liabilities: "Total liabilities",
+        StockholdersEquity: "Shareholders' equity",
+        CashAndCashEquivalentsAtCarryingValue: "Cash and equivalents",
+        CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents: "Cash and equivalents",
+        NetCashProvidedByUsedInOperatingActivities: "Operating cash flow",
+        PaymentsToAcquirePropertyPlantAndEquipment: "Capital expenditures",
+        ResearchAndDevelopmentExpense: "Research and development expense",
+        SellingGeneralAndAdministrativeExpense: "SG&A expense",
+        CommonStocksIncludingAdditionalPaidInCapital: "Common stock and paid-in capital",
+      };
+      if (labels[name]) return labels[name];
+      return String(name || "Fact")
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .replace(/And/g, "and")
+        .replace(/\bUsd\b/g, "USD")
+        .trim();
+    }
+
+    function humanFactPeriod(period) {
+      const text = String(period || "").trim();
+      if (!text) return "";
+      const fyQuarter = text.match(/^(\d{4})\s+(Q[1-4])/i);
+      if (fyQuarter) return `FY${fyQuarter[1]} ${fyQuarter[2].toUpperCase()}`;
+      const dateOnly = text.match(/^\d{4}-\d{2}-\d{2}$/);
+      if (dateOnly) return `period ended ${formatDateLabel(text)}`;
+      return text.replace(/\s+CY\d{4}Q[1-4]\b/i, "");
+    }
+
+    function formatFactValue(value, unit) {
+      if (value === null || value === undefined || value === "") return "n/a";
+      const numeric = Number(value);
+      const unitText = String(unit || "").toUpperCase();
+      if (!Number.isFinite(numeric)) return String(value);
+      const compact = compactNumber(numeric);
+      if (unitText === "USD") return `$${compact}`;
+      if (unitText === "SHARES") return `${compact} shares`;
+      if (unitText) return `${compact} ${unit}`;
+      return compact;
+    }
+
+    function compactNumber(value) {
+      const number = Number(value);
+      const sign = number < 0 ? "-" : "";
+      const abs = Math.abs(number);
+      const format = (divisor, suffix) => `${sign}${trimTrailingZeros((abs / divisor).toFixed(abs >= divisor * 100 ? 0 : 1))}${suffix}`;
+      if (abs >= 1e12) return format(1e12, "T");
+      if (abs >= 1e9) return format(1e9, "B");
+      if (abs >= 1e6) return format(1e6, "M");
+      if (abs >= 1e3) return format(1e3, "K");
+      return trimTrailingZeros(abs.toFixed(2));
+    }
+
+    function trimTrailingZeros(value) {
+      return String(value).replace(/\.0+$/, "").replace(/(\.\d*[1-9])0+$/, "$1");
+    }
+
+    function formatDateLabel(value) {
+      const text = String(value || "");
+      const match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return text;
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      return `${months[Number(match[2]) - 1]} ${Number(match[3])}, ${match[1]}`;
+    }
+
+    function consistencySummary(result) {
       const verdict = verdictLabel(result.verdict);
       const issues = result.issues || [];
       const lines = [`<strong>${escapeHtml(verdict)}</strong>`];
-      if (derivation !== "n/a") {
-        lines.push(`Calculation/check: ${escapeHtml(derivation)}`);
+      const numericSummary = naturalNumericSummary(result.numeric_derivation, issues);
+      if (numericSummary) {
+        lines.push(escapeHtml(numericSummary));
+        return lines.join("<br>");
       }
       if (issues.length) {
-        lines.push(`Reason: ${escapeHtml(readableIssues(issues).slice(0, 3).join("; "))}`);
+        lines.push(escapeHtml(naturalIssueSummary(issues)));
       } else if (String(result.verdict || "").includes("support")) {
         lines.push("The source values or description broadly match the claim.");
       } else {
@@ -1616,14 +1758,136 @@ HTML = r"""<!doctype html>
       return lines.join("<br>");
     }
 
+    function naturalNumericSummary(derivation, issues) {
+      const matchSummary = numericMatchParts(derivation, issues);
+      if (!matchSummary.confirmed.length && !matchSummary.unconfirmed.length) {
+        return naturalFormulaSummary(derivation);
+      }
+      const confirmed = matchSummary.confirmed.length
+        ? `The source confirms ${joinHumanList(matchSummary.confirmed)}.`
+        : "";
+      const unconfirmed = matchSummary.unconfirmed.length
+        ? `It does not clearly confirm ${joinHumanList(matchSummary.unconfirmed)} in this excerpt.`
+        : "";
+      if (confirmed && unconfirmed) {
+        return `${confirmed} ${unconfirmed} That is why this claim is marked as partially consistent.`;
+      }
+      if (confirmed) {
+        return `${confirmed} The displayed evidence supports the numeric part of the claim.`;
+      }
+      return `${unconfirmed || "The displayed evidence is related, but it is not enough to verify the numeric claim."}`;
+    }
+
+    function numericMatchParts(derivation, issues) {
+      const confirmed = [];
+      const unconfirmed = [];
+      if (derivation && derivation.expression === "numeric_match_summary") {
+        confirmed.push(...parseMatchedValues(derivation.inputs?.matched_values));
+        unconfirmed.push(...parseUnmatchedValues(derivation.inputs?.unmatched_values));
+      }
+      (issues || []).forEach(issue => {
+        const text = String(issue || "");
+        if (text.startsWith("matched ")) {
+          confirmed.push(...parseMatchedValues(text.replace(/^matched\s+/, "")));
+        }
+        if (text.startsWith("unmatched claim numbers:")) {
+          unconfirmed.push(...parseUnmatchedValues(text.replace(/^unmatched claim numbers:\s*/, "")));
+        }
+      });
+      return {
+        confirmed: uniqueStrings(confirmed).slice(0, 3),
+        unconfirmed: uniqueStrings(unconfirmed).slice(0, 3),
+      };
+    }
+
+    function parseMatchedValues(value) {
+      const text = String(value || "").trim();
+      if (!text || text === "none") return [];
+      return text.split(";").map(item => item.trim()).filter(Boolean).map(item => {
+        const [claimValue, sourceValue] = item.split("->").map(part => part && part.trim());
+        const display = claimValue || sourceValue || item;
+        return `the claimed value ${humanClaimValue(display, sourceValue)}`;
+      });
+    }
+
+    function parseUnmatchedValues(value) {
+      const text = String(value || "").trim();
+      if (!text || text === "none") return [];
+      const dateFragments = [];
+      const values = [];
+      text.split(",").map(item => item.trim()).filter(Boolean).forEach(item => {
+        if (/^\d{1,2}$/.test(item)) {
+          dateFragments.push(item);
+        } else {
+          values.push(humanClaimValue(item));
+        }
+      });
+      const output = values.map(item => `the claimed ${claimValueKind(item)} ${item}`);
+      if (dateFragments.length && !values.length) {
+        output.push("the exact date or period detail");
+      } else if (dateFragments.length) {
+        output.push("the date or period detail");
+      }
+      return output;
+    }
+
+    function humanClaimValue(value, sourceValue) {
+      const text = String(value || "").trim();
+      const sourceText = String(sourceValue || "").trim();
+      const moneyText = text.match(/\$?\s*(-?\d+(?:\.\d+)?)\s*(billion|million|trillion|bn|mm|m|b|t)?/i);
+      if (text.includes("$") && moneyText) {
+        const number = Number(moneyText[1]);
+        const scale = (moneyText[2] || "").toLowerCase();
+        if (Number.isFinite(number)) {
+          if (["trillion", "t"].includes(scale)) return `$${trimTrailingZeros(number.toFixed(1))}T`;
+          if (["billion", "bn", "b"].includes(scale)) return `$${trimTrailingZeros(number.toFixed(1))}B`;
+          if (["million", "mm", "m"].includes(scale)) return `$${trimTrailingZeros(number.toFixed(1))}M`;
+        }
+      }
+      if (/^-?\d+(\.\d+)?%$/.test(text)) return text;
+      const sourceNumber = Number(sourceText.replace(/,/g, ""));
+      if (Number.isFinite(sourceNumber) && Math.abs(sourceNumber) >= 1e6 && text.includes("$")) {
+        return `$${compactNumber(sourceNumber)}`;
+      }
+      return text;
+    }
+
+    function claimValueKind(value) {
+      const text = String(value || "").toLowerCase();
+      if (text.includes("%")) return "percentage";
+      if (text.includes("$")) return "amount";
+      return "value";
+    }
+
+    function naturalFormulaSummary(derivation) {
+      if (!derivation) return "";
+      if (derivation.expression && derivation.expression.includes("current - prior")) {
+        const result = derivation.result === null || derivation.result === undefined ? "" : `${(Number(derivation.result) * 100).toFixed(2)}%`;
+        const status = derivation.passed ? "matches" : "does not match";
+        return result
+          ? `Recomputing the growth rate from the stored values gives ${result}, which ${status} the claim.`
+          : "The growth-rate check could not be recomputed from the displayed values.";
+      }
+      if (derivation.passed === true) return "The numeric calculation is consistent with the stored evidence.";
+      if (derivation.passed === false) return "The numeric calculation does not match the stored evidence.";
+      return "";
+    }
+
+    function naturalIssueSummary(issues) {
+      const readable = readableIssues(issues).filter(Boolean);
+      if (!readable.length) return "The current source is not enough to fully confirm this claim.";
+      return `The verifier found ${joinHumanList(readable.slice(0, 3))}.`;
+    }
+
     function readableIssues(issues) {
       return (issues || []).map(issue => {
         const text = String(issue || "");
         if (text.startsWith("matched ")) {
-          return text.replace(/^matched /, "matched claim value ");
+          return text.replace(/^matched /, "a matching claim value: ");
         }
         if (text.startsWith("unmatched claim numbers:")) {
-          return text.replace(/^unmatched claim numbers:/, "not verified from this source:");
+          const values = parseUnmatchedValues(text.replace(/^unmatched claim numbers:\s*/, ""));
+          return values.length ? `${joinHumanList(values)} is not clearly shown in this source` : "some claimed numbers are not clearly shown in this source";
         }
         if (text === "ambiguous_unit_currency_or_period") {
           return "the unit, currency, or period is ambiguous";
@@ -1668,22 +1932,16 @@ HTML = r"""<!doctype html>
       return `${text.slice(0, maxLength - 1)}...`;
     }
 
-    function formatDerivation(derivation) {
-      if (!derivation) return "n/a";
-      if (derivation.expression === "numeric_match_summary") {
-        const matched = derivation.inputs?.matched_values || "none";
-        const unmatched = derivation.inputs?.unmatched_values || "none";
-        if (unmatched !== "none") {
-          return `matched: ${matched}; not verified: ${unmatched}`;
-        }
-        return `matched: ${matched}`;
-      }
-      if (derivation.expression && derivation.expression.includes("current - prior")) {
-        const result = derivation.result === null || derivation.result === undefined ? "n/a" : `${(Number(derivation.result) * 100).toFixed(2)}%`;
-        return `recomputed with ${derivation.expression}; result ${result}; expected ${derivation.comparator || "n/a"}; ${derivation.passed ? "passed" : "failed"}`;
-      }
-      if (derivation.passed === null || derivation.passed === undefined) return derivation.expression || "numeric check";
-      return `numeric check ${derivation.passed ? "passed" : "failed"}: ${derivation.result || derivation.expression || "n/a"}`;
+    function uniqueStrings(values) {
+      return [...new Set((values || []).map(value => String(value || "").trim()).filter(Boolean))];
+    }
+
+    function joinHumanList(values) {
+      const items = uniqueStrings(values);
+      if (!items.length) return "";
+      if (items.length === 1) return items[0];
+      if (items.length === 2) return `${items[0]} and ${items[1]}`;
+      return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
     }
 
     function fmtConfidence(value) {
