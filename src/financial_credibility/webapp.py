@@ -1392,6 +1392,7 @@ HTML = r"""<!doctype html>
         return `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${label}</a>`;
       });
       html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
+      html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
       return html;
     }
 
@@ -2065,12 +2066,25 @@ HTML = r"""<!doctype html>
     function readableIssues(issues) {
       return (issues || []).map(issue => {
         const text = String(issue || "");
+        const lower = text.toLowerCase();
+        if (
+          !text ||
+          lower.includes("http error") ||
+          lower.includes("bad request") ||
+          lower.includes("fallback:") ||
+          text === "llm_judge_unavailable"
+        ) {
+          return "";
+        }
         if (text.startsWith("matched ")) {
           return text.replace(/^matched /, "a matching claim value: ");
         }
         if (text.startsWith("unmatched claim numbers:")) {
           const values = parseUnmatchedValues(text.replace(/^unmatched claim numbers:\s*/, ""));
           return values.length ? `${joinHumanList(values)} is not clearly shown in this source` : "some claimed numbers are not clearly shown in this source";
+        }
+        if (text === "ticker_only_entity_resolution") {
+          return "entity resolution is based mainly on the ticker symbol";
         }
         if (text === "ambiguous_unit_currency_or_period") {
           return "the unit, currency, or period is ambiguous";

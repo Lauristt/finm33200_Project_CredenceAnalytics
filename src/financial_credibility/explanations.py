@@ -150,7 +150,22 @@ def _claim_caveats(result: dict[str, Any]) -> list[str]:
     if review_reasons:
         caveats.append("Human review is recommended for this claim.")
     issues = result.get("issues") or []
-    caveats.extend(str(issue) for issue in issues[:3])
+    caveats.extend(_user_facing_issue(str(issue)) for issue in issues)
     if not result.get("evidence_urls") and not result.get("evidence_keys"):
         caveats.append("No claim-linked evidence was available.")
-    return list(dict.fromkeys(caveats))
+    return list(dict.fromkeys(item for item in caveats if item))[:4]
+
+
+def _user_facing_issue(issue: str) -> str:
+    """Return a user-facing caveat, hiding internal provider/debug failures."""
+    text = " ".join(str(issue or "").split())
+    if not text:
+        return ""
+    lower = text.lower()
+    if "http error" in lower or "bad request" in lower or "fallback:" in lower:
+        return ""
+    if text == "llm_judge_unavailable":
+        return ""
+    if text == "ticker_only_entity_resolution":
+        return "Entity resolution is based mainly on the ticker symbol."
+    return text

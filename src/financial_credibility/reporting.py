@@ -490,7 +490,7 @@ def _source_label(source: dict[str, Any]) -> str:
 def _explanation_sentence(explanation: dict[str, Any] | None) -> str:
     if not explanation:
         return ""
-    numeric = _clean_report_sentence(str(explanation.get("numeric_summary") or ""))
+    numeric = _natural_numeric_report_sentence(str(explanation.get("numeric_summary") or ""))
     if numeric and not numeric.lower().startswith("no deterministic numeric"):
         return numeric
     summary = _clean_report_sentence(str(explanation.get("summary") or ""))
@@ -502,6 +502,18 @@ def _explanation_sentence(explanation: dict[str, Any] | None) -> str:
     return ""
 
 
+def _natural_numeric_report_sentence(value: str) -> str:
+    text = " ".join(str(value or "").split())
+    if not text:
+        return ""
+    lower = text.lower()
+    if "numeric derivation" in lower and "passed" in lower:
+        return "Numeric check passed."
+    if "numeric derivation" in lower and "did not pass" in lower:
+        return "Numeric check did not match the claim."
+    return _clean_report_sentence(text)
+
+
 def _clean_report_sentence(value: str) -> str:
     text = " ".join(str(value or "").split())
     blocked_fragments = (
@@ -510,6 +522,8 @@ def _clean_report_sentence(value: str) -> str:
         "matched ",
         "unmatched claim numbers:",
         "numeric_match_summary",
+        "llm_judge_unavailable",
+        "ticker_only_entity_resolution",
     )
     if any(fragment in text for fragment in blocked_fragments):
         return ""

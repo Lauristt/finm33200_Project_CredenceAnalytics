@@ -61,6 +61,31 @@ class ExplanationTests(unittest.TestCase):
         self.assertIn("No direct evidence", explanation["source_summary"])
         self.assertIn("No claim-linked evidence was available.", explanation["caveats"])
 
+    def test_claim_explanation_filters_internal_provider_errors(self):
+        result = {
+            "atomic_claim": {"claim_id": "claim_1", "text": "Apple revenue grew."},
+            "verdict": "partially_supported",
+            "evidence_urls": ["https://data.sec.gov/example"],
+            "issues": [
+                "ticker_only_entity_resolution",
+                "openai fallback: HTTP Error 400: Bad Request",
+                "llm_judge_unavailable",
+            ],
+        }
+        evidence = {
+            "https://data.sec.gov/example": {
+                "title": "SEC Company Facts for AAPL",
+                "url": "https://data.sec.gov/example",
+            }
+        }
+
+        explanation = build_claim_explanation(result, evidence)
+
+        self.assertIn("Entity resolution is based mainly on the ticker symbol.", explanation["caveats"])
+        self.assertFalse(any("HTTP Error" in item for item in explanation["caveats"]))
+        self.assertFalse(any("fallback" in item for item in explanation["caveats"]))
+        self.assertFalse(any("llm_judge_unavailable" in item for item in explanation["caveats"]))
+
 
 if __name__ == "__main__":
     unittest.main()

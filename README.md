@@ -29,6 +29,33 @@ macro indicators, commodities, FX, credit, rates, indexes, futures, ETFs, and
 crypto are now detected and grouped in the report; full claim-level verification
 for all of those classes is the next expansion layer.
 
+## Workflow
+
+GitHub renders the diagram below with Mermaid.
+
+```mermaid
+flowchart TD
+    A[Input memo or article] --> B[Clean copied-page noise]
+    B --> C[Extract assets and atomic claims]
+    C --> D{Fact-checkable?}
+    D -- No: opinion, forecast, vague discussion --> E[Skip or human review]
+    D -- Yes --> F[Select source and time window]
+    F --> G[Retrieve official or structured evidence]
+    G --> H[Normalize facts and calculate checks]
+    H --> I{Evidence matches claim?}
+    I -- Yes --> J[Consistent]
+    I -- No --> K[Inconsistent]
+    I -- Ambiguous or missing --> E
+    E --> L[Audit and compact report]
+    J --> L
+    K --> L
+```
+
+The key design rule is that a claim is only verified against evidence that
+matches the asset class, metric, and time window. If the system cannot find a
+compatible source, it should show insufficient evidence or human review instead
+of forcing a mismatched data source.
+
 ## Quick Start
 
 The package currently has no required third-party runtime dependencies.

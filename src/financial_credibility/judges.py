@@ -190,18 +190,18 @@ class OpenAIJudge(HeuristicJudge):
             label = SupportLabel(data.get("label", SupportLabel.NOT_ENOUGH_INFO.value))
             score = _support_score_from_llm_data(data, label)
             return label, score, [f"openai judge: {data.get('reason', '')}".strip()]
-        except Exception as exc:
+        except Exception:
             label, score, notes = super().judge_evidence_support(claim, evidence)
-            return label, score, notes + [f"openai fallback: {exc}"]
+            return label, score, notes + ["llm judge unavailable; used heuristic fallback"]
 
     def judge_numeric_claim(self, claim: str, evidence: list[Evidence]) -> VerificationCheck:
         prompt = _verification_prompt("numeric_verification", claim, evidence)
         try:
             data = self._chat_json(prompt)
             return _check_from_llm_data("numeric_check", data, evidence, "openai")
-        except Exception as exc:
+        except Exception:
             check = super().judge_numeric_claim(claim, evidence)
-            return _append_issue(check, f"openai fallback: {exc}")
+            return _append_issue(check, "llm_judge_unavailable")
 
     def judge_logic_claim(
         self,
@@ -218,9 +218,9 @@ class OpenAIJudge(HeuristicJudge):
         try:
             data = self._chat_json(prompt)
             return _check_from_llm_data("logic_check", data, evidence, "openai")
-        except Exception as exc:
+        except Exception:
             check = super().judge_logic_claim(claim, evidence, argument_type)
-            return _append_issue(check, f"openai fallback: {exc}")
+            return _append_issue(check, "llm_judge_unavailable")
 
     def _chat_json(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Call OpenAI chat completions and parse a JSON object response."""
@@ -284,18 +284,18 @@ class AnthropicJudge(HeuristicJudge):
             label = SupportLabel(data.get("label", SupportLabel.NOT_ENOUGH_INFO.value))
             score = _support_score_from_llm_data(data, label)
             return label, score, [f"anthropic judge: {data.get('reason', '')}".strip()]
-        except Exception as exc:
+        except Exception:
             label, score, notes = super().judge_evidence_support(claim, evidence)
-            return label, score, notes + [f"anthropic fallback: {exc}"]
+            return label, score, notes + ["llm judge unavailable; used heuristic fallback"]
 
     def judge_numeric_claim(self, claim: str, evidence: list[Evidence]) -> VerificationCheck:
         prompt = _verification_prompt("numeric_verification", claim, evidence)
         try:
             data = self._messages_json(prompt)
             return _check_from_llm_data("numeric_check", data, evidence, "anthropic")
-        except Exception as exc:
+        except Exception:
             check = super().judge_numeric_claim(claim, evidence)
-            return _append_issue(check, f"anthropic fallback: {exc}")
+            return _append_issue(check, "llm_judge_unavailable")
 
     def judge_logic_claim(
         self,
@@ -312,9 +312,9 @@ class AnthropicJudge(HeuristicJudge):
         try:
             data = self._messages_json(prompt)
             return _check_from_llm_data("logic_check", data, evidence, "anthropic")
-        except Exception as exc:
+        except Exception:
             check = super().judge_logic_claim(claim, evidence, argument_type)
-            return _append_issue(check, f"anthropic fallback: {exc}")
+            return _append_issue(check, "llm_judge_unavailable")
 
     def _messages_json(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Call Anthropic messages and parse a JSON object response."""

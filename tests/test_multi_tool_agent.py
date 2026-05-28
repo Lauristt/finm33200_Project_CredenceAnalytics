@@ -35,8 +35,10 @@ class MultiToolAgentTests(unittest.TestCase):
         self.assertIn("select_sources", tool_names)
         self.assertIn("retrieve_evidence", tool_names)
         self.assertIn("audit_report", payload)
-        self.assertIn("Multi-Tool Agent Trace", payload["report_markdown"])
-        self.assertIn("Audit Report", payload["report_markdown"])
+        self.assertIn("## Bottom Line", payload["report_markdown"])
+        self.assertIn("## AAPL", payload["report_markdown"])
+        self.assertNotIn("Multi-Tool Agent Trace", payload["report_markdown"])
+        self.assertNotIn("Audit Report", payload["report_markdown"])
 
     def test_no_key_fallback_stops_at_max_steps(self):
         payload = MultiToolAgentRunner(ToolkitConfig()).run(

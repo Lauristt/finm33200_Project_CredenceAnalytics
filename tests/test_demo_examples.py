@@ -33,8 +33,10 @@ class DemoExampleTests(unittest.TestCase):
             prefetched_results=prefetched,
         )
 
-        self.assertIn("Verification Coverage", payload["report_markdown"])
-        self.assertIn("Evidence Provenance", payload["report_markdown"])
+        self.assertIn("## Bottom Line", payload["report_markdown"])
+        self.assertIn("## AAPL", payload["report_markdown"])
+        self.assertIn("Evidence: T1 SEC Company Facts for AAPL", payload["report_markdown"])
+        self.assertNotIn("Evidence Provenance", payload["report_markdown"])
 
 
 if __name__ == "__main__":
