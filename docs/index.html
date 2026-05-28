@@ -34,6 +34,7 @@
   .note-box { background:#f4f7fb; border:1px solid #dde6f2; border-left:4px solid var(--muted); }
   .human-box { background:#eefaf2; border:1px solid #c7ecd6; border-left:4px solid var(--good); }
   .dir-box { background:#fff7ed; border:1px solid #fadcb0; border-left:4px solid #d98324; border-radius:10px; padding:2px 18px 10px; margin:18px 0; }
+  .dir-box.minor { background:#f4f7fb; border:1px solid #dde6f2; border-left:4px solid var(--muted); }
   .ex { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:12px 0; }
   blockquote { margin:12px 0; padding:8px 16px; border-left:3px solid var(--accent); color:#33405a; font-style:italic; }
   .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
@@ -58,7 +59,9 @@
   <h2>1. How we evaluated — a real-news benchmark</h2>
   <p><strong>113 real statements</strong> from Yahoo Finance across stocks, macro, commodities, FX, indices,
   rates, crypto and 5 claim types. Factual labels are cross-checked against SEC/FRED; a perturbed copy
-  (changed number/date) gives a matched false. Opinion/forecast carry no truth value (they test classification).</p>
+  (changed number/date) gives a matched false. Opinion/forecast carry no truth value (they test classification).
+  The set spans <strong>7 asset classes</strong> (equities 56, macro 18, commodities 12, indices 9, FX 8,
+  rates 6, crypto 4) from <strong>80+ distinct sources</strong> — cross-asset, not a single-ticker artifact.</p>
   <div class="callout note-box">
     <strong>113 total = 86 fact claims (50 true / 36 false) + 27 opinion/forecast/causal with no truth value.</strong>
     Classification (§2.1) is scored on all 113; the verdict test (§2.2) only on the <strong>86</strong> with an
@@ -120,7 +123,7 @@
   (e.g. <em>"Microsoft reported revenue of $82.89B"</em>); segment metrics (iPhone, AWS, Greater China) aren't mapped.</p>
   </div>
 
-  <div class="dir-box">
+  <div class="dir-box minor">
   <h3>3B. Failing to catch false claims (false acceptance) — smaller, but revealing</h3>
   <p>The agent catches false claims fairly well — <strong>30 of 36 (83%)</strong> are <code>contradicted</code>.
   But the <strong>6 it misses</strong> (5 <code>partially_supported</code>, <strong>1 wrongly

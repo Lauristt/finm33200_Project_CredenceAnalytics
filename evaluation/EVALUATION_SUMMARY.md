@@ -12,6 +12,9 @@ false ones** — and find they share a single root cause: comparing the claim ag
   rates, crypto and five claim types (numeric, factual, opinion, forecast, causal). Factual
   statements are labeled `true` and **each cross-checked against SEC/FRED**; a perturbed copy
   (changed number/date) makes a matched `false`. Opinion/forecast carry no truth value.
+- **Coverage.** The set spans **7 asset classes** — equities (56), macro (18), commodities (12), indices (9),
+  FX (8), rates (6), crypto (4) — drawn from **80+ distinct news items**, so the results reflect cross-asset
+  behavior rather than an artifact of a single ticker or data feed.
 - **113 total = 86 fact claims (50 `true` / 36 `false`) + 27 opinion/forecast/causal with no truth value.**
   Classification (§2.1) is scored on all 113; the verdict test (§2.2) is scored only on the 86 that have an
   objective true/false answer — you can't grade a verdict on an opinion or a forecast.

@@ -34,6 +34,7 @@
   .note-box { background:#f4f7fb; border:1px solid #dde6f2; border-left:4px solid var(--muted); }
   .human-box { background:#eefaf2; border:1px solid #c7ecd6; border-left:4px solid var(--good); }
   .dir-box { background:#fff7ed; border:1px solid #fadcb0; border-left:4px solid #d98324; border-radius:10px; padding:2px 18px 10px; margin:18px 0; }
+  .dir-box.minor { background:#f4f7fb; border:1px solid #dde6f2; border-left:4px solid var(--muted); }
   .ex { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:12px 0; }
   blockquote { margin:12px 0; padding:8px 16px; border-left:3px solid var(--accent); color:#33405a; font-style:italic; }
   .footer { color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:16px; }
@@ -57,7 +58,9 @@
 
   <h2>1. 怎么评估的 —— 真实新闻基准</h2>
   <p><strong>113 条真实语句</strong>,从 Yahoo Finance 抓取,覆盖股票/宏观/商品/FX/指数/利率/加密,以及 5 种 claim 类型。
-  事实类标签对 SEC/FRED 核验过,再改数字/日期造出配对假话;观点/预测无真假(用来测分类)。</p>
+  事实类标签对 SEC/FRED 核验过,再改数字/日期造出配对假话;观点/预测无真假(用来测分类)。
+  整套覆盖 <strong>7 个资产类别</strong>(股票 56、宏观 18、商品 12、指数 9、FX 8、利率 6、加密 4),
+  来自 <strong>80+ 个不同来源</strong>——是跨资产的结果,不是单只股票/单一数据源的偶然。</p>
   <div class="callout note-box">
     <strong>113 条 = 86 条事实类(50 真 / 36 假)+ 27 条观点/预测/因果(无真假)。</strong>
     分类(§2.1)在全部 113 条上算;真假判定(§2.2)只在有客观答案的 <strong>86</strong> 条上算
@@ -112,7 +115,7 @@
   细分指标(iPhone、AWS、大中华区)不在映射概念里。</p>
   </div>
 
-  <div class="dir-box">
+  <div class="dir-box minor">
   <h3>3B. 把假的没抓到(false acceptance)—— 更小,但很说明问题</h3>
   <p>抓假话其实还行——<strong>36 条里抓出 30 条(83%)</strong>判 <code>contradicted</code>。但<strong>漏掉的 6 条</strong>
   (5 条 <code>partially_supported</code>、<strong>1 条被错判为 <code>supported</code></strong>)栽在<strong>同一个时间错配上,只是反过来</strong>:
