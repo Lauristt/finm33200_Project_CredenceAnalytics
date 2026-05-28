@@ -125,3 +125,39 @@ time-aligned evidence into a correct verdict.
   (Q2 / half-year / FY) instead of an arbitrary one.
 - **Replace the all-or-nothing matcher with LLM reasoning,** so a claim whose official figure matches can be
   confirmed even when it also mentions a non-official number (e.g. an analyst estimate).
+
+## 7. Postscript — after the teammate's fix attempt
+
+After this evaluation was shared, the teammate pushed changes on branch **`yilong`** that directly target the
+two root causes above:
+- **`verification.py`** — replaces all-or-nothing with a `core_numbers` vs `contextual_numbers` split, so a
+  claim can be `verified` as long as all *core* numbers match (analyst estimates and other incidental numbers
+  no longer block it).
+- **new `time_context.py`** (wired into `toolkit.py`, `tool_runtime.py`, `multi_tool_agent.py`,
+  `reporting.py`) — infers each claim's `effective_as_of_date / event_date / publication_date` so retrieval
+  can be anchored to the claim's time rather than always-latest.
+
+Re-ran `eval_verdict.py` on the new code (same `claims_news.json`, same scripts; per-claim file
+`results_news_verdict_v2.csv`, scorecard `scorecard_verdict_v2.txt`):
+
+| Metric | Baseline (this report) | After `yilong` fix |
+|---|---|---|
+| Overall accuracy | 36.0% (31/86) | **1.2% (1/86)** |
+| True confirmed (`supported`/`verified`) | 1 / 50 | 0 / 50 |
+| True wrongly `contradicted` | 18 / 50 | **1 / 50** ↓ |
+| True stalled `partially_supported` | 17 / 50 | 2 / 50 |
+| **True abstained (`insufficient`)** | 2 / 50 | **30 / 50** ↑↑ |
+| False caught (`contradicted`) | 30 / 36 | **1 / 36** ↓↓ |
+| False wrongly `supported` | 1 / 36 | 0 / 36 |
+| **False abstained (`insufficient`)** | 1 / 36 | **33 / 36** ↑↑ |
+| Confidence AUC | 0.34 | 0.36 |
+
+**Interpretation.** The fix's *direction* is right and addresses both root causes — but the *calibration*
+overcorrects. 76% of all claims now return `insufficient` (with empty reason fields): the agent shifted from
+"confidently wrong" to "refuses to answer." Removing the 18 wrong `contradicted` came at the price of also
+losing 29 of the 30 false-claim catches; net accuracy dropped from 36% → 1.2%.
+
+**Suggested next step.** The two underlying fixes (core/contextual matching, time-context inference) are the
+right ideas; they just need *relaxed* strictness on the new evidence-relevance / time-context gates so the
+pipeline produces verdicts again. Right now those gates fail closed (→ `insufficient`) on most claims rather
+than letting the verdict logic try.

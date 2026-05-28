@@ -189,6 +189,46 @@
       matches can be confirmed even when it also mentions a non-official number (e.g. an analyst estimate).</li>
   </ul>
 
+  <h2>7. Postscript — after the teammate's fix attempt</h2>
+  <p>After this evaluation was shared, the teammate pushed changes on branch <code>yilong</code> that directly
+  target the two root causes above:</p>
+  <ul>
+    <li><strong><code>verification.py</code></strong> — replaces all-or-nothing with a <code>core_numbers</code>
+      vs <code>contextual_numbers</code> split, so a claim can be <code>verified</code> as long as all
+      <em>core</em> numbers match (analyst estimates and other incidental numbers no longer block it).</li>
+    <li><strong>new <code>time_context.py</code></strong> (wired into <code>toolkit.py</code>,
+      <code>tool_runtime.py</code>, <code>multi_tool_agent.py</code>, <code>reporting.py</code>) — infers each
+      claim's <code>effective_as_of_date / event_date / publication_date</code> so retrieval can be anchored
+      to the claim's time rather than always-latest.</li>
+  </ul>
+  <p>Re-ran <code>eval_verdict.py</code> on the new code (same <code>claims_news.json</code>; per-claim
+  output <code>results_news_verdict_v2.csv</code>, scorecard <code>scorecard_verdict_v2.txt</code>):</p>
+  <table>
+    <tr><th>Metric</th><th class="num">Baseline (this report)</th><th class="num">After <code>yilong</code> fix</th></tr>
+    <tr><td>Overall accuracy</td><td class="num">36.0% (31/86)</td><td class="num"><strong>1.2% (1/86)</strong></td></tr>
+    <tr><td>True confirmed (<code>supported</code>/<code>verified</code>)</td><td class="num">1 / 50</td><td class="num">0 / 50</td></tr>
+    <tr><td>True wrongly <code>contradicted</code></td><td class="num">18 / 50</td><td class="num"><strong>1 / 50</strong> ↓</td></tr>
+    <tr><td>True stalled <code>partially_supported</code></td><td class="num">17 / 50</td><td class="num">2 / 50</td></tr>
+    <tr><td><strong>True abstained (<code>insufficient</code>)</strong></td><td class="num">2 / 50</td><td class="num"><strong>30 / 50</strong> ↑↑</td></tr>
+    <tr><td>False caught (<code>contradicted</code>)</td><td class="num">30 / 36</td><td class="num"><strong>1 / 36</strong> ↓↓</td></tr>
+    <tr><td>False wrongly <code>supported</code></td><td class="num">1 / 36</td><td class="num">0 / 36</td></tr>
+    <tr><td><strong>False abstained (<code>insufficient</code>)</strong></td><td class="num">1 / 36</td><td class="num"><strong>33 / 36</strong> ↑↑</td></tr>
+    <tr><td>Confidence AUC</td><td class="num">0.34</td><td class="num">0.36</td></tr>
+  </table>
+  <div class="callout bad-box">
+    <strong>Interpretation.</strong> The fix's <em>direction</em> is right and addresses both root causes —
+    but the <em>calibration</em> overcorrects. <strong>76% of all claims now return <code>insufficient</code></strong>
+    (with empty reason fields): the agent has shifted from "confidently wrong" to "refuses to answer."
+    Removing the 18 wrong <code>contradicted</code> came at the price of also losing 29 of the 30 false-claim
+    catches; net accuracy dropped from 36% → 1.2%.
+  </div>
+  <div class="callout note-box">
+    <strong>Suggested next step.</strong> The two underlying fixes (core/contextual matching, time-context
+    inference) are the right ideas; they just need <em>relaxed</em> strictness on the new evidence-relevance
+    / time-context gates so the pipeline produces verdicts again. Right now those gates fail closed
+    (→ <code>insufficient</code>) on most claims rather than letting the verdict logic try.
+  </div>
+
   <div class="footer">
     FINM 33200 final project — evaluation track. Benchmark, scripts, and per-claim results are in the project's
     <code>evaluation/</code> folder; all numbers are reproducible from the committed data.

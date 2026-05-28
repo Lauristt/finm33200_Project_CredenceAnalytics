@@ -168,6 +168,43 @@
     <li><strong>用 LLM 推理替换"全有或全无"匹配器,</strong>让官方数字对上的 claim 即使还提了一个非官方数字(如分析师预期)也能被确认。</li>
   </ul>
 
+  <h2>7. 附录 —— 同学尝试修复之后</h2>
+  <p>本评估同步给同学之后,他在 <code>yilong</code> 分支上做了改动,直接对着上面两个根因:</p>
+  <ul>
+    <li><strong><code>verification.py</code></strong> —— 把"全有或全无"换成 <code>core_numbers</code> /
+      <code>contextual_numbers</code> 划分;只要<em>核心数字</em>都对上就能判 <code>verified</code>
+      (分析师预期之类的附带数字不再卡死)。</li>
+    <li><strong>新增 <code>time_context.py</code></strong>(已接入 <code>toolkit.py</code>、
+      <code>tool_runtime.py</code>、<code>multi_tool_agent.py</code>、<code>reporting.py</code>)
+      —— 为每条 claim 推断 <code>effective_as_of_date / event_date / publication_date</code>,
+      让取数能按 claim 的时间锚定,而不是永远最新值。</li>
+  </ul>
+  <p>在新代码上重跑 <code>eval_verdict.py</code>(同一份 <code>claims_news.json</code>;逐条结果
+  <code>results_news_verdict_v2.csv</code>,记分卡 <code>scorecard_verdict_v2.txt</code>):</p>
+  <table>
+    <tr><th>指标</th><th class="num">Baseline(本报告)</th><th class="num">同学修改后(<code>yilong</code>)</th></tr>
+    <tr><td>总准确率</td><td class="num">36.0%(31/86)</td><td class="num"><strong>1.2%(1/86)</strong></td></tr>
+    <tr><td>真话确认(<code>supported</code>/<code>verified</code>)</td><td class="num">1 / 50</td><td class="num">0 / 50</td></tr>
+    <tr><td>真话被冤判 <code>contradicted</code></td><td class="num">18 / 50</td><td class="num"><strong>1 / 50</strong> ↓</td></tr>
+    <tr><td>真话卡 <code>partially_supported</code></td><td class="num">17 / 50</td><td class="num">2 / 50</td></tr>
+    <tr><td><strong>真话放弃判 <code>insufficient</code></strong></td><td class="num">2 / 50</td><td class="num"><strong>30 / 50</strong> ↑↑</td></tr>
+    <tr><td>假话被抓出 <code>contradicted</code></td><td class="num">30 / 36</td><td class="num"><strong>1 / 36</strong> ↓↓</td></tr>
+    <tr><td>假话被错判为真 <code>supported</code></td><td class="num">1 / 36</td><td class="num">0 / 36</td></tr>
+    <tr><td><strong>假话放弃判 <code>insufficient</code></strong></td><td class="num">1 / 36</td><td class="num"><strong>33 / 36</strong> ↑↑</td></tr>
+    <tr><td>置信度 AUC</td><td class="num">0.34</td><td class="num">0.36</td></tr>
+  </table>
+  <div class="callout bad-box">
+    <strong>解读。</strong>修改的<em>方向</em>是对的(正面对应两个根因),但<em>校准</em>过度——
+    <strong>76% 的 claim 现在直接返回 <code>insufficient</code></strong>(reason 字段大多为空):
+    agent 从"信心十足判错"变成了"干脆不判"。消除了原来 18 条"真话被冤判"的代价是,**也丢掉了 30 条假话中的 29 条**;
+    净准确率从 36% → 1.2%。
+  </div>
+  <div class="callout note-box">
+    <strong>下一步建议。</strong>底层的两个修复方向(core/contextual 拆分、time-context 推断)都是对的;
+    只是<em>严格度需要放宽</em>——目前新加的"证据相关性 / 时间上下文"判断在大多数 claim 上 fail-closed
+    (→ <code>insufficient</code>),verdict 逻辑根本没机会跑。校准好之后这套思路是有希望的。
+  </div>
+
   <div class="footer">
     FINM 33200 期末项目 · 评估部分。benchmark、脚本、逐条结果在 <code>evaluation/</code> 目录;所有数字均可从提交的数据复现。
   </div>

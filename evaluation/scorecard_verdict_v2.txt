@@ -1,0 +1,111 @@
+Verdict eval on 86 claims | judge=OpenAIJudge | file=claims_news.json
+
+  [  1/86] true  stock          -> not_applicable
+  [  2/86] false stock          -> insufficient
+  [  3/86] true  stock          -> insufficient
+  [  4/86] false stock          -> insufficient
+  [  5/86] true  stock          -> not_applicable
+  [  6/86] false stock          -> insufficient
+  [  7/86] true  stock          -> not_applicable
+  [  8/86] true  stock          -> not_applicable
+  [  9/86] false stock          -> not_applicable
+  [ 10/86] true  stock          -> insufficient
+  [ 11/86] false stock          -> insufficient
+  [ 12/86] true  stock          -> not_applicable
+  [ 13/86] true  stock          -> insufficient
+  [ 14/86] false stock          -> insufficient
+  [ 15/86] true  stock          -> insufficient
+  [ 16/86] true  stock          -> not_applicable
+  [ 17/86] false stock          -> insufficient
+  [ 18/86] true  stock          -> not_applicable
+  [ 19/86] false stock          -> partially_supported
+  [ 20/86] true  stock          -> not_applicable
+  [ 21/86] true  stock          -> not_applicable
+  [ 22/86] false stock          -> insufficient
+  [ 23/86] true  stock          -> not_applicable
+  [ 24/86] false stock          -> insufficient
+  [ 25/86] true  stock          -> insufficient
+  [ 26/86] false stock          -> insufficient
+  [ 27/86] true  stock          -> not_applicable
+  [ 28/86] false stock          -> insufficient
+  [ 29/86] true  stock          -> not_applicable
+  [ 30/86] false stock          -> insufficient
+  [ 31/86] true  stock          -> insufficient
+  [ 32/86] false stock          -> insufficient
+  [ 33/86] true  stock          -> not_applicable
+  [ 34/86] false stock          -> insufficient
+  [ 35/86] true  stock          -> insufficient
+  [ 36/86] false stock          -> insufficient
+  [ 37/86] true  stock          -> partially_supported
+  [ 38/86] true  stock          -> not_applicable
+  [ 39/86] true  stock          -> not_applicable
+  [ 40/86] true  stock          -> insufficient
+  [ 41/86] false stock          -> insufficient
+  [ 42/86] true  stock          -> insufficient
+  [ 43/86] false stock          -> insufficient
+  [ 44/86] true  stock          -> insufficient
+  [ 45/86] false stock          -> insufficient
+  [ 46/86] true  macro          -> insufficient
+  [ 47/86] false macro          -> insufficient
+  [ 48/86] false macro          -> insufficient
+  [ 49/86] true  macro          -> insufficient
+  [ 50/86] false macro          -> insufficient
+  [ 51/86] true  macro          -> insufficient
+  [ 52/86] false macro          -> insufficient
+  [ 53/86] true  macro          -> insufficient
+  [ 54/86] true  commodity      -> insufficient
+  [ 55/86] false commodity      -> insufficient
+  [ 56/86] true  commodity      -> insufficient
+  [ 57/86] true  index          -> insufficient
+  [ 58/86] false index          -> insufficient
+  [ 59/86] true  index          -> insufficient
+  [ 60/86] true  index          -> insufficient
+  [ 61/86] true  fx             -> insufficient
+  [ 62/86] false fx             -> insufficient
+  [ 63/86] true  commodity      -> insufficient
+  [ 64/86] false commodity      -> insufficient
+  [ 65/86] true  commodity      -> insufficient
+  [ 66/86] false commodity      -> insufficient
+  [ 67/86] true  commodity      -> insufficient
+  [ 68/86] true  index          -> insufficient
+  [ 69/86] false index          -> insufficient
+  [ 70/86] true  index          -> insufficient
+  [ 71/86] false index          -> insufficient
+  [ 72/86] true  rates          -> insufficient
+  [ 73/86] false rates          -> insufficient
+  [ 74/86] true  rates          -> not_applicable
+  [ 75/86] true  macro          -> insufficient
+  [ 76/86] false macro          -> insufficient
+  [ 77/86] true  macro          -> partially_supported
+  [ 78/86] false macro          -> contradicted
+  [ 79/86] true  macro          -> contradicted
+  [ 80/86] false macro          -> insufficient
+  [ 81/86] true  macro          -> not_applicable
+  [ 82/86] true  fx             -> insufficient
+  [ 83/86] false fx             -> insufficient
+  [ 84/86] true  fx             -> insufficient
+  [ 85/86] true  crypto         -> insufficient
+  [ 86/86] false crypto         -> insufficient
+
+============================================================
+VERDICT-ACCURACY SCORECARD
+============================================================
+
+[1] Overall accuracy: 1/86 (  1.2%)
+    True  rated supported(credible):  0/50
+    False rated contradicted:         1/36
+
+[2] Confidence AUC (true vs false): 0.357
+
+[3] Accuracy by group (falsification type or asset class)
+    commodity       0/8
+    crypto          0/2
+    fx              0/5
+    index           0/8
+    macro           1/15
+    rates           0/3
+    stock           0/45
+
+[4] Human-review flags: 68/86; of those, wrong = 67/68
+
+Per-claim -> /Users/huangshixian/Desktop/26spring/ai/credence_latest/evaluation/results_news_verdict_v2.csv
