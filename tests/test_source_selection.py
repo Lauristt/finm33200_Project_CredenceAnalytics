@@ -129,6 +129,28 @@ class SourceSelectionTests(unittest.TestCase):
         self.assertNotIn("sec_company_facts", ids)
         self.assertNotIn("market_prices_vendor", ids)
 
+    def test_acquisition_claim_routes_to_event_sources_not_company_facts(self):
+        claim = "SMBC acquired Jefferies in 2026."
+        candidates = candidate_sources_for_claim(claim)
+        ids = [item["source_id"] for item in candidates]
+        route = route_sources(claim)
+
+        self.assertIn("sec_recent_filings", ids)
+        self.assertIn("serper_web", ids)
+        self.assertIn("sec_recent_filings", route["routes"])
+        self.assertIn("serper_web", route["routes"])
+        self.assertNotIn("sec_company_facts", ids)
+        self.assertNotIn("ecb_data_portal", ids)
+        self.assertNotIn("bank_of_england", ids)
+
+    def test_chinese_acquisition_claim_routes_to_event_sources(self):
+        candidates = candidate_sources_for_claim("三井住友银行2026年收购Jefferies。")
+        ids = [item["source_id"] for item in candidates]
+
+        self.assertIn("sec_recent_filings", ids)
+        self.assertIn("serper_web", ids)
+        self.assertNotIn("sec_company_facts", ids)
+
     def test_selection_can_return_no_sources_when_catalog_has_no_match(self):
         selections = select_sources_for_claims(
             "The product is strategically important.",

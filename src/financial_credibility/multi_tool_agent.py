@@ -20,7 +20,7 @@ from .tool_profiles import tool_names_for_profile
 from .tool_runtime import execute_tool
 
 
-DEFAULT_MAX_STEPS = 12
+DEFAULT_MAX_STEPS = 20
 
 
 class MultiToolAgentRunner:
@@ -48,6 +48,8 @@ class MultiToolAgentRunner:
     ) -> dict[str, Any]:
         """Run a multi-tool agent, then attach trace and audit output to a report."""
         original_memo = memo
+        if max_steps == DEFAULT_MAX_STEPS:
+            max_steps = max(DEFAULT_MAX_STEPS, len(tickers or []) * 5)
         preprocessed = preprocess_statement(memo)
         memo = preprocessed.clean_text
         time_context = infer_time_context(memo, as_of_date)
@@ -511,6 +513,8 @@ def _agent_instructions(tool_profile: str) -> str:
         "unless the claim states a concrete objective metric, period, value, and comparison baseline. "
         "Before choosing retrieval tools, combine the claim with the detected asset class: "
         "equity/ETF/index price or return moves can use historical_prices; issuer fundamentals use SEC or company fundamentals; "
+        "corporate acquisition, merger, takeover, stake, or M&A claims need event evidence such as 8-K/press release/web discovery "
+        "and must not use SEC Company Facts, EPS, revenue, or other XBRL numeric facts as proof of the transaction; "
         "macro, rates, FX, commodities, credit, fixed income, and derivatives use their official series/regulatory sources. "
         "Do not call a tool just because one word overlaps when the source cannot verify that property. "
         "Before retrieve_evidence or build_evidence_pack, infer the relevant time window from the full context "

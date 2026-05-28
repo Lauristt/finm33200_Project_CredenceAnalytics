@@ -1192,8 +1192,7 @@ HTML = r"""<!doctype html>
         ["Asset Classes", summary.asset_class_count ?? 0],
         ["Fact Checks", summary.atomic_claim_count ?? 0],
         ["Not Fact-Checked", summary.skipped_claim_count ?? 0],
-        ["Needs Review", summary.human_review_count ?? 0],
-        ["Verification Confidence", fmtConfidence(summary.average_confidence)]
+        ["Needs Review", summary.human_review_count ?? 0]
       ];
       const runs = (data.runs || []).map(renderEntity).join("");
       const errors = (data.errors || []).map(err => `<div class="section error">${escapeHtml(err.ticker)}: ${escapeHtml(err.error)}</div>`).join("");
@@ -1541,8 +1540,6 @@ HTML = r"""<!doctype html>
 
     function renderClaimCard(result, run) {
       const claim = result.atomic_claim || {};
-      const components = result.confidence_components || {};
-      const confidence = Number(components.final_confidence || 0);
       const source = bestSourceForClaim(result, run.evidence || []);
       const facts = factsForClaim(result, run.canonical_facts || []);
       const match = consistencySummary(result);
@@ -1575,7 +1572,6 @@ HTML = r"""<!doctype html>
             </div>
           </div>
           <div class="claim-foot">
-            <span class="mini-meter">Verification confidence ${fmtConfidence(confidence)} <span class="bar"><span style="width:${Math.max(0, Math.min(100, confidence * 100))}%"></span></span></span>
             <span>${review}</span>
           </div>
         </article>
@@ -1942,12 +1938,6 @@ HTML = r"""<!doctype html>
       if (items.length === 1) return items[0];
       if (items.length === 2) return `${items[0]} and ${items[1]}`;
       return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
-    }
-
-    function fmtConfidence(value) {
-      if (value === null || value === undefined || value === "n/a") return "n/a";
-      const numeric = Number(value);
-      return Number.isFinite(numeric) ? numeric.toFixed(2) : String(value);
     }
 
     function pillClass(value) {

@@ -120,6 +120,37 @@ class OfficialVerifierUpgradeTests(unittest.TestCase):
         self.assertNotIn("SEC Company Facts for AAPL", {fact.fact_name for fact in facts})
         self.assertNotIn(2026, {fact.value for fact in facts})
 
+    def test_acquisition_claim_does_not_treat_eps_as_relevant_fact(self):
+        source = assess_source("https://data.sec.gov/api/xbrl/companyfacts/CIK0000475520.json")
+        evidence = [
+            Evidence(
+                url="https://data.sec.gov/api/xbrl/companyfacts/CIK0000475520.json",
+                title="SEC Company Facts for JEF",
+                text=(
+                    "EarningsPerShareDiluted (USD/shares) for fiscal quarter ending "
+                    "2026-02-28: 0.7 (form 10-Q)"
+                ),
+                source_type=source.source_type,
+                source_tier=source.source_tier,
+                domain=source.domain,
+                published_at="2026-04-07",
+                license_tag=source.license_tag,
+                is_official_primary=True,
+            )
+        ]
+        facts = canonicalize_evidence(evidence, "JEF")
+
+        results = verify_atomic_claims(
+            "SMBC acquired Jefferies in 2026.",
+            evidence,
+            facts,
+            EntityResolution(ticker="JEF", entity_id="JEF", confidence=0.80),
+        )
+
+        self.assertEqual(results[0].verdict, VerificationVerdict.INSUFFICIENT)
+        self.assertEqual(results[0].canonical_fact_ids, [])
+        self.assertEqual(results[0].evidence_urls, [])
+
     def test_evidence_pack_contains_atomic_claims_facts_and_audit_trace(self):
         toolkit = FinancialCredibilityToolkit(ToolkitConfig())
         pack = toolkit.build_evidence_pack(

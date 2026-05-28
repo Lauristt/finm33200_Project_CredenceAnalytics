@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 
 from .asset_universe import normalize_asset_class
+from .claim_intent import is_corporate_transaction_claim
 from .entity_extraction import heuristic_asset_classes_from_text
 from .models import AtomicClaim
 from .price_history import PRICE_HISTORY_ASSET_CLASSES, needs_historical_price_data
@@ -22,6 +23,9 @@ def route_sources(
     routes: list[str] = []
     reasons: list[str] = []
 
+    if is_corporate_transaction_claim(text):
+        routes.extend(["sec_recent_filings", "serper_web"])
+        reasons.append("corporate transaction claim needs event evidence, not XBRL numeric facts")
     if _contains(lower, "revenue", "sales", "income", "eps", "cash flow", "debt", "assets", "liabilities", "margin", "buyback", "repurchase", "leverage"):
         routes.extend(["sec_company_facts", "sec_recent_filings"])
         reasons.append("company financial statement claim")

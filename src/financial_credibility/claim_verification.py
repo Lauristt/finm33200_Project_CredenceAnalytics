@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 
 from .claims import decompose_claims
+from .claim_intent import is_corporate_transaction_claim
 from .derivations import derive_numeric_check
 from .models import (
     AtomicClaim,
@@ -77,6 +78,10 @@ def _claim_verdict(
     logic_verdict: str,
     derivation: NumericDerivation | None = None,
 ) -> VerificationVerdict:
+    if derivation and derivation.expression == "numeric_match_summary" and derivation.passed is False:
+        if logic_verdict == VerificationVerdict.CONTRADICTED.value:
+            return VerificationVerdict.CONTRADICTED
+        return VerificationVerdict.PARTIALLY_SUPPORTED
     if derivation and derivation.expression != "numeric_match_summary":
         if derivation.passed is True:
             return VerificationVerdict.SUPPORTED
@@ -156,6 +161,8 @@ def _is_price_history_evidence(item: Evidence) -> bool:
 
 
 def _relevant_facts(atomic_claim: AtomicClaim, facts: list[CanonicalFact]) -> list[CanonicalFact]:
+    if is_corporate_transaction_claim(atomic_claim.text):
+        return []
     required_aliases = _required_fact_aliases_for_claim(atomic_claim.text)
     return sorted(
         [

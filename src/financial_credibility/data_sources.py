@@ -19,6 +19,7 @@ from datetime import date, datetime, time, timedelta, timezone
 from io import StringIO
 from typing import Any
 
+from .claim_intent import is_corporate_transaction_claim
 from .config import ToolkitConfig
 from .models import ArgumentType, SearchResult
 from .net import urlopen_request
@@ -1626,6 +1627,8 @@ class FreeDataSourceClient:
 
     def _concepts_for_claim(self, claim: str) -> list[str]:
         """Map claim keywords to a small set of SEC us-gaap concepts."""
+        if is_corporate_transaction_claim(claim):
+            return []
         lower = claim.lower()
         concepts: list[str] = []
         for keyword, mapped in SEC_CONCEPTS.items():

@@ -21,6 +21,12 @@ class DataSourceClientTests(unittest.TestCase):
         concepts = client._concepts_for_claim("Apple revenue grew 6% year over year.")
         self.assertIn("Revenues", concepts)
 
+    def test_sec_company_facts_not_used_for_acquisition_claim(self):
+        client = FreeDataSourceClient(ToolkitConfig())
+
+        self.assertEqual(client._concepts_for_claim("SMBC acquired Jefferies in 2026."), [])
+        self.assertEqual(client._concepts_for_claim("三井住友银行2026年收购Jefferies。"), [])
+
     def test_sec_concept_matcher_handles_custom_revenue_tags(self):
         client = FreeDataSourceClient(ToolkitConfig())
         facts = {

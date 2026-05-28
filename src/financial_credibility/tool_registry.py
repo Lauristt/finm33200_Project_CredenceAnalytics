@@ -383,7 +383,10 @@ def _get_sec_company_facts_tool() -> RegisteredTool:
         when_to_use="Use for official numeric fundamentals such as revenue, net income, EPS, assets, debt, margins, or cash flow.",
         data_sources=["SEC EDGAR company facts"],
         requires_keys=[],
-        limitations=["Concept selection is keyword-based, not a full XBRL semantic planner."],
+        limitations=[
+            "Concept selection is keyword-based, not a full XBRL semantic planner.",
+            "Do not use for merger, acquisition, takeover, stake, product-market, or management-quote claims.",
+        ],
         input_schema=_object_schema(
             {
                 "ticker": {"type": "string"},

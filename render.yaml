@@ -10,18 +10,78 @@ services:
       - key: CREDIBILITY_HOST
         value: 0.0.0.0
       - key: CREDIBILITY_LLM_PROVIDER
-        value: auto
+        value: openai
       - key: OPENAI_MODEL
-        value: gpt-4.1-mini
+        sync: false
+      - key: ANTHROPIC_MODEL
+        sync: false
       - key: CREDIBILITY_STRUCTURED_SOURCES
         value: "true"
+      - key: CREDIBILITY_LIVE_EXTRACTION
+        value: "false"
+      - key: CREDIBILITY_YAHOO_FALLBACK
+        value: "false"
+      - key: CREDIBILITY_ALLOW_INSECURE_SSL_FALLBACK
+        value: "false"
       - key: CREDIBILITY_TICKER_UNIVERSE_FILTER
         value: "true"
       - key: CREDIBILITY_TICKER_UNIVERSE_FETCH
         value: "true"
+      - key: CREDIBILITY_TICKER_UNIVERSE_FILE
+        sync: false
+      - key: CREDIBILITY_TICKER_UNIVERSE_CACHE
+        value: .cache/financial_credibility/company_tickers_exchange.json
+      - key: CREDIBILITY_ASSET_UNIVERSE_FILTER
+        value: "true"
+      - key: CREDIBILITY_ASSET_UNIVERSE_FILE
+        sync: false
       - key: CREDIBILITY_REQUEST_TIMEOUT
         value: "25"
       - key: OPENAI_API_KEY
         sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: SERPER_API_KEY
+        sync: false
+      - key: JINA_API_KEY
+        sync: false
+      - key: FINNHUB_API_KEY
+        sync: false
+      - key: ALPHA_VANTAGE_API_KEY
+        sync: false
+      - key: FMP_API_KEY
+        sync: false
+      - key: MARKETSTACK_API_KEY
+        sync: false
+      - key: TIINGO_API_KEY
+        sync: false
+      - key: FRED_API_KEY
+        sync: false
+      - key: BLS_API_KEY
+        sync: false
+      - key: BEA_API_KEY
+        sync: false
+      - key: EIA_API_KEY
+        sync: false
+      - key: CFTC_APP_TOKEN
+        sync: false
+      - key: FINRA_CLIENT_ID
+        sync: false
+      - key: FINRA_CLIENT_SECRET
+        sync: false
+      - key: OPENFIGI_API_KEY
+        sync: false
       - key: SEC_USER_AGENT
         sync: false
+      - key: CFTC_BASE_URL
+        value: https://publicreporting.cftc.gov/resource
+      - key: ECB_BASE_URL
+        value: https://data-api.ecb.europa.eu/service
+      - key: BIS_BASE_URL
+        value: https://stats.bis.org/api/v2
+      - key: IMF_BASE_URL
+        value: https://api.imf.org/external/sdmx/3.0
+      - key: WORLD_BANK_BASE_URL
+        value: https://api.worldbank.org/v2
+      - key: BOE_IADB_BASE_URL
+        value: https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp

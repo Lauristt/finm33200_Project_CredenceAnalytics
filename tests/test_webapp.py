@@ -37,6 +37,8 @@ class WebappTests(unittest.TestCase):
         self.assertIn("isDisplayableFact", HTML)
         self.assertIn("/^SEC Company Facts", HTML)
         self.assertIn("Human Review", HTML)
+        self.assertNotIn("Verification Confidence", HTML)
+        self.assertNotIn("Verification confidence", HTML)
         self.assertIn("needs-review", HTML)
         self.assertIn("liveTraceOpenDetails", HTML)
         self.assertIn("rememberLiveTraceDetailState", HTML)

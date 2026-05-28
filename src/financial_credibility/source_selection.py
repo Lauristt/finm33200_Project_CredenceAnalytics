@@ -11,6 +11,7 @@ from typing import Any
 
 from .asset_universe import normalize_asset_class
 from .claims import decompose_claims
+from .claim_intent import is_corporate_transaction_claim
 from .config import ToolkitConfig
 from .entity_extraction import heuristic_asset_classes_from_text
 from .models import AtomicClaim, LicenseTag, SourceTier
@@ -81,7 +82,7 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         detail_file="sec_company_facts.md",
         coverage=["US public company XBRL facts", "revenue", "net income", "EPS", "cash flow", "assets", "debt"],
         best_for=["historical reported financial metrics", "10-K and 10-Q numeric verification"],
-        not_for=["MD&A explanations", "earnings call commentary", "market prices"],
+        not_for=["MD&A explanations", "earnings call commentary", "market prices", "merger or acquisition events"],
         required_inputs=["ticker_or_cik", "metric_hint"],
         keywords=["revenue", "sales", "income", "eps", "cash flow", "assets", "debt", "margin", "financial statement"],
     ),
@@ -98,7 +99,25 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
         best_for=["filing context", "event verification", "MD&A or management explanation follow-up"],
         not_for=["macro series", "market price"],
         required_inputs=["ticker_or_cik"],
-        keywords=["10-k", "10-q", "8-k", "filed", "filing", "mda", "management", "buyback", "repurchase", "guidance"],
+        keywords=[
+            "10-k",
+            "10-q",
+            "8-k",
+            "filed",
+            "filing",
+            "mda",
+            "management",
+            "buyback",
+            "repurchase",
+            "guidance",
+            "acquisition",
+            "acquired",
+            "merger",
+            "takeover",
+            "stake",
+            "收购",
+            "并购",
+        ],
     ),
     SourceCatalogEntry(
         source_id="fred",
@@ -585,6 +604,13 @@ SOURCE_CATALOG: list[SourceCatalogEntry] = [
             "announced",
             "press release",
             "company ir",
+            "acquisition",
+            "acquired",
+            "merger",
+            "takeover",
+            "stake",
+            "收购",
+            "并购",
         ],
     ),
 ]
@@ -1063,6 +1089,8 @@ def _catalog_score(
     entry: SourceCatalogEntry,
     asset_classes: list[str] | tuple[str, ...] | set[str] | None = None,
 ) -> float:
+    if is_corporate_transaction_claim(claim) and entry.source_id not in {"sec_recent_filings", "serper_web"}:
+        return 0.0
     if entry.source_id == "historical_prices" and not needs_historical_price_data(claim, asset_classes):
         return 0.0
     text = claim.lower()
