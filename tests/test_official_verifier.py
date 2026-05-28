@@ -166,6 +166,39 @@ class OfficialVerifierUpgradeTests(unittest.TestCase):
         self.assertTrue(any(result.numeric_derivation for result in pack.atomic_claims))
         self.assertTrue(all(result.confidence_components for result in pack.atomic_claims))
 
+    def test_retrieval_budget_is_per_atomic_claim_not_global(self):
+        toolkit = FinancialCredibilityToolkit(ToolkitConfig())
+        calls = []
+
+        def fake_search(self, claim, ticker, argument_type, max_sources=8, as_of_date=None, prefetched_results=None, selected_sources=None):
+            calls.append(claim)
+            slug = claim.lower().replace(" ", "-").replace("%", "pct")[:36]
+            return [
+                SearchResult(
+                    title=f"SEC source for {claim}",
+                    url=f"https://data.sec.gov/{slug}",
+                    snippet=f"{claim}. Official filing excerpt for {ticker}.",
+                    published_at="2025-11-01",
+                    source="SEC EDGAR",
+                    raw={"provider": "sec_recent_filings"},
+                )
+            ], [f"{claim}: fake result"]
+
+        with patch("financial_credibility.toolkit.SearchClient.search_financial_sources", new=fake_search):
+            pack = toolkit.build_evidence_pack(
+                claim="Apple revenue grew 6% year over year; Apple debt declined 2%; Apple EPS rose 3%.",
+                ticker="AAPL",
+                as_of_date="2025-11-01",
+                max_sources=1,
+            )
+
+        self.assertEqual(len(calls), 3)
+        self.assertGreaterEqual(len(pack.evidence), 3)
+        self.assertEqual(pack.metadata["retrieval_budget"], 3)
+        self.assertEqual(len(pack.metadata["claim_retrievals"]), 3)
+        self.assertTrue(all(item["retrieved_count"] == 1 for item in pack.metadata["claim_retrievals"]))
+        self.assertEqual(len(pack.metadata["evidence_coverage"]), 3)
+
     def test_uncovered_conference_call_claim_goes_to_human_review_not_sec_xbrl(self):
         toolkit = FinancialCredibilityToolkit(ToolkitConfig())
         pack = toolkit.build_evidence_pack(

@@ -602,6 +602,69 @@ def _reconcile_final_verdict(
     return Verdict.SUPPORTED, label, sorted(set(final_flags + ["verdict_reconciled_from_verification_checks"]))
 
 
+def _retrieval_budget(max_sources: int, fact_checkable_claims: list) -> int:
+    """Use a per-claim retrieval budget so early claims cannot starve later ones."""
+    return max(1, int(max_sources)) * max(1, len(fact_checkable_claims))
+
+
+def _build_evidence_coverage(
+    atomic_claims,
+    source_selection_plan: list[dict[str, Any]],
+    claim_retrievals: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Summarize whether each atomic claim reached evidence before final judgment."""
+    selection_by_id = {
+        str(item.get("claim_id")): item
+        for item in source_selection_plan
+        if item.get("claim_id")
+    }
+    retrieval_by_id = {
+        str(item.get("claim_id")): item
+        for item in claim_retrievals
+        if item.get("claim_id")
+    }
+    rows = []
+    for result in atomic_claims:
+        claim = result.atomic_claim
+        selection = selection_by_id.get(claim.claim_id, {})
+        retrieval = retrieval_by_id.get(claim.claim_id, {})
+        selected_sources = (
+            selection.get("selected_provider_names")
+            or selection.get("selected_sources")
+            or retrieval.get("selected_providers")
+            or []
+        )
+        fact_checkable = claim.argument_type in FACTUAL_TYPES
+        has_relevant_evidence = bool(result.evidence_urls)
+        if not fact_checkable:
+            status = "skipped_non_factual"
+        elif has_relevant_evidence:
+            status = "evidence_attached"
+        elif selected_sources and retrieval.get("retrieved_count", 0):
+            status = "retrieved_but_not_relevant"
+        elif selected_sources:
+            status = "selected_source_returned_no_data"
+        else:
+            status = "no_compatible_source"
+        rows.append(
+            {
+                "claim_id": claim.claim_id,
+                "claim": claim.text,
+                "fact_checkable": fact_checkable,
+                "selected_sources": selected_sources,
+                "retrieved_count": int(retrieval.get("retrieved_count") or 0),
+                "added_urls": retrieval.get("added_urls") or [],
+                "evidence_url_count": len(result.evidence_urls),
+                "has_relevant_evidence": has_relevant_evidence,
+                "verdict": result.verdict.value,
+                "human_review_required": result.human_review_required,
+                "review_reasons": result.review_reasons,
+                "closure_status": status,
+            }
+        )
+    return rows
+
+
 def _emit_trace(
     callback: Callable[[dict[str, Any]], None] | None,
     step: str,
