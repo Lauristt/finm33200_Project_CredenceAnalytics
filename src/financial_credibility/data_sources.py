@@ -1689,6 +1689,432 @@ class FreeDataSourceClient:
             )
         ]
 
+    # ── New financial-statement tools ────────────────────────────────────────
+
+    def get_income_statement(
+        self,
+        ticker: str,
+        period: str = "annual",
+        limit: int = 4,
+    ) -> list[SearchResult]:
+        """Return structured income statement rows from SEC XBRL + FMP fallback."""
+        from datetime import date as _date
+
+        cik = self._ticker_to_cik(ticker)
+        rows: list[dict] = []
+        url_primary = ""
+
+        if cik:
+            url_primary = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"
+            try:
+                data = self._get_json(url_primary, sec=True)
+                facts = data.get("facts", {}).get("us-gaap", {})
+                concepts = {
+                    "revenue": ["Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "SalesRevenueNet"],
+                    "grossProfit": ["GrossProfit"],
+                    "operatingIncome": ["OperatingIncomeLoss"],
+                    "netIncome": ["NetIncomeLoss"],
+                    "epsDiluted": ["EarningsPerShareDiluted"],
+                    "epsBasic": ["EarningsPerShareBasic"],
+                    "operatingExpense": ["OperatingExpenses"],
+                    "costOfRevenue": ["CostOfRevenue", "CostOfGoodsAndServicesSold"],
+                }
+                period_days = (340, 380) if period == "annual" else (75, 105)
+                by_end: dict[str, dict] = {}
+                for field, concept_list in concepts.items():
+                    for concept_name in concept_list:
+                        concept_data = facts.get(concept_name, {})
+                        for unit_name, values in concept_data.get("units", {}).items():
+                            if unit_name not in {"USD", "USD/shares"}:
+                                continue
+                            for v in values:
+                                end = v.get("end")
+                                start = v.get("start")
+                                val = v.get("val")
+                                if not end or val is None:
+                                    continue
+                                if start:
+                                    try:
+                                        span = (_date.fromisoformat(end) - _date.fromisoformat(start)).days
+                                    except ValueError:
+                                        continue
+                                    if not (period_days[0] <= span <= period_days[1]):
+                                        continue
+                                elif period == "annual" and v.get("form") != "10-K":
+                                    continue
+                                row = by_end.setdefault(end, {"period_end": end})
+                                if field not in row:
+                                    row[field] = val
+                                    row[f"{field}_unit"] = unit_name
+                rows = sorted(by_end.values(), key=lambda r: r["period_end"], reverse=True)[:limit]
+            except Exception:
+                rows = []
+
+        if not rows:
+            # FMP fallback
+            key = self.config.fmp_api_key
+            if key:
+                fmp_period = "annual" if period == "annual" else "quarter"
+                try:
+                    data = self._get_json(
+                        "https://financialmodelingprep.com/stable/income-statement?"
+                        + urllib.parse.urlencode({"symbol": ticker.upper(), "period": fmp_period, "limit": limit, "apikey": key})
+                    )
+                    if isinstance(data, list):
+                        for item in data:
+                            rows.append({
+                                "period_end": item.get("date", ""),
+                                "revenue": item.get("revenue"),
+                                "grossProfit": item.get("grossProfit"),
+                                "operatingIncome": item.get("operatingIncome"),
+                                "netIncome": item.get("netIncome"),
+                                "epsDiluted": item.get("epsdiluted"),
+                                "epsBasic": item.get("eps"),
+                            })
+                except Exception:
+                    pass
+
+        if not rows:
+            return []
+
+        lines = [f"{ticker.upper()} Income Statement ({period}):"]
+        for row in rows:
+            parts = [f"Period ending {row['period_end']}"]
+            for field in ["revenue", "grossProfit", "operatingIncome", "netIncome", "epsDiluted"]:
+                val = row.get(field)
+                if val is not None:
+                    parts.append(f"{field}={val}")
+            lines.append("; ".join(parts))
+
+        return [
+            SearchResult(
+                title=f"Income Statement for {ticker.upper()} ({period})",
+                url=url_primary or f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker.upper()}",
+                snippet=" | ".join(lines),
+                source="SEC EDGAR" if url_primary else "Financial Modeling Prep",
+                raw={"provider": "income_statement", "ticker": ticker.upper(), "period": period, "rows": rows},
+            )
+        ]
+
+    def get_balance_sheet(
+        self,
+        ticker: str,
+        period: str = "annual",
+        limit: int = 4,
+    ) -> list[SearchResult]:
+        """Return structured balance sheet rows from SEC XBRL + FMP fallback."""
+        from datetime import date as _date
+
+        cik = self._ticker_to_cik(ticker)
+        rows: list[dict] = []
+        url_primary = ""
+
+        if cik:
+            url_primary = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"
+            try:
+                data = self._get_json(url_primary, sec=True)
+                facts = data.get("facts", {}).get("us-gaap", {})
+                concepts = {
+                    "totalAssets": ["Assets"],
+                    "currentAssets": ["AssetsCurrent"],
+                    "currentLiabilities": ["LiabilitiesCurrent"],
+                    "totalLiabilities": ["Liabilities"],
+                    "stockholdersEquity": ["StockholdersEquity", "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"],
+                    "cash": ["CashAndCashEquivalentsAtCarryingValue", "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents"],
+                    "longTermDebt": ["LongTermDebt", "LongTermDebtNoncurrent"],
+                    "shortTermDebt": ["ShortTermBorrowings", "ShortTermDebt"],
+                    "retainedEarnings": ["RetainedEarningsAccumulatedDeficit"],
+                }
+                # Balance sheet is a snapshot (no start date); filter by period
+                point_forms = {"10-K"} if period == "annual" else {"10-Q", "10-K"}
+                by_end: dict[str, dict] = {}
+                for field, concept_list in concepts.items():
+                    for concept_name in concept_list:
+                        concept_data = facts.get(concept_name, {})
+                        for _unit, values in concept_data.get("units", {}).items():
+                            for v in values:
+                                end = v.get("end")
+                                val = v.get("val")
+                                form = v.get("form", "")
+                                if not end or val is None or form not in point_forms:
+                                    continue
+                                row = by_end.setdefault(end, {"period_end": end})
+                                if field not in row:
+                                    row[field] = val
+                rows = sorted(by_end.values(), key=lambda r: r["period_end"], reverse=True)[:limit]
+            except Exception:
+                rows = []
+
+        if not rows:
+            key = self.config.fmp_api_key
+            if key:
+                fmp_period = "annual" if period == "annual" else "quarter"
+                try:
+                    data = self._get_json(
+                        "https://financialmodelingprep.com/stable/balance-sheet-statement?"
+                        + urllib.parse.urlencode({"symbol": ticker.upper(), "period": fmp_period, "limit": limit, "apikey": key})
+                    )
+                    if isinstance(data, list):
+                        for item in data:
+                            rows.append({
+                                "period_end": item.get("date", ""),
+                                "totalAssets": item.get("totalAssets"),
+                                "currentAssets": item.get("totalCurrentAssets"),
+                                "currentLiabilities": item.get("totalCurrentLiabilities"),
+                                "totalLiabilities": item.get("totalLiabilities"),
+                                "stockholdersEquity": item.get("totalStockholdersEquity"),
+                                "cash": item.get("cashAndCashEquivalents"),
+                                "longTermDebt": item.get("longTermDebt"),
+                            })
+                except Exception:
+                    pass
+
+        if not rows:
+            return []
+
+        lines = [f"{ticker.upper()} Balance Sheet ({period}):"]
+        for row in rows:
+            parts = [f"Period ending {row['period_end']}"]
+            for field in ["totalAssets", "currentAssets", "currentLiabilities", "totalLiabilities", "stockholdersEquity", "cash", "longTermDebt"]:
+                val = row.get(field)
+                if val is not None:
+                    parts.append(f"{field}={val}")
+            lines.append("; ".join(parts))
+
+        return [
+            SearchResult(
+                title=f"Balance Sheet for {ticker.upper()} ({period})",
+                url=url_primary or f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker.upper()}",
+                snippet=" | ".join(lines),
+                source="SEC EDGAR" if url_primary else "Financial Modeling Prep",
+                raw={"provider": "balance_sheet", "ticker": ticker.upper(), "period": period, "rows": rows},
+            )
+        ]
+
+    def get_cash_flow_statement(
+        self,
+        ticker: str,
+        period: str = "annual",
+        limit: int = 4,
+    ) -> list[SearchResult]:
+        """Return structured cash flow statement rows from SEC XBRL + FMP fallback."""
+        from datetime import date as _date
+
+        cik = self._ticker_to_cik(ticker)
+        rows: list[dict] = []
+        url_primary = ""
+
+        if cik:
+            url_primary = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"
+            try:
+                data = self._get_json(url_primary, sec=True)
+                facts = data.get("facts", {}).get("us-gaap", {})
+                concepts = {
+                    "operatingCF": ["NetCashProvidedByUsedInOperatingActivities"],
+                    "investingCF": ["NetCashProvidedByUsedInInvestingActivities"],
+                    "financingCF": ["NetCashProvidedByUsedInFinancingActivities"],
+                    "capex": ["PaymentsToAcquirePropertyPlantAndEquipment"],
+                    "depreciation": ["DepreciationDepletionAndAmortization"],
+                    "stockBasedComp": ["ShareBasedCompensation"],
+                }
+                period_days = (340, 380) if period == "annual" else (75, 105)
+                by_end: dict[str, dict] = {}
+                for field, concept_list in concepts.items():
+                    for concept_name in concept_list:
+                        concept_data = facts.get(concept_name, {})
+                        for _unit, values in concept_data.get("units", {}).items():
+                            for v in values:
+                                end = v.get("end")
+                                start = v.get("start")
+                                val = v.get("val")
+                                if not end or val is None:
+                                    continue
+                                if start:
+                                    try:
+                                        span = (_date.fromisoformat(end) - _date.fromisoformat(start)).days
+                                    except ValueError:
+                                        continue
+                                    if not (period_days[0] <= span <= period_days[1]):
+                                        continue
+                                elif period == "annual" and v.get("form") != "10-K":
+                                    continue
+                                row = by_end.setdefault(end, {"period_end": end})
+                                if field not in row:
+                                    row[field] = val
+                # Compute free cash flow
+                for row in by_end.values():
+                    ocf = row.get("operatingCF")
+                    capex = row.get("capex")
+                    if ocf is not None and capex is not None:
+                        row["freeCashFlow"] = ocf - abs(capex)
+                rows = sorted(by_end.values(), key=lambda r: r["period_end"], reverse=True)[:limit]
+            except Exception:
+                rows = []
+
+        if not rows:
+            key = self.config.fmp_api_key
+            if key:
+                fmp_period = "annual" if period == "annual" else "quarter"
+                try:
+                    data = self._get_json(
+                        "https://financialmodelingprep.com/stable/cash-flow-statement?"
+                        + urllib.parse.urlencode({"symbol": ticker.upper(), "period": fmp_period, "limit": limit, "apikey": key})
+                    )
+                    if isinstance(data, list):
+                        for item in data:
+                            ocf = item.get("operatingCashFlow")
+                            capex = item.get("capitalExpenditure")
+                            rows.append({
+                                "period_end": item.get("date", ""),
+                                "operatingCF": ocf,
+                                "investingCF": item.get("investingCashFlow"),
+                                "financingCF": item.get("financingCashFlow"),
+                                "capex": capex,
+                                "freeCashFlow": (ocf - abs(capex)) if ocf is not None and capex is not None else None,
+                            })
+                except Exception:
+                    pass
+
+        if not rows:
+            return []
+
+        lines = [f"{ticker.upper()} Cash Flow Statement ({period}):"]
+        for row in rows:
+            parts = [f"Period ending {row['period_end']}"]
+            for field in ["operatingCF", "investingCF", "financingCF", "capex", "freeCashFlow"]:
+                val = row.get(field)
+                if val is not None:
+                    parts.append(f"{field}={val}")
+            lines.append("; ".join(parts))
+
+        return [
+            SearchResult(
+                title=f"Cash Flow Statement for {ticker.upper()} ({period})",
+                url=url_primary or f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker.upper()}",
+                snippet=" | ".join(lines),
+                source="SEC EDGAR" if url_primary else "Financial Modeling Prep",
+                raw={"provider": "cash_flow_statement", "ticker": ticker.upper(), "period": period, "rows": rows},
+            )
+        ]
+
+    def get_earnings_history(
+        self,
+        ticker: str,
+        limit: int = 8,
+    ) -> list[SearchResult]:
+        """Return quarterly EPS history from SEC XBRL + FMP earnings surprises."""
+        from datetime import date as _date
+
+        cik = self._ticker_to_cik(ticker)
+        rows: list[dict] = []
+        url_primary = ""
+
+        if cik:
+            url_primary = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"
+            try:
+                data = self._get_json(url_primary, sec=True)
+                facts = data.get("facts", {}).get("us-gaap", {})
+                # Grab quarterly EPS (diluted preferred, basic fallback)
+                for concept_name in ["EarningsPerShareDiluted", "EarningsPerShareBasic"]:
+                    concept_data = facts.get(concept_name, {})
+                    for _unit, values in concept_data.get("units", {}).items():
+                        for v in values:
+                            end = v.get("end")
+                            start = v.get("start")
+                            val = v.get("val")
+                            form = v.get("form", "")
+                            if not end or val is None:
+                                continue
+                            if start:
+                                try:
+                                    span = (_date.fromisoformat(end) - _date.fromisoformat(start)).days
+                                except ValueError:
+                                    continue
+                                if not (75 <= span <= 105):
+                                    continue
+                            elif form not in {"10-Q", "10-K"}:
+                                continue
+                            # Only add if we don't already have this period
+                            existing = next((r for r in rows if r.get("period_end") == end), None)
+                            if not existing:
+                                rows.append({
+                                    "period_end": end,
+                                    "eps_actual": val,
+                                    "eps_type": concept_name,
+                                    "form": form,
+                                })
+                    if rows:
+                        break  # diluted found, skip basic
+                rows = sorted(rows, key=lambda r: r["period_end"], reverse=True)[:limit]
+            except Exception:
+                rows = []
+
+        # FMP earnings surprises (gives actual vs estimate)
+        fmp_rows: list[dict] = []
+        key = self.config.fmp_api_key
+        if key:
+            try:
+                data = self._get_json(
+                    "https://financialmodelingprep.com/stable/earnings?"
+                    + urllib.parse.urlencode({"symbol": ticker.upper(), "limit": limit, "apikey": key})
+                )
+                if isinstance(data, list):
+                    for item in data:
+                        fmp_rows.append({
+                            "period_end": item.get("date", ""),
+                            "eps_actual": item.get("eps"),
+                            "eps_estimated": item.get("epsEstimated"),
+                            "revenue_actual": item.get("revenue"),
+                            "revenue_estimated": item.get("revenueEstimated"),
+                        })
+            except Exception:
+                pass
+
+        # Merge FMP beat data into SEC rows where possible
+        fmp_by_period: dict[str, dict] = {}
+        for r in fmp_rows:
+            end = r.get("period_end", "")[:7]  # YYYY-MM
+            fmp_by_period[end] = r
+
+        for row in rows:
+            month_key = row.get("period_end", "")[:7]
+            fmp_match = fmp_by_period.get(month_key, {})
+            if fmp_match.get("eps_estimated") is not None:
+                row["eps_estimated"] = fmp_match["eps_estimated"]
+                actual = row.get("eps_actual")
+                est = fmp_match["eps_estimated"]
+                if actual is not None:
+                    row["beat"] = actual > est
+
+        if not rows:
+            rows = fmp_rows[:limit]
+
+        if not rows:
+            return []
+
+        lines = [f"{ticker.upper()} Earnings History (quarterly EPS):"]
+        for row in rows:
+            parts = [f"Q ending {row['period_end']}"]
+            if row.get("eps_actual") is not None:
+                parts.append(f"EPS={row['eps_actual']}")
+            if row.get("eps_estimated") is not None:
+                parts.append(f"est={row['eps_estimated']}")
+            if "beat" in row:
+                parts.append("beat=True" if row["beat"] else "beat=False")
+            if row.get("revenue_actual") is not None:
+                parts.append(f"revenue={row['revenue_actual']}")
+            lines.append("; ".join(parts))
+
+        return [
+            SearchResult(
+                title=f"Earnings History for {ticker.upper()}",
+                url=url_primary or f"https://financialmodelingprep.com/stable/earnings?symbol={ticker.upper()}",
+                snippet=" | ".join(lines),
+                source="SEC EDGAR" if url_primary else "Financial Modeling Prep",
+                raw={"provider": "earnings_history", "ticker": ticker.upper(), "rows": rows},
+            )
+        ]
+
     def _ticker_to_cik(self, ticker: str) -> int | None:
         """Resolve an equity ticker to a SEC CIK using the SEC ticker map."""
         data = self._get_json("https://www.sec.gov/files/company_tickers.json", sec=True)

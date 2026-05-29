@@ -85,6 +85,10 @@ def _executors() -> dict[str, ToolExecutor]:
         "get_company_fundamentals": _execute_get_company_fundamentals,
         "get_historical_prices": _execute_get_historical_prices,
         "compare_stock_performance": _execute_compare_stock_performance,
+        "get_income_statement": _execute_get_income_statement,
+        "get_balance_sheet": _execute_get_balance_sheet,
+        "get_cash_flow_statement": _execute_get_cash_flow_statement,
+        "get_earnings_history": _execute_get_earnings_history,
         "retrieve_evidence": _execute_retrieve_evidence,
         "verify_atomic_claim": _execute_verify_atomic_claim,
         "calibrate_uncertainty": _execute_calibrate_uncertainty,
@@ -287,6 +291,41 @@ def _execute_compare_stock_performance(args: dict[str, Any], config: ToolkitConf
         "ticker_result": left,
         "benchmark_result": right,
     }
+
+
+def _execute_get_income_statement(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    period = str(args.get("period") or "annual")
+    limit = int(args.get("limit") or 4)
+    client = FreeDataSourceClient(config)
+    results = client.get_income_statement(ticker, period=period, limit=limit)
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
+def _execute_get_balance_sheet(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    period = str(args.get("period") or "annual")
+    limit = int(args.get("limit") or 4)
+    client = FreeDataSourceClient(config)
+    results = client.get_balance_sheet(ticker, period=period, limit=limit)
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
+def _execute_get_cash_flow_statement(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    period = str(args.get("period") or "annual")
+    limit = int(args.get("limit") or 4)
+    client = FreeDataSourceClient(config)
+    results = client.get_cash_flow_statement(ticker, period=period, limit=limit)
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
+def _execute_get_earnings_history(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    limit = int(args.get("limit") or 8)
+    client = FreeDataSourceClient(config)
+    results = client.get_earnings_history(ticker, limit=limit)
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
 
 
 def _execute_retrieve_evidence(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:

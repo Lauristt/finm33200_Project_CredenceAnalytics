@@ -23,6 +23,16 @@ CORE_TOOLS = [
     "build_audit_trace",
 ]
 
+FINANCIAL_STATEMENT_TOOLS = [
+    "get_income_statement",
+    "get_balance_sheet",
+    "get_cash_flow_statement",
+    "get_earnings_history",
+    "get_sec_company_facts",
+    "get_recent_filings",
+    "get_company_fundamentals",
+]
+
 TOOL_PROFILES: dict[str, list[str]] = {
     "one_shot": ["build_evidence_pack"],
     "agent_core": CORE_TOOLS,
@@ -34,6 +44,7 @@ TOOL_PROFILES: dict[str, list[str]] = {
         "compare_stock_performance",
         "get_company_fundamentals",
     ],
+    "financial_statements": CORE_TOOLS + FINANCIAL_STATEMENT_TOOLS,
     "audit": ["audit_verification_chain"],
     "review": ["summarize_evidence_pack", "summarize_audit_report", "review_tool_surface"],
 }

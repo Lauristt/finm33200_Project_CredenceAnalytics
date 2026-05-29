@@ -84,6 +84,10 @@ def all_registered_tools() -> list[RegisteredTool]:
         _get_company_fundamentals_tool(),
         _get_historical_prices_tool(),
         _compare_stock_performance_tool(),
+        _get_income_statement_tool(),
+        _get_balance_sheet_tool(),
+        _get_cash_flow_statement_tool(),
+        _get_earnings_history_tool(),
         _retrieve_evidence_tool(),
         _verify_atomic_claim_tool(),
         _calibrate_uncertainty_tool(),
@@ -509,6 +513,108 @@ def _compare_stock_performance_tool() -> RegisteredTool:
     )
 
 
+def _get_income_statement_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="get_income_statement",
+        description="Retrieve structured income statement rows (revenue, gross profit, operating income, net income, EPS) for multiple periods.",
+        when_to_use=(
+            "Use when a claim asserts specific income-statement figures such as revenue, net income, gross profit, operating income, "
+            "EPS, or margins for one or more fiscal periods. Prefer over get_sec_company_facts when you need a multi-period table "
+            "rather than a concept-filtered snippet."
+        ),
+        data_sources=["SEC EDGAR XBRL company facts (primary)", "Financial Modeling Prep (fallback)"],
+        requires_keys=["No key needed for SEC path; FMP_API_KEY optional for fallback"],
+        limitations=[
+            "XBRL figures are as-reported and may differ from adjusted/non-GAAP metrics.",
+            "Very recent quarters may not yet be filed with SEC.",
+        ],
+        input_schema=_object_schema(
+            {
+                "ticker": {"type": "string", "description": "Equity ticker symbol, e.g. AAPL."},
+                "period": {"type": "string", "enum": ["annual", "quarterly"], "default": "annual"},
+                "limit": {"type": "integer", "default": 4, "description": "Number of periods to return (1–8)."},
+            },
+            ["ticker"],
+        ),
+        output_schema=_object_schema({"results": _search_result_array(), "notes": {"type": "array"}}),
+    )
+
+
+def _get_balance_sheet_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="get_balance_sheet",
+        description="Retrieve structured balance sheet rows (assets, liabilities, equity, cash, debt) for multiple periods.",
+        when_to_use=(
+            "Use when a claim asserts balance-sheet figures: total assets, liabilities, stockholders' equity, cash position, "
+            "long-term debt, current ratio, or working capital."
+        ),
+        data_sources=["SEC EDGAR XBRL company facts (primary)", "Financial Modeling Prep (fallback)"],
+        requires_keys=["No key needed for SEC path; FMP_API_KEY optional"],
+        limitations=[
+            "Balance-sheet snapshots are point-in-time; ensure the period end matches the claim's reference date.",
+        ],
+        input_schema=_object_schema(
+            {
+                "ticker": {"type": "string"},
+                "period": {"type": "string", "enum": ["annual", "quarterly"], "default": "annual"},
+                "limit": {"type": "integer", "default": 4},
+            },
+            ["ticker"],
+        ),
+        output_schema=_object_schema({"results": _search_result_array(), "notes": {"type": "array"}}),
+    )
+
+
+def _get_cash_flow_statement_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="get_cash_flow_statement",
+        description="Retrieve structured cash flow statement rows (operating, investing, financing CF; capex; free cash flow).",
+        when_to_use=(
+            "Use when a claim asserts cash flow figures: operating cash flow, free cash flow, capex, "
+            "or investing/financing activities for a specific period."
+        ),
+        data_sources=["SEC EDGAR XBRL company facts (primary)", "Financial Modeling Prep (fallback)"],
+        requires_keys=["No key needed for SEC path; FMP_API_KEY optional"],
+        limitations=[
+            "Free cash flow is computed as operatingCF minus absolute capex; does not include working-capital adjustments.",
+        ],
+        input_schema=_object_schema(
+            {
+                "ticker": {"type": "string"},
+                "period": {"type": "string", "enum": ["annual", "quarterly"], "default": "annual"},
+                "limit": {"type": "integer", "default": 4},
+            },
+            ["ticker"],
+        ),
+        output_schema=_object_schema({"results": _search_result_array(), "notes": {"type": "array"}}),
+    )
+
+
+def _get_earnings_history_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="get_earnings_history",
+        description="Retrieve quarterly EPS history with beat/miss vs. analyst estimates.",
+        when_to_use=(
+            "Use when a claim asserts an EPS figure, an earnings beat or miss, 'kept beating quarter after quarter', "
+            "or a pattern of earnings surprises. This tool returns actual vs. estimated EPS for recent quarters."
+        ),
+        data_sources=["SEC EDGAR XBRL company facts (EPS)", "Financial Modeling Prep earnings surprises (optional)"],
+        requires_keys=["No key needed for SEC EPS history; FMP_API_KEY for beat/miss estimates"],
+        limitations=[
+            "Beat/miss data requires FMP_API_KEY; without it only reported EPS is returned.",
+            "EPS figures are GAAP diluted unless otherwise noted.",
+        ],
+        input_schema=_object_schema(
+            {
+                "ticker": {"type": "string"},
+                "limit": {"type": "integer", "default": 8, "description": "Number of quarters to return."},
+            },
+            ["ticker"],
+        ),
+        output_schema=_object_schema({"results": _search_result_array(), "notes": {"type": "array"}}),
+    )
+
+
 def _retrieve_evidence_tool() -> RegisteredTool:
     return RegisteredTool(
         name="retrieve_evidence",
@@ -820,6 +926,8 @@ def _required_prior_state(name: str) -> str:
         return "A specific claim; extracted entities are useful but optional."
     if name == "load_source_documentation":
         return "Selected source ids from map_asset_sources/select_sources, or a claim so the tool can infer likely source ids."
+    if name in {"get_income_statement", "get_balance_sheet", "get_cash_flow_statement", "get_earnings_history"}:
+        return "A resolved ticker; optionally the period (annual/quarterly) and limit."
     if name in {"retrieve_evidence", "select_sources", "route_sources"}:
         return "A specific claim plus detected entities or asset_classes when available; for retrieval, a resolved ticker or explicit ticker hint and the inferred event/release/trading date when available."
     if name in {"get_canonical_facts", "verify_atomic_claim", "verify_numeric_claim", "verify_logic_claim", "verify_source_quality", "aggregate_credibility"}:
@@ -842,6 +950,8 @@ def _do_not_use_when(name: str) -> str:
         return "the selected source documentation has already been loaded and still matches the source ids being used."
     if name == "build_evidence_pack":
         return "the agent needs fine-grained multi-step control or must inspect intermediate evidence before deciding."
+    if name in {"get_income_statement", "get_balance_sheet", "get_cash_flow_statement", "get_earnings_history"}:
+        return "the claim does not assert a specific financial statement figure, or the data for that period is already available from a prior retrieval."
     if name.startswith("get_"):
         return "the needed evidence is already available in prior tool output and still matches the claim/time window."
     if name.startswith("verify_"):
@@ -862,6 +972,8 @@ def _output_means(name: str) -> str:
         return "planning metadata that tells the agent which source/series/endpoint should be tried next."
     if name == "load_source_documentation":
         return "source-specific API playbooks with endpoint schemas, auth env vars, naming rules, response fields, and caveats."
+    if name in {"get_income_statement", "get_balance_sheet", "get_cash_flow_statement", "get_earnings_history"}:
+        return "structured financial statement rows with period-end dates and line-item values; pass results to get_canonical_facts or verify_numeric_claim."
     if name in {"retrieve_evidence", "get_sec_company_facts", "get_recent_filings", "get_company_fundamentals"}:
         return "candidate source records that still need canonicalization or verification before final claims."
     if name == "get_canonical_facts":
@@ -886,6 +998,10 @@ def _recommended_next_tools(name: str) -> str:
         "decompose_claims": "classify_claim or select_sources for factual claims; skip opinion/forecast unless the user asks for reasoning review.",
         "select_sources": "retrieve_evidence or source-specific retrieval tools.",
         "route_sources": "source-specific retrieval tools or retrieve_evidence.",
+        "get_income_statement": "get_canonical_facts using the results, then verify_numeric_claim or verify_atomic_claim.",
+        "get_balance_sheet": "get_canonical_facts using the results, then verify_numeric_claim or verify_atomic_claim.",
+        "get_cash_flow_statement": "get_canonical_facts using the results, then verify_numeric_claim or verify_atomic_claim.",
+        "get_earnings_history": "verify_numeric_claim or verify_logic_claim using the EPS rows.",
         "get_sec_company_facts": "get_canonical_facts, then verify_atomic_claim.",
         "get_recent_filings": "retrieve_evidence or verify_source_quality if filing context is sufficient.",
         "retrieve_evidence": "get_canonical_facts, verify_numeric_claim, verify_logic_claim, verify_source_quality.",

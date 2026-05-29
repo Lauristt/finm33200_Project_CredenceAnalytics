@@ -1,4 +1,10 @@
-"""Repo-native multi-tool agent runner with trace capture."""
+"""Repo-native multi-tool agent runner with trace capture.
+
+OpenAI path preference (highest → lowest priority):
+  1. openai-agents SDK  – full agentic loop, auto tool-choice (requires pip install openai-agents)
+  2. Responses API loop – raw HTTP fallback when SDK not installed
+  3. Deterministic fallback – when no LLM provider is configured
+"""
 
 from __future__ import annotations
 
@@ -322,6 +328,34 @@ class MultiToolAgentRunner:
         repeated: dict[tuple[str, str], int],
         progress_callback: Callable[[dict[str, Any]], None] | None,
     ) -> tuple[list[AgentToolCall], str]:
+        # ── Prefer the OpenAI Agents SDK when installed ───────────────────────
+        from .openai_agents_runner import is_available as _sdk_available, run_openai_agents_sdk
+
+        if _sdk_available():
+            _emit(
+                progress_callback,
+                "agent_start",
+                "running",
+                "Using OpenAI Agents SDK for tool orchestration.",
+            )
+            return run_openai_agents_sdk(
+                memo=memo,
+                tickers=tickers,
+                as_of_date=as_of_date,
+                max_steps=max_steps,
+                instructions=instructions,
+                tool_profile=tool_profile,
+                config=self.config,
+                progress_callback=progress_callback,
+            )
+
+        # ── Fallback: raw Responses API loop ─────────────────────────────────
+        _emit(
+            progress_callback,
+            "agent_start",
+            "running",
+            "openai-agents SDK not found; using raw Responses API loop.",
+        )
         tools = export_openai_response_tools(tool_profile)
         input_payload: Any = _user_prompt(memo, tickers, as_of_date)
         previous_response_id = None
