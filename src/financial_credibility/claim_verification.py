@@ -97,6 +97,11 @@ def _claim_verdict(
             and _derivation_has_no_matched_values(derivation)
         ):
             return VerificationVerdict.INSUFFICIENT
+    if _contains_numeric_value(claim_text) and numeric_verdict in {
+        VerificationVerdict.NOT_FOUND.value,
+        VerificationVerdict.INSUFFICIENT.value,
+    }:
+        return VerificationVerdict.INSUFFICIENT
     if derivation and derivation.expression == "numeric_match_summary" and derivation.passed is False:
         if logic_verdict == VerificationVerdict.CONTRADICTED.value:
             return VerificationVerdict.CONTRADICTED
@@ -115,15 +120,20 @@ def _claim_verdict(
         return VerificationVerdict.SUPPORTED
     if logic_verdict == VerificationVerdict.SUPPORTED.value and numeric_verdict in {
         VerificationVerdict.NOT_APPLICABLE.value,
-        VerificationVerdict.PARTIALLY_VERIFIED.value,
         VerificationVerdict.VERIFIED.value,
     }:
         return VerificationVerdict.SUPPORTED
+    if logic_verdict == VerificationVerdict.SUPPORTED.value and numeric_verdict == VerificationVerdict.PARTIALLY_VERIFIED.value:
+        return VerificationVerdict.PARTIALLY_SUPPORTED
     if numeric_verdict == VerificationVerdict.NOT_FOUND.value or logic_verdict == VerificationVerdict.PARTIALLY_SUPPORTED.value:
         return VerificationVerdict.PARTIALLY_SUPPORTED
     if VerificationVerdict.INSUFFICIENT.value in {numeric_verdict, logic_verdict}:
         return VerificationVerdict.INSUFFICIENT
     return VerificationVerdict.PARTIALLY_SUPPORTED
+
+
+def _contains_numeric_value(text: str) -> bool:
+    return bool(re.search(r"[$€£]?\d+(?:,\d{3})*(?:\.\d+)?\s*(?:%|percent|billion|million|trillion|bn|m|b)?", text, re.I))
 
 
 def _derivation_has_no_matched_values(derivation: NumericDerivation) -> bool:
@@ -156,6 +166,7 @@ def _relevant_evidence(atomic_claim: AtomicClaim, evidence: list[Evidence]) -> l
             for item in evidence
             if _is_price_history_evidence(item)
         ]
+    metric_terms = _required_metric_terms_for_claim(atomic_claim.text)
     scored = [
         (_text_overlap_hint(atomic_claim.text, item.title + " " + item.text), item)
         for item in evidence
@@ -163,7 +174,11 @@ def _relevant_evidence(atomic_claim: AtomicClaim, evidence: list[Evidence]) -> l
     relevant = [
         (score, item)
         for score, item in scored
-        if score > 0 or (_is_price_history_evidence(item) and needs_historical_price_data(atomic_claim.text))
+        if (
+            score > 0
+            and _evidence_satisfies_metric_terms(item, metric_terms)
+        )
+        or (_is_price_history_evidence(item) and needs_historical_price_data(atomic_claim.text))
     ]
     return [
         item
@@ -188,6 +203,34 @@ def _is_price_history_evidence(item: Evidence) -> bool:
         or "latest_daily_return_pct" in text
         or "latest quote" in text
     )
+
+
+def _required_metric_terms_for_claim(text: str) -> set[str]:
+    lower = text.lower()
+    if "operating income" in lower or "income from operations" in lower:
+        return {"operating", "income"}
+    if "net income" in lower:
+        return {"net", "income"}
+    if "free cash flow" in lower:
+        return {"free", "cash", "flow"}
+    if "cash flow" in lower:
+        return {"cash", "flow"}
+    if "eps" in lower or "earnings per share" in lower:
+        return {"eps"}
+    if "revenue" in lower or "sales" in lower:
+        return {"revenue"}
+    return set()
+
+
+def _evidence_satisfies_metric_terms(item: Evidence, required_terms: set[str]) -> bool:
+    if not required_terms:
+        return True
+    text = f"{item.title} {item.text}".lower().replace("-", " ")
+    if required_terms == {"eps"}:
+        return bool(re.search(r"\beps\b|earnings per share|earningspershare", text))
+    if required_terms == {"revenue"}:
+        return bool(re.search(r"\brevenue\b|\brevenues\b|\bsales\b|revenuefromcontract|salesrevenuenet", text))
+    return all(term in text for term in required_terms)
 
 
 def _relevant_facts(atomic_claim: AtomicClaim, facts: list[CanonicalFact]) -> list[CanonicalFact]:

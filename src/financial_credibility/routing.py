@@ -26,7 +26,23 @@ def route_sources(
     if is_corporate_transaction_claim(text):
         routes.extend(["sec_recent_filings", "serper_web"])
         reasons.append("corporate transaction claim needs event evidence, not XBRL numeric facts")
-    if _contains(lower, "revenue", "sales", "income", "eps", "cash flow", "debt", "assets", "liabilities", "margin", "buyback", "repurchase", "leverage"):
+    if _contains(
+        lower,
+        "revenue",
+        "sales",
+        "income",
+        "operating income",
+        "income from operations",
+        "eps",
+        "cash flow",
+        "debt",
+        "assets",
+        "liabilities",
+        "margin",
+        "buyback",
+        "repurchase",
+        "leverage",
+    ):
         routes.extend(["sec_company_facts", "sec_recent_filings"])
         reasons.append("company financial statement claim")
     if needs_historical_price_data(text, detected_asset_classes):

@@ -53,6 +53,19 @@ class MultiToolAgentTests(unittest.TestCase):
         self.assertEqual(payload["agent_trace"]["termination_reason"], "max_steps")
         self.assertEqual(len(payload["agent_trace"]["tool_calls"]), 2)
 
+    def test_no_key_fallback_uses_non_equity_symbols_as_trace_targets(self):
+        payload = MultiToolAgentRunner(ToolkitConfig(enable_structured_sources=False)).run(
+            memo="The S&P 500 added 0.6% Tuesday.",
+            tickers=[],
+            as_of_date="2026-05-27",
+            max_steps=8,
+            audit=False,
+        )
+
+        tool_names = [call["tool_name"] for call in payload["agent_trace"]["tool_calls"]]
+        self.assertIn("retrieve_evidence", tool_names)
+        self.assertEqual(payload["input"]["tickers"], ["SPX"])
+
     def test_no_key_fallback_respects_one_shot_profile(self):
         payload = MultiToolAgentRunner(ToolkitConfig()).run(
             memo="Apple revenue grew 6% year over year.",

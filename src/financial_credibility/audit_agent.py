@@ -239,7 +239,9 @@ def _audit_common_sense(report: dict[str, Any], pack: dict[str, Any]) -> list[Au
     findings = []
     for run in _runs(report, pack):
         evidence_by_url = {item.get("url"): item for item in run.get("evidence") or [] if item.get("url")}
-        evidence_by_key = {_evidence_key(item): item for item in run.get("evidence") or []}
+        evidence_by_key: dict[str, dict[str, Any]] = {}
+        for item in run.get("evidence") or []:
+            evidence_by_key.setdefault(_evidence_key(item), item)
         facts_by_id = {item.get("fact_id"): item for item in run.get("canonical_facts") or [] if item.get("fact_id")}
         selections_by_claim = _source_selections_by_claim(run)
         for result in run.get("atomic_claims") or []:
@@ -273,7 +275,7 @@ def _audit_common_sense(report: dict[str, Any], pack: dict[str, Any]) -> list[Au
                 VerificationVerdict.NOT_FOUND.value,
                 VerificationVerdict.WEAK.value,
             }:
-                severity = "major" if selected_sources else "minor"
+                severity = "minor" if result.get("human_review_required") else "major"
                 summary = (
                     "Selected sources produced no displayable evidence for this claim."
                     if selected_sources
@@ -304,7 +306,8 @@ def _audit_common_sense(report: dict[str, Any], pack: dict[str, Any]) -> list[Au
                         )
                     )
 
-            if used_facts and not _facts_match_claim_common_sense(text, used_facts):
+            metric_facts = [fact for fact in used_facts if _is_metric_fact(fact)]
+            if metric_facts and not _facts_match_claim_common_sense(text, metric_facts):
                 findings.append(
                     _finding(
                         "major",
@@ -594,12 +597,12 @@ def _used_evidence_for_result(
     evidence_by_key: dict[str, dict[str, Any]],
 ) -> list[dict[str, Any]]:
     items = []
-    for key in result.get("evidence_keys") or []:
-        item = evidence_by_key.get(key)
-        if item:
-            items.append(item)
     for url in result.get("evidence_urls") or []:
         item = evidence_by_url.get(url)
+        if item:
+            items.append(item)
+    for key in result.get("evidence_keys") or []:
+        item = evidence_by_key.get(key)
         if item:
             items.append(item)
     return _dedupe_plain_sources(items)
@@ -645,6 +648,15 @@ def _facts_match_claim_common_sense(claim: str, facts: list[dict[str, Any]]) -> 
     if _metric_intents(claim) & _metric_intents(fact_text):
         return True
     return _token_overlap_score(claim, fact_text) >= 0.18
+
+
+def _is_metric_fact(fact: dict[str, Any]) -> bool:
+    fact_text = " ".join(str(fact.get(field) or "") for field in ["fact_name", "unit", "currency"])
+    if _metric_intents(fact_text):
+        return True
+    if fact.get("unit") or fact.get("currency"):
+        return True
+    return False
 
 
 def _is_price_evidence(text: str) -> bool:

@@ -39,6 +39,8 @@ SEC_CONCEPTS = {
     "eps": ["EarningsPerShareDiluted", "EarningsPerShareBasic"],
     "earnings": ["NetIncomeLoss", "EarningsPerShareDiluted"],
     "net income": ["NetIncomeLoss"],
+    "operating income": ["OperatingIncomeLoss"],
+    "income from operations": ["OperatingIncomeLoss"],
     "margin": ["GrossProfit", "OperatingIncomeLoss", "NetIncomeLoss", "Revenues"],
     "gross margin": ["GrossProfit", "Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "SalesRevenueNet"],
     "operating margin": ["OperatingIncomeLoss", "Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "SalesRevenueNet"],

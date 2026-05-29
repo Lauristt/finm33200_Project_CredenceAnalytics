@@ -96,6 +96,21 @@ SOURCE_GOVERNANCE: dict[str, tuple[LicenseTag, bool]] = {
     "stooq.com": (LicenseTag.UNKNOWN, False),
 }
 
+ISSUER_IR_EXCLUDED_DOMAINS = {
+    "barrons.com",
+    "bloomberg.com",
+    "cnbc.com",
+    "finance.yahoo.com",
+    "fool.com",
+    "marketwatch.com",
+    "nasdaq.com",
+    "prnewswire.com",
+    "reuters.com",
+    "seekingalpha.com",
+    "stocktitan.net",
+    "wsj.com",
+}
+
 
 def canonical_domain(url: str) -> str:
     """Normalize a URL or host into a comparable domain."""
@@ -125,7 +140,7 @@ def assess_source(url: str, title: str = "") -> SourceAssessment:
                 is_official_primary=is_official_primary,
             )
 
-    if re.search(r"\b(investor|investors|ir|newsroom|press-release|press_release)\b", lower_url):
+    if looks_like_issuer_ir_url(domain, lower_url):
         return SourceAssessment(
             SourceType.COMPANY_IR,
             SourceTier.T2,
@@ -133,7 +148,7 @@ def assess_source(url: str, title: str = "") -> SourceAssessment:
             domain,
             ["company investor-relations or official press page pattern"],
             license_tag=LicenseTag.UNKNOWN,
-            is_official_primary=False,
+            is_official_primary=True,
         )
 
     if "press release" in lower_title or "earnings release" in lower_title:
@@ -153,6 +168,21 @@ def assess_source(url: str, title: str = "") -> SourceAssessment:
         0.40,
         domain,
         ["unknown source; conservative default"],
+    )
+
+
+def looks_like_issuer_ir_url(domain: str, lower_url: str) -> bool:
+    """Return true for issuer-owned IR/newsroom URLs, not media repost slugs."""
+    if any(domain == pattern or domain.endswith(f".{pattern}") for pattern in ISSUER_IR_EXCLUDED_DOMAINS):
+        return False
+    if domain.startswith(("ir.", "investor.", "investors.")):
+        return True
+    return bool(
+        re.search(
+            r"/(?:investor|investors|investor-relations|ir|newsroom)(?:/|$)|"
+            r"/(?:press-release|press_release)(?:/|$)",
+            lower_url,
+        )
     )
 
 

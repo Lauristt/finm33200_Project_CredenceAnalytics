@@ -32,12 +32,14 @@ class SearchClient:
         max_sources: int = 8,
         as_of_date: str | None = None,
         prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
+        source_results: list[dict[str, Any] | SearchResult] | None = None,
         selected_sources: list[str] | None = None,
     ) -> tuple[list[SearchResult], list[str]]:
         """Retrieve candidate sources for one claim.
 
         Retrieval order is deliberate: tests/demos can pass `prefetched_results`;
-        otherwise structured sources are tried before optional web search.
+        otherwise caller-provided source seeds, structured sources, and optional
+        web search are merged in that order.
         The returned notes are surfaced in `EvidencePack.metadata`.
         """
         if prefetched_results is not None:
@@ -48,6 +50,16 @@ class SearchClient:
         results: list[SearchResult] = []
         notes: list[str] = []
         seen_urls: set[str] = set()
+
+        for result in [_normalize_result(item) for item in (source_results or [])]:
+            if not result.url or result.url in seen_urls:
+                continue
+            seen_urls.add(result.url)
+            results.append(result)
+            if len(results) >= max_sources:
+                return results, ["used caller-provided source seed"] + notes
+        if source_results:
+            notes.append("used caller-provided source seed")
 
         if self.config.enable_structured_sources:
             structured_results, structured_notes = FreeDataSourceClient(self.config).query(

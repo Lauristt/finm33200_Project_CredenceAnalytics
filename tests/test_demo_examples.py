@@ -35,7 +35,8 @@ class DemoExampleTests(unittest.TestCase):
 
         self.assertIn("## Bottom Line", payload["report_markdown"])
         self.assertIn("## AAPL", payload["report_markdown"])
-        self.assertIn("Evidence: T1 SEC Company Facts for AAPL", payload["report_markdown"])
+        self.assertIn("Evidence:", payload["report_markdown"])
+        self.assertIn("The evidence directly matches 6%", payload["report_markdown"])
         self.assertNotIn("Evidence Provenance", payload["report_markdown"])
 
 

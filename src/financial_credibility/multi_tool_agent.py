@@ -44,6 +44,7 @@ class MultiToolAgentRunner:
         provider: str = "auto",
         audit: bool = True,
         prefetched_results: list[dict[str, Any]] | None = None,
+        source_results: list[dict[str, Any]] | None = None,
         progress_callback: Callable[[dict[str, Any]], None] | None = None,
     ) -> dict[str, Any]:
         """Run a multi-tool agent, then attach trace and audit output to a report."""
@@ -89,6 +90,7 @@ class MultiToolAgentRunner:
                 max_steps=max_steps,
                 tool_profile=tool_profile,
                 prefetched_results=prefetched_results,
+                source_results=source_results,
                 progress_callback=progress_callback,
             )
         else:
@@ -103,6 +105,7 @@ class MultiToolAgentRunner:
                 instructions=instructions,
                 tool_profile=tool_profile,
                 prefetched_results=prefetched_results,
+                source_results=source_results,
                 progress_callback=progress_callback,
             )
 
@@ -111,6 +114,7 @@ class MultiToolAgentRunner:
             tickers=tickers or [],
             as_of_date=effective_as_of_date,
             prefetched_results=prefetched_results,
+            source_results=source_results,
             progress_callback=progress_callback,
         )
         payload.setdefault("input", {})["mode"] = "multi_tool"
@@ -170,6 +174,7 @@ class MultiToolAgentRunner:
         max_steps: int,
         tool_profile: str,
         prefetched_results: list[dict[str, Any]] | None,
+        source_results: list[dict[str, Any]] | None,
         progress_callback: Callable[[dict[str, Any]], None] | None,
     ) -> AgentTrace:
         calls: list[AgentToolCall] = []
@@ -187,7 +192,7 @@ class MultiToolAgentRunner:
 
         entities = call("extract_entities", {"memo": memo})
         claims = call("decompose_claims", {"claim": memo})
-        clean_tickers = tickers or entities.get("tickers") or []
+        clean_tickers = tickers or _entity_targets(entities)
         claim_text = _first_fact_checkable_claim_text(claims)
         if "build_evidence_pack" in allowed_tools and clean_tickers:
             call(
@@ -197,6 +202,7 @@ class MultiToolAgentRunner:
                     "ticker": str(clean_tickers[0]),
                     "as_of_date": as_of_date,
                     "prefetched_results": prefetched_results,
+                    "source_results": source_results,
                 },
             )
             reason = "max_steps" if len(calls) >= max_steps else "no_provider_fallback"
@@ -229,6 +235,7 @@ class MultiToolAgentRunner:
                     "as_of_date": as_of_date,
                     "selected_sources": selected_sources,
                     "prefetched_results": prefetched_results,
+                    "source_results": source_results,
                 },
             )
             canonical = call(
@@ -272,6 +279,7 @@ class MultiToolAgentRunner:
         instructions: str,
         tool_profile: str,
         prefetched_results: list[dict[str, Any]] | None,
+        source_results: list[dict[str, Any]] | None,
         progress_callback: Callable[[dict[str, Any]], None] | None,
     ) -> AgentTrace:
         calls: list[AgentToolCall] = []
@@ -279,11 +287,11 @@ class MultiToolAgentRunner:
         try:
             if provider == "openai":
                 calls, reason = self._run_openai_loop(
-                    memo, tickers, as_of_date, max_steps, instructions, tool_profile, prefetched_results, repeated, progress_callback
+                    memo, tickers, as_of_date, max_steps, instructions, tool_profile, prefetched_results, source_results, repeated, progress_callback
                 )
             else:
                 calls, reason = self._run_anthropic_loop(
-                    memo, tickers, as_of_date, max_steps, instructions, tool_profile, prefetched_results, repeated, progress_callback
+                    memo, tickers, as_of_date, max_steps, instructions, tool_profile, prefetched_results, source_results, repeated, progress_callback
                 )
         except Exception as exc:
             calls.append(
@@ -310,6 +318,7 @@ class MultiToolAgentRunner:
         instructions: str,
         tool_profile: str,
         prefetched_results: list[dict[str, Any]] | None,
+        source_results: list[dict[str, Any]] | None,
         repeated: dict[tuple[str, str], int],
         progress_callback: Callable[[dict[str, Any]], None] | None,
     ) -> tuple[list[AgentToolCall], str]:
@@ -339,7 +348,7 @@ class MultiToolAgentRunner:
                     return calls, "max_steps"
                 name = item.get("name", "")
                 args = _loads_args(item.get("arguments") or "{}")
-                args = _inject_known_args(name, args, as_of_date, prefetched_results)
+                args = _inject_known_args(name, args, as_of_date, prefetched_results, source_results)
                 result, event = self._execute_guarded_model_call(name, args, len(calls), repeated)
                 calls.append(event)
                 _emit(progress_callback, "agent_tool_call", event.status, f"{name} executed.", outputs=to_plain(event))
@@ -364,6 +373,7 @@ class MultiToolAgentRunner:
         instructions: str,
         tool_profile: str,
         prefetched_results: list[dict[str, Any]] | None,
+        source_results: list[dict[str, Any]] | None,
         repeated: dict[tuple[str, str], int],
         progress_callback: Callable[[dict[str, Any]], None] | None,
     ) -> tuple[list[AgentToolCall], str]:
@@ -396,7 +406,7 @@ class MultiToolAgentRunner:
                 if len(calls) >= max_steps:
                     return calls, "max_steps"
                 name = item.get("name", "")
-                args = _inject_known_args(name, dict(item.get("input") or {}), as_of_date, prefetched_results)
+                args = _inject_known_args(name, dict(item.get("input") or {}), as_of_date, prefetched_results, source_results)
                 result, event = self._execute_guarded_model_call(name, args, len(calls), repeated)
                 calls.append(event)
                 _emit(progress_callback, "agent_tool_call", event.status, f"{name} executed.", outputs=to_plain(event))
@@ -481,6 +491,7 @@ class MultiToolAgentRunner:
         tickers: list[str],
         as_of_date: str | None,
         prefetched_results: list[dict[str, Any]] | None,
+        source_results: list[dict[str, Any]] | None,
         progress_callback: Callable[[dict[str, Any]], None] | None,
     ) -> dict[str, Any]:
         from .reporting import build_verification_report
@@ -492,6 +503,7 @@ class MultiToolAgentRunner:
             as_of_date=as_of_date,
             mode="agentic",
             prefetched_results=prefetched_results,
+            source_results=source_results,
             progress_callback=progress_callback,
         )
 
@@ -542,14 +554,17 @@ def _user_prompt(memo: str, tickers: list[str], as_of_date: str | None) -> str:
 def _inject_known_args(
     name: str,
     args: dict[str, Any],
-    as_of_date: str | None,
-    prefetched_results: list[dict[str, Any]] | None,
+        as_of_date: str | None,
+        prefetched_results: list[dict[str, Any]] | None,
+        source_results: list[dict[str, Any]] | None,
 ) -> dict[str, Any]:
     updated = dict(args)
     if as_of_date and name in {"retrieve_evidence", "build_evidence_pack"} and not updated.get("as_of_date"):
         updated["as_of_date"] = as_of_date
     if prefetched_results is not None and name in {"retrieve_evidence", "build_evidence_pack"} and "prefetched_results" not in updated:
         updated["prefetched_results"] = prefetched_results
+    if source_results is not None and name in {"retrieve_evidence", "build_evidence_pack"} and "source_results" not in updated:
+        updated["source_results"] = source_results
     return updated
 
 
@@ -562,6 +577,31 @@ def _first_fact_checkable_claim_text(claims_payload: dict[str, Any]) -> str | No
         if text:
             return str(text)
     return None
+
+
+def _entity_targets(entities_payload: dict[str, Any]) -> list[str]:
+    targets: list[str] = []
+    for value in entities_payload.get("tickers") or []:
+        if value:
+            targets.append(str(value))
+    for item in entities_payload.get("entities") or []:
+        value = item.get("ticker") or item.get("symbol")
+        if value:
+            targets.append(str(value))
+    for group in (entities_payload.get("asset_groups") or {}).values():
+        for item in group or []:
+            value = item.get("ticker") or item.get("symbol")
+            if value:
+                targets.append(str(value))
+    seen = set()
+    deduped = []
+    for value in targets:
+        upper = value.upper()
+        if upper in seen:
+            continue
+        seen.add(upper)
+        deduped.append(upper)
+    return deduped
 
 
 def _loads_args(value: str) -> dict[str, Any]:

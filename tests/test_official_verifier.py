@@ -67,6 +67,38 @@ class OfficialVerifierUpgradeTests(unittest.TestCase):
         self.assertIn("On Tuesday, The Nasdaq composite climbed 1.2%", texts)
         self.assertIn("On Tuesday, The Dow Jones Industrial Average slipped 0.2%", texts)
 
+    def test_claim_decomposition_records_surrounding_context_window(self):
+        claims = decompose_claims(
+            "How major US stock indexes fared Tuesday 5/26/2026. "
+            "Published 05/27/2026, 04:26 PM. "
+            "The S&P 500 added 0.6%."
+        )
+
+        self.assertEqual(len(claims), 1)
+        self.assertEqual(claims[0].text, "On Tuesday, The S&P 500 added 0.6%")
+        self.assertIn("How major US stock indexes fared Tuesday 5/26/2026", claims[0].context_window)
+        self.assertIn("Published 05/27/2026, 04:26 PM", claims[0].context_window)
+        self.assertEqual(claims[0].context_window_source, "section_context")
+
+    def test_claim_decomposition_preserves_financial_metric_context_for_bare_growth_clause(self):
+        claims = decompose_claims(
+            "Nvidia reported revenue of $81.6 billion, up 20% sequentially and up 85% from a year earlier."
+        )
+        texts = [claim.text for claim in claims]
+
+        self.assertIn("Nvidia reported revenue of $81.6 billion, up 20% sequentially", texts)
+        self.assertIn("revenue up 85% from a year earlier", texts)
+        self.assertNotIn("historical_prices", route_sources(claims[1])["routes"])
+
+    def test_claim_decomposition_splits_multiple_index_moves_on_comma(self):
+        claims = decompose_claims("The S&P 500 added 0.6%, the Dow rose less than 0.1%, and the Nasdaq climbed 0.9%.")
+        texts = [claim.text for claim in claims]
+
+        self.assertEqual(
+            texts,
+            ["The S&P 500 added 0.6%", "the Dow rose less than 0.1%", "the Nasdaq climbed 0.9%"],
+        )
+
     def test_canonicalizes_sec_company_facts_fixture(self):
         results = [
             SearchResult(

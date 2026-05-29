@@ -194,6 +194,8 @@ class AtomicClaim:
     argument_type: ArgumentType
     classification_confidence: float
     signals: list[str] = field(default_factory=list)
+    context_window: str = ""
+    context_window_source: str = "claim"
 
 
 @dataclass(frozen=True)

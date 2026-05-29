@@ -43,6 +43,7 @@ def build_verification_report(
     max_sources: int = 8,
     mode: str = "agentic",
     prefetched_results: list[dict[str, Any]] | None = None,
+    source_results: list[dict[str, Any]] | None = None,
     progress_callback: Callable[[dict[str, Any]], None] | None = None,
     tool_profile: str = "agent_core",
     agent_max_steps: int = 12,
@@ -61,6 +62,7 @@ def build_verification_report(
             tool_profile=tool_profile,
             audit=audit,
             prefetched_results=prefetched_results,
+            source_results=source_results,
             progress_callback=progress_callback,
         )
     original_memo = memo
@@ -159,6 +161,7 @@ def build_verification_report(
                 max_sources=max_sources,
                 mode=mode,
                 prefetched_results=prefetched_results,
+                source_results=source_results,
                 trace_callback=_scoped_progress(progress_callback, ticker),
             )
             runs.append(pack.to_dict())
@@ -438,6 +441,8 @@ def _claim_result_sentence(
     verdict = _report_verdict_label(result.get("verdict"))
     source = _best_evidence_for_result(result, evidence_by_url)
     reason = _explanation_sentence(explanation)
+    if not reason:
+        reason = _fallback_reason_sentence(result, source)
     review = _review_sentence(result.get("review_reasons") or [])
     parts = [f"- **{verdict}.** {_sentence_text(claim)}"]
     if source:
@@ -485,6 +490,21 @@ def _source_label(source: dict[str, Any]) -> str:
     suffix = f" ({domain})" if domain else ""
     prefix = f"{tier} " if tier else ""
     return f"{prefix}{title}{suffix}"
+
+
+def _fallback_reason_sentence(result: dict[str, Any], source: dict[str, Any] | None) -> str:
+    verdict = str(result.get("verdict") or "").lower()
+    issues = [str(issue) for issue in (result.get("issues") or [])]
+    review_reasons = {str(reason) for reason in (result.get("review_reasons") or [])}
+    if "insufficient" in verdict and source:
+        if "ambiguous_unit_currency_or_period" in review_reasons:
+            return "Evidence was retrieved, but the exact value, unit, or reporting period was not matched clearly."
+        return "Evidence was retrieved, but it was not sufficient to verify the claim."
+    if "partial" in verdict and "ambiguous_unit_currency_or_period" in review_reasons:
+        return "The source supports part of the claim, but at least one value, unit, or reporting period remains ambiguous."
+    if any("unmatched claim numbers" in issue for issue in issues):
+        return "Some numbers in the claim were not matched in the retrieved evidence."
+    return ""
 
 
 def _explanation_sentence(explanation: dict[str, Any] | None) -> str:
@@ -546,7 +566,7 @@ def _review_sentence(reasons: list[str]) -> str:
 def _review_reason_label(value: str) -> str:
     return {
         "no_official_primary_source": "no official primary source was found",
-        "non_official_sources_only": "only non-official sources were available",
+        "non_official_sources_only": "only supplemental or third-party sources were available",
         "official_source_conflict": "official sources conflict",
         "amended_or_restatement_or_vintage_revision": "an amendment, restatement, or vintage revision may matter",
         "low_entity_resolution_confidence": "entity resolution is uncertain",
@@ -739,6 +759,7 @@ def _run_pack(
     max_sources: int,
     mode: str,
     prefetched_results: list[dict[str, Any]] | None,
+    source_results: list[dict[str, Any]] | None,
     trace_callback: Callable[[dict[str, Any]], None] | None = None,
 ) -> EvidencePack:
     kwargs = {
@@ -747,6 +768,7 @@ def _run_pack(
         "as_of_date": as_of_date,
         "max_sources": max_sources,
         "prefetched_results": prefetched_results,
+        "source_results": source_results,
     }
     if mode == "strict":
         return toolkit.build_evidence_pack(**kwargs, mode="strict", trace_callback=trace_callback)

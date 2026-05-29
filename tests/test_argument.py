@@ -42,6 +42,7 @@ class ArgumentClassifierTests(unittest.TestCase):
             ),
             "Management sought to reassure investors it can sustain growth.",
             "Huang discussed with investors how Nvidia can maintain growth.",
+            "Dollar Tree, Snowflake, and Hormel Foods were among the companies highlighted after earnings.",
         ]
         for text in examples:
             with self.subTest(text=text):

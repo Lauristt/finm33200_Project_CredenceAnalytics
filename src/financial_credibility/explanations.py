@@ -128,12 +128,45 @@ def _numeric_summary(derivation: dict[str, Any] | None) -> str:
     if not derivation:
         return "No deterministic numeric derivation was attached to this claim."
     expression = derivation.get("expression") or "numeric check"
+    inputs = derivation.get("inputs") or {}
     passed = derivation.get("passed")
+    if expression == "numeric_match_summary":
+        matched = _numeric_value_list(str(inputs.get("matched_values") or ""))
+        unmatched = _numeric_value_list(str(inputs.get("unmatched_values") or ""))
+        if passed is True and matched:
+            return f"The evidence directly matches { _join_human_list(matched) } from the claim."
+        if passed is False and matched and unmatched:
+            return f"The evidence matches { _join_human_list(matched) }, but it does not clearly confirm { _join_human_list(unmatched) }."
+        if passed is False and unmatched:
+            return f"The evidence does not clearly confirm { _join_human_list(unmatched) } from the claim."
     if passed is True:
         return f"The numeric derivation `{expression}` passed."
     if passed is False:
         return f"The numeric derivation `{expression}` did not pass."
     return f"A numeric derivation summary was recorded as `{expression}`."
+
+
+def _numeric_value_list(value: str) -> list[str]:
+    text = value.strip()
+    if not text or text.lower() == "none":
+        return []
+    values = []
+    for item in text.split(";"):
+        cleaned = item.strip()
+        if not cleaned:
+            continue
+        values.append((cleaned.split("->", 1)[0] or cleaned).strip())
+    return values[:4]
+
+
+def _join_human_list(values: list[str]) -> str:
+    if not values:
+        return ""
+    if len(values) == 1:
+        return values[0]
+    if len(values) == 2:
+        return f"{values[0]} and {values[1]}"
+    return ", ".join(values[:-1]) + f", and {values[-1]}"
 
 
 def _source_summary(evidence: dict[str, Any] | None) -> str:

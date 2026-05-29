@@ -21,7 +21,7 @@ from .entity import resolve_entity
 from .extraction import EvidenceExtractor
 from .facts import canonicalize_evidence, canonicalize_search_results
 from .judges import SemanticJudge, create_judge
-from .models import CredibilityLabel, EvidencePack, SearchResult, Verdict, VerificationVerdict, today_iso, to_plain
+from .models import AtomicClaim, CredibilityLabel, EvidencePack, SearchResult, Verdict, VerificationVerdict, today_iso, to_plain
 from .preprocessing import preprocess_statement
 from .routing import route_sources
 from .rubrics import FACTUAL_TYPES
@@ -64,6 +64,7 @@ class FinancialCredibilityToolkit:
         as_of_date: str | None = None,
         max_sources: int = 8,
         prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
+        source_results: list[dict[str, Any] | SearchResult] | None = None,
         mode: str = "agentic",
         extra_queries: list[str] | None = None,
         trace_callback: Callable[[dict[str, Any]], None] | None = None,
@@ -124,6 +125,8 @@ class FinancialCredibilityToolkit:
                     {
                         "claim_id": item.claim_id,
                         "text": item.text,
+                        "context_window": item.context_window,
+                        "context_window_source": item.context_window_source,
                         "argument_type": item.argument_type,
                         "fact_checkable": item.argument_type in FACTUAL_TYPES,
                     }
@@ -174,21 +177,26 @@ class FinancialCredibilityToolkit:
                 outputs={"selected_providers": selected_providers},
             )
             if prefetched_results is not None:
-                results, search_notes = search_client.search_financial_sources(
-                    claim=claim,
-                    ticker=ticker,
-                    argument_type=classification.argument_type,
-                    max_sources=retrieval_budget,
-                    as_of_date=as_of,
-                    prefetched_results=prefetched_results,
-                    selected_sources=selected_providers,
-                )
+                search_kwargs = {
+                    "claim": claim,
+                    "ticker": ticker,
+                    "argument_type": classification.argument_type,
+                    "max_sources": retrieval_budget,
+                    "as_of_date": as_of,
+                    "prefetched_results": prefetched_results,
+                    "selected_sources": selected_providers,
+                }
+                if source_results is not None:
+                    search_kwargs["source_results"] = source_results
+                results, search_notes = search_client.search_financial_sources(**search_kwargs)
                 claim_time_contexts = [
                     {
                         "claim_id": item.claim_id,
                         "claim": item.text,
+                        "context_window": item.context_window,
+                        "context_window_source": item.context_window_source,
                         "as_of_date": as_of,
-                        "time_context": infer_time_context(item.text, anchor_date=as_of).to_dict(),
+                        "time_context": infer_time_context(_claim_context_text(item), anchor_date=as_of).to_dict(),
                     }
                     for item in fact_checkable_claims
                 ]
@@ -196,6 +204,8 @@ class FinancialCredibilityToolkit:
                     {
                         "claim_id": item.claim_id,
                         "claim": item.text,
+                        "context_window": item.context_window,
+                        "context_window_source": item.context_window_source,
                         "selected_providers": selected_providers,
                         "retrieved_count": len(results),
                         "added_urls": [result.url for result in results[:retrieval_budget]],
@@ -222,25 +232,31 @@ class FinancialCredibilityToolkit:
                             }
                         )
                         continue
-                    atom_time_context = infer_time_context(atom.text, anchor_date=as_of)
+                    atom_context_text = _claim_context_text(atom)
+                    atom_time_context = infer_time_context(atom_context_text, anchor_date=as_of)
                     atom_as_of = atom_time_context.effective_as_of_date or as_of
                     claim_time_contexts.append(
                         {
                             "claim_id": atom.claim_id,
                             "claim": atom.text,
+                            "context_window": atom.context_window,
+                            "context_window_source": atom.context_window_source,
                             "as_of_date": atom_as_of,
                             "time_context": atom_time_context.to_dict(),
                             "selected_providers": providers,
                         }
                     )
-                    atom_results, atom_notes = search_client.search_financial_sources(
-                        claim=atom.text,
-                        ticker=ticker,
-                        argument_type=atom.argument_type,
-                        max_sources=max_sources,
-                        as_of_date=atom_as_of,
-                        selected_sources=providers,
-                    )
+                    search_kwargs = {
+                        "claim": atom_context_text,
+                        "ticker": ticker,
+                        "argument_type": atom.argument_type,
+                        "max_sources": max_sources,
+                        "as_of_date": atom_as_of,
+                        "selected_sources": providers,
+                    }
+                    if source_results is not None:
+                        search_kwargs["source_results"] = source_results
+                    atom_results, atom_notes = search_client.search_financial_sources(**search_kwargs)
                     search_notes.extend([f"{atom.claim_id}: {note}" for note in atom_notes])
                     added_urls = []
                     for result in atom_results:
@@ -258,6 +274,8 @@ class FinancialCredibilityToolkit:
                         {
                             "claim_id": atom.claim_id,
                             "claim": atom.text,
+                            "context_window": atom.context_window,
+                            "context_window_source": atom.context_window_source,
                             "as_of_date": atom_as_of,
                             "selected_providers": providers,
                             "retrieved_count": len(atom_results),
@@ -607,6 +625,13 @@ def _retrieval_budget(max_sources: int, fact_checkable_claims: list) -> int:
     return max(1, int(max_sources)) * max(1, len(fact_checkable_claims))
 
 
+def _claim_context_text(claim: AtomicClaim) -> str:
+    context = " ".join(str(claim.context_window or "").split())
+    if context and claim.text not in context:
+        return f"{context} {claim.text}"
+    return context or claim.text
+
+
 def _build_evidence_coverage(
     atomic_claims,
     source_selection_plan: list[dict[str, Any]],
@@ -650,6 +675,8 @@ def _build_evidence_coverage(
             {
                 "claim_id": claim.claim_id,
                 "claim": claim.text,
+                "context_window": claim.context_window,
+                "context_window_source": claim.context_window_source,
                 "fact_checkable": fact_checkable,
                 "selected_sources": selected_sources,
                 "retrieved_count": int(retrieval.get("retrieved_count") or 0),

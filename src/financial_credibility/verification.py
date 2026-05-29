@@ -273,6 +273,8 @@ def _material_claim_number_items(claim: str) -> list[_ClaimNumber]:
     for value, start, end in extract_substantive_number_spans(claim):
         if _is_asset_label_number(claim, value, start, end):
             continue
+        if _is_calendar_date_component_number(claim, value, start, end):
+            continue
         if _is_period_marker_number(value):
             continue
         role = "context" if _is_contextual_forward_number(claim, value) else "core"
@@ -316,11 +318,41 @@ def _is_period_marker_number(value: str) -> bool:
     compact = re.sub(r"[\s,$,]", "", value.lower())
     if re.search(r"(%|percent|bps|billion|million|trillion|bn|mn|亿|万|美元)", compact):
         return False
+    if "." in compact:
+        return False
     try:
         numeric = int(float(compact))
     except ValueError:
         return False
     return 1900 <= numeric <= 2100 or 1 <= numeric <= 4
+
+
+def _is_calendar_date_component_number(claim: str, value: str, start: int, end: int) -> bool:
+    """Drop day/month numbers that are only part of a reporting date."""
+    compact = re.sub(r"[\s,$,]", "", value.lower())
+    if re.search(r"(%|percent|bps|billion|million|trillion|bn|mn|亿|万|美元)", compact):
+        return False
+    try:
+        numeric = int(float(compact))
+    except ValueError:
+        return False
+    if not 1 <= numeric <= 31:
+        return False
+
+    lower = claim.lower()
+    left = lower[max(0, start - 24) : start]
+    right = lower[end : min(len(lower), end + 24)]
+    month = (
+        r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|"
+        r"jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?"
+    )
+    if re.search(rf"\b(?:{month})\s*$", left) and re.match(r"\s*,?\s*(?:19|20)?\d{2}\b", right):
+        return True
+    if re.match(rf"\s*(?:{month})\b", right):
+        return True
+    if (left.endswith(("/", "-")) or right.startswith(("/", "-"))) and re.search(r"(?:19|20)\d{2}", left + right):
+        return True
+    return False
 
 
 def _is_asset_label_number(claim: str, value: str, start: int, end: int) -> bool:

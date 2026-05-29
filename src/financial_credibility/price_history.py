@@ -117,6 +117,11 @@ def needs_historical_price_data(claim: str, asset_classes: list[str] | tuple[str
     has_price_context = bool(
         re.search(r"\b(stock|share|shares|price|close|closed|closing|trading|chart|technical|futures?|markets?)\b", lower)
     )
+    bare_fundamental_change = bool(
+        re.match(r"^\s*(?:up|down|higher|lower)\s+[-+]?\d+(?:\.\d+)?\s*(?:%|percent\b)", lower)
+        and re.search(r"\b(year earlier|year over year|yoy|sequential|from a year|previous quarter)\b", lower)
+        and not has_price_context
+    )
     has_lookback_context = bool(
         re.search(r"\b(last|past|previous|trailing|these|recent|for the|this)\b.*\b(day|days|week|weeks|month|months|year|years)\b", lower)
         or re.search(r"\b\d+\s*(d|day|days|w|week|weeks|mo|month|months|y|year|years)\b", lower)
@@ -125,6 +130,8 @@ def needs_historical_price_data(claim: str, asset_classes: list[str] | tuple[str
     if has_pattern and (has_price_context or has_lookback_context):
         return True
     non_price_metric_blocks = has_fundamental_metric and not has_price_context
+    if bare_fundamental_change:
+        return False
     return has_price_action_move and not non_price_metric_blocks and (has_price_context or has_move_magnitude)
 
 

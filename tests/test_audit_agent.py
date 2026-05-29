@@ -179,6 +179,7 @@ class AuditAgentTests(unittest.TestCase):
 
         self.assertTrue(any(finding.category == "coverage" for finding in audit.findings))
         self.assertTrue(any("No displayable source" in finding.summary for finding in audit.findings))
+        self.assertTrue(all(finding.severity == "minor" for finding in audit.findings if finding.category == "coverage"))
 
     def test_common_sense_allows_price_history_for_equity_price_claim(self):
         report = {
@@ -205,6 +206,104 @@ class AuditAgentTests(unittest.TestCase):
                             "verdict": "supported",
                             "evidence_urls": ["https://stooq.com/q/d/l/?s=qcom.us"],
                             "confidence_components": {"final_confidence": 0.86},
+                        }
+                    ],
+                }
+            ]
+        }
+
+        audit = audit_verification_chain(report_payload=report)
+
+        self.assertFalse(any(finding.category == "source_alignment" for finding in audit.findings))
+
+    def test_common_sense_prefers_exact_url_over_colliding_evidence_key(self):
+        report = {
+            "runs": [
+                {
+                    "ticker": "MSFT",
+                    "evidence": [
+                        {
+                            "url": "https://www.microsoft.com/en-us/investor/earnings/FY-2026-Q3/press-release-webcast",
+                            "title": "Microsoft Cloud and AI Strength Fuels Third Quarter Results",
+                            "text": "Operating income was $38.4 billion, up 20%.",
+                            "domain": "microsoft.com",
+                            "source_tier": "T2",
+                            "published_at": None,
+                            "is_official_primary": True,
+                        },
+                        {
+                            "url": "https://www.microsoft.com/en-us/investor/default",
+                            "title": "Home page - Microsoft",
+                            "text": "Know the next earnings release date.",
+                            "domain": "microsoft.com",
+                            "source_tier": "T2",
+                            "published_at": None,
+                            "is_official_primary": True,
+                        },
+                    ],
+                    "canonical_facts": [],
+                    "atomic_claims": [
+                        {
+                            "atomic_claim": {"claim_id": "claim_2", "text": "Operating income was $38.4 billion, up 20%."},
+                            "verdict": "supported",
+                            "evidence_urls": [
+                                "https://www.microsoft.com/en-us/investor/earnings/FY-2026-Q3/press-release-webcast"
+                            ],
+                            "evidence_keys": ["T2:microsoft.com:undated"],
+                            "numeric_derivation": {
+                                "expression": "numeric_match_summary",
+                                "inputs": {"matched_values": "$38.4 billion -> $38.4 billion; 20% -> 20%"},
+                                "result": True,
+                                "passed": True,
+                            },
+                            "confidence_components": {"final_confidence": 0.86},
+                        }
+                    ],
+                }
+            ]
+        }
+
+        audit = audit_verification_chain(report_payload=report)
+
+        self.assertFalse(any(finding.category == "source_alignment" for finding in audit.findings))
+
+    def test_common_sense_ignores_generic_document_locator_facts(self):
+        report = {
+            "runs": [
+                {
+                    "ticker": "GOOGL",
+                    "evidence": [
+                        {
+                            "url": "https://s206.q4cdn.com/example.pdf",
+                            "title": "Alphabet Q1 2026 earnings release",
+                            "text": "Total operating income was $39.696 billion.",
+                            "domain": "s206.q4cdn.com",
+                            "source_tier": "T2",
+                            "published_at": "2026-04-29",
+                        }
+                    ],
+                    "canonical_facts": [
+                        {
+                            "fact_id": "fact_doc",
+                            "fact_name": "Alphabet Q1 2026 earnings release",
+                            "value": "2026",
+                            "unit": None,
+                            "currency": None,
+                        }
+                    ],
+                    "atomic_claims": [
+                        {
+                            "atomic_claim": {"claim_id": "claim_3", "text": "Total operating income was $39.696 billion."},
+                            "verdict": "supported",
+                            "evidence_urls": ["https://s206.q4cdn.com/example.pdf"],
+                            "canonical_fact_ids": ["fact_doc"],
+                            "numeric_derivation": {
+                                "expression": "numeric_match_summary",
+                                "inputs": {"matched_values": "$39.696 billion -> $39.696 billion"},
+                                "result": True,
+                                "passed": True,
+                            },
+                            "confidence_components": {"final_confidence": 0.82},
                         }
                     ],
                 }

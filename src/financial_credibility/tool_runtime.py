@@ -313,6 +313,7 @@ def _execute_retrieve_evidence(args: dict[str, Any], config: ToolkitConfig) -> d
         max_sources=max_sources,
         as_of_date=as_of_date,
         prefetched_results=args.get("prefetched_results"),
+        source_results=args.get("source_results"),
         selected_sources=args.get("selected_sources"),
     )
     evidence, extraction_notes = EvidenceExtractor(config).extract(
@@ -461,6 +462,8 @@ def _execute_build_evidence_pack(args: dict[str, Any], config: ToolkitConfig) ->
         "max_sources": int(args.get("max_sources", 8)),
         "prefetched_results": args.get("prefetched_results"),
     }
+    if args.get("source_results") is not None:
+        kwargs["source_results"] = args.get("source_results")
     if mode == "agentic":
         pack = AgenticCredibilityRunner(toolkit).run(**kwargs)
     else:

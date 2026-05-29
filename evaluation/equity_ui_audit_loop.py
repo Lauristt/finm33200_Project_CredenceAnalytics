@@ -28,6 +28,7 @@ from financial_credibility.audit_agent import audit_verification_chain, summariz
 from financial_credibility.config import ToolkitConfig  # noqa: E402
 from financial_credibility.models import to_plain  # noqa: E402
 from financial_credibility.reporting import build_verification_report  # noqa: E402
+from financial_credibility.sources import assess_source  # noqa: E402
 
 
 SAMPLES = ROOT / "evaluation" / "equity_news_ui_audit_samples.json"
@@ -76,6 +77,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--samples", type=Path, default=SAMPLES)
     parser.add_argument("--out-dir", type=Path, default=OUT_DIR)
+    parser.add_argument("--results-json", type=Path, default=RESULTS_JSON)
+    parser.add_argument("--report-md", type=Path, default=REPORT_MD)
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--use-llm", action="store_true", help="Use configured LLM instead of deterministic heuristic judge.")
     parser.add_argument("--agent-max-steps", type=int, default=20)
@@ -108,6 +111,7 @@ def main() -> None:
             tool_profile="agent_core",
             agent_max_steps=args.agent_max_steps,
             audit=True,
+            source_results=sample_source_results(sample),
         )
         write_sample_output(args.out_dir, sample["id"], report)
         built_in_audit = report.get("audit_report") or {}
@@ -119,21 +123,53 @@ def main() -> None:
                 "built_in_audit_summary": summarize_audit_report(built_in_audit) if built_in_audit else {},
                 "custom_findings": custom_findings,
                 "report_paths": {
-                    "json": str((args.out_dir / f"{sample['id']}.json").relative_to(ROOT)),
-                    "markdown": str((args.out_dir / f"{sample['id']}.md").relative_to(ROOT)),
+                    "json": relative_path(args.out_dir / f"{sample['id']}.json"),
+                    "markdown": relative_path(args.out_dir / f"{sample['id']}.md"),
                 },
             }
         )
 
-    RESULTS_JSON.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
-    REPORT_MD.write_text(render_audit_report(results), encoding="utf-8")
-    print(f"\nWrote {RESULTS_JSON.relative_to(ROOT)}")
-    print(f"Wrote {REPORT_MD.relative_to(ROOT)}")
+    args.results_json.parent.mkdir(parents=True, exist_ok=True)
+    args.report_md.parent.mkdir(parents=True, exist_ok=True)
+    args.results_json.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
+    args.report_md.write_text(render_audit_report(results), encoding="utf-8")
+    print(f"\nWrote {relative_path(args.results_json)}")
+    print(f"Wrote {relative_path(args.report_md)}")
 
 
 def write_sample_output(out_dir: Path, sample_id: str, report: dict[str, Any]) -> None:
     (out_dir / f"{sample_id}.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     (out_dir / f"{sample_id}.md").write_text(report.get("report_markdown") or "", encoding="utf-8")
+
+
+def sample_source_results(sample: dict[str, Any]) -> list[dict[str, Any]]:
+    """Seed official sample source pages without replacing structured retrieval."""
+    url = str(sample.get("url") or "")
+    if not url:
+        return []
+    title = str(sample.get("title") or sample.get("source") or "")
+    source = str(sample.get("source") or "")
+    lower_context = f"{title} {source}".lower()
+    assessment = assess_source(url, title)
+    if not assessment.is_official_primary and "investor relations" not in lower_context:
+        return []
+    return [
+        {
+            "title": title or source or "Sample source",
+            "url": url,
+            "snippet": str(sample.get("memo") or ""),
+            "published_at": sample.get("published_at"),
+            "source": source or None,
+            "raw": {"provider": "audit_sample_source", "seed_source": True},
+        }
+    ]
+
+
+def relative_path(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path)
 
 
 def compact_report_summary(report: dict[str, Any]) -> dict[str, Any]:
@@ -190,7 +226,9 @@ def audit_web_output(sample: dict[str, Any], report: dict[str, Any]) -> list[dic
     for run in report.get("runs") or []:
         evidence = run.get("evidence") or []
         evidence_by_url = {item.get("url"): item for item in evidence if item.get("url")}
-        evidence_by_key = {_evidence_key(item): item for item in evidence}
+        evidence_by_key: dict[str, dict[str, Any]] = {}
+        for item in evidence:
+            evidence_by_key.setdefault(_evidence_key(item), item)
         for result in run.get("atomic_claims") or []:
             claim = result.get("atomic_claim") or {}
             text = str(claim.get("text") or "")

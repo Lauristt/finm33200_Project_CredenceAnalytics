@@ -158,6 +158,48 @@ class VerificationTests(unittest.TestCase):
         self.assertTrue(any("matched $102.5 billion" in issue for issue in check.issues))
         self.assertTrue(any("contextual forward-looking numbers" in issue for issue in check.issues))
 
+    def test_numeric_check_ignores_reporting_date_day_number(self):
+        evidence = [
+            Evidence(
+                url="https://www.microsoft.com/en-us/investor/example",
+                title="Microsoft FY26 Q3 earnings release",
+                text="Revenue was $82.9 billion and increased 18% year over year for the quarter ended March 31, 2026.",
+                source_type=SourceType.COMPANY_IR,
+                source_tier=SourceTier.T2,
+                domain="microsoft.com",
+            )
+        ]
+
+        check = verify_numeric_claim(
+            "Microsoft reported fiscal third-quarter revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year.",
+            evidence,
+        )
+
+        self.assertEqual(check.verdict, "verified")
+        self.assertTrue(any("matched $82.9 billion" in issue for issue in check.issues))
+        self.assertTrue(any("matched 18%" in issue for issue in check.issues))
+        self.assertFalse(any("31" in issue for issue in check.issues))
+
+    def test_numeric_check_keeps_eps_decimal_values(self):
+        evidence = [
+            Evidence(
+                url="https://investor.nvidia.com/example",
+                title="NVIDIA quarterly results",
+                text="GAAP diluted EPS was $2.39, and non-GAAP diluted EPS was $1.87.",
+                source_type=SourceType.COMPANY_IR,
+                source_tier=SourceTier.T2,
+                domain="investor.nvidia.com",
+            )
+        ]
+
+        gaap = verify_numeric_claim("GAAP diluted EPS was $2.39.", evidence)
+        non_gaap = verify_numeric_claim("non-GAAP diluted EPS was $1.87.", evidence)
+
+        self.assertEqual(gaap.verdict, "verified")
+        self.assertEqual(non_gaap.verdict, "verified")
+        self.assertTrue(any("matched $2.39" in issue for issue in gaap.issues))
+        self.assertTrue(any("matched $1.87" in issue for issue in non_gaap.issues))
+
     def test_numeric_check_matches_chinese_hundred_million_amounts(self):
         evidence = [
             Evidence(

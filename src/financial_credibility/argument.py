@@ -74,6 +74,7 @@ DISCUSSION_QUESTION_PATTERNS: list[tuple[str, str]] = [
     ("competitive framing", r"\b(competing|competition|competitive|moat|inference workloads|silicon)\b"),
     ("investment judgment", r"\b(attractive|risky|bullish|bearish|overvalued|undervalued|cheap|expensive|strong|weak)\b"),
     ("vague beat commentary", r"\b(?:another\s+)?beat\b|\bbeating\s+quarter\s+after\s+quarter\b|\bquarter\s+after\s+quarter\b"),
+    ("article mention framing", r"\b(?:highlighted|mentioned|featured)\s+after\s+earnings\b|\bwere\s+among\s+the\s+companies\s+(?:highlighted|mentioned|featured)\b"),
     ("priced-in commentary", r"\bpriced\s+in\b|\bessentially\s+priced\b"),
     ("price action pattern", r"\b(oscillat\w*|fluctuat\w*|volatile|volatility|range[- ]?bound|choppy|sideways|swing\w*|trend\w*)\b"),
     ("tentative interpretation", r"\b(seems|appears|looks like|suggests)\b"),

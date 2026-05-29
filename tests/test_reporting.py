@@ -84,6 +84,33 @@ class ReportingTests(unittest.TestCase):
         self.assertTrue(payload["runs"][0]["source_selection_debug"])
         self.assertTrue(payload["runs"][0]["audit_export"]["download_ready"])
 
+    def test_build_report_uses_source_seed_without_replacing_live_retrieval_contract(self):
+        payload = build_verification_report(
+            memo=(
+                "Microsoft reported fiscal third-quarter revenue of $82.9 billion for the quarter ended "
+                "March 31, 2026, up 18% year over year."
+            ),
+            tickers=["MSFT"],
+            config=ToolkitConfig(enable_structured_sources=False),
+            as_of_date="2026-04-29",
+            source_results=[
+                {
+                    "title": "Microsoft Cloud and AI Strength Fuels Third Quarter Results",
+                    "url": "https://www.microsoft.com/en-us/investor/earnings/FY-2026-Q3/press-release-webcast",
+                    "snippet": (
+                        "Revenue was $82.9 billion and increased 18% for the quarter ended March 31, 2026."
+                    ),
+                    "published_at": "2026-04-29",
+                    "source": "Microsoft Investor Relations",
+                }
+            ],
+        )
+
+        markdown = payload["report_markdown"]
+        self.assertIn("Consistent", markdown)
+        self.assertIn("microsoft.com", markdown)
+        self.assertIn("The evidence directly matches $82.9 billion and 18%", markdown)
+
     def test_build_report_with_only_non_equity_entities_does_not_force_ticker_run(self):
         payload = build_verification_report(
             memo="CPI surprised higher while WTI and EUR/USD moved sharply.",
@@ -218,7 +245,39 @@ class ReportingTests(unittest.TestCase):
 
         self.assertNotIn("Human Review Explanations", payload["report_markdown"])
         self.assertNotIn("Recommended action", payload["report_markdown"])
-        self.assertIn("Needs human review", payload["report_markdown"])
+
+    def test_report_explains_insufficient_result_with_linked_evidence(self):
+        markdown = render_markdown_report(
+            {
+                "summary": {"atomic_claim_count": 1, "entity_count": 1, "human_review_count": 1},
+                "runs": [
+                    {
+                        "ticker": "AAPL",
+                        "evidence": [
+                            {
+                                "title": "SEC Company Facts for AAPL",
+                                "url": "https://data.sec.gov/example",
+                                "domain": "data.sec.gov",
+                                "source_tier": "T1",
+                                "is_official_primary": True,
+                            }
+                        ],
+                        "atomic_claims": [
+                            {
+                                "atomic_claim": {"claim_id": "claim_1", "text": "Apple reported revenue of $111.2 billion."},
+                                "verdict": "insufficient",
+                                "evidence_urls": ["https://data.sec.gov/example"],
+                                "review_reasons": ["ambiguous_unit_currency_or_period"],
+                            }
+                        ],
+                        "claim_explanations": [],
+                    }
+                ],
+            }
+        )
+
+        self.assertIn("Evidence was retrieved, but the exact value, unit, or reporting period was not matched clearly.", markdown)
+        self.assertIn("Needs human review", markdown)
 
     def test_sec_evidence_provenance_marks_official_primary(self):
         payload = build_verification_report(
