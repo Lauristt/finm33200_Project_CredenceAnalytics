@@ -66,9 +66,23 @@ class RegisteredTool:
         )
 
 
+# Module-level dynamic registry — populated at runtime by tool_synthesis.py
+_DYNAMIC_REGISTRY: dict[str, "RegisteredTool"] = {}
+
+
+def register_dynamic_tool(tool: "RegisteredTool") -> None:
+    """Register a synthesized tool so it appears in all_registered_tools()."""
+    _DYNAMIC_REGISTRY[tool.name] = tool
+
+
+def unregister_dynamic_tool(name: str) -> None:
+    """Remove a dynamically registered tool (for testing or reload)."""
+    _DYNAMIC_REGISTRY.pop(name, None)
+
+
 def all_registered_tools() -> list[RegisteredTool]:
-    """Return all tools exposed to an agent."""
-    return [
+    """Return all tools exposed to an agent (static + synthesized)."""
+    static = [
         _preprocess_statement_tool(),
         _classify_claim_tool(),
         _extract_entities_tool(),
@@ -102,6 +116,7 @@ def all_registered_tools() -> list[RegisteredTool]:
         _summarize_audit_report_tool(),
         _review_tool_surface_tool(),
     ]
+    return static + list(_DYNAMIC_REGISTRY.values())
 
 
 def get_registered_tool(name: str) -> RegisteredTool:

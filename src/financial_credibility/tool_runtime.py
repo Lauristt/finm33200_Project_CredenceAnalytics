@@ -54,6 +54,14 @@ from .verification import verify_sources
 
 ToolExecutor = Callable[[dict[str, Any], ToolkitConfig], dict[str, Any]]
 
+# Populated at runtime by tool_synthesis.py when new tools are synthesized
+_DYNAMIC_EXECUTORS: dict[str, ToolExecutor] = {}
+
+
+def register_dynamic_executor(name: str, fn: ToolExecutor) -> None:
+    """Register a synthesized tool executor so execute_tool() can dispatch to it."""
+    _DYNAMIC_EXECUTORS[name] = fn
+
 
 def execute_tool(
     name: str,
@@ -69,7 +77,7 @@ def execute_tool(
 
 
 def _executors() -> dict[str, ToolExecutor]:
-    return {
+    base: dict[str, ToolExecutor] = {
         "preprocess_statement": _execute_preprocess_statement,
         "classify_claim": _execute_classify_claim,
         "extract_entities": _execute_extract_entities,
@@ -103,6 +111,8 @@ def _executors() -> dict[str, ToolExecutor]:
         "summarize_audit_report": _execute_summarize_audit_report,
         "review_tool_surface": _execute_review_tool_surface,
     }
+    base.update(_DYNAMIC_EXECUTORS)
+    return base
 
 
 def _execute_preprocess_statement(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
