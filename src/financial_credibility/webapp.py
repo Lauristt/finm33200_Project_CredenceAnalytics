@@ -1046,6 +1046,11 @@ HTML = r"""<!doctype html>
       margin-bottom: -2px;
     }
 
+    /* ── Trace panel inner (single-column, no raw JSON) ─── */
+    .trace-panel-inner {
+      padding: 14px 16px 16px;
+    }
+
     /* ── Composer header ─────────────────────────────────── */
     .composer-hdr {
       grid-column: 1 / -1;
@@ -1328,26 +1333,22 @@ HTML = r"""<!doctype html>
           <div class="message-label">Running</div>
           <details class="trace-panel live-trace">
             <summary class="trace-head">
-              <h3>Trace</h3>
+              <h3>Verification in progress</h3>
               <span class="live-progress" id="liveTraceProgress">
                 <span class="pulse-dot" aria-hidden="true"></span>
                 <span id="liveTraceStatus">Starting verification</span>
                 <span class="activity-bar" aria-hidden="true"></span>
               </span>
             </summary>
-            <div class="trace-grid">
+            <div class="trace-panel-inner">
               <div class="trace-list" id="liveTraceList">
                 <div class="trace-step">
                   <div class="trace-step-top">
                     <strong>Starting</strong>
-                    <span class="subtle">pending</span>
+                    <span class="subtle">Preparing</span>
                   </div>
                   <div>Preparing the verification workflow.</div>
                 </div>
-              </div>
-              <div>
-                <h3>Stream</h3>
-                <pre class="trace-meta" id="liveTraceRaw">[]</pre>
               </div>
             </div>
           </details>
@@ -1358,25 +1359,20 @@ HTML = r"""<!doctype html>
     function appendLiveTrace(event) {
       liveTraceEvents.push(event);
       const list = document.getElementById("liveTraceList");
-      const raw = document.getElementById("liveTraceRaw");
       const status = document.getElementById("liveTraceStatus");
       const progress = document.getElementById("liveTraceProgress");
       if (list) {
-        rememberLiveTraceDetailState(list);
-        list.innerHTML = liveTraceEvents.map((traceEvent, index) => renderTraceEvent(traceEvent, index, true)).join("");
-        restoreLiveTraceDetailState(list);
-      }
-      if (raw) {
-        raw.textContent = JSON.stringify(liveTraceEvents, null, 2);
+        list.innerHTML = liveTraceEvents.map((traceEvent, index) => renderTraceEvent(traceEvent, index, false)).join("");
       }
       if (status) {
         const last = liveTraceEvents[liveTraceEvents.length - 1] || {};
-        const label = last.step ? `${formatStepName(last.step)} - ${last.status || "running"}` : "Running verification";
-        status.textContent = `${label} (${liveTraceEvents.length} event${liveTraceEvents.length === 1 ? "" : "s"})`;
+        const label = last.step ? friendlyStepLabel(last.step) : "Verifying";
+        const statusLabel = last.status ? friendlyStatusLabel(last.status) : "";
+        status.textContent = statusLabel ? `${label} — ${statusLabel}` : label;
       }
       if (progress) progress.classList.remove("done", "error", "stopped");
       const last = liveTraceEvents[liveTraceEvents.length - 1] || {};
-      statusEl.textContent = last.step ? `${last.step}: ${last.status || "running"}` : "Running";
+      statusEl.textContent = last.step ? friendlyStepLabel(last.step) : "Running";
     }
 
     function setLiveTraceFinished(state, label) {
@@ -1623,13 +1619,15 @@ HTML = r"""<!doctype html>
       const claims = checkedResults.map(result => renderClaimCard(result, run)).join("");
       const skippedClaims = renderSkippedClaims(skippedResults);
       const trace = renderAgentTrace(audit);
-      const evidence = (run.evidence || []).slice(0, 8).map(item => `
-        <div class="evidence-item">
-          <strong>${escapeHtml(item.source_tier || "")}</strong>
-          ${escapeHtml(item.title || "")}
-          <div class="subtle">${escapeHtml(item.domain || "")} - ${escapeHtml(item.published_at || "undated")}</div>
-        </div>
-      `).join("");
+      const evidence = (run.evidence || []).slice(0, 8).map(item => {
+        const tier = item.source_tier ? `<span class="pill">${escapeHtml(friendlySourceTier(item.source_tier))}</span> ` : "";
+        return `
+          <div class="evidence-item">
+            ${tier}<strong>${escapeHtml(item.title || item.domain || "Source")}</strong>
+            <div class="subtle">${escapeHtml(item.domain || "")}${item.published_at ? " · " + escapeHtml(item.published_at) : ""}</div>
+          </div>
+        `;
+      }).join("");
       return `
         <section class="entity">
           <div class="entity-head">
@@ -1666,11 +1664,12 @@ HTML = r"""<!doctype html>
           <div class="evidence">
             ${results.map(result => {
               const claim = result.atomic_claim || {};
+              const typeLabel = skippedClaimTypeLabel(claim.argument_type);
               return `
                 <div class="evidence-item">
-                  <strong>${escapeHtml(claim.argument_type || "not_applicable")}</strong>
+                  <strong>${escapeHtml(typeLabel)}</strong>
                   <div>${escapeHtml(claim.text || "")}</div>
-                  <div class="subtle">Skipped because this is not a historical factual claim.</div>
+                  <div class="subtle">This is a ${escapeHtml(typeLabel.toLowerCase())} — not a verifiable historical fact.</div>
                 </div>
               `;
             }).join("")}
@@ -1679,25 +1678,29 @@ HTML = r"""<!doctype html>
       `;
     }
 
+    function skippedClaimTypeLabel(argumentType) {
+      const labels = {
+        opinion_analysis: "Opinion or analysis",
+        forecast: "Forecast or prediction",
+        causal: "Causal claim",
+        qualitative: "Qualitative statement",
+        not_applicable: "Non-factual statement",
+      };
+      return labels[String(argumentType || "").toLowerCase()] || formatStepName(argumentType) || "Non-factual statement";
+    }
+
     function renderAgentTrace(audit) {
       const events = audit.events || [];
-      const replay = audit.replayable_inputs || {};
-      const sourceNotes = audit.source_notes || [];
-      if (!events.length && !Object.keys(replay).length && !sourceNotes.length) return "";
+      if (!events.length) return "";
       return `
         <details class="trace-panel">
           <summary class="trace-head">
-            <h3>Agent Trace</h3>
-            <span class="subtle">${escapeHtml(audit.trace_id || "trace unavailable")}</span>
+            <h3>Verification Steps</h3>
+            <span class="subtle">How the agent checked this claim</span>
           </summary>
-          <div class="trace-grid">
+          <div class="trace-panel-inner">
             <div class="trace-list">
-              ${events.map(renderTraceEvent).join("") || '<div class="subtle">No trace events.</div>'}
-            </div>
-            <div>
-              <h3>Replay</h3>
-              <pre class="trace-meta">${escapeHtml(JSON.stringify(replay, null, 2))}</pre>
-              ${sourceNotes.length ? `<div class="subtle">${escapeHtml(sourceNotes.join(", "))}</div>` : ""}
+              ${events.map(renderTraceEvent).join("")}
             </div>
           </div>
         </details>
@@ -1720,31 +1723,107 @@ HTML = r"""<!doctype html>
       });
     }
 
-    function renderTraceEvent(event, index, preserveOpen = false) {
+    function renderTraceEvent(event, index, _preserveOpen = false) {
       const status = String(event.status || "").toLowerCase();
       const statusClass = status.includes("review") || status.includes("warn") ? "warn" : (status.includes("fail") || status.includes("error") ? "bad" : "");
-      const outputs = event.outputs && Object.keys(event.outputs).length ? JSON.stringify(event.outputs, null, 2) : "";
-      const detailKey = `event-${index}-${event.step || "step"}`;
-      const detailOpen = preserveOpen && liveTraceOpenDetails.has(detailKey) ? " open" : "";
+      const stepLabel = friendlyStepLabel(event.step);
+      const statusLabel = friendlyStatusLabel(event.status);
       return `
         <div class="trace-step ${statusClass}">
           <div class="trace-step-top">
-            <strong>${escapeHtml(index + 1)}. ${escapeHtml(event.step || "step")}</strong>
-            <span class="subtle">${escapeHtml(event.status || "n/a")}</span>
+            <strong>${escapeHtml(index + 1)}. ${escapeHtml(stepLabel)}</strong>
+            <span class="subtle">${escapeHtml(statusLabel)}</span>
           </div>
           <div>${escapeHtml(event.summary || "")}</div>
-          ${outputs ? `<details class="trace-details" data-detail-key="${escapeHtml(detailKey)}"${detailOpen}><summary>Outputs</summary><pre class="trace-meta">${escapeHtml(outputs)}</pre></details>` : ""}
         </div>
       `;
     }
 
+    function friendlyStepLabel(step) {
+      const labels = {
+        retrieve: "Retrieve sources",
+        extract_evidence: "Extract evidence",
+        resolve_entity: "Identify entity",
+        canonicalize_facts: "Structure facts",
+        verify_atomic_claims: "Verify claims",
+        search: "Search",
+        fetch: "Fetch document",
+        score: "Score evidence",
+        judge: "Judge claim",
+        summarize: "Summarize",
+        classify: "Classify claim",
+        route: "Route to source",
+        decompose: "Decompose claims",
+        select_sources: "Select sources",
+      };
+      const key = String(step || "").toLowerCase();
+      return labels[key] || formatStepName(step);
+    }
+
+    function friendlyStatusLabel(status) {
+      const labels = {
+        ok: "Done",
+        done: "Done",
+        success: "Done",
+        empty: "No data found",
+        review: "Needs review",
+        warn: "Warning",
+        warning: "Warning",
+        error: "Error",
+        fail: "Failed",
+        failed: "Failed",
+        running: "In progress",
+        skipped: "Skipped",
+        pending: "Pending",
+        partial: "Partially done",
+        insufficient: "Insufficient data",
+      };
+      const key = String(status || "").toLowerCase();
+      return labels[key] || formatStepName(status);
+    }
+
+    function friendlySourceName(sourceId) {
+      const labels = {
+        sec_company_facts: "SEC XBRL Filings",
+        sec_recent_filings: "SEC Filing History",
+        fred: "FRED (Federal Reserve)",
+        bls: "BLS Statistics",
+        bea: "BEA Economic Data",
+        eia: "EIA Energy Data",
+        web_search: "Web Search",
+        yahoo_finance: "Yahoo Finance",
+        finra: "FINRA",
+        cftc: "CFTC",
+        fmp: "Financial Modeling Prep",
+        alpha_vantage: "Alpha Vantage",
+        tiingo: "Tiingo",
+        finnhub: "Finnhub",
+        historical_prices: "Historical Price Data",
+        news: "News",
+      };
+      const key = String(sourceId || "").toLowerCase();
+      return labels[key] || String(sourceId || "").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function friendlySourceTier(tier) {
+      const labels = {
+        T1: "Official primary",
+        T2: "Official secondary",
+        T3: "Vendor data",
+        T4: "News",
+        T5: "Web",
+      };
+      return labels[String(tier || "").toUpperCase()] || String(tier || "");
+    }
+
     function renderSourceSelection(selection) {
-      const sources = (selection.selected_sources || []).join(", ") || "n/a";
+      const claimText = escapeHtml(selection.claim || selection.claim_id || "Claim");
+      const sourceIds = selection.selected_provider_names || selection.selected_sources || [];
+      const sourceNames = sourceIds.map(friendlySourceName).join(", ") || "n/a";
       return `
         <div class="evidence-item">
-          <strong>${escapeHtml(selection.claim_id || "claim")}</strong>
-          <div>${escapeHtml(sources)}</div>
-          ${selection.rationale ? `<div class="subtle">${escapeHtml(selection.rationale)}</div>` : ""}
+          <strong>${claimText}</strong>
+          <div class="subtle">Databases checked: ${escapeHtml(sourceNames)}</div>
         </div>
       `;
     }
@@ -1760,7 +1839,6 @@ HTML = r"""<!doctype html>
         <article class="claim-card ${needsReview ? "needs-review" : ""}">
           <div class="claim-card-head">
             <div class="claim-card-title">
-              <span class="subtle">${escapeHtml(claim.claim_id || "claim")}</span>
               <strong>${escapeHtml(claim.text || "")}</strong>
             </div>
             <div class="claim-status">
@@ -1819,14 +1897,14 @@ HTML = r"""<!doctype html>
     function renderSourceBox(source) {
       if (!source) return '<span class="subtle">No displayable source was found.</span>';
       const title = source.title || source.domain || source.url || "Source";
-      const tier = source.source_tier || "n/a";
+      const tierLabel = source.source_tier ? friendlySourceTier(source.source_tier) : "";
       const date = source.published_at || "undated";
       const domain = source.domain || "";
       const url = source.url || "";
       return `
-        <div class="source-title">${escapeHtml(tier)} - ${escapeHtml(title)}</div>
-        <div class="subtle">${escapeHtml(domain)} - ${escapeHtml(date)}</div>
-        ${url ? `<a class="source-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open source</a>` : ""}
+        <div class="source-title">${tierLabel ? `<span class="pill">${escapeHtml(tierLabel)}</span> ` : ""}${escapeHtml(title)}</div>
+        <div class="subtle">${escapeHtml(domain)}${domain && date ? " · " : ""}${escapeHtml(date)}</div>
+        ${url ? `<a class="source-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open source →</a>` : ""}
       `;
     }
 
@@ -2229,6 +2307,21 @@ HTML = r"""<!doctype html>
         }
         if (text === "ambiguous_unit_currency_or_period") {
           return "the unit, currency, or period is ambiguous";
+        }
+        if (text === "no_evidence") {
+          return "no supporting evidence was found for this claim";
+        }
+        if (text === "no_primary_source") {
+          return "no primary source was found";
+        }
+        if (text === "low_confidence") {
+          return "evidence confidence is low";
+        }
+        if (text === "partial_match") {
+          return "only a partial match was found in the source";
+        }
+        if (/^[a-z][a-z0-9_]*$/.test(text)) {
+          return text.replace(/_/g, " ");
         }
         return text;
       });
