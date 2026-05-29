@@ -959,7 +959,7 @@ HTML = r"""<!doctype html>
     }
     .error { color: var(--red); font-weight: 650; }
     @media (max-width: 900px) {
-      .chat { padding: 18px 12px 150px; }
+      .chat { padding: 18px 12px 160px; }
       .summary { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
       .row { grid-template-columns: 1fr; }
       .trace-grid { grid-template-columns: 1fr; }
@@ -978,7 +978,116 @@ HTML = r"""<!doctype html>
       .composer-wrap { padding: 12px; }
       .composer { grid-template-columns: minmax(0, 1fr); }
       .send-button, .stop-button { width: 100%; }
+      .topbar-meta { display: none; }
+      .welcome { padding: 36px 16px 28px; }
+      .example-chips { gap: 7px; }
     }
+
+    /* ── Welcome / empty state ───────────────────────────── */
+    .welcome {
+      display: grid;
+      gap: 20px;
+      place-items: center;
+      text-align: center;
+      padding: 56px 20px 52px;
+    }
+    .welcome-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border: 1.5px solid rgba(86, 206, 190, 0.60);
+      background: linear-gradient(135deg, rgba(86, 206, 190, 0.13), rgba(17, 27, 32, 0.04));
+      box-shadow: 0 0 0 7px rgba(86, 206, 190, 0.07);
+      transform: rotate(45deg);
+    }
+    .welcome-icon svg { transform: rotate(-45deg); }
+    .welcome-title { font-size: 20px; font-weight: 760; margin: 0; }
+    .welcome-sub {
+      max-width: 520px;
+      color: var(--muted);
+      line-height: 1.60;
+      font-size: 14.5px;
+      margin: 0;
+    }
+    .example-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      max-width: 720px;
+    }
+    .example-chip {
+      background: rgba(251, 252, 253, 0.90);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+      padding: 7px 13px;
+      cursor: pointer;
+      box-shadow: var(--shadow-tight);
+      text-align: left;
+      line-height: 1.35;
+    }
+    .example-chip:hover {
+      border-color: var(--teal);
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+    .example-chips-label {
+      width: 100%;
+      font-size: 12px;
+      font-weight: 720;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--muted);
+      margin-bottom: -2px;
+    }
+
+    /* ── Composer header ─────────────────────────────────── */
+    .composer-hdr {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 2px;
+    }
+    .composer-lbl {
+      font-size: 11px;
+      font-weight: 760;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--muted);
+    }
+    .composer-hint { font-size: 12px; color: var(--muted); }
+
+    /* ── Topbar meta row ─────────────────────────────────── */
+    .topbar-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(174, 191, 197, 0.65);
+      font-size: 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .topbar-sep {
+      width: 1px;
+      height: 13px;
+      background: rgba(174, 191, 197, 0.20);
+      flex: 0 0 auto;
+    }
+
+    /* ── Verify (primary) button ─────────────────────────── */
+    button.verify-button {
+      background: linear-gradient(160deg, var(--teal) 0%, #0a6860 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 7px 18px rgba(15, 118, 110, 0.28);
+    }
+    button.verify-button:hover:not(:disabled) { background: linear-gradient(160deg, #0a8a80 0%, #085c54 100%); }
   </style>
 </head>
 <body>
@@ -987,20 +1096,43 @@ HTML = r"""<!doctype html>
       <div class="brand">
         <h1>Credence Analytics Agent</h1>
       </div>
+      <div class="topbar-meta">
+        <span>Financial claim verification</span>
+        <span class="topbar-sep"></span>
+        <span>SEC · FRED · Prices · News</span>
+      </div>
     </header>
     <span id="status" class="sr-status" aria-live="polite"></span>
     <main class="chat">
       <div id="report" class="messages">
-        <div class="message assistant">
-          <div class="empty">Credence report output will appear here.</div>
+        <div class="welcome">
+          <div class="welcome-icon" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M13 2L24 13L13 24L2 13Z" stroke="rgba(86,206,190,0.88)" stroke-width="1.5" fill="rgba(86,206,190,0.11)"/>
+              <path d="M13 7.5L18.5 13L13 18.5L7.5 13Z" stroke="rgba(86,206,190,0.50)" stroke-width="1" fill="rgba(86,206,190,0.07)"/>
+            </svg>
+          </div>
+          <h2 class="welcome-title">Financial Claim Verifier</h2>
+          <p class="welcome-sub">Paste an investment memo, earnings note, or market claim. The agent extracts entities, routes each fact to SEC filings, price history, or news, then returns a structured verdict with source evidence.</p>
+          <div class="example-chips">
+            <span class="example-chips-label">Try an example</span>
+            <button type="button" class="example-chip" data-example="NVIDIA reported $81.6 billion in revenue for fiscal Q1 2025.">NVIDIA reported $81.6B in revenue for fiscal Q1 2025</button>
+            <button type="button" class="example-chip" data-example="Apple Q2 2025 revenue was $111.2 billion.">Apple Q2 2025 revenue was $111.2B</button>
+            <button type="button" class="example-chip" data-example="The S&amp;P 500 rose 2.3% last week.">S&amp;P 500 rose 2.3% last week</button>
+            <button type="button" class="example-chip" data-example="U.S. CPI rose 3.8% year-over-year in January 2024.">U.S. CPI rose 3.8% YoY in Jan 2024</button>
+          </div>
         </div>
       </div>
     </main>
     <form id="form" class="composer-wrap">
       <div class="composer">
+        <div class="composer-hdr">
+          <span class="composer-lbl">Claim to verify</span>
+          <span class="composer-hint">Enter to submit &middot; Shift+Enter for newline</span>
+        </div>
         <label for="statement">Statement</label>
-        <textarea id="statement" name="statement" rows="1" placeholder="Paste an investment note or financial statement for verification."></textarea>
-        <button id="run" class="send-button" type="submit">Run</button>
+        <textarea id="statement" name="statement" rows="1" placeholder="Paste an investment memo, earnings summary, or market claim&hellip;"></textarea>
+        <button id="run" class="send-button verify-button" type="submit">Verify</button>
         <button id="stop" class="stop-button" type="button" hidden>Stop</button>
       </div>
     </form>
@@ -1015,6 +1147,15 @@ HTML = r"""<!doctype html>
     let liveTraceEvents = [];
     let liveTraceOpenDetails = new Set();
     let currentRunController = null;
+
+    document.addEventListener("click", (event) => {
+      const chip = event.target.closest(".example-chip");
+      if (!chip) return;
+      const example = chip.dataset.example || chip.textContent.trim();
+      statementEl.value = example;
+      statementEl.focus();
+      resizeComposer();
+    });
 
     statementEl.addEventListener("input", resizeComposer);
     statementEl.addEventListener("keydown", (event) => {
