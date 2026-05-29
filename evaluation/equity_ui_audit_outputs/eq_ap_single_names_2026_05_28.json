@@ -1,0 +1,3549 @@
+{
+  "input": {
+    "memo": "Wall Street pushed toward more records Thursday as corporate profits stayed strong. The S&P 500 added 0.4% in late morning trading. Snowflake rose 34.1% after profit and revenue exceeded expectations. Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%, and Hormel Foods climbed 9.8% after stronger-than-expected profit reports. Marvell Technology fell 1.3% after its profit matched expectations.",
+    "original_memo": "Wall Street pushed toward more records Thursday as corporate profits stayed strong. The S&P 500 added 0.4% in late morning trading. Snowflake rose 34.1% after profit and revenue exceeded expectations. Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%, and Hormel Foods climbed 9.8% after stronger-than-expected profit reports. Marvell Technology fell 1.3% after its profit matched expectations.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 413,
+      "cleaned_length": 413,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "Wall Street pushed toward more records Thursday as corporate profits stayed strong. The S&P 500 added 0.4% in late morning trading. Snowflake rose 34.1% after profit and revenue exceeded expectations. Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%, and Hormel Foods climbed 9.8% after stronger-than-expected profit reports. Marvell Technology fell 1.3% after its profit matched expectations."
+    },
+    "tickers": [
+      "SNOW",
+      "DLTR",
+      "KSS",
+      "BBY",
+      "HRL",
+      "MRVL",
+      "SPX"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "Snowflake Inc.",
+          "ticker": "SNOW",
+          "symbol": "SNOW",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0001640147",
+          "exchange": "NYSE"
+        },
+        {
+          "name": "Dollar Tree, Inc.",
+          "ticker": "DLTR",
+          "symbol": "DLTR",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0000935703",
+          "exchange": "Nasdaq"
+        },
+        {
+          "name": "Kohl's Corporation",
+          "ticker": "KSS",
+          "symbol": "KSS",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0000885639",
+          "exchange": "NYSE"
+        },
+        {
+          "name": "Best Buy Co., Inc.",
+          "ticker": "BBY",
+          "symbol": "BBY",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0000764478",
+          "exchange": "NYSE"
+        },
+        {
+          "name": "Hormel Foods Corporation",
+          "ticker": "HRL",
+          "symbol": "HRL",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0000048465",
+          "exchange": "NYSE"
+        },
+        {
+          "name": "Marvell Technology, Inc.",
+          "ticker": "MRVL",
+          "symbol": "MRVL",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0001835632",
+          "exchange": "Nasdaq"
+        },
+        {
+          "name": "S&P 500 Index",
+          "ticker": null,
+          "symbol": "SPX",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        }
+      ],
+      "tickers": [
+        "SNOW",
+        "DLTR",
+        "KSS",
+        "BBY",
+        "HRL",
+        "MRVL"
+      ],
+      "asset_classes": [
+        "single_name_equity",
+        "equity_index"
+      ],
+      "asset_groups": {
+        "single_name_equity": [
+          {
+            "name": "Snowflake Inc.",
+            "ticker": "SNOW",
+            "symbol": "SNOW",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0001640147",
+            "exchange": "NYSE"
+          },
+          {
+            "name": "Dollar Tree, Inc.",
+            "ticker": "DLTR",
+            "symbol": "DLTR",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0000935703",
+            "exchange": "Nasdaq"
+          },
+          {
+            "name": "Kohl's Corporation",
+            "ticker": "KSS",
+            "symbol": "KSS",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0000885639",
+            "exchange": "NYSE"
+          },
+          {
+            "name": "Best Buy Co., Inc.",
+            "ticker": "BBY",
+            "symbol": "BBY",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0000764478",
+            "exchange": "NYSE"
+          },
+          {
+            "name": "Hormel Foods Corporation",
+            "ticker": "HRL",
+            "symbol": "HRL",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0000048465",
+            "exchange": "NYSE"
+          },
+          {
+            "name": "Marvell Technology, Inc.",
+            "ticker": "MRVL",
+            "symbol": "MRVL",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0001835632",
+            "exchange": "Nasdaq"
+          }
+        ],
+        "equity_index": [
+          {
+            "name": "S&P 500 Index",
+            "ticker": null,
+            "symbol": "SPX",
+            "entity_type": "index",
+            "asset_class": "equity_index",
+            "confidence": 0.78,
+            "source": "asset_class_pattern+built_in_asset_universe",
+            "reason": ""
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [
+        {
+          "name": "S&P 500 Index",
+          "ticker": null,
+          "symbol": "SPX",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        }
+      ],
+      "notes": [
+        "ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json",
+        "asset_universe_source:built_in"
+      ]
+    },
+    "as_of_date": "2026-05-28",
+    "requested_as_of_date": "2026-05-28",
+    "time_context": {
+      "effective_as_of_date": "2026-05-28",
+      "user_as_of_date": "2026-05-28",
+      "event_date": null,
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": []
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 7,
+    "detected_entity_count": 7,
+    "asset_class_count": 2,
+    "asset_classes": [
+      "single_name_equity",
+      "equity_index"
+    ],
+    "non_equity_entity_count": 1,
+    "error_count": 0,
+    "atomic_claim_count": 5,
+    "skipped_claim_count": 2,
+    "total_claim_count": 7,
+    "human_review_count": 5,
+    "average_confidence": 0.23,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "Snowflake rose 34.1% after profit",
+      "ticker": "SNOW",
+      "as_of_date": "2026-05-28",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.66,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.0,
+      "score_breakdown": {
+        "source_authority": 0.0,
+        "recency": 0.0,
+        "evidence_support": 0.0,
+        "numeric_consistency": 0.0,
+        "independence": 0.0,
+        "reasoning_quality": 0.0,
+        "penalties": 0.2,
+        "final_score": 0.0,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for numeric verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for logic verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "insufficient",
+        "confidence": 0.0,
+        "summary": "No sources were available.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Low",
+        "final_confidence": 0.07,
+        "numeric_confidence": 0.1,
+        "logic_confidence": 0.1,
+        "source_confidence": 0.0,
+        "summary": "Overall confidence is Low. Numeric check: insufficient; logic check: insufficient; source check: insufficient."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Snowflake rose 34.1% after profit",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.65,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.118
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_entity_resolution_confidence",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "ticker_only_entity_resolution",
+            "no_evidence"
+          ]
+        }
+      ],
+      "canonical_facts": [],
+      "entity_resolution": {
+        "ticker": "SNOW",
+        "entity_id": "SNOW",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.65,
+        "sources": [],
+        "issues": [
+          "ticker_only_entity_resolution"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_160ab3bc9bc6",
+        "created_at": "2026-05-28T17:00:31+00:00",
+        "replayable_inputs": {
+          "claim": "Snowflake rose 34.1% after profit",
+          "ticker": "SNOW",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": []
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "empty",
+            "summary": "Retrieved 0 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": []
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "empty",
+            "summary": "Built 0 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": []
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as SNOW.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "SNOW",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.65,
+              "issues": [
+                "ticker_only_entity_resolution"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "empty",
+            "summary": "Created 0 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": []
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "insufficient"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "no_official_primary_source",
+                  "low_entity_resolution_confidence",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_1: web search skipped by source selection policy"
+        ]
+      },
+      "evidence": [],
+      "risk_flags": [
+        "human_review_required",
+        "no_evidence",
+        "search_unavailable"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "numeric change"
+        ],
+        "needs_decomposition": false,
+        "search_notes": [
+          "claim_1: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_1: web search skipped by source selection policy"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Snowflake rose 34.1% after profit",
+            "as_of_date": "2026-05-28",
+            "time_context": {
+              "effective_as_of_date": "2026-05-28",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Snowflake rose 34.1% after profit",
+            "as_of_date": "2026-05-28",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Snowflake rose 34.1% after profit",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_entity_resolution_confidence",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "selected_source_returned_no_data"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Snowflake rose 34.1% after profit",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Snowflake rose 34.1% after profit",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 33,
+          "cleaned_length": 33,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Snowflake rose 34.1% after profit"
+        },
+        "original_claim": "Snowflake rose 34.1% after profit",
+        "agentic_search_plan": [
+          "SNOW \"Snowflake rose 34.1% after profit\" SEC 10-Q 10-K",
+          "SNOW earnings release revenue EPS investor relations",
+          "SNOW company facts SEC revenue earnings",
+          "SNOW Snowflake rose 34.1% after profit correction restatement contradiction",
+          "SNOW Snowflake rose 34.1% after profit SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Snowflake rose 34.1% after profit",
+          "verdict": "insufficient",
+          "confidence": 0.118,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.12.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "Entity resolution is based mainly on the ticker symbol.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_160ab3bc9bc6",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    },
+    {
+      "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+      "ticker": "DLTR",
+      "as_of_date": "2026-05-28",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.58,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.0,
+      "score_breakdown": {
+        "source_authority": 0.0,
+        "recency": 0.0,
+        "evidence_support": 0.0,
+        "numeric_consistency": 0.0,
+        "independence": 0.0,
+        "reasoning_quality": 0.0,
+        "penalties": 0.2,
+        "final_score": 0.0,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for numeric verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for logic verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "insufficient",
+        "confidence": 0.0,
+        "summary": "No sources were available.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Low",
+        "final_confidence": 0.07,
+        "numeric_confidence": 0.1,
+        "logic_confidence": 0.1,
+        "source_confidence": 0.0,
+        "summary": "Overall confidence is Low. Numeric check: insufficient; logic check: insufficient; source check: insufficient."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.58,
+            "signals": [
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.65,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.118
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_entity_resolution_confidence",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "ticker_only_entity_resolution",
+            "no_evidence"
+          ]
+        }
+      ],
+      "canonical_facts": [],
+      "entity_resolution": {
+        "ticker": "DLTR",
+        "entity_id": "DLTR",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.65,
+        "sources": [],
+        "issues": [
+          "ticker_only_entity_resolution"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_e4632f4df423",
+        "created_at": "2026-05-28T17:00:32+00:00",
+        "replayable_inputs": {
+          "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+          "ticker": "DLTR",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": []
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "empty",
+            "summary": "Retrieved 0 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": []
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "empty",
+            "summary": "Built 0 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": []
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as DLTR.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "DLTR",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.65,
+              "issues": [
+                "ticker_only_entity_resolution"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "empty",
+            "summary": "Created 0 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": []
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "insufficient"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "no_official_primary_source",
+                  "low_entity_resolution_confidence",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_1: web search skipped by source selection policy"
+        ]
+      },
+      "evidence": [],
+      "risk_flags": [
+        "human_review_required",
+        "no_evidence",
+        "search_unavailable"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "numeric change"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_1: web search skipped by source selection policy"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "as_of_date": "2026-05-28",
+            "time_context": {
+              "effective_as_of_date": "2026-05-28",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "as_of_date": "2026-05-28",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_entity_resolution_confidence",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "selected_source_returned_no_data"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 68,
+          "cleaned_length": 68,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%"
+        },
+        "original_claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+        "agentic_search_plan": [
+          "DLTR \"Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%\" SEC 10-Q 10-K",
+          "DLTR earnings release revenue EPS investor relations",
+          "DLTR company facts SEC revenue earnings",
+          "DLTR Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9% correction restatement contradiction",
+          "DLTR Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9% SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+          "verdict": "insufficient",
+          "confidence": 0.118,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.12.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "Entity resolution is based mainly on the ticker symbol.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_e4632f4df423",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    },
+    {
+      "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+      "ticker": "KSS",
+      "as_of_date": "2026-05-28",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.58,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.0,
+      "score_breakdown": {
+        "source_authority": 0.0,
+        "recency": 0.0,
+        "evidence_support": 0.0,
+        "numeric_consistency": 0.0,
+        "independence": 0.0,
+        "reasoning_quality": 0.0,
+        "penalties": 0.2,
+        "final_score": 0.0,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for numeric verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for logic verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "insufficient",
+        "confidence": 0.0,
+        "summary": "No sources were available.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Low",
+        "final_confidence": 0.07,
+        "numeric_confidence": 0.1,
+        "logic_confidence": 0.1,
+        "source_confidence": 0.0,
+        "summary": "Overall confidence is Low. Numeric check: insufficient; logic check: insufficient; source check: insufficient."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.58,
+            "signals": [
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.65,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.118
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_entity_resolution_confidence",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "ticker_only_entity_resolution",
+            "no_evidence"
+          ]
+        }
+      ],
+      "canonical_facts": [],
+      "entity_resolution": {
+        "ticker": "KSS",
+        "entity_id": "KSS",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.65,
+        "sources": [],
+        "issues": [
+          "ticker_only_entity_resolution"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_9eb388864367",
+        "created_at": "2026-05-28T17:00:32+00:00",
+        "replayable_inputs": {
+          "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+          "ticker": "KSS",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": []
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "empty",
+            "summary": "Retrieved 0 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": []
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "empty",
+            "summary": "Built 0 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": []
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as KSS.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "KSS",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.65,
+              "issues": [
+                "ticker_only_entity_resolution"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "empty",
+            "summary": "Created 0 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": []
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "insufficient"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "no_official_primary_source",
+                  "low_entity_resolution_confidence",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_1: web search skipped by source selection policy"
+        ]
+      },
+      "evidence": [],
+      "risk_flags": [
+        "human_review_required",
+        "no_evidence",
+        "search_unavailable"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "numeric change"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_1: web search skipped by source selection policy"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "as_of_date": "2026-05-28",
+            "time_context": {
+              "effective_as_of_date": "2026-05-28",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "as_of_date": "2026-05-28",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_entity_resolution_confidence",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "selected_source_returned_no_data"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 68,
+          "cleaned_length": 68,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%"
+        },
+        "original_claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+        "agentic_search_plan": [
+          "KSS \"Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%\" SEC 10-Q 10-K",
+          "KSS earnings release revenue EPS investor relations",
+          "KSS company facts SEC revenue earnings",
+          "KSS Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9% correction restatement contradiction",
+          "KSS Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9% SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+          "verdict": "insufficient",
+          "confidence": 0.118,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.12.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "Entity resolution is based mainly on the ticker symbol.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_9eb388864367",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    },
+    {
+      "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+      "ticker": "BBY",
+      "as_of_date": "2026-05-28",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.58,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.0,
+      "score_breakdown": {
+        "source_authority": 0.0,
+        "recency": 0.0,
+        "evidence_support": 0.0,
+        "numeric_consistency": 0.0,
+        "independence": 0.0,
+        "reasoning_quality": 0.0,
+        "penalties": 0.2,
+        "final_score": 0.0,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for numeric verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for logic verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "insufficient",
+        "confidence": 0.0,
+        "summary": "No sources were available.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Low",
+        "final_confidence": 0.07,
+        "numeric_confidence": 0.1,
+        "logic_confidence": 0.1,
+        "source_confidence": 0.0,
+        "summary": "Overall confidence is Low. Numeric check: insufficient; logic check: insufficient; source check: insufficient."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.58,
+            "signals": [
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.65,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.118
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_entity_resolution_confidence",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "ticker_only_entity_resolution",
+            "no_evidence"
+          ]
+        }
+      ],
+      "canonical_facts": [],
+      "entity_resolution": {
+        "ticker": "BBY",
+        "entity_id": "BBY",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.65,
+        "sources": [],
+        "issues": [
+          "ticker_only_entity_resolution"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_8e98ad06e62c",
+        "created_at": "2026-05-28T17:00:33+00:00",
+        "replayable_inputs": {
+          "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+          "ticker": "BBY",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": []
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "empty",
+            "summary": "Retrieved 0 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": []
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "empty",
+            "summary": "Built 0 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": []
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as BBY.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "BBY",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.65,
+              "issues": [
+                "ticker_only_entity_resolution"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "empty",
+            "summary": "Created 0 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": []
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "insufficient"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "no_official_primary_source",
+                  "low_entity_resolution_confidence",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_1: web search skipped by source selection policy"
+        ]
+      },
+      "evidence": [],
+      "risk_flags": [
+        "human_review_required",
+        "no_evidence",
+        "search_unavailable"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "numeric change"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_1: web search skipped by source selection policy"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "as_of_date": "2026-05-28",
+            "time_context": {
+              "effective_as_of_date": "2026-05-28",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "as_of_date": "2026-05-28",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_entity_resolution_confidence",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "selected_source_returned_no_data"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 68,
+          "cleaned_length": 68,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%"
+        },
+        "original_claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+        "agentic_search_plan": [
+          "BBY \"Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%\" SEC 10-Q 10-K",
+          "BBY earnings release revenue EPS investor relations",
+          "BBY company facts SEC revenue earnings",
+          "BBY Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9% correction restatement contradiction",
+          "BBY Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9% SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%",
+          "verdict": "insufficient",
+          "confidence": 0.118,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.12.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "Entity resolution is based mainly on the ticker symbol.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_8e98ad06e62c",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    },
+    {
+      "claim": "Hormel Foods climbed 9.8% after stronger-than-expected profit reports",
+      "ticker": "HRL",
+      "as_of_date": "2026-05-28",
+      "argument_type": "forecast",
+      "classification_confidence": 0.92,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.0,
+      "score_breakdown": {
+        "source_authority": 0.0,
+        "recency": 0.0,
+        "evidence_support": 0.0,
+        "numeric_consistency": 0.0,
+        "independence": 0.0,
+        "reasoning_quality": 0.0,
+        "penalties": 0.2,
+        "final_score": 0.0,
+        "weights": {
+          "source_authority": 0.1,
+          "recency": 0.1,
+          "evidence_support": 0.2,
+          "numeric_consistency": 0.05,
+          "independence": 0.25,
+          "reasoning_quality": 0.3
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for numeric verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for logic verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "insufficient",
+        "confidence": 0.0,
+        "summary": "No sources were available.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Low",
+        "final_confidence": 0.07,
+        "numeric_confidence": 0.1,
+        "logic_confidence": 0.1,
+        "source_confidence": 0.0,
+        "summary": "Overall confidence is Low. Numeric check: insufficient; logic check: insufficient; source check: insufficient."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Hormel Foods climbed 9.8% after stronger-than-expected profit reports",
+            "argument_type": "forecast",
+            "classification_confidence": 0.92,
+            "signals": [
+              "forecast word"
+            ]
+          },
+          "verdict": "not_applicable",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": null,
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "Skipped non-factual claim type: forecast"
+          ]
+        }
+      ],
+      "canonical_facts": [],
+      "entity_resolution": {
+        "ticker": "HRL",
+        "entity_id": "HRL",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.65,
+        "sources": [],
+        "issues": [
+          "ticker_only_entity_resolution"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_d072c469fdc6",
+        "created_at": "2026-05-28T17:00:33+00:00",
+        "replayable_inputs": {
+          "claim": "Hormel Foods climbed 9.8% after stronger-than-expected profit reports",
+          "ticker": "HRL",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": []
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "empty",
+            "summary": "Retrieved 0 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": []
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "empty",
+            "summary": "Built 0 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": []
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as HRL.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "HRL",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.65,
+              "issues": [
+                "ticker_only_entity_resolution"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "empty",
+            "summary": "Created 0 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": []
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "ok",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "not_applicable"
+              },
+              "review_reasons": {}
+            }
+          }
+        ],
+        "source_notes": [
+          "retrieval skipped because no fact-checkable claims were found"
+        ]
+      },
+      "evidence": [],
+      "risk_flags": [
+        "no_evidence"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "forecast word"
+        ],
+        "needs_decomposition": false,
+        "search_notes": [
+          "retrieval skipped because no fact-checkable claims were found"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [],
+        "claim_retrievals": [],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Hormel Foods climbed 9.8% after stronger-than-expected profit reports",
+            "fact_checkable": false,
+            "selected_sources": [],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "not_applicable",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "skipped_non_factual"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [],
+        "selected_providers": [],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Hormel Foods climbed 9.8% after stronger-than-expected profit reports",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 69,
+          "cleaned_length": 69,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Hormel Foods climbed 9.8% after stronger-than-expected profit reports"
+        },
+        "original_claim": "Hormel Foods climbed 9.8% after stronger-than-expected profit reports",
+        "agentic_search_plan": [
+          "HRL \"Hormel Foods climbed 9.8% after stronger-than-expected profit reports\" guidance outlook consensus estimates",
+          "HRL forecast assumptions guidance investor relations",
+          "HRL analyst estimates forecast independent sources",
+          "HRL Hormel Foods climbed 9.8% after stronger-than-expected profit reports correction restatement contradiction",
+          "HRL Hormel Foods climbed 9.8% after stronger-than-expected profit reports SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [],
+      "claim_explanations": [],
+      "source_selection_debug": [],
+      "audit_export": {
+        "trace_id": "trace_d072c469fdc6",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    },
+    {
+      "claim": "Marvell Technology fell 1.3% after its profit matched expectations",
+      "ticker": "MRVL",
+      "as_of_date": "2026-05-28",
+      "argument_type": "forecast",
+      "classification_confidence": 0.92,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.0,
+      "score_breakdown": {
+        "source_authority": 0.0,
+        "recency": 0.0,
+        "evidence_support": 0.0,
+        "numeric_consistency": 0.0,
+        "independence": 0.0,
+        "reasoning_quality": 0.0,
+        "penalties": 0.2,
+        "final_score": 0.0,
+        "weights": {
+          "source_authority": 0.1,
+          "recency": 0.1,
+          "evidence_support": 0.2,
+          "numeric_consistency": 0.05,
+          "independence": 0.25,
+          "reasoning_quality": 0.3
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for numeric verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "insufficient",
+        "confidence": 0.1,
+        "summary": "No evidence was available for logic verification.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "insufficient",
+        "confidence": 0.0,
+        "summary": "No sources were available.",
+        "evidence_urls": [],
+        "issues": [
+          "no_evidence"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Low",
+        "final_confidence": 0.07,
+        "numeric_confidence": 0.1,
+        "logic_confidence": 0.1,
+        "source_confidence": 0.0,
+        "summary": "Overall confidence is Low. Numeric check: insufficient; logic check: insufficient; source check: insufficient."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Marvell Technology fell 1.3% after its profit matched expectations",
+            "argument_type": "forecast",
+            "classification_confidence": 0.92,
+            "signals": [
+              "forecast word"
+            ]
+          },
+          "verdict": "not_applicable",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": null,
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "Skipped non-factual claim type: forecast"
+          ]
+        }
+      ],
+      "canonical_facts": [],
+      "entity_resolution": {
+        "ticker": "MRVL",
+        "entity_id": "MRVL",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.65,
+        "sources": [],
+        "issues": [
+          "ticker_only_entity_resolution"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_bde5bd61b0f9",
+        "created_at": "2026-05-28T17:00:33+00:00",
+        "replayable_inputs": {
+          "claim": "Marvell Technology fell 1.3% after its profit matched expectations",
+          "ticker": "MRVL",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": []
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "empty",
+            "summary": "Retrieved 0 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": []
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "empty",
+            "summary": "Built 0 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": []
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as MRVL.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "MRVL",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.65,
+              "issues": [
+                "ticker_only_entity_resolution"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "empty",
+            "summary": "Created 0 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": []
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "ok",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "not_applicable"
+              },
+              "review_reasons": {}
+            }
+          }
+        ],
+        "source_notes": [
+          "retrieval skipped because no fact-checkable claims were found"
+        ]
+      },
+      "evidence": [],
+      "risk_flags": [
+        "no_evidence"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "forecast word"
+        ],
+        "needs_decomposition": false,
+        "search_notes": [
+          "retrieval skipped because no fact-checkable claims were found"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [],
+        "claim_retrievals": [],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Marvell Technology fell 1.3% after its profit matched expectations",
+            "fact_checkable": false,
+            "selected_sources": [],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "not_applicable",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "skipped_non_factual"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [],
+        "selected_providers": [],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Marvell Technology fell 1.3% after its profit matched expectations",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 66,
+          "cleaned_length": 66,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Marvell Technology fell 1.3% after its profit matched expectations"
+        },
+        "original_claim": "Marvell Technology fell 1.3% after its profit matched expectations",
+        "agentic_search_plan": [
+          "MRVL \"Marvell Technology fell 1.3% after its profit matched expectations\" guidance outlook consensus estimates",
+          "MRVL forecast assumptions guidance investor relations",
+          "MRVL analyst estimates forecast independent sources",
+          "MRVL Marvell Technology fell 1.3% after its profit matched expectations correction restatement contradiction",
+          "MRVL Marvell Technology fell 1.3% after its profit matched expectations SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [],
+      "claim_explanations": [],
+      "source_selection_debug": [],
+      "audit_export": {
+        "trace_id": "trace_bde5bd61b0f9",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    },
+    {
+      "claim": "The S&P 500 added 0.4% in late morning trading",
+      "ticker": "SPX",
+      "as_of_date": "2026-05-28",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.66,
+      "verdict": "supported",
+      "credibility_label": "medium",
+      "credibility_score": 0.55,
+      "score_breakdown": {
+        "source_authority": 0.88,
+        "recency": 0.98,
+        "evidence_support": 0.158,
+        "numeric_consistency": 0.72,
+        "independence": 0.35,
+        "reasoning_quality": 0.55,
+        "penalties": 0.05,
+        "final_score": 0.55,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "partially_verified",
+        "confidence": 0.72,
+        "summary": "Numeric values are partially supported by available evidence.",
+        "evidence_urls": [
+          "https://fred.stlouisfed.org/series/SP500"
+        ],
+        "issues": [],
+        "method": "heuristic_llm_fallback"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "partially_supported",
+        "confidence": 0.505,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://fred.stlouisfed.org/series/SP500"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "verified",
+        "confidence": 0.772,
+        "summary": "Sources are strong enough for a useful credibility assessment.",
+        "evidence_urls": [
+          "https://fred.stlouisfed.org/series/SP500"
+        ],
+        "issues": [
+          "single_source_domain",
+          "single_evidence_item"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Medium",
+        "final_confidence": 0.66,
+        "numeric_confidence": 0.72,
+        "logic_confidence": 0.505,
+        "source_confidence": 0.772,
+        "summary": "Overall confidence is Medium. Numeric check: partially_verified; logic check: partially_supported; source check: verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "The S&P 500 added 0.4% in late morning trading",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ]
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://fred.stlouisfed.org/series/SP500"
+          ],
+          "evidence_keys": [
+            "T2:fred.stlouisfed.org:2026-05-27"
+          ],
+          "canonical_fact_ids": [],
+          "numeric_derivation": {
+            "expression": "numeric_verification",
+            "inputs": {},
+            "result": "partially_verified",
+            "comparator": null,
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "Numeric values are partially supported by available evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.88,
+            "entity_match": 0.45,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.93,
+            "retrieval_sufficiency": 0.62,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.676
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "low_entity_resolution_confidence"
+          ],
+          "issues": [
+            "low_evidence_entity_match"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_cb48f114e219",
+          "source_type": "regulator_exchange",
+          "authority_tier": "T2",
+          "license_tag": "third_party_restricted",
+          "entity_id": "SPX",
+          "ticker": "SPX",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-05-27",
+          "observation_date": "2026-05-27",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "FRED 1-month historical prices for S&P 500 Index",
+          "value": "1",
+          "provenance_locator": "https://fred.stlouisfed.org/series/SP500",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "fred_historical_prices"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "SPX",
+        "entity_id": "SPX",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.45,
+        "sources": [
+          "asset_symbol_map"
+        ],
+        "issues": [
+          "low_evidence_entity_match"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_ca611921a90c",
+        "created_at": "2026-05-28T17:00:34+00:00",
+        "replayable_inputs": {
+          "claim": "The S&P 500 added 0.4% in late morning trading",
+          "ticker": "SPX",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": [
+            "https://fred.stlouisfed.org/series/SP500"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 1 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://fred.stlouisfed.org/series/SP500"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 1 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "fred.stlouisfed.org"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as SPX.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "SPX",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.45,
+              "issues": [
+                "low_evidence_entity_match"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 1 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_cb48f114e219"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "supported"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "low_entity_resolution_confidence"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://fred.stlouisfed.org/series/SP500",
+          "title": "FRED 1-month historical prices for S&P 500 Index",
+          "text": "retrieval_window approximately 1 month(s); window_source lookback_months; S&P 500 INDEX historical daily close prices over approximately 1 months: observations 22; period 2026-04-27 to 2026-05-27; start_close 7173.91; end_close 7520.36; min_close 7135.95; max_close 7520.36; latest_daily_calculation previous_close 7519.12 to end_close 7520.36; latest_daily_point_change 1.24; latest_daily_abs_point_change 1.24; latest_daily_return_pct 0.02% from close-to-close calculation; latest_daily_abs_return_pct 0.02%; previous_daily_return_pct 0.61%; previous_daily_abs_return_pct 0.61%; total_point_change 346.45; total_return_pct 4.83%; range_pct 5.36%; annualized_volatility_pct 10.52; up_days 13; down_days 8; daily_direction_changes 9; daily_direction_change_ratio 0.529; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+          "source_type": "regulator_exchange",
+          "source_tier": "T2",
+          "domain": "fred.stlouisfed.org",
+          "published_at": "2026-05-27",
+          "license_tag": "third_party_restricted",
+          "is_official_primary": true,
+          "source_authority": 0.88,
+          "recency_score": 0.98,
+          "relevance_score": 0.342,
+          "entity_match_score": 0.45,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.451,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.35,
+          "notes": [
+            "Federal Reserve economic data",
+            "1 days old",
+            "partially matched numeric values: 500",
+            "token overlap=0.17",
+            "reasoning quality is secondary for factual claim type",
+            "single evidence source"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required",
+        "single_source_domain",
+        "verdict_reconciled_from_verification_checks"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "numeric change"
+        ],
+        "needs_decomposition": false,
+        "search_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.4% in late morning trading",
+            "as_of_date": "2026-05-28",
+            "time_context": {
+              "effective_as_of_date": "2026-05-28",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.4% in late morning trading",
+            "as_of_date": "2026-05-28",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://fred.stlouisfed.org/series/SP500"
+            ],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.4% in late morning trading",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://fred.stlouisfed.org/series/SP500"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "low_entity_resolution_confidence"
+            ],
+            "closure_status": "evidence_attached"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.4% in late morning trading",
+            "detected_asset_classes": [
+              "equity_index"
+            ],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.4% in late morning trading",
+            "official_only": true,
+            "asset_classes": [
+              "equity_index"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset",
+              "market price or index-performance claim"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 46,
+          "cleaned_length": 46,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "The S&P 500 added 0.4% in late morning trading"
+        },
+        "original_claim": "The S&P 500 added 0.4% in late morning trading",
+        "agentic_search_plan": [
+          "SPX \"The S&P 500 added 0.4% in late morning trading\" SEC 10-Q 10-K",
+          "SPX earnings release revenue EPS investor relations",
+          "SPX company facts SEC revenue earnings",
+          "SPX The S&P 500 added 0.4% in late morning trading correction restatement contradiction",
+          "SPX The S&P 500 added 0.4% in late morning trading SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "FRED 1-month historical prices for S&P 500 Index",
+          "domain": "fred.stlouisfed.org",
+          "source_tier": "T2",
+          "is_official_primary": true,
+          "license_tag": "third_party_restricted",
+          "published_at": "2026-05-27",
+          "url": "https://fred.stlouisfed.org/series/SP500",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "The S&P 500 added 0.4% in late morning trading",
+          "verdict": "supported",
+          "confidence": 0.676,
+          "summary": "The claim is marked `supported` based on FRED 1-month historical prices for S&P 500 Index with confidence 0.68.",
+          "numeric_summary": "The numeric derivation `numeric_verification` passed.",
+          "source_summary": "The main evidence is official primary evidence with source tier T2.",
+          "main_evidence": {
+            "url": "https://fred.stlouisfed.org/series/SP500",
+            "title": "FRED 1-month historical prices for S&P 500 Index",
+            "text": "retrieval_window approximately 1 month(s); window_source lookback_months; S&P 500 INDEX historical daily close prices over approximately 1 months: observations 22; period 2026-04-27 to 2026-05-27; start_close 7173.91; end_close 7520.36; min_close 7135.95; max_close 7520.36; latest_daily_calculation previous_close 7519.12 to end_close 7520.36; latest_daily_point_change 1.24; latest_daily_abs_point_change 1.24; latest_daily_return_pct 0.02% from close-to-close calculation; latest_daily_abs_return_pct 0.02%; previous_daily_return_pct 0.61%; previous_daily_abs_return_pct 0.61%; total_point_change 346.45; total_return_pct 4.83%; range_pct 5.36%; annualized_volatility_pct 10.52; up_days 13; down_days 8; daily_direction_changes 9; daily_direction_change_ratio 0.529; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+            "source_type": "regulator_exchange",
+            "source_tier": "T2",
+            "domain": "fred.stlouisfed.org",
+            "published_at": "2026-05-27",
+            "license_tag": "third_party_restricted",
+            "is_official_primary": true,
+            "source_authority": 0.88,
+            "recency_score": 0.98,
+            "relevance_score": 0.342,
+            "entity_match_score": 0.45,
+            "numeric_consistency_score": 0.72,
+            "support_label": "not_enough_info",
+            "support_score": 0.451,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.35,
+            "notes": [
+              "Federal Reserve economic data",
+              "1 days old",
+              "partially matched numeric values: 500",
+              "token overlap=0.17",
+              "reasoning quality is secondary for factual claim type",
+              "single evidence source"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "low_evidence_entity_match"
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_ca611921a90c",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "Snowflake Inc. (SNOW)",
+        "name": "Snowflake Inc.",
+        "ticker": "SNOW",
+        "symbol": "SNOW",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Dollar Tree, Inc. (DLTR)",
+        "name": "Dollar Tree, Inc.",
+        "ticker": "DLTR",
+        "symbol": "DLTR",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Kohl's Corporation (KSS)",
+        "name": "Kohl's Corporation",
+        "ticker": "KSS",
+        "symbol": "KSS",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Best Buy Co., Inc. (BBY)",
+        "name": "Best Buy Co., Inc.",
+        "ticker": "BBY",
+        "symbol": "BBY",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Hormel Foods Corporation (HRL)",
+        "name": "Hormel Foods Corporation",
+        "ticker": "HRL",
+        "symbol": "HRL",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Marvell Technology, Inc. (MRVL)",
+        "name": "Marvell Technology, Inc.",
+        "ticker": "MRVL",
+        "symbol": "MRVL",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "S&P 500 Index (SPX)",
+        "name": "S&P 500 Index",
+        "ticker": null,
+        "symbol": "SPX",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "Snowflake Inc. (SNOW)",
+        "name": "Snowflake Inc.",
+        "ticker": "SNOW",
+        "symbol": "SNOW",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Dollar Tree, Inc. (DLTR)",
+        "name": "Dollar Tree, Inc.",
+        "ticker": "DLTR",
+        "symbol": "DLTR",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Kohl's Corporation (KSS)",
+        "name": "Kohl's Corporation",
+        "ticker": "KSS",
+        "symbol": "KSS",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Best Buy Co., Inc. (BBY)",
+        "name": "Best Buy Co., Inc.",
+        "ticker": "BBY",
+        "symbol": "BBY",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Hormel Foods Corporation (HRL)",
+        "name": "Hormel Foods Corporation",
+        "ticker": "HRL",
+        "symbol": "HRL",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "Marvell Technology, Inc. (MRVL)",
+        "name": "Marvell Technology, Inc.",
+        "ticker": "MRVL",
+        "symbol": "MRVL",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      },
+      {
+        "label": "S&P 500 Index (SPX)",
+        "name": "S&P 500 Index",
+        "ticker": null,
+        "symbol": "SPX",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 5 fact-checkable claims across 7 entities. Skipped 2 opinion, forecast, or non-falsifiable statements. 5 claims need human review.\n\n## SNOW\n\n- **Insufficient evidence.** Snowflake rose 34.1% after profit. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, entity resolution is uncertain.\n\n## DLTR\n\n- **Insufficient evidence.** Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, entity resolution is uncertain.\n\n## KSS\n\n- **Insufficient evidence.** Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, entity resolution is uncertain.\n\n## BBY\n\n- **Insufficient evidence.** Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, entity resolution is uncertain.\n\n## HRL\n\nNot fact-checked:\n- Skipped `forecast`: Hormel Foods climbed 9.8% after stronger-than-expected profit reports\n\n## MRVL\n\nNot fact-checked:\n- Skipped `forecast`: Marvell Technology fell 1.3% after its profit matched expectations\n\n## SPX\n\n- **Consistent.** The S&P 500 added 0.4% in late morning trading. Evidence: T2 FRED 1-month historical prices for S&P 500 Index (fred.stlouisfed.org). Reason: Numeric check passed. Needs human review: entity resolution is uncertain.\n",
+  "agent_trace": {
+    "run_id": "agent_4350fc754936",
+    "created_at": "2026-05-28T17:00:30+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_f4f00768",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "Wall Street pushed toward more records Thursday as corporate profits stayed strong. The S&P 500 added 0.4% in late morning trading. Snowflake rose 34.1% after profit and revenue exceeded expectations. Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%, and Hormel Foods climbed 9.8% after stronger-than-expected profit reports. Marvell Technology fell 1.3% after its profit matched expectations."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 39,
+        "output_preview": "{\"asset_classes\": [\"single_name_equity\", \"equity_index\"], \"asset_groups\": {\"equity_index\": [{\"asset_class\": \"equity_index\", \"confidence\": 0.78, \"entity_type\": \"index\", \"name\": \"S&P 500 Index\", \"reason\": \"\", \"source\": \"asset_class_pattern+built_in_asset_universe\", \"symbol\": \"SPX\", \"ticker\": null}], \"single_name_equity\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0001640147\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"NYSE\", \"name\": \"Snowflake Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"SNOW\", \"ticker\": \"SNOW\"}, {\"asset_class\": \"single_name_equity\", \"cik\": \"0000935703\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Dollar Tree, Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tic",
+        "output_hash": "a1a5b8a97c28d22a7a01d131cc6a833732c27cab4c1f4fe8cc49f721a5106ed5"
+      },
+      {
+        "call_id": "fallback_1_cbb1f3d8",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "Wall Street pushed toward more records Thursday as corporate profits stayed strong. The S&P 500 added 0.4% in late morning trading. Snowflake rose 34.1% after profit and revenue exceeded expectations. Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%, and Hormel Foods climbed 9.8% after stronger-than-expected profit reports. Marvell Technology fell 1.3% after its profit matched expectations."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"opinion_analysis\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.9, \"signals\": [\"investment judgment\"], \"text\": \"Wall Street pushed toward more records Thursday as corporate profits stayed strong\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.66, \"signals\": [\"numeric change\"], \"text\": \"The S&P 500 added 0.4% in late morning trading\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_3\", \"classification_confidence\": 0.66, \"signals\": [\"numeric change\"], \"text\": \"Snowflake rose 34.1% after profit\"}, {\"argument_type\": \"forecast\", \"claim_id\": \"claim_4\", \"classification_confidence\": 0.92, \"signals\": [\"forecast word\"], \"text\": \"revenue exceeded expectations\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_5",
+        "output_hash": "5bb42749774b54a4adbd5906acc0daa1ce7395332c90824c9fba462e41f46cde"
+      },
+      {
+        "call_id": "fallback_2_7dc070f0",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "The S&P 500 added 0.4% in late morning trading"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 9,
+        "output_preview": "{\"selections\": [{\"candidates\": [{\"adapter_status\": \"implemented\", \"authority_tier\": \"T3\", \"brief_description\": \"Supplemental historical equity price source group for price, return, volatility, and drawdown claims.\", \"candidate_score\": 3.5, \"detail_available\": true, \"detected_asset_classes\": [\"equity_index\"], \"is_official_primary\": false, \"is_runtime_selectable\": true, \"license_tag\": \"third_party_restricted\", \"name\": \"Historical Price Series\", \"required_inputs\": [\"ticker\", \"date_window\"], \"source_id\": \"historical_prices\"}, {\"adapter_status\": \"implemented\", \"authority_tier\": \"T3\", \"brief_description\": \"Supplemental market-data vendor group for latest quotes and end-of-day price checks.\", \"candidate_score\": 2.5, \"detail_available\": true, \"detected_asset_classes\": [\"equity_index\"], \"is_officia",
+        "output_hash": "8d62c9299a7c523c741ced7da0183c8bd2fb70cb8869116c8fe0e5f8322e3eb1"
+      },
+      {
+        "call_id": "fallback_3_b9accb3b",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "The S&P 500 added 0.4% in late morning trading",
+          "ticker": "SNOW",
+          "as_of_date": "2026-05-28",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "prefetched_results": null
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 573,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.66, \"needs_decomposition\": false, \"signals\": [\"numeric change\"]}, \"evidence\": [], \"extraction_notes\": [], \"search_notes\": [\"historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))\", \"web search skipped by source selection policy\"], \"time_context\": {\"confidence\": 1.0, \"effective_as_of_date\": \"2026-05-28\", \"event_date\": null, \"notes\": [], \"publication_date\": null, \"source\": \"user_as_of_date\", \"user_as_of_date\": \"2026-05-28\"}}",
+        "output_hash": "1a6d5b1b1589ff4c8963f8cfa4cb91d44dc9aab6ad259cf0a6472cc355956c04"
+      },
+      {
+        "call_id": "fallback_4_71b3d138",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "SNOW",
+          "evidence": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 4,
+        "output_preview": "{\"canonical_facts\": [], \"entity_resolution\": {\"cik\": null, \"confidence\": 0.65, \"entity_id\": \"SNOW\", \"figi\": null, \"issues\": [\"ticker_only_entity_resolution\"], \"lei\": null, \"sources\": [], \"ticker\": \"SNOW\"}}",
+        "output_hash": "6e59c70e67edf752846e62da275f123eb54a576b1c4015f3306c6bbe2462bc2b"
+      },
+      {
+        "call_id": "fallback_5_d4cbbf4f",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "The S&P 500 added 0.4% in late morning trading",
+          "ticker": "SNOW",
+          "evidence": [],
+          "canonical_facts": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 4,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.66, \"signals\": [\"numeric change\"], \"text\": \"The S&P 500 added 0.4% in late morning trading\"}, \"canonical_fact_ids\": [], \"confidence_components\": {\"cross_source_consistency\": 0.0, \"entity_match\": 0.65, \"final_confidence\": 0.118, \"numeric_exactness\": 0.1, \"parser_confidence\": 0.0, \"retrieval_sufficiency\": 0.0, \"source_authority\": 0.0, \"time_alignment\": 0.0}, \"evidence_keys\": [], \"evidence_urls\": [], \"human_review_required\": true, \"issues\": [\"ticker_only_entity_resolution\", \"no_evidence\"], \"numeric_derivation\": null, \"review_reasons\": [\"no_official_primary_source\", \"low_entity_resolution_confidence\", \"low_retrieval_sufficiency\", \"ambiguous_unit_currency_or_period\"], \"verd",
+        "output_hash": "ae0f9612f665b2e150a54f6c17391fccc917918679f78e23f8083f33a75849de"
+      },
+      {
+        "call_id": "fallback_6_e49ecb1c",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "The S&P 500 added 0.4% in late morning trading",
+          "ticker": "SNOW",
+          "as_of_date": "2026-05-28",
+          "evidence": [],
+          "canonical_facts": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"created_at\": \"2026-05-28T17:00:31+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": []}, \"status\": \"empty\", \"step\": \"extract_evidence\", \"summary\": \"Built 0 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": null, \"confidence\": 0.65, \"issues\": [\"ticker_only_entity_resolution\"], \"lei\": null, \"ticker\": \"SNOW\"}, \"status\": \"review\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as SNOW.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": []}, \"status\": \"empty\", \"step\": \"canonicalize_facts\", \"summary\": \"Created 0 canonical fact(s).\"}, {\"inputs\": {}, \"outputs\": {\"review_reasons\": {\"claim_1\": [\"no_official_primary_source\", \"low_entity_resolution_con",
+        "output_hash": "743ccfa7a6c3e96706a4fba205268edfb2d2f41d3db598980388b442bb3f9ab2"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_4350fc754936",
+    "created_at": "2026-05-28T17:00:34+00:00",
+    "verdict": "fail",
+    "score": 0.24,
+    "summary": "Audit fail: 9 finding(s) (major=4, minor=5); score 0.24.",
+    "findings": [
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      },
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      },
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      },
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      },
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      },
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      },
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      },
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      },
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      }
+    ]
+  }
+}

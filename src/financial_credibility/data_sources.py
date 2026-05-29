@@ -118,6 +118,12 @@ MARKET_PRICE_SYMBOLS = {
     },
 }
 
+FRED_INDEX_PRICE_SERIES = {
+    "SPX": ("SP500", "S&P 500 Index"),
+    "NDQ": ("NASDAQCOM", "Nasdaq Composite Index"),
+    "DJIA": ("DJIA", "Dow Jones Industrial Average"),
+}
+
 FRED_SERIES = {
     "core pce": "PCEPILFE",
     "pce price": "PCEPI",
@@ -410,7 +416,10 @@ class FreeDataSourceClient:
                 break
             if allowed and not _provider_allowed(name, allowed):
                 continue
-            if name == "historical_prices" and not needs_historical_price_data(claim):
+            claim_needs_history = needs_historical_price_data(claim)
+            if name == "historical_prices" and not claim_needs_history:
+                continue
+            if name in {"marketstack", "tiingo", "stooq", "yahoo_chart_unofficial"} and claim_needs_history:
                 continue
             try:
                 provider_results = provider()
@@ -418,9 +427,16 @@ class FreeDataSourceClient:
                 if provider_results:
                     notes.append(f"{name}: {len(provider_results)} result(s)")
                 elif name == "historical_prices":
+                    provider_notes = "; ".join(
+                        item
+                        for item in getattr(self, "_last_historical_price_errors", [])
+                        if item
+                    )
+                    suffix = f" ({provider_notes})" if provider_notes else ""
                     notes.append(
                         "historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, "
                         "FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads"
+                        f"{suffix}"
                     )
             except Exception as exc:
                 notes.append(f"{name} failed: {exc}")
@@ -1359,17 +1375,20 @@ class FreeDataSourceClient:
     ) -> list[SearchResult]:
         """Return daily historical prices from the first configured provider."""
         lookback_months, start, as_of, window_label, window_source = self._price_history_window(claim, as_of_date)
+        self._last_historical_price_errors = []
         providers = [
             ("alpha_vantage_historical_prices", self.alpha_vantage_historical_prices),
             ("fmp_historical_prices", self.fmp_historical_prices),
             ("finnhub_historical_prices", self.finnhub_historical_prices),
+            ("fred_historical_prices", self.fred_historical_prices),
             ("stooq_historical_prices", self.stooq_historical_prices),
         ]
         for provider_name, provider in providers:
             for provider_symbol in _price_provider_symbols(ticker, provider_name):
                 try:
                     points = provider(provider_symbol, start, as_of)
-                except Exception:
+                except Exception as exc:
+                    self._last_historical_price_errors.append(_provider_failure_message(provider_name, exc))
                     continue
                 if not points:
                     continue
@@ -1508,6 +1527,54 @@ class FreeDataSourceClient:
                 continue
         return sorted(points, key=lambda item: item.date)
 
+    def fred_historical_prices(
+        self,
+        ticker: str,
+        start: date,
+        as_of: date,
+    ) -> list[PricePoint]:
+        """Return FRED daily index levels as close-only price points."""
+        key = self.config.fred_api_key
+        if not key:
+            return []
+        mapping = FRED_INDEX_PRICE_SERIES.get(str(ticker or "").upper())
+        if not mapping:
+            return []
+        series_id, _label = mapping
+        url = "https://api.stlouisfed.org/fred/series/observations?" + urllib.parse.urlencode(
+            {
+                "series_id": series_id,
+                "api_key": key,
+                "file_type": "json",
+                "observation_start": start.isoformat(),
+                "observation_end": as_of.isoformat(),
+                "sort_order": "asc",
+            }
+        )
+        data = self._get_json(url)
+        observations = data.get("observations", []) if isinstance(data, dict) else []
+        points: list[PricePoint] = []
+        for row in observations:
+            try:
+                value = str(row.get("value", "")).strip()
+                if not value or value == ".":
+                    continue
+                day = date.fromisoformat(str(row["date"])[:10])
+                close = float(value)
+                points.append(
+                    PricePoint(
+                        date=day,
+                        open=close,
+                        high=close,
+                        low=close,
+                        close=close,
+                        volume=0,
+                    )
+                )
+            except (KeyError, TypeError, ValueError):
+                continue
+        return sorted(points, key=lambda item: item.date)
+
     def stooq_historical_prices(
         self,
         ticker: str,
@@ -1581,6 +1648,10 @@ class FreeDataSourceClient:
             return f"https://financialmodelingprep.com/stable/historical-price-eod/full?symbol={ticker.upper()}"
         if provider_name == "finnhub_historical_prices":
             return f"https://finnhub.io/api/v1/stock/candle?symbol={ticker.upper()}&resolution=D"
+        if provider_name == "fred_historical_prices":
+            mapping = FRED_INDEX_PRICE_SERIES.get(str(ticker or "").upper())
+            series_id = mapping[0] if mapping else ticker.upper()
+            return f"https://fred.stlouisfed.org/series/{series_id}"
         symbol = _stooq_symbol(ticker)
         return (
             "https://stooq.com/q/d/l/?"
@@ -1781,8 +1852,21 @@ def _price_history_source_name(provider_name: str) -> str:
         "alpha_vantage_historical_prices": "Alpha Vantage",
         "fmp_historical_prices": "Financial Modeling Prep",
         "finnhub_historical_prices": "Finnhub",
+        "fred_historical_prices": "FRED",
         "stooq_historical_prices": "Stooq",
     }.get(provider_name, provider_name)
+
+
+def _provider_failure_message(provider_name: str, exc: Exception) -> str:
+    label = _price_history_source_name(provider_name)
+    if isinstance(exc, urllib.error.HTTPError):
+        if exc.code == 429:
+            return f"{label} rate-limited (HTTP 429)"
+        if exc.code in {401, 403}:
+            return f"{label} authorization or entitlement failed (HTTP {exc.code})"
+        return f"{label} unavailable (HTTP {exc.code})"
+    text = str(exc).strip()
+    return f"{label} failed{f': {text[:120]}' if text else ''}"
 
 
 def _join_url(base: str, *parts: str) -> str:

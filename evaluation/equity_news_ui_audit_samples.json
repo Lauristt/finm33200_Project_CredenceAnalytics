@@ -1,0 +1,82 @@
+[
+  {
+    "id": "eq_ap_indexes_2026_05_26",
+    "title": "How major US stock indexes fared Tuesday 5/26/2026",
+    "source": "AP News",
+    "url": "https://apnews.com/article/wall-street-stocks-dow-nasdaq-b2fb9ef30834ed73768f2afd65ec7de0",
+    "published_at": "2026-05-26",
+    "memo": "The U.S. stock market rose to more all-time highs on Tuesday after trading resumed following Monday's holiday. The S&P 500 rose 45.65 points, or 0.6%, to 7,519.12. The Dow Jones Industrial Average fell 118.02 points, or 0.2%, to 50,461.68. The Nasdaq Composite rose 312.21 points, or 1.2%, to 26,656.18. The Russell 2000 rose 51.31 points, or 1.8%, to 2,920.54. For the year, the S&P 500 is up 673.62 points, or 9.8%, the Dow is up 2,398.39 points, or 5%, the Nasdaq is up 3,414.19 points, or 14.7%, and the Russell 2000 is up 438.63 points, or 17.7%."
+  },
+  {
+    "id": "eq_ap_indexes_2026_05_27",
+    "title": "How major US stock indexes fared Wednesday 5/27/2026",
+    "source": "AP News",
+    "url": "https://apnews.com/article/wall-street-stocks-dow-nasdaq-6b22ac4e7e8ab54dde3d3499e6643f28",
+    "published_at": "2026-05-27",
+    "memo": "U.S. stocks inched to more records Wednesday. The S&P 500 rose 1.24 points, or less than 0.1%, to 7,520.36. The Dow Jones Industrial Average rose 182.60 points, or 0.4%, to 50,644.28. The Nasdaq Composite rose 18.55 points, or 0.1%, to 26,674.73. The Russell 2000 fell 0.60 points, or less than 0.1%, to 2,919.94. For the week, the S&P 500 is up 46.89 points, or 0.6%, while the Nasdaq is up 330.76 points, or 1.3%."
+  },
+  {
+    "id": "eq_ap_single_names_2026_05_28",
+    "title": "Wall Street pushes to more records as profits keep piling up for US companies",
+    "source": "AP News",
+    "url": "https://apnews.com/article/stocks-markets-oil-iran-trump-inflation-559e1f1e5269976ea21bb551e916c941",
+    "published_at": "2026-05-28",
+    "memo": "Wall Street pushed toward more records Thursday as corporate profits stayed strong. The S&P 500 added 0.4% in late morning trading. Snowflake rose 34.1% after profit and revenue exceeded expectations. Dollar Tree rose 18.1%, Kohl's rallied 16.3%, Best Buy climbed 15.9%, and Hormel Foods climbed 9.8% after stronger-than-expected profit reports. Marvell Technology fell 1.3% after its profit matched expectations."
+  },
+  {
+    "id": "eq_nvda_q1_fy2027",
+    "title": "NVIDIA Announces Financial Results for First Quarter Fiscal 2027",
+    "source": "NVIDIA / GlobeNewswire",
+    "url": "https://www.globenewswire.com/news-release/2026/05/20/3298888/0/en/nvidia-announces-financial-results-for-first-quarter-fiscal-2027.html",
+    "published_at": "2026-05-20",
+    "memo": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong."
+  },
+  {
+    "id": "eq_aapl_q2_fy2026",
+    "title": "Apple Reports Record-Breaking 2Q 2026 Results",
+    "source": "MacRumors summary of Apple results",
+    "url": "https://www.macrumors.com/2026/04/30/apple-2q-2026-earnings/",
+    "published_at": "2026-04-30",
+    "memo": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings per share of $2.01. iPhone revenue grew 21.7% year over year, Services revenue grew 16.3%, and Greater China revenue grew 28.1%. The article said Apple's share price was down about 0.5% in after-hours trading after the earnings release."
+  },
+  {
+    "id": "eq_msft_q3_fy2026",
+    "title": "Microsoft Cloud and AI Strength Fuels Third Quarter Results",
+    "source": "Microsoft Investor Relations",
+    "url": "https://www.microsoft.com/en-us/investor/earnings/FY-2026-Q3/press-release-webcast",
+    "published_at": "2026-04-29",
+    "memo": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year."
+  },
+  {
+    "id": "eq_amzn_q1_2026",
+    "title": "Amazon.com Announces First Quarter Results",
+    "source": "Amazon Investor Relations",
+    "url": "https://s2.q4cdn.com/299287126/files/doc_earnings/2026/q1/earnings-result/AMZN-Q1-2026-Earnings-Release.pdf",
+    "published_at": "2026-04-29",
+    "memo": "Amazon reported first-quarter net sales of $181.5 billion, up 17% from a year earlier. AWS segment sales increased 28% year over year to $37.6 billion. Operating income increased to $23.9 billion from $18.4 billion in the prior-year quarter. Management said AWS had its fastest growth in 15 quarters."
+  },
+  {
+    "id": "eq_googl_q1_2026",
+    "title": "Alphabet Q1 2026 earnings release",
+    "source": "Alphabet Investor Relations",
+    "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2026/q1/2026q1-alphabet-earnings-release.pdf",
+    "published_at": "2026-04-29",
+    "memo": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion."
+  },
+  {
+    "id": "eq_tsla_q1_2026",
+    "title": "Tesla Q1 2026 earnings coverage",
+    "source": "TIKR / market coverage",
+    "url": "https://www.tikr.com/blog/tesla-q1-2026-earnings-revenue-up-16-eps-up-52-but-free-cash-flow-turns-negative",
+    "published_at": "2026-04-23",
+    "memo": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results."
+  },
+  {
+    "id": "eq_jpm_q1_2026",
+    "title": "JPMorgan Chase 1Q26 earnings press release",
+    "source": "JPMorgan Chase Investor Relations",
+    "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+    "published_at": "2026-04-14",
+    "memo": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%."
+  }
+]

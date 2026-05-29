@@ -79,6 +79,25 @@ class DataSourceClientTests(unittest.TestCase):
         self.assertEqual(results[0].raw["provider"], "fred")
         self.assertIn("observation_end=2024-03-31", client.last_url)
 
+    def test_fred_historical_prices_parses_index_levels(self):
+        client = FakeDataSourceClient(
+            ToolkitConfig(fred_api_key="demo"),
+            json_payload={
+                "observations": [
+                    {"date": "2026-05-25", "value": "."},
+                    {"date": "2026-05-26", "value": "7519.12"},
+                ]
+            },
+        )
+
+        points = client.fred_historical_prices("SPX", date(2026, 5, 25), date(2026, 5, 26))
+
+        self.assertEqual(len(points), 1)
+        self.assertEqual(points[0].date, date(2026, 5, 26))
+        self.assertEqual(points[0].close, 7519.12)
+        self.assertIn("series_id=SP500", client.last_url)
+        self.assertIn("observation_start=2026-05-25", client.last_url)
+
     def test_bls_api_posts_v2_timeseries_request(self):
         client = FakeDataSourceClient(
             ToolkitConfig(bls_api_key="bls-key"),
@@ -219,6 +238,26 @@ class DataSourceClientTests(unittest.TestCase):
             argument_type=ArgumentType.METRIC_FACT,
             allowed_sources=["historical_prices"],
             as_of_date="2026-05-26",
+        )
+
+        self.assertEqual(results, [])
+        self.assertTrue(any("historical_prices: no historical price series returned" in note for note in notes))
+
+    def test_return_claim_does_not_fallback_to_latest_quote(self):
+        client = FakeDataSourceClient(
+            ToolkitConfig(),
+            text_payload=(
+                "Symbol,Date,Time,Open,High,Low,Close,Volume\n"
+                "SNOW.US,2026-05-28,22:00:00,237.00,242.11,229.49,239.19,16105887\n"
+            ),
+        )
+
+        results, notes = client.query(
+            claim="Snowflake rose 34.1% after profit.",
+            ticker="SNOW",
+            argument_type=ArgumentType.METRIC_FACT,
+            allowed_sources=["historical_prices", "market_prices_vendor"],
+            as_of_date="2026-05-28",
         )
 
         self.assertEqual(results, [])

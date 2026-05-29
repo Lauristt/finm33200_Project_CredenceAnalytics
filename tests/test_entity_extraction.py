@@ -141,6 +141,15 @@ class EntityExtractionTests(unittest.TestCase):
         self.assertNotIn("US", result["tickers"])
         self.assertNotIn("THE", result["tickers"])
 
+    def test_extracts_common_single_name_news_entities(self):
+        result = extract_entities_from_memo(
+            "Snowflake rose, Dollar Tree rose, Kohl's rallied, Best Buy climbed, Hormel Foods climbed, and Marvell Technology fell.",
+            ToolkitConfig(enable_ticker_universe_filter=False),
+        )
+
+        symbols = {entity.get("symbol") for entity in result["entities"]}
+        self.assertTrue({"SNOW", "DLTR", "KSS", "BBY", "HRL", "MRVL"}.issubset(symbols))
+
     def test_resolves_market_index_symbol_without_ticker_only_issue(self):
         entity = resolve_entity("SPX")
 

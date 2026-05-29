@@ -509,8 +509,11 @@ def _historical_price_payload(
         ("Alpha Vantage", "alpha_vantage_historical_prices", client.alpha_vantage_historical_prices),
         ("Financial Modeling Prep", "fmp_historical_prices", client.fmp_historical_prices),
         ("Finnhub", "finnhub_historical_prices", client.finnhub_historical_prices),
-        ("Stooq", "stooq_historical_prices", client.stooq_historical_prices),
     ]
+    fred_provider = getattr(client, "fred_historical_prices", None)
+    if callable(fred_provider):
+        providers.append(("FRED", "fred_historical_prices", fred_provider))
+    providers.append(("Stooq", "stooq_historical_prices", client.stooq_historical_prices))
     errors = []
     for provider_label, provider_name, provider in providers:
         try:

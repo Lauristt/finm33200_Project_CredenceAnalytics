@@ -140,7 +140,7 @@ def _handler(config: ToolkitConfig):
                 prefetched_results=payload.get("prefetched_results") or None,
                 progress_callback=progress_callback,
                 tool_profile=str(payload.get("tool_profile") or "agent_core"),
-                agent_max_steps=int(payload.get("agent_max_steps") or 12),
+                agent_max_steps=int(payload.get("agent_max_steps") or 20),
                 audit=bool(payload.get("audit", True)),
             )
 
@@ -1057,7 +1057,7 @@ HTML = r"""<!doctype html>
         statement,
         mode: "multi_tool",
         tool_profile: "agent_core",
-        agent_max_steps: 12,
+        agent_max_steps: 20,
         audit: true
       };
       try {

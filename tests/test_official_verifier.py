@@ -471,6 +471,55 @@ class OfficialVerifierUpgradeTests(unittest.TestCase):
         self.assertEqual(derivation.result, 0.5)
         self.assertTrue(derivation.passed)
 
+    def test_price_claim_without_return_derivation_is_insufficient(self):
+        evidence = [
+            Evidence(
+                url="https://stooq.com/q/l/?s=snow.us",
+                title="Stooq latest quote for SNOW",
+                text="SNOW latest quote: date 2026-05-28 close 239.19 open 237 high 242.11 low 229.49",
+                source_type=SourceType.DATA_VENDOR,
+                source_tier=SourceTier.T4,
+                domain="stooq.com",
+                relevance_score=0.4,
+                numeric_consistency_score=0.25,
+                support_score=0.0,
+            )
+        ]
+
+        result = verify_atomic_claims(
+            claim="Snowflake rose 34.1% after profit.",
+            evidence=evidence,
+            canonical_facts=[],
+            entity_resolution=EntityResolution(ticker="SNOW", entity_id="SNOW", confidence=0.86),
+        )[0]
+
+        self.assertEqual(result.verdict, VerificationVerdict.INSUFFICIENT)
+
+    def test_price_claim_ignores_sec_financial_statement_evidence(self):
+        evidence = [
+            Evidence(
+                url="https://www.sec.gov/Archives/example",
+                title="Apple press release filed with SEC",
+                text="Apple posted quarterly revenue of $111.2 billion and diluted EPS of $2.01.",
+                source_type=SourceType.SEC_FILING,
+                source_tier=SourceTier.T1,
+                domain="sec.gov",
+                is_official_primary=True,
+                relevance_score=0.8,
+                numeric_consistency_score=0.8,
+            )
+        ]
+
+        result = verify_atomic_claims(
+            claim="Apple's share price was down about 0.5% in after-hours trading.",
+            evidence=evidence,
+            canonical_facts=[],
+            entity_resolution=EntityResolution(ticker="AAPL", entity_id="AAPL", confidence=0.86),
+        )[0]
+
+        self.assertEqual(result.verdict, VerificationVerdict.INSUFFICIENT)
+        self.assertEqual(result.evidence_urls, [])
+
     def test_free_cash_flow_derivation_recomputes_amount(self):
         facts = canonicalize_search_results(
             [

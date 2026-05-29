@@ -1,0 +1,2226 @@
+{
+  "input": {
+    "memo": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%.",
+    "original_memo": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 234,
+      "cleaned_length": 234,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%."
+    },
+    "tickers": [
+      "JPM"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "JPMorgan Chase & Co.",
+          "ticker": "JPM",
+          "symbol": "JPM",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0000019617",
+          "exchange": "NYSE"
+        }
+      ],
+      "tickers": [
+        "JPM"
+      ],
+      "asset_classes": [
+        "single_name_equity"
+      ],
+      "asset_groups": {
+        "single_name_equity": [
+          {
+            "name": "JPMorgan Chase & Co.",
+            "ticker": "JPM",
+            "symbol": "JPM",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0000019617",
+            "exchange": "NYSE"
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [],
+      "notes": [
+        "ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json"
+      ]
+    },
+    "as_of_date": "2026-04-14",
+    "requested_as_of_date": "2026-04-14",
+    "time_context": {
+      "effective_as_of_date": "2026-04-14",
+      "user_as_of_date": "2026-04-14",
+      "event_date": null,
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": []
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 1,
+    "detected_entity_count": 1,
+    "asset_class_count": 1,
+    "asset_classes": [
+      "single_name_equity"
+    ],
+    "non_equity_entity_count": 0,
+    "error_count": 0,
+    "atomic_claim_count": 4,
+    "skipped_claim_count": 0,
+    "total_claim_count": 4,
+    "human_review_count": 4,
+    "average_confidence": 0.269,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%.",
+      "ticker": "JPM",
+      "as_of_date": "2026-04-14",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.95,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.479,
+      "score_breakdown": {
+        "source_authority": 0.94,
+        "recency": 0.972,
+        "evidence_support": 0.087,
+        "numeric_consistency": 0.25,
+        "independence": 0.85,
+        "reasoning_quality": 0.55,
+        "penalties": 0.05,
+        "final_score": 0.479,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "partially_verified",
+        "confidence": 0.59,
+        "summary": "Some core numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+        ],
+        "issues": [
+          "matched 10% with 10",
+          "unmatched claim numbers: $16.5 billion, 13%, $50.5 billion, $25.5 billion, 9%, $11.6 billion, 20%"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "weak",
+        "confidence": 0.415,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "https://fred.stlouisfed.org/series/FEDFUNDS"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "verified",
+        "confidence": 0.925,
+        "summary": "Sources are strong enough for a useful credibility assessment.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "https://fred.stlouisfed.org/series/FEDFUNDS"
+        ],
+        "issues": [],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Medium",
+        "final_confidence": 0.629,
+        "numeric_confidence": 0.59,
+        "logic_confidence": 0.415,
+        "source_confidence": 0.925,
+        "summary": "Overall confidence is Medium. Numeric check: partially_verified; logic check: weak; source check: verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "numeric change",
+              "reported period"
+            ]
+          },
+          "verdict": "partially_supported",
+          "evidence_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+          ],
+          "evidence_keys": [
+            "T1:data.sec.gov:2026-04-06"
+          ],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 1.0,
+            "entity_match": 0.9,
+            "time_alignment": 0.978,
+            "numeric_exactness": 0.25,
+            "retrieval_sufficiency": 0.62,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.631
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "ambiguous_unit_currency_or_period",
+            "explanation_claim_needs_human_review"
+          ],
+          "issues": []
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_2",
+            "text": "Managed net revenue was $50.5 billion, up 10%",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "financial metric",
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.85,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.148
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "no_evidence"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_3",
+            "text": "Net interest income was $25.5 billion, up 9%",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.85,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.148
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "no_evidence"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_4",
+            "text": "Markets revenue was $11.6 billion, up 20%",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "financial metric",
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.85,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.148
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "no_evidence"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_3824d8bbaee7",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2025-09-30",
+          "filing_date": "2026-04-06",
+          "observation_date": "2025-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 14393000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_8154ccca4123",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2025-06-30",
+          "filing_date": "2026-04-06",
+          "observation_date": "2025-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 14987000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_420679c33acd",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2025-03-31",
+          "filing_date": "2026-04-06",
+          "observation_date": "2025-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 14643000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_1d9f6919eaa6",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2024-09-30",
+          "filing_date": "2026-04-06",
+          "observation_date": "2024-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 12898000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f3f0c3674ec7",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2024-06-30",
+          "filing_date": "2026-04-06",
+          "observation_date": "2024-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 18149000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_cf6276aace90",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2024-03-31",
+          "filing_date": "2026-04-06",
+          "observation_date": "2024-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 13419000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_dfab334e399b",
+          "source_type": "regulator_exchange",
+          "authority_tier": "T2",
+          "license_tag": "third_party_restricted",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": null,
+          "observation_date": "2026-04-01",
+          "vintage_date": "2026-05-28",
+          "unit": null,
+          "currency": null,
+          "fact_name": "FEDFUNDS",
+          "value": 3.64,
+          "provenance_locator": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "parser_confidence": 0.88,
+          "raw": {
+            "provider": "fred",
+            "series_id": "FEDFUNDS",
+            "realtime_start": "2026-05-28",
+            "realtime_end": "2026-05-28"
+          }
+        },
+        {
+          "fact_id": "fact_169b2b507061",
+          "source_type": "regulator_exchange",
+          "authority_tier": "T2",
+          "license_tag": "third_party_restricted",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": null,
+          "observation_date": "2026-03-01",
+          "vintage_date": "2026-05-28",
+          "unit": null,
+          "currency": null,
+          "fact_name": "FEDFUNDS",
+          "value": 3.64,
+          "provenance_locator": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "parser_confidence": 0.88,
+          "raw": {
+            "provider": "fred",
+            "series_id": "FEDFUNDS",
+            "realtime_start": "2026-05-28",
+            "realtime_end": "2026-05-28"
+          }
+        },
+        {
+          "fact_id": "fact_7fd72e052a00",
+          "source_type": "regulator_exchange",
+          "authority_tier": "T2",
+          "license_tag": "third_party_restricted",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": null,
+          "observation_date": "2026-02-01",
+          "vintage_date": "2026-05-28",
+          "unit": null,
+          "currency": null,
+          "fact_name": "FEDFUNDS",
+          "value": 3.64,
+          "provenance_locator": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "parser_confidence": 0.88,
+          "raw": {
+            "provider": "fred",
+            "series_id": "FEDFUNDS",
+            "realtime_start": "2026-05-28",
+            "realtime_end": "2026-05-28"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "JPM",
+        "entity_id": "CIK0000019617",
+        "cik": "0000019617",
+        "lei": null,
+        "figi": null,
+        "confidence": 0.85,
+        "sources": [
+          "SEC",
+          "evidence_entity_match"
+        ],
+        "issues": []
+      },
+      "audit_trace": {
+        "trace_id": "trace_b54c731ab1b1",
+        "created_at": "2026-05-28T17:01:17+00:00",
+        "replayable_inputs": {
+          "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%.",
+          "ticker": "JPM",
+          "as_of_date": "2026-04-14",
+          "search_result_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+            "https://fred.stlouisfed.org/series/FEDFUNDS"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 2 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+                "https://fred.stlouisfed.org/series/FEDFUNDS"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 2 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "data.sec.gov",
+                "fred.stlouisfed.org"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "ok",
+            "summary": "Resolved entity as CIK0000019617.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "confidence": 0.85,
+              "issues": []
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 9 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_3824d8bbaee7",
+                "fact_8154ccca4123",
+                "fact_420679c33acd",
+                "fact_1d9f6919eaa6",
+                "fact_f3f0c3674ec7",
+                "fact_cf6276aace90",
+                "fact_dfab334e399b",
+                "fact_169b2b507061",
+                "fact_7fd72e052a00"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 4 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "partially_supported",
+                "claim_2": "insufficient",
+                "claim_3": "insufficient",
+                "claim_4": "insufficient"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "ambiguous_unit_currency_or_period",
+                  "explanation_claim_needs_human_review"
+                ],
+                "claim_2": [
+                  "no_official_primary_source",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ],
+                "claim_3": [
+                  "no_official_primary_source",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ],
+                "claim_4": [
+                  "no_official_primary_source",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_3: fred: 1 result(s)",
+          "claim_4: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_4: sec_company_facts: 1 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "title": "SEC Company Facts for JPM",
+          "text": "NetIncomeLoss (USD) for fiscal year ending 2025-12-31: 57000000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2025-09-30: 14393000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-30: 14987000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-31: 14643000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-12-31: 58500000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2024-09-30: 12898000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-30: 18149000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-31: 13419000000 (form 10-Q)",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "data.sec.gov",
+          "published_at": "2026-04-06",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.978,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.25,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "SEC filing/regulatory source",
+            "8 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "title": "FRED macro series FEDFUNDS",
+          "text": "2026-04-01: 3.64; 2026-03-01: 3.64; 2026-02-01: 3.64",
+          "source_type": "regulator_exchange",
+          "source_tier": "T2",
+          "domain": "fred.stlouisfed.org",
+          "published_at": "2026-04-01",
+          "license_tag": "third_party_restricted",
+          "is_official_primary": true,
+          "source_authority": 0.88,
+          "recency_score": 0.965,
+          "relevance_score": 0.2,
+          "entity_match_score": 0.45,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.25,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "Federal Reserve economic data",
+            "13 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "financial metric",
+          "numeric change",
+          "reported period"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_3: fred: 1 result(s)",
+          "claim_4: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_4: sec_company_facts: 1 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-04-14",
+          "user_as_of_date": "2026-04-14",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+            "as_of_date": "2026-04-14",
+            "time_context": {
+              "effective_as_of_date": "2026-04-14",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Managed net revenue was $50.5 billion, up 10%",
+            "as_of_date": "2026-04-14",
+            "time_context": {
+              "effective_as_of_date": "2026-04-14",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Net interest income was $25.5 billion, up 9%",
+            "as_of_date": "2026-04-14",
+            "time_context": {
+              "effective_as_of_date": "2026-04-14",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ]
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue was $11.6 billion, up 20%",
+            "as_of_date": "2026-04-14",
+            "time_context": {
+              "effective_as_of_date": "2026-04-14",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "historical_prices"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+            "as_of_date": "2026-04-14",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Managed net revenue was $50.5 billion, up 10%",
+            "as_of_date": "2026-04-14",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Net interest income was $25.5 billion, up 9%",
+            "as_of_date": "2026-04-14",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://fred.stlouisfed.org/series/FEDFUNDS"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue was $11.6 billion, up 20%",
+            "as_of_date": "2026-04-14",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "historical_prices"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "partially_supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "ambiguous_unit_currency_or_period",
+              "explanation_claim_needs_human_review"
+            ],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Managed net revenue was $50.5 billion, up 10%",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "retrieved_but_not_relevant"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Net interest income was $25.5 billion, up 9%",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://fred.stlouisfed.org/series/FEDFUNDS"
+            ],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "retrieved_but_not_relevant"
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue was $11.6 billion, up 20%",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "historical_prices"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "retrieved_but_not_relevant"
+          }
+        ],
+        "retrieval_budget": 32,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Managed net revenue was $50.5 billion, up 10%",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Net interest income was $25.5 billion, up 9%",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.35,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "fred",
+                "name": "FRED Macro Series",
+                "authority_tier": "T2",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": true,
+                "brief_description": "St. Louis Fed FRED/ALFRED economic time-series API for macro observations and vintage-aware checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "series_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 1.35,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 3,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings",
+                "fred"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings",
+                "fred"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md",
+                "fred.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              },
+              {
+                "source_id": "fred",
+                "name": "FRED Macro Series",
+                "detail_file": "fred.md",
+                "detail_markdown": "# FRED / ALFRED\n\nSource id: fred\nOfficial docs: https://fred.stlouisfed.org/docs/api/fred/\nObservations docs: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\nAuthority tier: T2 official/statistical primary for macro verification\nLicense tag: third_party_restricted\n\nOfficial description summary:\n- FRED API v1 lets programs retrieve economic data from FRED and ALFRED by source, release, category, series, tags, and observations.\n- FRED API v2 supports bulk retrieval for all series on a release and the entire release history.\n- ALFRED vintage/real-time-period fields are important for checking what was known at a historical date.\n\nAPI playbook:\n- Auth/env: requires `FRED_API_KEY`.\n- Observations endpoint: `GET https://api.stlouisfed.org/fred/series/observations`.\n- Required params: `series_id`, `api_key`, `file_type=json`. Current adapter also sends `sort_order=desc` and `limit=3`.\n- Time alignment: when article context has an as-of date, send `observation_end=YYYY-MM-DD`; for vintage checks add ALFRED real-time params in a future adapter expansion.\n- Response schema: top-level `observations[]` with `date`, `value`, `realtime_start`, and `realtime_end`.\n- Naming rules: map claim text to known `FRED_SERIES` IDs such as `SOFR`, `DGS2`, `DGS10`, `DGS30`, `FEDFUNDS`, `PCEPI`, `PCEPILFE`, `PAYEMS`, `UNRATE`, `BAMLH0A0HYM2`, `BAMLC0A0CM`, `DCOILWTICO`, `DCOILBRENTEU`, `GOLDAMGBD228NLBM`, `DEXUSEU`, `DEXJPUS`, `DEXUSUK`, `DEXCAUS`, `DEXCHUS`, `DEXUSAL`, and `DTWEXBGS`.\n- Adapter output: return the latest aligned observations and the FRED series page URL; prefer BLS/BEA/EIA direct APIs when the claim explicitly needs the original publishing agency.\n\nUse for:\n- US and global macroeconomic time-series checks available through FRED.\n- CPI, PCE/core PCE, GDP, payrolls, unemployment, SOFR, policy rates, Treasury yields, HY/IG OAS, WTI/Brent, gold, major FX, dollar-index proxy, monetary aggregates, and release-level economic data.\n- Vintage-aware checks through ALFRED-compatible real-time periods and vintage dates.\n\nDo not use for:\n- Company-specific financial statements, issuer identity, or SEC filing facts.\n- Claims whose exact official source is outside FRED and where a direct agency API is already available and required.\n\nImportant metadata:\n- Preserve series_id, observation date, realtime_start, realtime_end, vintage date if supplied, units, frequency, aggregation method, and source/release metadata.\n- If a claim is time-sensitive, ask whether current latest value or as-known-on vintage value is needed.\n- Treat missing API key, missing vintage date, or revised observations as uncertainty/human-review signals.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers macro time series and vintage-aware observations.\n- Load this detail for inflation, rates, GDP, unemployment, yields, and other economic series claims."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue was $11.6 billion, up 20%",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 4,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings",
+                "historical_prices"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings",
+                "historical_prices"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md",
+                "historical_prices.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              },
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "historical_prices"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "historical_prices"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "sec_company_facts",
+          "sec_recent_filings",
+          "fred",
+          "historical_prices"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Managed net revenue was $50.5 billion, up 10%",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Net interest income was $25.5 billion, up 9%",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue was $11.6 billion, up 20%",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "company financial statement claim",
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 234,
+          "cleaned_length": 234,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%."
+        },
+        "original_claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%.",
+        "agentic_search_plan": [
+          "JPM \"JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%.\" SEC 10-Q 10-K",
+          "JPM earnings release revenue EPS investor relations",
+          "JPM company facts SEC revenue earnings",
+          "JPM JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%. correction restatement contradiction",
+          "JPM JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%. SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "SEC Company Facts for JPM",
+          "domain": "data.sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-06",
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        },
+        {
+          "title": "FRED macro series FEDFUNDS",
+          "domain": "fred.stlouisfed.org",
+          "source_tier": "T2",
+          "is_official_primary": true,
+          "license_tag": "third_party_restricted",
+          "published_at": "2026-04-01",
+          "url": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "used_by_claims": []
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+          "verdict": "partially_supported",
+          "confidence": 0.631,
+          "summary": "The claim is marked `partially_supported` based on SEC Company Facts for JPM with confidence 0.63.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T1.",
+          "main_evidence": {
+            "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+            "title": "SEC Company Facts for JPM",
+            "text": "NetIncomeLoss (USD) for fiscal year ending 2025-12-31: 57000000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2025-09-30: 14393000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-30: 14987000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-31: 14643000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-12-31: 58500000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2024-09-30: 12898000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-30: 18149000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-31: 13419000000 (form 10-Q)",
+            "source_type": "sec_filing",
+            "source_tier": "T1",
+            "domain": "data.sec.gov",
+            "published_at": "2026-04-06",
+            "license_tag": "public_official",
+            "is_official_primary": true,
+            "source_authority": 1.0,
+            "recency_score": 0.978,
+            "relevance_score": 0.4,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.25,
+            "support_label": "not_enough_info",
+            "support_score": 0.25,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "SEC filing/regulatory source",
+              "8 days old",
+              "claim numbers were not found in evidence",
+              "token overlap=0.00",
+              "weak lexical support",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim."
+          ]
+        },
+        {
+          "claim_id": "claim_2",
+          "claim": "Managed net revenue was $50.5 billion, up 10%",
+          "verdict": "insufficient",
+          "confidence": 0.148,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.15.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        },
+        {
+          "claim_id": "claim_3",
+          "claim": "Net interest income was $25.5 billion, up 9%",
+          "verdict": "insufficient",
+          "confidence": 0.148,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.15.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        },
+        {
+          "claim_id": "claim_4",
+          "claim": "Markets revenue was $11.6 billion, up 20%",
+          "verdict": "insufficient",
+          "confidence": 0.148,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.15.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_2",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_3",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings",
+            "fred"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_4",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings",
+            "historical_prices"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_b54c731ab1b1",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "JPMorgan Chase & Co. (JPM)",
+        "name": "JPMorgan Chase & Co.",
+        "ticker": "JPM",
+        "symbol": "JPM",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "JPMorgan Chase & Co. (JPM)",
+        "name": "JPMorgan Chase & Co.",
+        "ticker": "JPM",
+        "symbol": "JPM",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 4 fact-checkable claims across 1 entity. 4 claims need human review.\n\n## JPM\n\n- **Partially consistent.** JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Evidence: T1 SEC Company Facts for JPM (data.sec.gov). Needs human review: the unit, currency, or period is ambiguous, the explanatory claim needs human judgment.\n- **Insufficient evidence.** Managed net revenue was $50.5 billion, up 10%. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, retrieved evidence is limited.\n- **Insufficient evidence.** Net interest income was $25.5 billion, up 9%. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, retrieved evidence is limited.\n- **Insufficient evidence.** Markets revenue was $11.6 billion, up 20%. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, retrieved evidence is limited.\n",
+  "agent_trace": {
+    "run_id": "agent_eed82ed1c548",
+    "created_at": "2026-05-28T17:01:07+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_6a570b08",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 37,
+        "output_preview": "{\"asset_classes\": [\"single_name_equity\"], \"asset_groups\": {\"single_name_equity\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0000019617\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"NYSE\", \"name\": \"JPMorgan Chase & Co.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"JPM\", \"ticker\": \"JPM\"}]}, \"entities\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0000019617\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"NYSE\", \"name\": \"JPMorgan Chase & Co.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"JPM\", \"ticker\": \"JPM\"}], \"method\": \"heuristic\", \"non_equity_entities\": [], \"notes\": [\"ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json\"], \"tickers\": [\"JPM\"], \"u",
+        "output_hash": "dc074d65dc6989a0fbb2a05e61eb8ed30863d57daae932cd3abc055f2dfed7f8"
+      },
+      {
+        "call_id": "fallback_1_8da2c052",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year. Managed net revenue was $50.5 billion, up 10%. Net interest income was $25.5 billion, up 9%, and Markets revenue was $11.6 billion, up 20%."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.87, \"signals\": [\"financial metric\", \"numeric change\"], \"text\": \"Managed net revenue was $50.5 billion, up 10%\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_3\", \"classification_confidence\": 0.66, \"signals\": [\"numeric change\"], \"text\": \"Net interest income was $25.5 billion, up 9%\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_4\", \"classification_confidence\": 0.87, \"signals\": [\"financial metric\", \"numeric change\"], ",
+        "output_hash": "1b2436f940209a9b7fc81338c14df54a30922263be32afe9060477ba0e7bc337"
+      },
+      {
+        "call_id": "fallback_2_922cac6e",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 9,
+        "output_preview": "{\"selections\": [{\"candidates\": [{\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.\", \"candidate_score\": 4.85, \"detail_available\": true, \"detected_asset_classes\": [\"single_name_equity\"], \"is_official_primary\": true, \"is_runtime_selectable\": true, \"license_tag\": \"public_official\", \"name\": \"SEC Company Facts\", \"required_inputs\": [\"ticker_or_cik\", \"metric_hint\"], \"source_id\": \"sec_company_facts\"}, {\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.\", \"candidate_score\": 2.5, \"detail_available\": true, \"detected_asset_classes\": [\"single_na",
+        "output_hash": "8f934add6cbee52aa9a9ae9b4031bb8652e79694c575cd82cbfc60559a4a5c07"
+      },
+      {
+        "call_id": "fallback_3_30021f66",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+          "ticker": "JPM",
+          "as_of_date": "2026-04-14",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "prefetched_results": null
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1411,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.95, \"needs_decomposition\": false, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"]}, \"evidence\": [{\"domain\": \"data.sec.gov\", \"entity_match_score\": 0.9, \"independence_score\": 0.0, \"is_official_primary\": true, \"license_tag\": \"public_official\", \"notes\": [\"SEC filing/regulatory source\", \"8 days old\", \"claim numbers were not found in evidence\"], \"numeric_consistency_score\": 0.25, \"published_at\": \"2026-04-06\", \"reasoning_quality_score\": 0.0, \"recency_score\": 0.978, \"relevance_score\": 0.471, \"source_authority\": 1.0, \"source_tier\": \"T1\", \"source_type\": \"sec_filing\", \"support_label\": \"not_enough_info\", \"support_score\": 0.0, \"text\": \"NetIncomeLoss (USD) for fiscal year ending 2025-",
+        "output_hash": "99c60972964aca9e82e1e384a9e27114e7c72d7f9cb2d52e7872ea9db61e7b85"
+      },
+      {
+        "call_id": "fallback_4_76b9d7bc",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "JPM",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "title": "SEC Company Facts for JPM",
+              "text": "NetIncomeLoss (USD) for fiscal year ending 2025-12-31: 57000000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2025-09-30: 14393000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-30: 14987000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-31: 14643000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-12-31: 58500000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2024-09-30: 12898000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-30: 18149000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-31: 13419000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-06",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.978,
+              "relevance_score": 0.471,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "8 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"canonical_facts\": [{\"authority_tier\": \"T1\", \"cik\": \"0000019617\", \"currency\": \"USD\", \"entity_id\": \"CIK0000019617\", \"fact_id\": \"fact_3824d8bbaee7\", \"fact_name\": \"NetIncomeLoss\", \"filing_date\": \"2026-04-06\", \"lei\": null, \"license_tag\": \"public_official\", \"observation_date\": \"2025-09-30\", \"parser_confidence\": 0.88, \"provenance_locator\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json\", \"raw\": {\"form\": \"10-Q\", \"period_kind\": \"fiscal quarter\", \"provider\": \"sec_company_facts\"}, \"report_period\": \"2025-09-30\", \"source_type\": \"sec_filing\", \"ticker\": \"JPM\", \"unit\": \"USD\", \"value\": 14393000000, \"vintage_date\": null}, {\"authority_tier\": \"T1\", \"cik\": \"0000019617\", \"currency\": \"USD\", \"entity_id\": \"CIK0000019617\", \"fact_id\": \"fact_8154ccca4123\", \"fact_name\": \"NetIncomeLoss\", \"filing_date\"",
+        "output_hash": "c4440383bcf8c6aa21e582f2c45620391a595138f677bc5f7d50507817739ca9"
+      },
+      {
+        "call_id": "fallback_5_eed14dee",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+          "ticker": "JPM",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "title": "SEC Company Facts for JPM",
+              "text": "NetIncomeLoss (USD) for fiscal year ending 2025-12-31: 57000000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2025-09-30: 14393000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-30: 14987000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-31: 14643000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-12-31: 58500000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2024-09-30: 12898000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-30: 18149000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-31: 13419000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-06",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.978,
+              "relevance_score": 0.471,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "8 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_3824d8bbaee7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14393000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_8154ccca4123",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14987000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_420679c33acd",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14643000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1d9f6919eaa6",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 12898000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f3f0c3674ec7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 18149000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_cf6276aace90",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-03-31",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 13419000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 2,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year\"}, \"canonical_fact_ids\": [], \"confidence_components\": {\"cross_source_consistency\": 0.55, \"entity_match\": 0.9, \"final_confidence\": 0.631, \"numeric_exactness\": 0.25, \"parser_confidence\": 0.0, \"retrieval_sufficiency\": 0.62, \"source_authority\": 1.0, \"time_alignment\": 0.978}, \"evidence_keys\": [\"T1:data.sec.gov:2026-04-06\"], \"evidence_urls\": [\"https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json\"], \"human_review_required\": true, \"issues\": [], \"numeric_derivation\": null, \"review_reasons\": [\"am",
+        "output_hash": "7684be94e9c826aa68ed794f1bd6a01ebd330ee89548599f43113e6c3dabdea9"
+      },
+      {
+        "call_id": "fallback_6_cea00301",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter net income of $16.5 billion, up 13% from the prior year",
+          "ticker": "JPM",
+          "as_of_date": "2026-04-14",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "title": "SEC Company Facts for JPM",
+              "text": "NetIncomeLoss (USD) for fiscal year ending 2025-12-31: 57000000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2025-09-30: 14393000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-30: 14987000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-31: 14643000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-12-31: 58500000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2024-09-30: 12898000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-30: 18149000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-31: 13419000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-06",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.978,
+              "relevance_score": 0.471,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "8 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_3824d8bbaee7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14393000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_8154ccca4123",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14987000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_420679c33acd",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14643000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1d9f6919eaa6",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 12898000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f3f0c3674ec7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 18149000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_cf6276aace90",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-03-31",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 13419000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1,
+        "output_preview": "{\"created_at\": \"2026-05-28T17:01:09+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": [\"data.sec.gov\"]}, \"status\": \"ok\", \"step\": \"extract_evidence\", \"summary\": \"Built 1 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": \"0000019617\", \"confidence\": 0.85, \"issues\": [], \"lei\": null, \"ticker\": \"JPM\"}, \"status\": \"ok\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as CIK0000019617.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": [\"fact_3824d8bbaee7\", \"fact_8154ccca4123\", \"fact_420679c33acd\", \"fact_1d9f6919eaa6\", \"fact_f3f0c3674ec7\", \"fact_cf6276aace90\"]}, \"status\": \"ok\", \"step\": \"canonicalize_facts\", \"summary\": \"Created 6 canonical fact(s).\"}, {",
+        "output_hash": "46982641e3b153dbe0963b218bee75288978420a48839317831d6e92f23a3502"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_eed82ed1c548",
+    "created_at": "2026-05-28T17:01:17+00:00",
+    "verdict": "fail",
+    "score": 0.58,
+    "summary": "Audit fail: 3 finding(s) (major=3); score 0.58.",
+    "findings": [
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_2",
+        "trace_refs": [
+          "sec_company_facts",
+          "sec_recent_filings"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      },
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_3",
+        "trace_refs": [
+          "sec_company_facts",
+          "sec_recent_filings",
+          "fred"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      },
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_4",
+        "trace_refs": [
+          "sec_company_facts",
+          "sec_recent_filings",
+          "historical_prices"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      }
+    ]
+  }
+}

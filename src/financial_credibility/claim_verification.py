@@ -59,7 +59,12 @@ def verify_atomic_claims(
         results.append(
             AtomicClaimResult(
                 atomic_claim=atomic_claim,
-                verdict=_claim_verdict(effective_numeric_check.verdict, logic_check.verdict, derivation),
+                verdict=_claim_verdict(
+                    effective_numeric_check.verdict,
+                    logic_check.verdict,
+                    derivation,
+                    atomic_claim.text,
+                ),
                 evidence_urls=[item.url for item in relevant_evidence[:5]],
                 evidence_keys=[_evidence_key(item) for item in relevant_evidence[:5]],
                 canonical_fact_ids=[fact.fact_id for fact in relevant_facts[:10]],
@@ -77,7 +82,21 @@ def _claim_verdict(
     numeric_verdict: str,
     logic_verdict: str,
     derivation: NumericDerivation | None = None,
+    claim_text: str = "",
 ) -> VerificationVerdict:
+    if needs_historical_price_data(claim_text):
+        if not derivation and numeric_verdict in {
+            VerificationVerdict.NOT_FOUND.value,
+            VerificationVerdict.INSUFFICIENT.value,
+        }:
+            return VerificationVerdict.INSUFFICIENT
+        if (
+            derivation
+            and derivation.expression == "numeric_match_summary"
+            and derivation.passed is False
+            and _derivation_has_no_matched_values(derivation)
+        ):
+            return VerificationVerdict.INSUFFICIENT
     if derivation and derivation.expression == "numeric_match_summary" and derivation.passed is False:
         if logic_verdict == VerificationVerdict.CONTRADICTED.value:
             return VerificationVerdict.CONTRADICTED
@@ -107,6 +126,11 @@ def _claim_verdict(
     return VerificationVerdict.PARTIALLY_SUPPORTED
 
 
+def _derivation_has_no_matched_values(derivation: NumericDerivation) -> bool:
+    matched = str((derivation.inputs or {}).get("matched_values") or "").strip().lower()
+    return matched in {"", "none"}
+
+
 def _numeric_check_with_derivation(
     numeric_check: VerificationCheck,
     derivation: NumericDerivation | None,
@@ -126,6 +150,12 @@ def _numeric_check_with_derivation(
 
 def _relevant_evidence(atomic_claim: AtomicClaim, evidence: list[Evidence]) -> list[Evidence]:
     """Return only evidence whose text is topically connected to the atomic claim."""
+    if needs_historical_price_data(atomic_claim.text):
+        return [
+            item
+            for item in evidence
+            if _is_price_history_evidence(item)
+        ]
     scored = [
         (_text_overlap_hint(atomic_claim.text, item.title + " " + item.text), item)
         for item in evidence

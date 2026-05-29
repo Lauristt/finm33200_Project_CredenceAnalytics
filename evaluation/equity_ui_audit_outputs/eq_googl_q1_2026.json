@@ -1,0 +1,1615 @@
+{
+  "input": {
+    "memo": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion.",
+    "original_memo": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 256,
+      "cleaned_length": 256,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion."
+    },
+    "tickers": [
+      "GOOGL"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "Alphabet Inc.",
+          "ticker": "GOOGL",
+          "symbol": "GOOGL",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0001652044",
+          "exchange": "Nasdaq"
+        }
+      ],
+      "tickers": [
+        "GOOGL"
+      ],
+      "asset_classes": [
+        "single_name_equity"
+      ],
+      "asset_groups": {
+        "single_name_equity": [
+          {
+            "name": "Alphabet Inc.",
+            "ticker": "GOOGL",
+            "symbol": "GOOGL",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0001652044",
+            "exchange": "Nasdaq"
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [],
+      "notes": [
+        "ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json"
+      ]
+    },
+    "as_of_date": "2026-04-29",
+    "requested_as_of_date": "2026-04-29",
+    "time_context": {
+      "effective_as_of_date": "2026-04-29",
+      "user_as_of_date": "2026-04-29",
+      "event_date": null,
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": []
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 1,
+    "detected_entity_count": 1,
+    "asset_class_count": 1,
+    "asset_classes": [
+      "single_name_equity"
+    ],
+    "non_equity_entity_count": 0,
+    "error_count": 0,
+    "atomic_claim_count": 3,
+    "skipped_claim_count": 0,
+    "total_claim_count": 3,
+    "human_review_count": 2,
+    "average_confidence": 0.565,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion.",
+      "ticker": "GOOGL",
+      "as_of_date": "2026-04-29",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.95,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.483,
+      "score_breakdown": {
+        "source_authority": 1.0,
+        "recency": 0.797,
+        "evidence_support": 0.113,
+        "numeric_consistency": 0.25,
+        "independence": 0.35,
+        "reasoning_quality": 0.55,
+        "penalties": 0.0,
+        "final_score": 0.483,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "partially_verified",
+        "confidence": 0.608,
+        "summary": "Some core numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json"
+        ],
+        "issues": [
+          "matched $90.234 billion with 90234000000",
+          "unmatched claim numbers: $109.896 billion, $20.028 billion, $12.260 billion, $39.696 billion"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "weak",
+        "confidence": 0.448,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "verified",
+        "confidence": 0.787,
+        "summary": "Sources are strong enough for a useful credibility assessment.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json"
+        ],
+        "issues": [
+          "single_source_domain",
+          "single_evidence_item"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Medium",
+        "final_confidence": 0.606,
+        "numeric_confidence": 0.608,
+        "logic_confidence": 0.448,
+        "source_confidence": 0.787,
+        "summary": "Overall confidence is Medium. Numeric check: partially_verified; logic check: weak; source check: verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "numeric change",
+              "reported period"
+            ]
+          },
+          "verdict": "partially_supported",
+          "evidence_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json"
+          ],
+          "evidence_keys": [
+            "T1:data.sec.gov:2026-02-05"
+          ],
+          "canonical_fact_ids": [
+            "fact_f588c154a05a",
+            "fact_a9e1dd8c9f6b",
+            "fact_b2caf031d68d",
+            "fact_2ff24c9bb824",
+            "fact_720a6ad50d02",
+            "fact_5b96a1705930",
+            "fact_fac76735f02c",
+            "fact_cca38f3ddfcf"
+          ],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$90.234 billion -> 90234000000",
+              "unmatched_values": "$109.896 billion"
+            },
+            "result": false,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": false,
+            "tolerance": null,
+            "notes": [
+              "Some core numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 1.0,
+            "entity_match": 0.9,
+            "time_alignment": 0.797,
+            "numeric_exactness": 0.68,
+            "retrieval_sufficiency": 0.82,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.88,
+            "final_confidence": 0.817
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "explanation_claim_needs_human_review"
+          ],
+          "issues": [
+            "matched $90.234 billion with 90234000000",
+            "unmatched claim numbers: $109.896 billion"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_2",
+            "text": "Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "numeric change",
+              "reported period"
+            ]
+          },
+          "verdict": "partially_supported",
+          "evidence_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json"
+          ],
+          "evidence_keys": [
+            "T1:data.sec.gov:2026-02-05"
+          ],
+          "canonical_fact_ids": [
+            "fact_f588c154a05a",
+            "fact_a9e1dd8c9f6b",
+            "fact_b2caf031d68d",
+            "fact_2ff24c9bb824",
+            "fact_720a6ad50d02",
+            "fact_5b96a1705930",
+            "fact_fac76735f02c",
+            "fact_cca38f3ddfcf"
+          ],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 1.0,
+            "entity_match": 0.9,
+            "time_alignment": 0.797,
+            "numeric_exactness": 0.25,
+            "retrieval_sufficiency": 0.82,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.88,
+            "final_confidence": 0.731
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": []
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_3",
+            "text": "Total income from operations was $39.696 billion",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.85,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.148
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period",
+            "explanation_claim_needs_human_review"
+          ],
+          "issues": [
+            "no_evidence"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_4ad396538d99",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2025-03-31",
+          "filing_date": "2026-02-05",
+          "observation_date": "2025-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 90234000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_b3c713ddb336",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2024-12-31",
+          "filing_date": "2026-02-05",
+          "observation_date": "2024-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 350018000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_4effe495c1ca",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2024-09-30",
+          "filing_date": "2026-02-05",
+          "observation_date": "2024-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 88268000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_d98683aeaf23",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2024-06-30",
+          "filing_date": "2026-02-05",
+          "observation_date": "2024-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 84742000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_a61b3d052c26",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2024-03-31",
+          "filing_date": "2026-02-05",
+          "observation_date": "2024-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 80539000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_b533affcf87e",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2023-12-31",
+          "filing_date": "2026-02-05",
+          "observation_date": "2023-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 307394000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_c015388215a5",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2023-09-30",
+          "filing_date": "2026-02-05",
+          "observation_date": "2023-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 76693000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_6e5fb39c1f45",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2023-06-30",
+          "filing_date": "2026-02-05",
+          "observation_date": "2023-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 74604000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f588c154a05a",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2025-12-31",
+          "filing_date": "2026-02-05",
+          "observation_date": "2025-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 402836000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_a9e1dd8c9f6b",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2025-09-30",
+          "filing_date": "2026-02-05",
+          "observation_date": "2025-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 102346000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_b2caf031d68d",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2025-06-30",
+          "filing_date": "2026-02-05",
+          "observation_date": "2025-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 96428000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_2ff24c9bb824",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2024-12-31",
+          "filing_date": "2026-02-05",
+          "observation_date": "2024-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 350018000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_720a6ad50d02",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2024-09-30",
+          "filing_date": "2026-02-05",
+          "observation_date": "2024-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 88268000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_5b96a1705930",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2024-06-30",
+          "filing_date": "2026-02-05",
+          "observation_date": "2024-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 84742000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_fac76735f02c",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2023-12-31",
+          "filing_date": "2026-02-05",
+          "observation_date": "2023-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 307394000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_cca38f3ddfcf",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001652044",
+          "ticker": "GOOGL",
+          "cik": "0001652044",
+          "lei": null,
+          "report_period": "2021-12-31",
+          "filing_date": "2026-02-05",
+          "observation_date": "2021-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 257637000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "GOOGL",
+        "entity_id": "CIK0001652044",
+        "cik": "0001652044",
+        "lei": null,
+        "figi": null,
+        "confidence": 0.85,
+        "sources": [
+          "SEC",
+          "evidence_entity_match"
+        ],
+        "issues": []
+      },
+      "audit_trace": {
+        "trace_id": "trace_0bba5357eec4",
+        "created_at": "2026-05-28T17:01:00+00:00",
+        "replayable_inputs": {
+          "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion.",
+          "ticker": "GOOGL",
+          "as_of_date": "2026-04-29",
+          "search_result_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 1 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 1 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "data.sec.gov"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "ok",
+            "summary": "Resolved entity as CIK0001652044.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "GOOGL",
+              "cik": "0001652044",
+              "lei": null,
+              "confidence": 0.85,
+              "issues": []
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 16 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_4ad396538d99",
+                "fact_b3c713ddb336",
+                "fact_4effe495c1ca",
+                "fact_d98683aeaf23",
+                "fact_a61b3d052c26",
+                "fact_b533affcf87e",
+                "fact_c015388215a5",
+                "fact_6e5fb39c1f45",
+                "fact_f588c154a05a",
+                "fact_a9e1dd8c9f6b",
+                "fact_b2caf031d68d",
+                "fact_2ff24c9bb824",
+                "fact_720a6ad50d02",
+                "fact_5b96a1705930",
+                "fact_fac76735f02c",
+                "fact_cca38f3ddfcf"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 3 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "partially_supported",
+                "claim_2": "partially_supported",
+                "claim_3": "insufficient"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "explanation_claim_needs_human_review"
+                ],
+                "claim_3": [
+                  "no_official_primary_source",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period",
+                  "explanation_claim_needs_human_review"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: retrieval skipped because no compatible source was selected",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_3: web search skipped by source selection policy"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "title": "SEC Company Facts for GOOGL",
+          "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 90234000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-12-31: 350018000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 88268000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-30: 84742000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-31: 80539000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2023-12-31: 307394000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2023-09-30: 76693000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2023-06-30: 74604000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-12-31: 402836000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-09-30: 102346000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-06-30: 96428000000 (form 10-Q); Revenues (USD) for fiscal year ending 2024-12-31: 350018000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-09-30: 88268000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-06-30: 84742000000 (form 10-Q); Revenues (USD) for fiscal year ending 2023-12-31: 307394000000 (form 10-K); Revenues (USD) for fiscal year ending 2021-12-31: 257637000000 (form 10-K)",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "data.sec.gov",
+          "published_at": "2026-02-05",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.797,
+          "relevance_score": 0.474,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.324,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.35,
+          "notes": [
+            "SEC filing/regulatory source",
+            "83 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.09",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "single evidence source"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required",
+        "single_source_domain"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "financial metric",
+          "numeric change",
+          "reported period"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: retrieval skipped because no compatible source was selected",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_3: web search skipped by source selection policy"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-04-29",
+          "user_as_of_date": "2026-04-29",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_2",
+            "claim": "Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter",
+            "as_of_date": "2026-04-29",
+            "time_context": {
+              "effective_as_of_date": "2026-04-29",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Total income from operations was $39.696 billion",
+            "as_of_date": "2026-04-29",
+            "time_context": {
+              "effective_as_of_date": "2026-04-29",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier",
+            "selected_providers": [],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "method": "no_compatible_source"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter",
+            "as_of_date": "2026-04-29",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Total income from operations was $39.696 billion",
+            "as_of_date": "2026-04-29",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier",
+            "fact_checkable": true,
+            "selected_sources": [],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "partially_supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "explanation_claim_needs_human_review"
+            ],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "partially_supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Total income from operations was $39.696 billion",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period",
+              "explanation_claim_needs_human_review"
+            ],
+            "closure_status": "selected_source_returned_no_data"
+          }
+        ],
+        "retrieval_budget": 24,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 0,
+              "stage_1_selected_sources": [],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [],
+              "stage_2_loaded_detail_files": []
+            },
+            "selected_source_details": [],
+            "selected_sources": [],
+            "selected_provider_names": [],
+            "rationale": "No source-catalog candidates matched this claim closely enough for automated retrieval.",
+            "confidence": 0.15,
+            "needs_cross_check": false,
+            "method": "deterministic_fallback",
+            "policy_notes": [
+              "no_matching_source_candidates",
+              "no_matching_source_candidates"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Total income from operations was $39.696 billion",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "sec_company_facts",
+          "sec_recent_filings"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [],
+            "reasons": [
+              "no structured official route matched"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Total income from operations was $39.696 billion",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 256,
+          "cleaned_length": 256,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion."
+        },
+        "original_claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion.",
+        "agentic_search_plan": [
+          "GOOGL \"Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion.\" SEC 10-Q 10-K",
+          "GOOGL earnings release revenue EPS investor relations",
+          "GOOGL company facts SEC revenue earnings",
+          "GOOGL Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion. correction restatement contradiction",
+          "GOOGL Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion. SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "SEC Company Facts for GOOGL",
+          "domain": "data.sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-02-05",
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+          "used_by_claims": [
+            "claim_1",
+            "claim_2"
+          ]
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier",
+          "verdict": "partially_supported",
+          "confidence": 0.817,
+          "summary": "The claim is marked `partially_supported` based on SEC Company Facts for GOOGL with confidence 0.82.",
+          "numeric_summary": "The numeric derivation `numeric_match_summary` did not pass.",
+          "source_summary": "The main evidence is official primary evidence with source tier T1.",
+          "main_evidence": {
+            "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+            "title": "SEC Company Facts for GOOGL",
+            "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 90234000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-12-31: 350018000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 88268000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-30: 84742000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-31: 80539000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2023-12-31: 307394000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2023-09-30: 76693000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2023-06-30: 74604000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-12-31: 402836000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-09-30: 102346000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-06-30: 96428000000 (form 10-Q); Revenues (USD) for fiscal year ending 2024-12-31: 350018000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-09-30: 88268000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-06-30: 84742000000 (form 10-Q); Revenues (USD) for fiscal year ending 2023-12-31: 307394000000 (form 10-K); Revenues (USD) for fiscal year ending 2021-12-31: 257637000000 (form 10-K)",
+            "source_type": "sec_filing",
+            "source_tier": "T1",
+            "domain": "data.sec.gov",
+            "published_at": "2026-02-05",
+            "license_tag": "public_official",
+            "is_official_primary": true,
+            "source_authority": 1.0,
+            "recency_score": 0.797,
+            "relevance_score": 0.474,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.25,
+            "support_label": "not_enough_info",
+            "support_score": 0.324,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.35,
+            "notes": [
+              "SEC filing/regulatory source",
+              "83 days old",
+              "claim numbers were not found in evidence",
+              "token overlap=0.09",
+              "weak lexical support",
+              "reasoning quality is secondary for factual claim type",
+              "single evidence source"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "matched $90.234 billion with 90234000000",
+            "unmatched claim numbers: $109.896 billion"
+          ]
+        },
+        {
+          "claim_id": "claim_2",
+          "claim": "Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter",
+          "verdict": "partially_supported",
+          "confidence": 0.731,
+          "summary": "The claim is marked `partially_supported` based on SEC Company Facts for GOOGL with confidence 0.73.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T1.",
+          "main_evidence": {
+            "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+            "title": "SEC Company Facts for GOOGL",
+            "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 90234000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-12-31: 350018000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 88268000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-30: 84742000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-31: 80539000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2023-12-31: 307394000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2023-09-30: 76693000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2023-06-30: 74604000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-12-31: 402836000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-09-30: 102346000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-06-30: 96428000000 (form 10-Q); Revenues (USD) for fiscal year ending 2024-12-31: 350018000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-09-30: 88268000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-06-30: 84742000000 (form 10-Q); Revenues (USD) for fiscal year ending 2023-12-31: 307394000000 (form 10-K); Revenues (USD) for fiscal year ending 2021-12-31: 257637000000 (form 10-K)",
+            "source_type": "sec_filing",
+            "source_tier": "T1",
+            "domain": "data.sec.gov",
+            "published_at": "2026-02-05",
+            "license_tag": "public_official",
+            "is_official_primary": true,
+            "source_authority": 1.0,
+            "recency_score": 0.797,
+            "relevance_score": 0.474,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.25,
+            "support_label": "not_enough_info",
+            "support_score": 0.324,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.35,
+            "notes": [
+              "SEC filing/regulatory source",
+              "83 days old",
+              "claim numbers were not found in evidence",
+              "token overlap=0.09",
+              "weak lexical support",
+              "reasoning quality is secondary for factual claim type",
+              "single evidence source"
+            ]
+          },
+          "caveats": []
+        },
+        {
+          "claim_id": "claim_3",
+          "claim": "Total income from operations was $39.696 billion",
+          "verdict": "insufficient",
+          "confidence": 0.148,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.15.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [],
+          "rationale": "No source-catalog candidates matched this claim closely enough for automated retrieval.",
+          "method": "deterministic_fallback",
+          "official_first_policy": "needs_review"
+        },
+        {
+          "claim_id": "claim_2",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_3",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_0bba5357eec4",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "Alphabet Inc. (GOOGL)",
+        "name": "Alphabet Inc.",
+        "ticker": "GOOGL",
+        "symbol": "GOOGL",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "Alphabet Inc. (GOOGL)",
+        "name": "Alphabet Inc.",
+        "ticker": "GOOGL",
+        "symbol": "GOOGL",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 3 fact-checkable claims across 1 entity. 2 claims need human review.\n\n## GOOGL\n\n- **Partially consistent.** Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Evidence: T1 SEC Company Facts for GOOGL (data.sec.gov). Reason: Numeric check did not match the claim. Needs human review: the explanatory claim needs human judgment.\n- **Partially consistent.** Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Evidence: T1 SEC Company Facts for GOOGL (data.sec.gov).\n- **Insufficient evidence.** Total income from operations was $39.696 billion. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, retrieved evidence is limited.\n",
+  "agent_trace": {
+    "run_id": "agent_6ad744048020",
+    "created_at": "2026-05-28T17:00:59+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_4db9da9f",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 31,
+        "output_preview": "{\"asset_classes\": [\"single_name_equity\"], \"asset_groups\": {\"single_name_equity\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0001652044\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Alphabet Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"GOOGL\", \"ticker\": \"GOOGL\"}]}, \"entities\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0001652044\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Alphabet Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"GOOGL\", \"ticker\": \"GOOGL\"}], \"method\": \"heuristic\", \"non_equity_entities\": [], \"notes\": [\"ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json\"], \"tickers\": [\"GOOGL\"], \"u",
+        "output_hash": "d54ef2f4cb5ac094ee2b202ecfc56bdc0f9bed45ef04c240ac667d8bffdc1798"
+      },
+      {
+        "call_id": "fallback_1_7696d7e7",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier. Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter. Total income from operations was $39.696 billion."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.87, \"signals\": [\"numeric change\", \"reported period\"], \"text\": \"Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Google Cloud revenue was $20.028 billion, compared with $12.260 billion in the prior-year quarter\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_3\", \"classification_confidence\": 0.66, \"signals\": [\"numeric change\"], \"text\": \"Total income from operations was $39.696 billion\"}]}",
+        "output_hash": "0825c21eb3f5a408b2ae55259e8c27b90cf23a9f8e48b28c63d4ea550571c062"
+      },
+      {
+        "call_id": "fallback_2_791bce9a",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 8,
+        "output_preview": "{\"selections\": [{\"candidates\": [], \"claim\": \"Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier\", \"claim_id\": \"claim_1\", \"confidence\": 0.15, \"detected_asset_classes\": [\"single_name_equity\"], \"disclosure_stages\": {\"stage_1\": \"brief_candidate_cards\", \"stage_1_candidate_count\": 0, \"stage_1_includes_planned_sources\": false, \"stage_1_selected_sources\": [], \"stage_2\": \"details_for_selected_sources\", \"stage_2_loaded_detail_files\": [], \"stage_2_loaded_source_ids\": []}, \"method\": \"deterministic_fallback\", \"needs_cross_check\": false, \"policy_notes\": [\"no_matching_source_candidates\", \"no_matching_source_candidates\"], \"rationale\": \"No source-catalog candidates matched this claim closely enough for automated retrieval.\", \"selected_provider_names\":",
+        "output_hash": "6d8a95ccdcb5f4b018d522b1f37b66b87e86d5aabcec0663d0d12760a24c117b"
+      },
+      {
+        "call_id": "fallback_3_bda0227f",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier",
+          "ticker": "GOOGL",
+          "as_of_date": "2026-04-29",
+          "selected_sources": [],
+          "prefetched_results": null
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 4,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.87, \"needs_decomposition\": true, \"signals\": [\"numeric change\", \"reported period\"]}, \"evidence\": [], \"extraction_notes\": [], \"search_notes\": [\"retrieval skipped because source selection found no compatible source\"], \"time_context\": {\"confidence\": 1.0, \"effective_as_of_date\": \"2026-04-29\", \"event_date\": null, \"notes\": [], \"publication_date\": null, \"source\": \"user_as_of_date\", \"user_as_of_date\": \"2026-04-29\"}}",
+        "output_hash": "15a311eeef0c249766b64199285ef74203376ff79d3fed9e6ba3a7200b6b1ef0"
+      },
+      {
+        "call_id": "fallback_4_a1a68fa3",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "GOOGL",
+          "evidence": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"canonical_facts\": [], \"entity_resolution\": {\"cik\": null, \"confidence\": 0.65, \"entity_id\": \"GOOGL\", \"figi\": null, \"issues\": [\"ticker_only_entity_resolution\"], \"lei\": null, \"sources\": [], \"ticker\": \"GOOGL\"}}",
+        "output_hash": "45ffbf8eaf666699f74b2691a2d9cf35731ec532459dd512d26086ddd05dbb02"
+      },
+      {
+        "call_id": "fallback_5_05fca7cc",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier",
+          "ticker": "GOOGL",
+          "evidence": [],
+          "canonical_facts": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.87, \"signals\": [\"numeric change\", \"reported period\"], \"text\": \"Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier\"}, \"canonical_fact_ids\": [], \"confidence_components\": {\"cross_source_consistency\": 0.0, \"entity_match\": 0.65, \"final_confidence\": 0.118, \"numeric_exactness\": 0.1, \"parser_confidence\": 0.0, \"retrieval_sufficiency\": 0.0, \"source_authority\": 0.0, \"time_alignment\": 0.0}, \"evidence_keys\": [], \"evidence_urls\": [], \"human_review_required\": true, \"issues\": [\"ticker_only_entity_resolution\", \"no_evidence\"], \"numeric_derivation\": null, \"review_reasons\": [\"no_official_primary_source\", \"low_entity_resolution_confid",
+        "output_hash": "d9eb2ddb8c788b0e812f7945049b28f8f0195f89861e68ac401f75fdbbf1b941"
+      },
+      {
+        "call_id": "fallback_6_859d2fd1",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "Alphabet reported first-quarter total revenues of $109.896 billion, up from $90.234 billion a year earlier",
+          "ticker": "GOOGL",
+          "as_of_date": "2026-04-29",
+          "evidence": [],
+          "canonical_facts": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"created_at\": \"2026-05-28T17:00:59+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": []}, \"status\": \"empty\", \"step\": \"extract_evidence\", \"summary\": \"Built 0 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": null, \"confidence\": 0.65, \"issues\": [\"ticker_only_entity_resolution\"], \"lei\": null, \"ticker\": \"GOOGL\"}, \"status\": \"review\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as GOOGL.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": []}, \"status\": \"empty\", \"step\": \"canonicalize_facts\", \"summary\": \"Created 0 canonical fact(s).\"}, {\"inputs\": {}, \"outputs\": {\"review_reasons\": {\"claim_1\": [\"no_official_primary_source\", \"low_entity_resolution_c",
+        "output_hash": "8c0d265416583ef0143e041a7fb4a248cec19fd941666fc25deeb562eda9d62e"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_6ad744048020",
+    "created_at": "2026-05-28T17:01:00+00:00",
+    "verdict": "review",
+    "score": 0.86,
+    "summary": "Audit review: 1 finding(s) (major=1); score 0.86.",
+    "findings": [
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_3",
+        "trace_refs": [
+          "sec_company_facts",
+          "sec_recent_filings"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      }
+    ]
+  }
+}

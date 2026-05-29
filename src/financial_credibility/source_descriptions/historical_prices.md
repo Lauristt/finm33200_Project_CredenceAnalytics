@@ -8,6 +8,7 @@ Reference docs:
 - Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full
 - Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily
 - Finnhub stock candles: https://finnhub.io/docs/api/stock-candles
+- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html
 - Stooq historical/latest quote browser: https://stooq.com/db/h/
 
 Use for:
@@ -23,7 +24,8 @@ Adapter retrieval order:
 1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.
 2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.
 3. Finnhub stock candles if `FINNHUB_API_KEY` exists.
-4. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.
+4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.
+5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.
 
 Financial Modeling Prep API playbook:
 - Env var: `FMP_API_KEY`
@@ -55,6 +57,17 @@ Finnhub API playbook:
 - `from` and `to` are UTC Unix timestamps.
 - Expected response shape: `{ "s": "ok", "t": [...], "o": [...], "h": [...], "l": [...], "c": [...], "v": [...] }`.
 - Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.
+
+FRED index fallback playbook:
+- Env var: `FRED_API_KEY`
+- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`
+- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`
+- Internal index mappings:
+  - `SPX` -> `SP500`
+  - `NDQ` -> `NASDAQCOM`
+  - `DJIA` -> `DJIA`
+- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.
+- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.
 
 Stooq playbook:
 - Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`
