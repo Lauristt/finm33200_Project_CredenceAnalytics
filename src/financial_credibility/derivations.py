@@ -23,6 +23,11 @@ def derive_numeric_check(claim: str, facts: list[CanonicalFact], numeric_check: 
         return fuzzy
     if is_growth_claim:
         return None
+    # Level check: for macro/price claims with a stated numeric value,
+    # compare the most recent matching fact directly against the claim.
+    level_check = _derive_level_check(claim, facts)
+    if level_check:
+        return level_check
     if numeric_check.verdict in {
         VerificationVerdict.NOT_APPLICABLE.value,
         VerificationVerdict.INSUFFICIENT.value,
@@ -34,6 +39,97 @@ def derive_numeric_check(claim: str, facts: list[CanonicalFact], numeric_check: 
         result=numeric_check.verdict,
         passed=numeric_check.verdict in {VerificationVerdict.VERIFIED.value, VerificationVerdict.PARTIALLY_VERIFIED.value},
         notes=[numeric_check.summary],
+    )
+
+
+def _derive_level_check(claim: str, facts: list[CanonicalFact]) -> NumericDerivation | None:
+    """For price/rate level claims, check the most recent fact against the stated value."""
+    from .sources import extract_substantive_numbers as _esn
+
+    # Only run for claims with numeric values and macro-style facts.
+    # Prefer numbers that appear adjacent to % or "basis points" as the claimed value.
+    claimed_pct_matches = re.findall(
+        r"([\d,]+(?:\.\d+)?)\s*(?:%|percent|basis\s+points?\b|bps\b|pp\b)", claim, re.I
+    )
+    claimed_plain = re.findall(r"(?<!\d)([\d,]+(?:\.\d+)?)(?!\d)", claim)
+
+    def _parse_num(s: str) -> float | None:
+        try:
+            return float(s.replace(",", ""))
+        except (ValueError, TypeError):
+            return None
+
+    # Build an ordered candidate list: % values first (most specific), then plain numbers
+    candidates: list[float] = []
+    for s in claimed_pct_matches:
+        v = _parse_num(s)
+        if v is not None and v != 0:
+            candidates.append(v)
+    for s in claimed_plain:
+        v = _parse_num(s)
+        if v is not None and v != 0 and v not in candidates:
+            candidates.append(v)
+
+    if not candidates:
+        return None
+
+    numeric_facts = [f for f in facts if isinstance(f.value, (int, float))]
+    if not numeric_facts:
+        return None
+
+    # Use anchor date to pick the most relevant fact
+    anchor = _extract_claim_anchor_date(claim)
+    if anchor:
+        numeric_facts.sort(key=lambda f: _period_days_from_anchor(f, anchor))
+    else:
+        numeric_facts.sort(key=lambda f: (f.report_period or ""), reverse=True)
+
+    best_fact = numeric_facts[0]
+    actual_value = float(best_fact.value)  # type: ignore[arg-type]
+
+    # Pick the candidate closest in ratio to 1.0 (most dimensionally compatible)
+    target: float | None = None
+    best_ratio_dist = float("inf")
+    for num in candidates:
+        if num == 0:
+            continue
+        ratio = actual_value / num
+        # Only consider numbers within 3 orders of magnitude of actual
+        if not (0.001 <= abs(ratio) <= 1000):
+            continue
+        dist = abs(ratio - 1.0)
+        if dist < best_ratio_dist:
+            best_ratio_dist = dist
+            target = num
+    if target is None:
+        return None
+
+    # Tolerance: 10% for "approximately"/"around" claims; 5% otherwise
+    is_approx = bool(re.search(r"\bapprox|around|roughly|about|approximately\b", claim, re.I))
+    tolerance = 0.10 if is_approx else 0.05
+    diff_pct = abs(actual_value - target) / max(abs(target), 1e-9)
+    passed = diff_pct <= tolerance
+    comparator = f"≈ {target} ± {int(tolerance*100)}%"
+
+    return NumericDerivation(
+        expression="level_check",
+        inputs={
+            "fact_id": best_fact.fact_id,
+            "fact_period": best_fact.report_period or best_fact.observation_date,
+            "actual": actual_value,
+            "claimed": target,
+            "diff_pct": round(diff_pct, 4),
+            "tolerance": tolerance,
+        },
+        result=actual_value,
+        comparator=comparator,
+        threshold=target,
+        tolerance=tolerance,
+        passed=passed,
+        notes=[
+            f"Level check: actual {actual_value} vs claimed {target} "
+            f"(diff {diff_pct*100:.1f}%, tol {tolerance*100:.0f}%)"
+        ],
     )
 
 

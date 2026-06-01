@@ -814,8 +814,10 @@ def _is_multi_tool_mode(mode: str) -> bool:
 _MACRO_ASSET_CLASSES = {
     "macro_indicator",
     "rates",
-    "commodities",
+    "commodity",          # entity_extraction uses singular form
+    "commodity_future",
     "fx",
+    "crypto",
     "credit",
     "fixed_income",
 }
@@ -979,14 +981,16 @@ def _run_macro_verification(
         if year_m:
             effective_fetch_date = f"{year_m.group(1)}-12-31"
 
-    # Fetch from all macro-relevant providers with extra history for YoY
+    # Fetch from all macro-relevant providers with extra history for YoY.
+    # Pass symbol_hint so FRED/EIA can look up the right series directly
+    # rather than relying on fuzzy keyword matching in the claim text.
     client = FreeDataSourceClient(toolkit.config)
     results: list[Any] = []
     for provider_name, fetcher in [
-        ("fred",               lambda: client.fred(memo, as_of_date=effective_fetch_date, limit=24)),
+        ("fred",               lambda: client.fred(memo, as_of_date=effective_fetch_date, limit=24, symbol_hint=symbol)),
         ("bls_api",            lambda: client.bls_api(memo, as_of_date=effective_fetch_date)),
         ("bea_api",            lambda: client.bea_api(memo, as_of_date=effective_fetch_date)),
-        ("eia_api",            lambda: client.eia_api(memo, as_of_date=effective_fetch_date)),
+        ("eia_api",            lambda: client.eia_api(memo, as_of_date=effective_fetch_date, symbol_hint=symbol)),
         ("ecb_data_portal",    lambda: client.ecb_data_portal(memo)),
         ("bis_data_portal",    lambda: client.bis_data_portal(memo)),
         ("imf_data_api",       lambda: client.imf_data_api(memo)),

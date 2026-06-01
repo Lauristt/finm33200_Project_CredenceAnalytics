@@ -161,8 +161,13 @@ FRED_SERIES = {
     "ppi": "PPIACO",
     "producer price index": "PPIACO",
     "high yield spread": "BAMLH0A0HYM2",
+    "high-yield spread": "BAMLH0A0HYM2",
+    "high yield credit spread": "BAMLH0A0HYM2",
+    "high-yield credit spread": "BAMLH0A0HYM2",
     "hy oas": "BAMLH0A0HYM2",
     "high-yield oas": "BAMLH0A0HYM2",
+    "hy credit": "BAMLH0A0HYM2",
+    "high yield credit": "BAMLH0A0HYM2",
     "investment grade spread": "BAMLC0A0CM",
     "ig oas": "BAMLC0A0CM",
     "corporate oas": "BAMLC0A0CM",
@@ -192,11 +197,50 @@ FRED_SERIES = {
     "broad dollar": "DTWEXBGS",
     "cpi": "CPIAUCSL",
     "inflation": "CPIAUCSL",
-    "interest": "FEDFUNDS",
-    "rate": "FEDFUNDS",
+    "federal reserve rate": "FEDFUNDS",
+    "policy rate": "FEDFUNDS",
+    "funds rate": "FEDFUNDS",
+    "interest rate": "FEDFUNDS",
     "gdp": "GDP",
+    "gross domestic product": "GDP",
     "unemployment": "UNRATE",
-    "yield": "DGS10",
+    "unemployment rate": "UNRATE",
+    "10-year yield": "DGS10",
+    "10 year yield": "DGS10",
+    "10-yr yield": "DGS10",
+}
+
+# Direct entity symbol → FRED series ID, used when the entity is known.
+SYMBOL_TO_FRED_SERIES: dict[str, str] = {
+    "FEDFUNDS": "FEDFUNDS",
+    "DGS10": "DGS10",
+    "DGS2": "DGS2",
+    "DGS30": "DGS30",
+    "SOFR": "SOFR",
+    "WTI": "DCOILWTICO",
+    "BRENT": "DCOILBRENTEU",
+    "XAU": "GOLDAMGBD228NLBM",
+    "NATGAS": "DHHNGSP",
+    "HY_CREDIT": "BAMLH0A0HYM2",
+    "IG_CREDIT": "BAMLC0A0CM",
+    "CREDIT_DERIVATIVES": "BAMLH0A0HYM2",
+    "EUR/USD": "DEXUSEU",
+    "GBP/USD": "DEXUSUK",
+    "USD/JPY": "DEXJPUS",
+    "AUD/USD": "DEXUSAL",
+    "USD/CAD": "DEXCAUS",
+    "USD/CHF": "DEXCHUS",
+    "CPI": "CPIAUCSL",
+    "UNRATE": "UNRATE",
+    "NFP": "PAYEMS",
+    "GDP": "GDP",
+}
+
+# Direct entity symbol → EIA route + series ID, used when the entity is known.
+SYMBOL_TO_EIA_SERIES: dict[str, tuple[str, str, str]] = {
+    "WTI": ("petroleum/pri/spt", "RWTC", "EIA WTI crude oil spot price"),
+    "BRENT": ("petroleum/pri/spt", "RBRTE", "EIA Brent crude oil spot price"),
+    "NATGAS": ("natural-gas/pri/fut", "RNGWHHD", "EIA Henry Hub natural gas spot price"),
 }
 
 BLS_SERIES = {
@@ -684,12 +728,15 @@ class FreeDataSourceClient:
             )
         return results
 
-    def fred(self, claim: str, as_of_date: str | None = None, limit: int = 3) -> list[SearchResult]:
+    def fred(self, claim: str, as_of_date: str | None = None, limit: int = 3, symbol_hint: str | None = None) -> list[SearchResult]:
         """Return a FRED macro series when the claim contains a known keyword."""
         key = self.config.fred_api_key
         if not key:
             return []
-        series_id = self._fred_series_for_claim(claim)
+        series_id = (
+            SYMBOL_TO_FRED_SERIES.get((symbol_hint or "").upper())
+            or self._fred_series_for_claim(claim)
+        )
         if not series_id:
             return []
         params = {
@@ -821,12 +868,15 @@ class FreeDataSourceClient:
             )
         ]
 
-    def eia_api(self, claim: str, as_of_date: str | None = None) -> list[SearchResult]:
+    def eia_api(self, claim: str, as_of_date: str | None = None, symbol_hint: str | None = None) -> list[SearchResult]:
         """Return EIA APIv2 observations for mapped energy commodity claims."""
         key = self.config.eia_api_key
         if not key:
             return []
-        series = _series_for_claim(claim, EIA_SERIES)
+        series = (
+            SYMBOL_TO_EIA_SERIES.get((symbol_hint or "").upper())
+            or _series_for_claim(claim, EIA_SERIES)
+        )
         if not series:
             return []
         route, series_id, label = series
