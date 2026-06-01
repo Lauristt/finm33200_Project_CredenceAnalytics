@@ -126,15 +126,42 @@ def _derive_growth(claim: str, facts: list[CanonicalFact]) -> NumericDerivation 
     def _current_period(pair: tuple[CanonicalFact, CanonicalFact]) -> str:
         return pair[1].report_period or pair[1].observation_date or ""
 
+    # If the claim references a specific month ("January 2024", "Q2 2025", etc.),
+    # anchor pair selection to that date so we pick prior→current rather than
+    # the most recent data point.
+    claim_anchor_date = _extract_claim_anchor_date(claim)
+
     if is_yoy:
         yoy_pairs = [p for p in pairs if 330 <= _pair_gap_days(p) <= 400]
         if yoy_pairs:
-            yoy_pairs.sort(key=_current_period, reverse=True)  # most recent first
+            if claim_anchor_date:
+                # When the claim names a specific date, prefer pairs whose current
+                # period is closest to that date (e.g. "January 2024" → Jan 2024).
+                anchored = [
+                    p for p in yoy_pairs
+                    if _period_days_from_anchor(p[1], claim_anchor_date) <= 40
+                ]
+                pool = anchored if anchored else yoy_pairs
+                pool.sort(key=lambda p: _period_days_from_anchor(p[1], claim_anchor_date))
+            else:
+                pool = yoy_pairs
+                pool.sort(key=_current_period, reverse=True)  # most recent first
+            yoy_pairs = pool
         pairs = yoy_pairs or pairs
     elif is_qoq:
         qoq_pairs = [p for p in pairs if 75 <= _pair_gap_days(p) <= 105]
         if qoq_pairs:
-            qoq_pairs.sort(key=_current_period, reverse=True)
+            if claim_anchor_date:
+                anchored = [
+                    p for p in qoq_pairs
+                    if _period_days_from_anchor(p[1], claim_anchor_date) <= 40
+                ]
+                pool = anchored if anchored else qoq_pairs
+                pool.sort(key=lambda p: _period_days_from_anchor(p[1], claim_anchor_date))
+            else:
+                pool = qoq_pairs
+                pool.sort(key=_current_period, reverse=True)
+            qoq_pairs = pool
         pairs = qoq_pairs or pairs
     elif threshold is not None:
         # Pick the pair whose computed growth is closest to the claimed threshold.
@@ -208,6 +235,8 @@ def _candidate_growth_pairs(facts: list[CanonicalFact]) -> list[tuple[CanonicalF
     def _raw_period_kind(fact: CanonicalFact) -> str:
         raw = fact.raw or {}
         pk = str(raw.get("period_kind", "")).lower()
+        if "month" in pk:
+            return "monthly"
         if "quarter" in pk:
             return "quarter"
         if "year" in pk or "annual" in pk:
@@ -251,19 +280,29 @@ def _candidate_growth_pairs(facts: list[CanonicalFact]) -> list[tuple[CanonicalF
             prior_date = _parse_date(prior.report_period or prior.observation_date)
             if prior_date is None:
                 continue
+            # Scan all candidates up to the YoY window; pick the pair
+            # whose gap is *closest to 365 days* rather than stopping at
+            # the first hit. This matters for monthly data where 334-day
+            # cross-month pairs beat the true same-month 366-day pair.
+            best_yoy: "tuple | None" = None
+            best_yoy_gap: int = 0
             for current in ordered[i + 1:]:
                 current_date = _parse_date(current.report_period or current.observation_date)
                 if current_date is None or current_date <= prior_date:
                     continue
                 gap = (current_date - prior_date).days
+                if gap > 400:
+                    break  # beyond YoY window, nothing further will qualify
                 if 330 <= gap <= 400 and prior.fact_id not in yoy_seen:
-                    pairs.append((prior, current))
-                    yoy_seen.add(prior.fact_id)
-                    break           # take the closest YoY match per prior
+                    if best_yoy is None or abs(gap - 365) < abs(best_yoy_gap - 365):
+                        best_yoy = (prior, current)
+                        best_yoy_gap = gap
                 if 75 <= gap <= 105 and prior.fact_id not in qoq_seen:
                     pairs.append((prior, current))
                     qoq_seen.add(prior.fact_id)
-                    # do NOT break — keep scanning for a YoY match further out
+            if best_yoy is not None and prior.fact_id not in yoy_seen:
+                pairs.append(best_yoy)
+                yoy_seen.add(prior.fact_id)
     return pairs
 
 
@@ -285,6 +324,55 @@ def _has_duplicate_period_values(facts: list[CanonicalFact]) -> bool:
         key = (fact.fact_name, fact.report_period, period_kind, form)
         seen.setdefault(key, set()).add(float(fact.value))
     return any(len(values) > 1 for values in seen.values())
+
+
+_MONTH_MAP = {
+    "january": 1, "jan": 1, "february": 2, "feb": 2, "march": 3, "mar": 3,
+    "april": 4, "apr": 4, "may": 5, "june": 6, "jun": 6,
+    "july": 7, "jul": 7, "august": 8, "aug": 8, "september": 9, "sep": 9, "sept": 9,
+    "october": 10, "oct": 10, "november": 11, "nov": 11, "december": 12, "dec": 12,
+}
+
+
+def _extract_claim_anchor_date(claim: str) -> "date | None":
+    """Extract a specific month/year reference from a claim string."""
+    from datetime import date as _date
+    lower = claim.lower()
+    # "January 2024" / "jan 2024"
+    m = re.search(
+        r"\b(january|february|march|april|may|june|july|august|september|october|november|december"
+        r"|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)\s+(20\d{2})\b",
+        lower,
+    )
+    if m:
+        month = _MONTH_MAP.get(m.group(1), 1)
+        year = int(m.group(2))
+        try:
+            return _date(year, month, 1)
+        except ValueError:
+            pass
+    # "Q2 2025" / "Q2FY2025"
+    q = re.search(r"\bq([1-4])\s*(?:fy\s*)?(20\d{2})\b", lower)
+    if q:
+        quarter = int(q.group(1))
+        year = int(q.group(2))
+        month = (quarter - 1) * 3 + 1
+        try:
+            return _date(year, month, 1)
+        except ValueError:
+            pass
+    return None
+
+
+def _period_days_from_anchor(fact: "CanonicalFact", anchor: "date") -> int:
+    """Days between fact.report_period and the anchor date (absolute)."""
+    from datetime import date as _date
+    period_str = fact.report_period or fact.observation_date or ""
+    try:
+        fd = _date.fromisoformat(period_str[:10])
+        return abs((fd - anchor).days)
+    except (ValueError, AttributeError):
+        return 9999
 
 
 def _period_kind(period: str | None) -> str | None:

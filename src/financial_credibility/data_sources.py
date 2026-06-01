@@ -684,7 +684,7 @@ class FreeDataSourceClient:
             )
         return results
 
-    def fred(self, claim: str, as_of_date: str | None = None) -> list[SearchResult]:
+    def fred(self, claim: str, as_of_date: str | None = None, limit: int = 3) -> list[SearchResult]:
         """Return a FRED macro series when the claim contains a known keyword."""
         key = self.config.fred_api_key
         if not key:
@@ -697,7 +697,7 @@ class FreeDataSourceClient:
             "api_key": key,
             "file_type": "json",
             "sort_order": "desc",
-            "limit": 3,
+            "limit": limit,
         }
         if _parse_iso_date(as_of_date):
             params["observation_end"] = str(as_of_date)[:10]
@@ -2359,12 +2359,16 @@ def _keyword_matches(text: str, keyword: str) -> bool:
 
 
 def _year_window_for_claim(claim: str, as_of_date: str | None, default_years: int = 3) -> tuple[int, int]:
+    as_of = _parse_iso_date(as_of_date)
+    today_year = as_of.year if as_of else date.today().year
     years = _world_bank_date_range_for_claim(claim)
     if years:
-        return years
-    as_of = _parse_iso_date(as_of_date)
-    end_year = as_of.year if as_of else date.today().year
-    return max(1900, end_year - max(default_years - 1, 0)), end_year
+        first, second = years
+        # Always ensure at least default_years of history so YoY derivations
+        # have enough prior-period data even when the claim names a single year.
+        first = min(first, second - max(default_years - 1, 0))
+        return max(1900, first), second
+    return max(1900, today_year - max(default_years - 1, 0)), today_year
 
 
 def _bls_period_label(row: dict[str, Any]) -> str:

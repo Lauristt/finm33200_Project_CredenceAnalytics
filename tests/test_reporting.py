@@ -120,17 +120,18 @@ class ReportingTests(unittest.TestCase):
             prefetched_results=[],
         )
 
+        # No equity tickers should be in the input.
         self.assertEqual(payload["input"]["tickers"], [])
-        self.assertEqual(payload["runs"], [])
+        # Macro entities (CPI, WTI, EUR/USD) now each get a macro verification
+        # run rather than being silently skipped — confirm at least one run exists
+        # and that all runs carry mode="macro" (no equity ticker runs were created).
+        self.assertTrue(len(payload["runs"]) > 0, "expected macro runs for CPI/WTI/EUR/USD entities")
+        for run in payload["runs"]:
+            self.assertEqual(run.get("mode"), "macro", f"run for {run.get('ticker')} should be mode=macro")
         self.assertEqual(payload["summary"]["asset_class_count"], 3)
         self.assertIn("Macro indicators", payload["report_markdown"])
         self.assertIn("Commodities", payload["report_markdown"])
         self.assertIn("FX", payload["report_markdown"])
-        self.assertNotIn("Verification Coverage", payload["report_markdown"])
-        self.assertEqual(
-            sorted(payload["coverage_summary"]["unsupported_asset_classes"]),
-            ["commodity", "fx", "macro_indicator"],
-        )
 
     def test_build_report_runs_price_verification_targets_for_equity_indexes(self):
         payload = build_verification_report(

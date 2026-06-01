@@ -105,7 +105,14 @@ def build_verification_report(
             "unresolved_entities": entity_extraction.get("unresolved_entities", []),
         },
     )
-    if not clean_tickers:
+    # Macro entities (CPI, GDP, PCE, etc.) have no SEC ticker but can be verified
+    # against FRED / BLS / BEA / EIA / ECB / BIS / IMF / WorldBank time-series.
+    macro_entities = [
+        e for e in entity_extraction.get("entities", [])
+        if e.get("asset_class") in _MACRO_ASSET_CLASSES and not e.get("ticker")
+    ]
+
+    if not clean_tickers and not macro_entities:
         if not entity_extraction.get("entities"):
             raise UserFacingError(
                 "no_financial_entity_detected",
@@ -143,6 +150,27 @@ def build_verification_report(
     toolkit = FinancialCredibilityToolkit(cfg)
     runs: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
+
+    # Macro verification branch — runs before equity so progress trace is sequential
+    for entity in macro_entities:
+        symbol = str(entity.get("symbol") or entity.get("name") or "MACRO")
+        try:
+            macro_run = _run_macro_verification(
+                memo=memo,
+                entity=entity,
+                toolkit=toolkit,
+                as_of_date=effective_as_of_date,
+                trace_callback=_scoped_progress(progress_callback, symbol),
+            )
+            runs.append(macro_run)
+        except Exception as exc:
+            errors.append({"ticker": symbol, "error": str(exc)})
+            _emit_progress(
+                progress_callback, "run_entity", "error",
+                f"Macro verification failed for {symbol}: {exc}",
+                outputs={"ticker": symbol},
+            )
+
     for ticker in clean_tickers:
         _emit_progress(
             progress_callback,
@@ -777,6 +805,264 @@ def _run_pack(
 
 def _is_multi_tool_mode(mode: str) -> bool:
     return str(mode or "").replace("-", "_").lower() == "multi_tool"
+
+
+# ---------------------------------------------------------------------------
+# Macro indicator verification (FRED / BLS / BEA / EIA / ECB / BIS / IMF / WB)
+# ---------------------------------------------------------------------------
+
+_MACRO_ASSET_CLASSES = {
+    "macro_indicator",
+    "rates",
+    "commodities",
+    "fx",
+    "credit",
+    "fixed_income",
+}
+
+_MACRO_PROVIDERS = [
+    "fred",
+    "bls_api",
+    "bea_api",
+    "eia_api",
+    "ecb_data_portal",
+    "bis_data_portal",
+    "imf_data_api",
+    "world_bank_indicators",
+]
+
+
+def _bls_period_to_iso(date_str: str) -> str | None:
+    """Convert BLS period label '2024-M01' → '2024-01-01'. Returns None if unparseable."""
+    import re as _re
+    m = _re.match(r"(\d{4})-M(\d{2})$", str(date_str or ""))
+    if m:
+        return f"{m.group(1)}-{m.group(2)}-01"
+    # Quarterly format 'YYYY-QN' → first month of quarter
+    q = _re.match(r"(\d{4})-Q(\d)$", str(date_str or ""))
+    if q:
+        month = str((int(q.group(2)) - 1) * 3 + 1).zfill(2)
+        return f"{q.group(1)}-{month}-01"
+    # Already ISO or close enough
+    if _re.match(r"\d{4}-\d{2}-\d{2}", str(date_str or "")):
+        return str(date_str)[:10]
+    return None
+
+
+def _macro_canonical_facts(
+    results: list[Any],
+    symbol: str,
+) -> list[Any]:
+    """Convert SearchResult objects from macro providers into CanonicalFact objects."""
+    from .models import CanonicalFact, SourceType, SourceTier, LicenseTag
+
+    facts: list[Any] = []
+    for result in results:
+        raw = result.raw if hasattr(result, "raw") else (result.get("raw") or {})
+        provider = raw.get("provider", "")
+        series_id = raw.get("series_id", symbol)
+        # Use the result title as fact_name so token overlap with the claim works.
+        # E.g. "BLS CPI for all urban consumers (CUSR0000SA0)" → contains "cpi"
+        result_title = (getattr(result, "title", "") or "").strip()
+        fact_label = result_title if result_title else series_id
+        result_url = getattr(result, "url", "") or ""
+
+        if provider == "fred":
+            for obs in raw.get("observations", []):
+                date_str = obs.get("date", "")
+                val_str = str(obs.get("value", ""))
+                if not date_str or val_str in {"", ".", None}:
+                    continue
+                try:
+                    value = float(val_str)
+                except (ValueError, TypeError):
+                    continue
+                facts.append(CanonicalFact(
+                    fact_id=f"fred_{series_id}_{date_str}",
+                    source_type=SourceType.REGULATOR_EXCHANGE,
+                    authority_tier=SourceTier.T1,
+                    license_tag=LicenseTag.PUBLIC_OFFICIAL,
+                    entity_id=series_id,
+                    ticker=symbol,
+                    report_period=date_str[:10],
+                    fact_name=fact_label,
+                    value=value,
+                    provenance_locator=result_url,
+                    parser_confidence=0.95,
+                    raw={"provider": "fred", "series_id": series_id, "period_kind": "monthly"},
+                ))
+
+        elif provider == "bls_api":
+            for row in raw.get("rows", []):
+                iso = _bls_period_to_iso(row.get("date", ""))
+                val_str = str(row.get("value", ""))
+                if not iso or not val_str:
+                    continue
+                try:
+                    value = float(val_str)
+                except (ValueError, TypeError):
+                    continue
+                facts.append(CanonicalFact(
+                    fact_id=f"bls_{series_id}_{iso}",
+                    source_type=SourceType.REGULATOR_EXCHANGE,
+                    authority_tier=SourceTier.T1,
+                    license_tag=LicenseTag.PUBLIC_OFFICIAL,
+                    entity_id=series_id,
+                    ticker=symbol,
+                    report_period=iso,
+                    fact_name=fact_label,
+                    value=value,
+                    provenance_locator=result_url,
+                    parser_confidence=0.95,
+                    raw={"provider": "bls_api", "series_id": series_id, "period_kind": "monthly"},
+                ))
+
+        elif provider in {"bea_api", "eia_api", "ecb_data_portal", "bis_data_portal",
+                          "imf_data_api", "world_bank_indicators"}:
+            # Generic path: rows with {date, value} keys
+            period_kind = "quarterly" if provider == "bea_api" else "monthly"
+            for row in raw.get("rows", raw.get("observations", [])):
+                iso = _bls_period_to_iso(row.get("date", "")) or str(row.get("date", ""))[:10]
+                val_str = str(row.get("value", ""))
+                if not iso or len(iso) < 7 or not val_str:
+                    continue
+                try:
+                    value = float(val_str)
+                except (ValueError, TypeError):
+                    continue
+                facts.append(CanonicalFact(
+                    fact_id=f"{provider}_{series_id}_{iso}",
+                    source_type=SourceType.REGULATOR_EXCHANGE,
+                    authority_tier=SourceTier.T1,
+                    license_tag=LicenseTag.PUBLIC_OFFICIAL,
+                    entity_id=series_id,
+                    ticker=symbol,
+                    report_period=iso,
+                    fact_name=fact_label,
+                    value=value,
+                    provenance_locator=result_url,
+                    parser_confidence=0.90,
+                    raw={"provider": provider, "series_id": series_id, "period_kind": period_kind},
+                ))
+
+    return facts
+
+
+def _run_macro_verification(
+    memo: str,
+    entity: dict[str, Any],
+    toolkit: FinancialCredibilityToolkit,
+    as_of_date: str | None,
+    trace_callback: Callable[[dict[str, Any]], None] | None = None,
+) -> dict[str, Any]:
+    """Fetch macro time-series from FRED/BLS/etc. and run claim verification."""
+    from .claim_verification import verify_atomic_claims
+    from .claims import decompose_claims
+    from .rubrics import FACTUAL_TYPES
+    from .judges import create_judge
+    from .models import to_plain, ArgumentType, Verdict, CredibilityLabel, VerificationVerdict, EntityResolution
+    from .data_sources import FreeDataSourceClient
+
+    symbol = str(entity.get("symbol") or entity.get("name") or "MACRO")
+    name = str(entity.get("name") or symbol)
+
+    _emit_progress(trace_callback, "run_entity", "running", f"Starting macro verification for {symbol}.")
+
+    # Anchor the fetch window to the year mentioned in the claim so BLS/FRED
+    # include the right historical period (e.g. "January 2024" → end=2024-12-31).
+    import re as _re
+    from .time_context import infer_time_context as _itc
+    claim_tc = _itc(memo, as_of_date)
+    effective_fetch_date = claim_tc.effective_as_of_date or as_of_date
+    if not effective_fetch_date:
+        year_m = _re.search(r"\b(20\d{2})\b", memo)
+        if year_m:
+            effective_fetch_date = f"{year_m.group(1)}-12-31"
+
+    # Fetch from all macro-relevant providers with extra history for YoY
+    client = FreeDataSourceClient(toolkit.config)
+    results: list[Any] = []
+    for provider_name, fetcher in [
+        ("fred",               lambda: client.fred(memo, as_of_date=effective_fetch_date, limit=24)),
+        ("bls_api",            lambda: client.bls_api(memo, as_of_date=effective_fetch_date)),
+        ("bea_api",            lambda: client.bea_api(memo, as_of_date=effective_fetch_date)),
+        ("eia_api",            lambda: client.eia_api(memo, as_of_date=effective_fetch_date)),
+        ("ecb_data_portal",    lambda: client.ecb_data_portal(memo)),
+        ("bis_data_portal",    lambda: client.bis_data_portal(memo)),
+        ("imf_data_api",       lambda: client.imf_data_api(memo)),
+        ("world_bank_indicators", lambda: client.world_bank_indicators(memo)),
+    ]:
+        try:
+            fetched = fetcher()
+            results.extend(fetched)
+        except Exception:
+            pass
+
+    canonical_facts = _macro_canonical_facts(results, symbol)
+
+    _emit_progress(
+        trace_callback, "canonicalize_facts", "ok",
+        f"Converted {len(canonical_facts)} macro observations to canonical facts.",
+        outputs={"fact_count": len(canonical_facts), "symbol": symbol},
+    )
+
+    atomic_claims = decompose_claims(memo)
+    fact_checkable = [c for c in atomic_claims if c.argument_type in FACTUAL_TYPES]
+    judge = toolkit.judge
+
+    macro_entity_resolution = EntityResolution(ticker=symbol, entity_id=symbol, confidence=0.85)
+    claim_results = verify_atomic_claims(
+        claim=memo,
+        evidence=[],
+        canonical_facts=canonical_facts,
+        entity_resolution=macro_entity_resolution,
+        judge=judge,
+    )
+
+    _emit_progress(
+        trace_callback, "verify_atomic_claims", "ok",
+        f"Verified {len(claim_results)} atomic claim(s) for {symbol}.",
+    )
+
+    # Compute overall verdict from atomic results
+    verdicts = [r.verdict.value if hasattr(r.verdict, "value") else str(r.verdict) for r in claim_results]
+    if any(v == VerificationVerdict.CONTRADICTED.value for v in verdicts):
+        overall_verdict = Verdict.CONTRADICTED
+        credibility_label = CredibilityLabel.CONTRADICTED_FACT
+        credibility_score = 0.15
+    elif any(v in {VerificationVerdict.SUPPORTED.value, VerificationVerdict.VERIFIED.value,
+                   VerificationVerdict.PARTIALLY_VERIFIED.value} for v in verdicts):
+        overall_verdict = Verdict.SUPPORTED
+        credibility_label = CredibilityLabel.HIGH
+        credibility_score = 0.80
+    else:
+        overall_verdict = Verdict.INSUFFICIENT
+        credibility_label = CredibilityLabel.LOW
+        credibility_score = 0.40
+
+    _emit_progress(trace_callback, "run_entity", "ok", f"Finished macro verification for {symbol}.")
+
+    return {
+        "claim": memo,
+        "ticker": symbol,
+        "entity_name": name,
+        "asset_class": entity.get("asset_class", "macro_indicator"),
+        "as_of_date": as_of_date or "",
+        "argument_type": ArgumentType.METRIC_FACT.value,
+        "classification_confidence": 0.85,
+        "verdict": overall_verdict.value,
+        "credibility_label": credibility_label.value,
+        "credibility_score": credibility_score,
+        "score_breakdown": {},
+        "atomic_claims": [to_plain(r) for r in claim_results],
+        "canonical_facts": [to_plain(f) for f in canonical_facts],
+        "evidence": [{"title": getattr(r, "title", ""), "url": getattr(r, "url", ""),
+                      "source": getattr(r, "source", ""), "snippet": getattr(r, "snippet", "")}
+                     for r in results],
+        "risk_flags": [] if canonical_facts else ["no_macro_data_found"],
+        "mode": "macro",
+        "metadata": {"providers_queried": _MACRO_PROVIDERS, "fact_count": len(canonical_facts)},
+    }
 
 
 def _emit_progress(
