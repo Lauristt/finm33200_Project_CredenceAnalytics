@@ -1824,7 +1824,7 @@ HTML = r"""<!doctype html>
       const claim = result.atomic_claim || {};
       const source = bestSourceForClaim(result, run.evidence || []);
       const facts = factsForClaim(result, run.canonical_facts || []);
-      const match = consistencySummary(result);
+      const match = consistencySummary(result, run.canonical_facts || []);
       const review = humanReviewSummary(result);
       const needsReview = Boolean(result.human_review_required || (result.review_reasons || []).length);
       return `
@@ -2134,11 +2134,11 @@ HTML = r"""<!doctype html>
       return `${months[Number(match[2]) - 1]} ${Number(match[3])}, ${match[1]}`;
     }
 
-    function consistencySummary(result) {
+    function consistencySummary(result, allFacts) {
       const verdict = verdictLabel(result.verdict);
       const issues = result.issues || [];
       const lines = [`<strong>${escapeHtml(verdict)}</strong>`];
-      const numericSummary = naturalNumericSummary(result.numeric_derivation, issues);
+      const numericSummary = naturalNumericSummary(result.numeric_derivation, issues, allFacts);
       if (numericSummary) {
         lines.push(escapeHtml(numericSummary));
         return lines.join("<br>");
@@ -2148,15 +2148,15 @@ HTML = r"""<!doctype html>
       } else if (String(result.verdict || "").includes("support")) {
         lines.push("The source values or description broadly match the claim.");
       } else {
-        lines.push("The current source is not enough to fully confirm this claim.");
+        lines.push(escapeHtml(whyInsufficientSummary(result, allFacts)));
       }
       return lines.join("<br>");
     }
 
-    function naturalNumericSummary(derivation, issues) {
+    function naturalNumericSummary(derivation, issues, allFacts) {
       const matchSummary = numericMatchParts(derivation, issues);
       if (!matchSummary.confirmed.length && !matchSummary.unconfirmed.length) {
-        return naturalFormulaSummary(derivation);
+        return naturalFormulaSummary(derivation, allFacts);
       }
       const confirmed = matchSummary.confirmed.length
         ? `The source confirms ${joinHumanList(matchSummary.confirmed)}.`
@@ -2254,18 +2254,83 @@ HTML = r"""<!doctype html>
       return "value";
     }
 
-    function naturalFormulaSummary(derivation) {
+    function naturalFormulaSummary(derivation, allFacts) {
       if (!derivation) return "";
       if (derivation.expression && derivation.expression.includes("current - prior")) {
-        const result = derivation.result === null || derivation.result === undefined ? "" : `${(Number(derivation.result) * 100).toFixed(2)}%`;
+        const inputs = derivation.inputs || {};
+        const rawResult = derivation.result;
         const status = derivation.passed ? "matches" : "does not match";
-        return result
-          ? `Recomputing the growth rate from the stored values gives ${result}, which ${status} the claim.`
+        const sign = Number(rawResult) >= 0 ? "+" : "";
+        const pctResult = rawResult !== null && rawResult !== undefined
+          ? `${sign}${(Number(rawResult) * 100).toFixed(2)}%`
+          : null;
+
+        // Look up fact metadata for metric name and currency
+        const currentFact = (allFacts || []).find(f => f.fact_id === inputs.current_fact_id);
+        const priorFact = (allFacts || []).find(f => f.fact_id === inputs.prior_fact_id);
+        const referenceFact = currentFact || priorFact;
+        const metricLabel = referenceFact ? humanFactName(referenceFact.fact_name || "") : "";
+        const unit = referenceFact ? (referenceFact.unit || referenceFact.currency || "") : "";
+
+        if (pctResult && inputs.current !== undefined && inputs.prior !== undefined) {
+          const cv = formatFactValue(inputs.current, unit);
+          const pv = formatFactValue(inputs.prior, unit);
+          const cp = inputs.current_period ? humanFactPeriod(inputs.current_period) : "";
+          const pp = inputs.prior_period ? humanFactPeriod(inputs.prior_period) : "";
+          const periodDetail = pp && cp ? ` (${pp} → ${cp})` : "";
+          const metric = metricLabel && metricLabel !== "Fact" ? `${metricLabel}: ` : "";
+          return `${metric}${pv} → ${cv}${periodDetail} = ${pctResult}, which ${status} the claim.`;
+        }
+
+        return pctResult
+          ? `Recomputing the growth rate from the stored values gives ${pctResult}, which ${status} the claim.`
           : "The growth-rate check could not be recomputed from the displayed values.";
+      }
+      if (derivation.expression === "level_check") {
+        const inputs = derivation.inputs || {};
+        const status = derivation.passed ? "matches" : "does not match";
+        const actual = inputs.actual !== undefined ? inputs.actual : null;
+        const claimed = inputs.claimed !== undefined ? inputs.claimed : null;
+        const diffPct = inputs.diff_pct !== undefined ? `${(inputs.diff_pct * 100).toFixed(1)}%` : null;
+        const period = inputs.fact_period ? ` as of ${humanFactPeriod(inputs.fact_period)}` : "";
+        if (actual !== null && claimed !== null) {
+          const diffText = diffPct ? ` (${diffPct} difference)` : "";
+          return `The actual value ${actual}${period} ${status} the claimed ${claimed}${diffText}.`;
+        }
       }
       if (derivation.passed === true) return "The numeric calculation is consistent with the stored evidence.";
       if (derivation.passed === false) return "The numeric calculation does not match the stored evidence.";
       return "";
+    }
+
+    function whyInsufficientSummary(result, allFacts) {
+      const factIds = new Set(result.canonical_fact_ids || []);
+      const claimFacts = (allFacts || []).filter(f => factIds.has(f.fact_id) && isDisplayableFact(f));
+      const verdict = String(result.verdict || "");
+
+      if (!claimFacts.length) {
+        const hasEvidence = (result.evidence_keys || []).length || (result.evidence_urls || []).length;
+        return hasEvidence
+          ? "A source was retrieved, but it did not contain numeric data that could be matched to this specific claim."
+          : "No matching data was retrieved for this claim. The verifier could not locate a relevant official source.";
+      }
+
+      const factSummaries = claimFacts.slice(0, 2).map(f => {
+        const val = formatFactValue(f.value, f.unit || f.currency);
+        const period = humanFactPeriod(f.report_period || f.observation_date);
+        return `${humanFactName(f.fact_name || "value")} of ${val}${period ? " (" + period + ")" : ""}`;
+      });
+      const factText = factSummaries.length ? `The source shows ${factSummaries.join(" and ")}` : "";
+
+      if (verdict.includes("contradict") || verdict.includes("conflict")) {
+        return factText
+          ? `${factText}, which conflicts with the stated claim.`
+          : "The retrieved data contradicts the stated claim.";
+      }
+
+      return factText
+        ? `${factText}, but this does not fully confirm all aspects of the claim — the exact period, figure, or metric may differ from what was stated.`
+        : "The retrieved data is related but does not provide sufficient evidence to confirm this specific claim.";
     }
 
     function naturalIssueSummary(issues) {
