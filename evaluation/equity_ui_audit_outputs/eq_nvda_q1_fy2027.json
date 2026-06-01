@@ -1,0 +1,3434 @@
+{
+  "input": {
+    "memo": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong.",
+    "original_memo": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 286,
+      "cleaned_length": 286,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong."
+    },
+    "tickers": [
+      "NVDA"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "NVIDIA Corporation",
+          "ticker": "NVDA",
+          "symbol": "NVDA",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0001045810",
+          "exchange": "Nasdaq"
+        }
+      ],
+      "tickers": [
+        "NVDA"
+      ],
+      "asset_classes": [
+        "single_name_equity"
+      ],
+      "asset_groups": {
+        "single_name_equity": [
+          {
+            "name": "NVIDIA Corporation",
+            "ticker": "NVDA",
+            "symbol": "NVDA",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0001045810",
+            "exchange": "Nasdaq"
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [],
+      "notes": [
+        "filtered_ambiguous_ticker:AI",
+        "ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json"
+      ]
+    },
+    "as_of_date": "2026-05-20",
+    "requested_as_of_date": "2026-05-20",
+    "time_context": {
+      "effective_as_of_date": "2026-05-20",
+      "user_as_of_date": "2026-05-20",
+      "event_date": "2026-04-26",
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": [
+        "absolute_date_detected"
+      ]
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 1,
+    "detected_entity_count": 1,
+    "asset_class_count": 1,
+    "asset_classes": [
+      "single_name_equity"
+    ],
+    "non_equity_entity_count": 0,
+    "error_count": 0,
+    "atomic_claim_count": 4,
+    "skipped_claim_count": 1,
+    "total_claim_count": 5,
+    "human_review_count": 4,
+    "average_confidence": 0.352,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong.",
+      "ticker": "NVDA",
+      "as_of_date": "2026-05-20",
+      "argument_type": "opinion_analysis",
+      "classification_confidence": 0.9,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.519,
+      "score_breakdown": {
+        "source_authority": 1.0,
+        "recency": 0.93,
+        "evidence_support": 0.115,
+        "numeric_consistency": 0.72,
+        "independence": 0.55,
+        "reasoning_quality": 0.408,
+        "penalties": 0.0,
+        "final_score": 0.519,
+        "weights": {
+          "source_authority": 0.1,
+          "recency": 0.1,
+          "evidence_support": 0.15,
+          "numeric_consistency": 0.05,
+          "independence": 0.2,
+          "reasoning_quality": 0.4
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "partially_verified",
+        "confidence": 0.72,
+        "summary": "Numeric values are partially supported by available evidence.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm"
+        ],
+        "issues": [],
+        "method": "heuristic_llm_fallback"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "weak",
+        "confidence": 0.399,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "verified",
+        "confidence": 0.87,
+        "summary": "Sources are strong enough for a useful credibility assessment.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+          "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm"
+        ],
+        "issues": [],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Medium",
+        "final_confidence": 0.653,
+        "numeric_confidence": 0.72,
+        "logic_confidence": 0.399,
+        "source_confidence": 0.87,
+        "summary": "Overall confidence is Medium. Numeric check: partially_verified; logic check: weak; source check: verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "numeric change",
+              "reported period"
+            ]
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json"
+          ],
+          "evidence_keys": [
+            "T1:data.sec.gov:2026-02-25"
+          ],
+          "canonical_fact_ids": [
+            "fact_df59b471f558",
+            "fact_36412598976a",
+            "fact_b3e5c19b7280",
+            "fact_ddd4c6c054ad",
+            "fact_7d81d6538f3a",
+            "fact_f9a678c441c3",
+            "fact_85476dd74c68",
+            "fact_f35091cb961d"
+          ],
+          "numeric_derivation": {
+            "expression": "numeric_verification",
+            "inputs": {},
+            "result": "partially_verified",
+            "comparator": null,
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "Numeric values are partially supported by available evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 1.0,
+            "entity_match": 0.9,
+            "time_alignment": 0.794,
+            "numeric_exactness": 0.93,
+            "retrieval_sufficiency": 0.82,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.88,
+            "final_confidence": 0.866
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "explanation_claim_needs_human_review"
+          ],
+          "issues": []
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_2",
+            "text": "up 85% from a year earlier",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.85,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.148
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period",
+            "explanation_claim_needs_human_review"
+          ],
+          "issues": [
+            "no_evidence"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_3",
+            "text": "GAAP diluted EPS was $2.39",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "financial metric",
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.85,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.35,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.198
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "no_evidence"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_4",
+            "text": "non-GAAP diluted EPS was $1.87",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "financial metric",
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.85,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.35,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.198
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "no_evidence"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_5",
+            "text": "The company also said AI infrastructure demand remained strong",
+            "argument_type": "opinion_analysis",
+            "classification_confidence": 0.9,
+            "signals": [
+              "investment judgment"
+            ]
+          },
+          "verdict": "not_applicable",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": null,
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "Skipped non-factual claim type: opinion_analysis"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_9366fdc2900e",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2022-01-30",
+          "filing_date": "2026-02-25",
+          "observation_date": "2022-01-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 26914000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_342201f4a9aa",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2021-01-31",
+          "filing_date": "2026-02-25",
+          "observation_date": "2021-01-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 16675000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_587b2e0a1948",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2020-01-26",
+          "filing_date": "2026-02-25",
+          "observation_date": "2020-01-26",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 10918000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_1898f7d15dc6",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2020-01-26",
+          "filing_date": "2026-02-25",
+          "observation_date": "2020-01-26",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 3105000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_71619c7e9c9b",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2019-10-27",
+          "filing_date": "2026-02-25",
+          "observation_date": "2019-10-27",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 3014000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f838f9180b2f",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2019-07-28",
+          "filing_date": "2026-02-25",
+          "observation_date": "2019-07-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 2579000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_0409542d78c0",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2019-04-28",
+          "filing_date": "2026-02-25",
+          "observation_date": "2019-04-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 2220000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_4c51d166b295",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2019-01-27",
+          "filing_date": "2026-02-25",
+          "observation_date": "2019-01-27",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 11716000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_df59b471f558",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2026-01-25",
+          "filing_date": "2026-02-25",
+          "observation_date": "2026-01-25",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 215938000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_36412598976a",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2025-10-26",
+          "filing_date": "2026-02-25",
+          "observation_date": "2025-10-26",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 57006000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_b3e5c19b7280",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2025-07-27",
+          "filing_date": "2026-02-25",
+          "observation_date": "2025-07-27",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 46743000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_ddd4c6c054ad",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2025-04-27",
+          "filing_date": "2026-02-25",
+          "observation_date": "2025-04-27",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 44062000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_7d81d6538f3a",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2025-01-26",
+          "filing_date": "2026-02-25",
+          "observation_date": "2025-01-26",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 130497000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f9a678c441c3",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2024-10-27",
+          "filing_date": "2026-02-25",
+          "observation_date": "2024-10-27",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 35082000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_85476dd74c68",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2024-07-28",
+          "filing_date": "2026-02-25",
+          "observation_date": "2024-07-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 30040000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f35091cb961d",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": "2024-04-28",
+          "filing_date": "2026-02-25",
+          "observation_date": "2024-04-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 26044000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_753bb6553ed2",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-05-20",
+          "observation_date": "2026-05-20",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 10-Q filing for NVDA",
+          "value": "10",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        },
+        {
+          "fact_id": "fact_53c7dec82359",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-05-20",
+          "observation_date": "2026-05-20",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 8-K filing for NVDA",
+          "value": "8",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        },
+        {
+          "fact_id": "fact_9e372b135b68",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001045810",
+          "ticker": "NVDA",
+          "cik": "0001045810",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-05-08",
+          "observation_date": "2026-05-08",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 8-K filing for NVDA",
+          "value": "8",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "NVDA",
+        "entity_id": "CIK0001045810",
+        "cik": "0001045810",
+        "lei": null,
+        "figi": null,
+        "confidence": 0.85,
+        "sources": [
+          "SEC",
+          "evidence_entity_match"
+        ],
+        "issues": []
+      },
+      "audit_trace": {
+        "trace_id": "trace_b991498a0c3c",
+        "created_at": "2026-05-28T17:00:39+00:00",
+        "replayable_inputs": {
+          "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong.",
+          "ticker": "NVDA",
+          "as_of_date": "2026-05-20",
+          "search_result_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+            "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+            "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+            "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 4 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+                "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+                "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+                "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 4 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "data.sec.gov",
+                "sec.gov"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "ok",
+            "summary": "Resolved entity as CIK0001045810.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "confidence": 0.85,
+              "issues": []
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 19 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_9366fdc2900e",
+                "fact_342201f4a9aa",
+                "fact_587b2e0a1948",
+                "fact_1898f7d15dc6",
+                "fact_71619c7e9c9b",
+                "fact_f838f9180b2f",
+                "fact_0409542d78c0",
+                "fact_4c51d166b295",
+                "fact_df59b471f558",
+                "fact_36412598976a",
+                "fact_b3e5c19b7280",
+                "fact_ddd4c6c054ad",
+                "fact_7d81d6538f3a",
+                "fact_f9a678c441c3",
+                "fact_85476dd74c68",
+                "fact_f35091cb961d",
+                "fact_753bb6553ed2",
+                "fact_53c7dec82359",
+                "fact_9e372b135b68"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 5 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "supported",
+                "claim_2": "insufficient",
+                "claim_3": "insufficient",
+                "claim_4": "insufficient",
+                "claim_5": "not_applicable"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "explanation_claim_needs_human_review"
+                ],
+                "claim_2": [
+                  "no_official_primary_source",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period",
+                  "explanation_claim_needs_human_review"
+                ],
+                "claim_3": [
+                  "no_official_primary_source",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ],
+                "claim_4": [
+                  "no_official_primary_source",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_2: web search skipped by source selection policy",
+          "claim_3: sec_company_facts: 1 result(s)",
+          "claim_3: sec_recent_filings: 3 result(s)",
+          "claim_4: sec_company_facts: 1 result(s)",
+          "claim_4: sec_recent_filings: 3 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "title": "SEC Company Facts for NVDA",
+          "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2022-01-30: 26914000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2021-01-31: 16675000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2020-01-26: 10918000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2020-01-26: 3105000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-10-27: 3014000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-07-28: 2579000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-04-28: 2220000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2019-01-27: 11716000000 (form 10-K); Revenues (USD) for fiscal year ending 2026-01-25: 215938000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-10-26: 57006000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-07-27: 46743000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-04-27: 44062000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-01-26: 130497000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-10-27: 35082000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-07-28: 30040000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-04-28: 26044000000 (form 10-Q)",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "data.sec.gov",
+          "published_at": "2026-02-25",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.794,
+          "relevance_score": 0.477,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.387,
+          "reasoning_quality_score": 0.408,
+          "independence_score": 0.85,
+          "notes": [
+            "SEC filing/regulatory source",
+            "84 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.09",
+            "reasoning markers=0",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "title": "SEC 10-Q filing for NVDA",
+          "text": "NVDA filed form 10-Q on 2026-05-20.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-05-20",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.98,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.408,
+          "independence_score": 0.45,
+          "notes": [
+            "SEC filing/regulatory source",
+            "0 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning markers=0",
+            "same canonical domain",
+            "same canonical domain"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+          "title": "SEC 8-K filing for NVDA",
+          "text": "NVDA filed form 8-K on 2026-05-20.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-05-20",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.98,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.408,
+          "independence_score": 0.45,
+          "notes": [
+            "SEC filing/regulatory source",
+            "0 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning markers=0",
+            "same canonical domain"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm",
+          "title": "SEC 8-K filing for NVDA",
+          "text": "NVDA filed form 8-K on 2026-05-08.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-05-08",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.968,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.408,
+          "independence_score": 0.45,
+          "notes": [
+            "SEC filing/regulatory source",
+            "12 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning markers=0"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "investment judgment"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: historical_prices: no historical price series returned; configure ALPHA_VANTAGE_API_KEY, FMP_API_KEY, or FINNHUB_API_KEY, or use a Stooq plan that allows historical CSV downloads (Financial Modeling Prep rate-limited (HTTP 429))",
+          "claim_2: web search skipped by source selection policy",
+          "claim_3: sec_company_facts: 1 result(s)",
+          "claim_3: sec_recent_filings: 3 result(s)",
+          "claim_4: sec_company_facts: 1 result(s)",
+          "claim_4: sec_recent_filings: 3 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-20",
+          "user_as_of_date": "2026-05-20",
+          "event_date": "2026-04-26",
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": [
+            "absolute_date_detected"
+          ]
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+            "as_of_date": "2026-04-26",
+            "time_context": {
+              "effective_as_of_date": "2026-04-26",
+              "user_as_of_date": null,
+              "event_date": "2026-04-26",
+              "publication_date": null,
+              "source": "explicit_event_date",
+              "confidence": 0.95,
+              "notes": [
+                "absolute_date_detected"
+              ]
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "up 85% from a year earlier",
+            "as_of_date": "2026-05-20",
+            "time_context": {
+              "effective_as_of_date": "2026-05-20",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "GAAP diluted EPS was $2.39",
+            "as_of_date": "2026-05-20",
+            "time_context": {
+              "effective_as_of_date": "2026-05-20",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "non-GAAP diluted EPS was $1.87",
+            "as_of_date": "2026-05-20",
+            "time_context": {
+              "effective_as_of_date": "2026-05-20",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+            "as_of_date": "2026-04-26",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "up 85% from a year earlier",
+            "as_of_date": "2026-05-20",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "GAAP diluted EPS was $2.39",
+            "as_of_date": "2026-05-20",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [
+              "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+              "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "non-GAAP diluted EPS was $1.87",
+            "as_of_date": "2026-05-20",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "explanation_claim_needs_human_review"
+            ],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "up 85% from a year earlier",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period",
+              "explanation_claim_needs_human_review"
+            ],
+            "closure_status": "selected_source_returned_no_data"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "GAAP diluted EPS was $2.39",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [
+              "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+              "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm"
+            ],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "retrieved_but_not_relevant"
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "non-GAAP diluted EPS was $1.87",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "retrieved_but_not_relevant"
+          },
+          {
+            "claim_id": "claim_5",
+            "claim": "The company also said AI infrastructure demand remained strong",
+            "fact_checkable": false,
+            "selected_sources": [],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "not_applicable",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "skipped_non_factual"
+          }
+        ],
+        "retrieval_budget": 32,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "up 85% from a year earlier",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "GAAP diluted EPS was $2.39",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "non-GAAP diluted EPS was $1.87",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "sec_company_facts",
+          "sec_recent_filings",
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "up 85% from a year earlier",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "GAAP diluted EPS was $2.39",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "non-GAAP diluted EPS was $1.87",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_5",
+            "claim": "The company also said AI infrastructure demand remained strong",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [],
+            "reasons": [
+              "no structured official route matched"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 286,
+          "cleaned_length": 286,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong."
+        },
+        "original_claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong.",
+        "agentic_search_plan": [
+          "NVDA \"Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong.\" analysis data valuation",
+          "NVDA valuation analysis revenue margins cash flow",
+          "NVDA bull bear thesis independent analysis",
+          "NVDA Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong. correction restatement contradiction",
+          "NVDA Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong. SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "SEC Company Facts for NVDA",
+          "domain": "data.sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-02-25",
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        },
+        {
+          "title": "SEC 10-Q filing for NVDA",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-05-20",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+          "used_by_claims": []
+        },
+        {
+          "title": "SEC 8-K filing for NVDA",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-05-20",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+          "used_by_claims": []
+        },
+        {
+          "title": "SEC 8-K filing for NVDA",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-05-08",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm",
+          "used_by_claims": []
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+          "verdict": "supported",
+          "confidence": 0.866,
+          "summary": "The claim is marked `supported` based on SEC Company Facts for NVDA with confidence 0.87.",
+          "numeric_summary": "The numeric derivation `numeric_verification` passed.",
+          "source_summary": "The main evidence is official primary evidence with source tier T1.",
+          "main_evidence": {
+            "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+            "title": "SEC Company Facts for NVDA",
+            "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2022-01-30: 26914000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2021-01-31: 16675000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2020-01-26: 10918000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2020-01-26: 3105000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-10-27: 3014000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-07-28: 2579000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-04-28: 2220000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2019-01-27: 11716000000 (form 10-K); Revenues (USD) for fiscal year ending 2026-01-25: 215938000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-10-26: 57006000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-07-27: 46743000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-04-27: 44062000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-01-26: 130497000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-10-27: 35082000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-07-28: 30040000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-04-28: 26044000000 (form 10-Q)",
+            "source_type": "sec_filing",
+            "source_tier": "T1",
+            "domain": "data.sec.gov",
+            "published_at": "2026-02-25",
+            "license_tag": "public_official",
+            "is_official_primary": true,
+            "source_authority": 1.0,
+            "recency_score": 0.794,
+            "relevance_score": 0.477,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.72,
+            "support_label": "not_enough_info",
+            "support_score": 0.387,
+            "reasoning_quality_score": 0.408,
+            "independence_score": 0.85,
+            "notes": [
+              "SEC filing/regulatory source",
+              "84 days old",
+              "partially matched numeric values: 2026",
+              "token overlap=0.09",
+              "reasoning markers=0",
+              "different domains and title text",
+              "different domains and title text",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim."
+          ]
+        },
+        {
+          "claim_id": "claim_2",
+          "claim": "up 85% from a year earlier",
+          "verdict": "insufficient",
+          "confidence": 0.148,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.15.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        },
+        {
+          "claim_id": "claim_3",
+          "claim": "GAAP diluted EPS was $2.39",
+          "verdict": "insufficient",
+          "confidence": 0.198,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.20.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        },
+        {
+          "claim_id": "claim_4",
+          "claim": "non-GAAP diluted EPS was $1.87",
+          "verdict": "insufficient",
+          "confidence": 0.198,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.20.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_2",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        },
+        {
+          "claim_id": "claim_3",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_4",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_b991498a0c3c",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "NVIDIA Corporation (NVDA)",
+        "name": "NVIDIA Corporation",
+        "ticker": "NVDA",
+        "symbol": "NVDA",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "NVIDIA Corporation (NVDA)",
+        "name": "NVIDIA Corporation",
+        "ticker": "NVDA",
+        "symbol": "NVDA",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 4 fact-checkable claims across 1 entity. Skipped 1 opinion, forecast, or non-falsifiable statement. 4 claims need human review.\n\n## NVDA\n\n- **Consistent.** Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter. Evidence: T1 SEC Company Facts for NVDA (data.sec.gov). Reason: Numeric check passed. Needs human review: the explanatory claim needs human judgment.\n- **Insufficient evidence.** up 85% from a year earlier. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, retrieved evidence is limited.\n- **Insufficient evidence.** GAAP diluted EPS was $2.39. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, retrieved evidence is limited.\n- **Insufficient evidence.** non-GAAP diluted EPS was $1.87. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, retrieved evidence is limited.\n\nNot fact-checked:\n- Skipped `opinion_analysis`: The company also said AI infrastructure demand remained strong\n",
+  "agent_trace": {
+    "run_id": "agent_fe9b298159cc",
+    "created_at": "2026-05-28T17:00:34+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_692c8e4d",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 34,
+        "output_preview": "{\"asset_classes\": [\"single_name_equity\"], \"asset_groups\": {\"single_name_equity\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0001045810\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"NVIDIA Corporation\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"NVDA\", \"ticker\": \"NVDA\"}]}, \"entities\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0001045810\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"NVIDIA Corporation\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"NVDA\", \"ticker\": \"NVDA\"}], \"method\": \"heuristic\", \"non_equity_entities\": [], \"notes\": [\"filtered_ambiguous_ticker:AI\", \"ticker_universe_source:.cache/financial_credibility/company_tickers_exc",
+        "output_hash": "4dbbada11021cd31d0d8f8663f97f291bdce6ce6a3dd8453c594cac9db3cfb12"
+      },
+      {
+        "call_id": "fallback_1_287ec425",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter and up 85% from a year earlier. GAAP diluted EPS was $2.39, while non-GAAP diluted EPS was $1.87. The company also said AI infrastructure demand remained strong."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.66, \"signals\": [\"numeric change\"], \"text\": \"up 85% from a year earlier\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_3\", \"classification_confidence\": 0.87, \"signals\": [\"financial metric\", \"numeric change\"], \"text\": \"GAAP diluted EPS was $2.39\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_4\", \"classification_confidence\": 0.87, \"signals\": [\"financial metric\", \"numeric change\"], \"text\"",
+        "output_hash": "e2f5552ead6f79d38357a9e9e30a72355df4478c6abc69de53f14dd42ee8bff4"
+      },
+      {
+        "call_id": "fallback_2_7240fbcd",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 10,
+        "output_preview": "{\"selections\": [{\"candidates\": [{\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.\", \"candidate_score\": 4.85, \"detail_available\": true, \"detected_asset_classes\": [\"single_name_equity\"], \"is_official_primary\": true, \"is_runtime_selectable\": true, \"license_tag\": \"public_official\", \"name\": \"SEC Company Facts\", \"required_inputs\": [\"ticker_or_cik\", \"metric_hint\"], \"source_id\": \"sec_company_facts\"}, {\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.\", \"candidate_score\": 2.5, \"detail_available\": true, \"detected_asset_classes\": [\"single_na",
+        "output_hash": "850b12407c4212e01e92c19004442f62de843c203c308626da7037a3de8201ba"
+      },
+      {
+        "call_id": "fallback_3_3be21810",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+          "ticker": "NVDA",
+          "as_of_date": "2026-05-20",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "prefetched_results": null
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1054,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.95, \"needs_decomposition\": false, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"]}, \"evidence\": [{\"domain\": \"data.sec.gov\", \"entity_match_score\": 0.9, \"independence_score\": 0.0, \"is_official_primary\": true, \"license_tag\": \"public_official\", \"notes\": [\"SEC filing/regulatory source\", \"0 days old\", \"partially matched numeric values: 2026\"], \"numeric_consistency_score\": 0.72, \"published_at\": \"2026-05-20\", \"reasoning_quality_score\": 0.0, \"recency_score\": 0.98, \"relevance_score\": 0.457, \"source_authority\": 1.0, \"source_tier\": \"T1\", \"source_type\": \"sec_filing\", \"support_label\": \"not_enough_info\", \"support_score\": 0.0, \"text\": \"RevenueFromContractWithCustomerExcludingAssessedTax",
+        "output_hash": "c7c68563321a686fa2e8ee77a3345f4a91dd4614915e7fc9e69e59b9ecded4b1"
+      },
+      {
+        "call_id": "fallback_4_037685c1",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "NVDA",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "title": "SEC Company Facts for NVDA",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2022-01-30: 26914000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2021-01-31: 16675000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2020-01-26: 10918000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2020-01-26: 3105000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-10-27: 3014000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-07-28: 2579000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-04-28: 2220000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2019-01-27: 11716000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2026-04-26: 81615000000 (form 10-Q); Revenues (USD) for fiscal year ending 2026-01-25: 215938000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-10-26: 57006000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-07-27: 46743000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-04-27: 44062000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-01-26: 130497000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-10-27: 35082000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-07-28: 30040000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-05-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.457,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "title": "SEC 10-Q filing for NVDA",
+              "text": "NVDA filed form 10-Q on 2026-05-20.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-05-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+              "title": "SEC 8-K filing for NVDA",
+              "text": "NVDA filed form 8-K on 2026-05-20.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-05-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm",
+              "title": "SEC 8-K filing for NVDA",
+              "text": "NVDA filed form 8-K on 2026-05-08.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-05-08",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.968,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "12 days old",
+                "partially matched numeric values: 2026"
+              ]
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1,
+        "output_preview": "{\"canonical_facts\": [{\"authority_tier\": \"T1\", \"cik\": \"0001045810\", \"currency\": \"USD\", \"entity_id\": \"CIK0001045810\", \"fact_id\": \"fact_d8bb974a1310\", \"fact_name\": \"RevenueFromContractWithCustomerExcludingAssessedTax\", \"filing_date\": \"2026-05-20\", \"lei\": null, \"license_tag\": \"public_official\", \"observation_date\": \"2022-01-30\", \"parser_confidence\": 0.88, \"provenance_locator\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json\", \"raw\": {\"form\": \"10-K\", \"period_kind\": \"fiscal year\", \"provider\": \"sec_company_facts\"}, \"report_period\": \"2022-01-30\", \"source_type\": \"sec_filing\", \"ticker\": \"NVDA\", \"unit\": \"USD\", \"value\": 26914000000, \"vintage_date\": null}, {\"authority_tier\": \"T1\", \"cik\": \"0001045810\", \"currency\": \"USD\", \"entity_id\": \"CIK0001045810\", \"fact_id\": \"fact_d68ae073d9f0\", \"fact_n",
+        "output_hash": "dbd63fa2216f2b859421782285238bd4715d9f377e61f44c13cbd1079e8459c5"
+      },
+      {
+        "call_id": "fallback_5_149aa957",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+          "ticker": "NVDA",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "title": "SEC Company Facts for NVDA",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2022-01-30: 26914000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2021-01-31: 16675000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2020-01-26: 10918000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2020-01-26: 3105000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-10-27: 3014000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-07-28: 2579000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-04-28: 2220000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2019-01-27: 11716000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2026-04-26: 81615000000 (form 10-Q); Revenues (USD) for fiscal year ending 2026-01-25: 215938000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-10-26: 57006000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-07-27: 46743000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-04-27: 44062000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-01-26: 130497000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-10-27: 35082000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-07-28: 30040000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-05-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.457,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "title": "SEC 10-Q filing for NVDA",
+              "text": "NVDA filed form 10-Q on 2026-05-20.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-05-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+              "title": "SEC 8-K filing for NVDA",
+              "text": "NVDA filed form 8-K on 2026-05-20.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-05-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm",
+              "title": "SEC 8-K filing for NVDA",
+              "text": "NVDA filed form 8-K on 2026-05-08.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-05-08",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.968,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "12 days old",
+                "partially matched numeric values: 2026"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_d8bb974a1310",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2022-01-30",
+              "filing_date": "2026-05-20",
+              "observation_date": "2022-01-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 26914000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d68ae073d9f0",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2021-01-31",
+              "filing_date": "2026-05-20",
+              "observation_date": "2021-01-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 16675000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_61ab218ad0ce",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2020-01-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2020-01-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 10918000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ebc681da85fd",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2020-01-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2020-01-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 3105000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0566ed0a67ba",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2019-10-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2019-10-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 3014000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_29574f6b3f07",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2019-07-28",
+              "filing_date": "2026-05-20",
+              "observation_date": "2019-07-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 2579000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_3b509a35052e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2019-04-28",
+              "filing_date": "2026-05-20",
+              "observation_date": "2019-04-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 2220000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5edd945251c9",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2019-01-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2019-01-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 11716000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_94c442156cee",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2026-04-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2026-04-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 81615000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_b20fda2f7886",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2026-01-25",
+              "filing_date": "2026-05-20",
+              "observation_date": "2026-01-25",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 215938000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_209829bf7e43",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2025-10-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2025-10-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 57006000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_79782a3cbb74",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2025-07-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2025-07-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 46743000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1fe9582f5e90",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2025-04-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2025-04-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 44062000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_10d474d17503",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2025-01-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2025-01-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 130497000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d8828d74ff1e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2024-10-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2024-10-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 35082000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5477091aa9a5",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2024-07-28",
+              "filing_date": "2026-05-20",
+              "observation_date": "2024-07-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 30040000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_582fe6c61545",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-05-20",
+              "observation_date": "2026-05-20",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 10-Q filing for NVDA",
+              "value": "10",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_2b0dee5faad7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-05-20",
+              "observation_date": "2026-05-20",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for NVDA",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_daa55191ae8b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-05-08",
+              "observation_date": "2026-05-08",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for NVDA",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 11,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter\"}, \"canonical_fact_ids\": [\"fact_94c442156cee\", \"fact_b20fda2f7886\", \"fact_209829bf7e43\", \"fact_79782a3cbb74\", \"fact_1fe9582f5e90\", \"fact_10d474d17503\", \"fact_d8828d74ff1e\", \"fact_5477091aa9a5\"], \"confidence_components\": {\"cross_source_consistency\": 0.55, \"entity_match\": 0.9, \"final_confidence\": 0.827, \"numeric_exactness\": 0.64, \"parser_confidence\": 0.88, \"retrieval_sufficiency\": 0.82, \"source_authority\": 1.0, \"time_alignment\": 0.98}, \"evidence_keys\": [\"T1:data.sec.",
+        "output_hash": "cd1355307f86b629e07457ec07962eed8cfe62a104f858babf8e236ba35c6dd4"
+      },
+      {
+        "call_id": "fallback_6_cea3868e",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "Nvidia reported record revenue of $81.6 billion for the first quarter ended April 26, 2026, up 20% from the previous quarter",
+          "ticker": "NVDA",
+          "as_of_date": "2026-05-20",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "title": "SEC Company Facts for NVDA",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2022-01-30: 26914000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2021-01-31: 16675000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2020-01-26: 10918000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2020-01-26: 3105000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-10-27: 3014000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-07-28: 2579000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2019-04-28: 2220000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2019-01-27: 11716000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2026-04-26: 81615000000 (form 10-Q); Revenues (USD) for fiscal year ending 2026-01-25: 215938000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-10-26: 57006000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-07-27: 46743000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-04-27: 44062000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-01-26: 130497000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-10-27: 35082000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-07-28: 30040000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-05-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.457,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "title": "SEC 10-Q filing for NVDA",
+              "text": "NVDA filed form 10-Q on 2026-05-20.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-05-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+              "title": "SEC 8-K filing for NVDA",
+              "text": "NVDA filed form 8-K on 2026-05-20.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-05-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm",
+              "title": "SEC 8-K filing for NVDA",
+              "text": "NVDA filed form 8-K on 2026-05-08.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-05-08",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.968,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "12 days old",
+                "partially matched numeric values: 2026"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_d8bb974a1310",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2022-01-30",
+              "filing_date": "2026-05-20",
+              "observation_date": "2022-01-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 26914000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d68ae073d9f0",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2021-01-31",
+              "filing_date": "2026-05-20",
+              "observation_date": "2021-01-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 16675000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_61ab218ad0ce",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2020-01-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2020-01-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 10918000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ebc681da85fd",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2020-01-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2020-01-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 3105000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0566ed0a67ba",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2019-10-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2019-10-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 3014000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_29574f6b3f07",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2019-07-28",
+              "filing_date": "2026-05-20",
+              "observation_date": "2019-07-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 2579000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_3b509a35052e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2019-04-28",
+              "filing_date": "2026-05-20",
+              "observation_date": "2019-04-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 2220000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5edd945251c9",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2019-01-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2019-01-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 11716000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_94c442156cee",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2026-04-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2026-04-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 81615000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_b20fda2f7886",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2026-01-25",
+              "filing_date": "2026-05-20",
+              "observation_date": "2026-01-25",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 215938000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_209829bf7e43",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2025-10-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2025-10-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 57006000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_79782a3cbb74",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2025-07-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2025-07-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 46743000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1fe9582f5e90",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2025-04-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2025-04-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 44062000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_10d474d17503",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2025-01-26",
+              "filing_date": "2026-05-20",
+              "observation_date": "2025-01-26",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 130497000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d8828d74ff1e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2024-10-27",
+              "filing_date": "2026-05-20",
+              "observation_date": "2024-10-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 35082000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5477091aa9a5",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": "2024-07-28",
+              "filing_date": "2026-05-20",
+              "observation_date": "2024-07-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 30040000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_582fe6c61545",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-05-20",
+              "observation_date": "2026-05-20",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 10-Q filing for NVDA",
+              "value": "10",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_2b0dee5faad7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-05-20",
+              "observation_date": "2026-05-20",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for NVDA",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000051/nvda-20260520.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_daa55191ae8b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001045810",
+              "ticker": "NVDA",
+              "cik": "0001045810",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-05-08",
+              "observation_date": "2026-05-08",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for NVDA",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000028/nvda-20260507.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 2,
+        "output_preview": "{\"created_at\": \"2026-05-28T17:00:35+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": [\"data.sec.gov\", \"sec.gov\"]}, \"status\": \"ok\", \"step\": \"extract_evidence\", \"summary\": \"Built 4 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": \"0001045810\", \"confidence\": 0.85, \"issues\": [], \"lei\": null, \"ticker\": \"NVDA\"}, \"status\": \"ok\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as CIK0001045810.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": [\"fact_d8bb974a1310\", \"fact_d68ae073d9f0\", \"fact_61ab218ad0ce\", \"fact_ebc681da85fd\", \"fact_0566ed0a67ba\", \"fact_29574f6b3f07\", \"fact_3b509a35052e\", \"fact_5edd945251c9\", \"fact_94c442156cee\", \"fact_b20fda2f7886",
+        "output_hash": "293f67191ebd2b68034c9a6850a874af092813e614be3802889403969f30e7fa"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_fe9b298159cc",
+    "created_at": "2026-05-28T17:00:39+00:00",
+    "verdict": "fail",
+    "score": 0.54,
+    "summary": "Audit fail: 4 finding(s) (major=3, minor=1); score 0.54.",
+    "findings": [
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_2",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      },
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_3",
+        "trace_refs": [
+          "sec_company_facts",
+          "sec_recent_filings"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      },
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_4",
+        "trace_refs": [
+          "sec_company_facts",
+          "sec_recent_filings"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      },
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_2",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      }
+    ]
+  }
+}

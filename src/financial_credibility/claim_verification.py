@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import re
+
 from .claims import decompose_claims
+from .claim_intent import is_corporate_transaction_claim
 from .derivations import derive_numeric_check
 from .models import (
     AtomicClaim,
@@ -14,6 +17,7 @@ from .models import (
     VerificationCheck,
     VerificationVerdict,
 )
+from .price_history import needs_historical_price_data
 from .rubrics import FACTUAL_TYPES
 from .uncertainty import calibrate_uncertainty
 from .verification import verify_logic_claim, verify_numeric_claim
@@ -55,7 +59,12 @@ def verify_atomic_claims(
         results.append(
             AtomicClaimResult(
                 atomic_claim=atomic_claim,
-                verdict=_claim_verdict(effective_numeric_check.verdict, logic_check.verdict, derivation),
+                verdict=_claim_verdict(
+                    effective_numeric_check.verdict,
+                    logic_check.verdict,
+                    derivation,
+                    atomic_claim.text,
+                ),
                 evidence_urls=[item.url for item in relevant_evidence[:5]],
                 evidence_keys=[_evidence_key(item) for item in relevant_evidence[:5]],
                 canonical_fact_ids=[fact.fact_id for fact in relevant_facts[:10]],
@@ -73,7 +82,30 @@ def _claim_verdict(
     numeric_verdict: str,
     logic_verdict: str,
     derivation: NumericDerivation | None = None,
+    claim_text: str = "",
 ) -> VerificationVerdict:
+    if needs_historical_price_data(claim_text):
+        if not derivation and numeric_verdict in {
+            VerificationVerdict.NOT_FOUND.value,
+            VerificationVerdict.INSUFFICIENT.value,
+        }:
+            return VerificationVerdict.INSUFFICIENT
+        if (
+            derivation
+            and derivation.expression == "numeric_match_summary"
+            and derivation.passed is False
+            and _derivation_has_no_matched_values(derivation)
+        ):
+            return VerificationVerdict.INSUFFICIENT
+    if _contains_numeric_value(claim_text) and numeric_verdict in {
+        VerificationVerdict.NOT_FOUND.value,
+        VerificationVerdict.INSUFFICIENT.value,
+    }:
+        return VerificationVerdict.INSUFFICIENT
+    if derivation and derivation.expression == "numeric_match_summary" and derivation.passed is False:
+        if logic_verdict == VerificationVerdict.CONTRADICTED.value:
+            return VerificationVerdict.CONTRADICTED
+        return VerificationVerdict.PARTIALLY_SUPPORTED
     if derivation and derivation.expression != "numeric_match_summary":
         if derivation.passed is True:
             return VerificationVerdict.SUPPORTED
@@ -88,15 +120,25 @@ def _claim_verdict(
         return VerificationVerdict.SUPPORTED
     if logic_verdict == VerificationVerdict.SUPPORTED.value and numeric_verdict in {
         VerificationVerdict.NOT_APPLICABLE.value,
-        VerificationVerdict.PARTIALLY_VERIFIED.value,
         VerificationVerdict.VERIFIED.value,
     }:
         return VerificationVerdict.SUPPORTED
+    if logic_verdict == VerificationVerdict.SUPPORTED.value and numeric_verdict == VerificationVerdict.PARTIALLY_VERIFIED.value:
+        return VerificationVerdict.PARTIALLY_SUPPORTED
     if numeric_verdict == VerificationVerdict.NOT_FOUND.value or logic_verdict == VerificationVerdict.PARTIALLY_SUPPORTED.value:
         return VerificationVerdict.PARTIALLY_SUPPORTED
     if VerificationVerdict.INSUFFICIENT.value in {numeric_verdict, logic_verdict}:
         return VerificationVerdict.INSUFFICIENT
     return VerificationVerdict.PARTIALLY_SUPPORTED
+
+
+def _contains_numeric_value(text: str) -> bool:
+    return bool(re.search(r"[$€£]?\d+(?:,\d{3})*(?:\.\d+)?\s*(?:%|percent|billion|million|trillion|bn|m|b)?", text, re.I))
+
+
+def _derivation_has_no_matched_values(derivation: NumericDerivation) -> bool:
+    matched = str((derivation.inputs or {}).get("matched_values") or "").strip().lower()
+    return matched in {"", "none"}
 
 
 def _numeric_check_with_derivation(
@@ -117,33 +159,208 @@ def _numeric_check_with_derivation(
 
 
 def _relevant_evidence(atomic_claim: AtomicClaim, evidence: list[Evidence]) -> list[Evidence]:
-    """Keep broad recall for MVP, with official and relevant snippets first."""
+    """Return only evidence whose text is topically connected to the atomic claim."""
+    if needs_historical_price_data(atomic_claim.text):
+        return [
+            item
+            for item in evidence
+            if _is_price_history_evidence(item)
+        ]
+    metric_terms = _required_metric_terms_for_claim(atomic_claim.text)
+    scored = [
+        (_text_overlap_hint(atomic_claim.text, item.title + " " + item.text), item)
+        for item in evidence
+    ]
+    relevant = [
+        (score, item)
+        for score, item in scored
+        if (
+            score > 0
+            and _evidence_satisfies_metric_terms(item, metric_terms)
+        )
+        or (_is_price_history_evidence(item) and needs_historical_price_data(atomic_claim.text))
+    ]
+    return [
+        item
+        for score, item in sorted(
+            relevant,
+            key=lambda pair: (
+                pair[1].is_official_primary,
+                pair[0],
+                pair[1].numeric_consistency_score,
+                pair[1].source_authority,
+            ),
+            reverse=True,
+        )
+    ]
+
+
+def _is_price_history_evidence(item: Evidence) -> bool:
+    text = f"{item.title} {item.text}".lower()
+    return (
+        "historical prices" in text
+        or "historical daily close prices" in text
+        or "latest_daily_return_pct" in text
+        or "latest quote" in text
+    )
+
+
+def _required_metric_terms_for_claim(text: str) -> set[str]:
+    lower = text.lower()
+    if "operating income" in lower or "income from operations" in lower:
+        return {"operating", "income"}
+    if "net income" in lower:
+        return {"net", "income"}
+    if "free cash flow" in lower:
+        return {"free", "cash", "flow"}
+    if "cash flow" in lower:
+        return {"cash", "flow"}
+    if "eps" in lower or "earnings per share" in lower:
+        return {"eps"}
+    if "revenue" in lower or "sales" in lower:
+        return {"revenue"}
+    return set()
+
+
+def _evidence_satisfies_metric_terms(item: Evidence, required_terms: set[str]) -> bool:
+    if not required_terms:
+        return True
+    text = f"{item.title} {item.text}".lower().replace("-", " ")
+    if required_terms == {"eps"}:
+        return bool(re.search(r"\beps\b|earnings per share|earningspershare", text))
+    if required_terms == {"revenue"}:
+        return bool(re.search(r"\brevenue\b|\brevenues\b|\bsales\b|revenuefromcontract|salesrevenuenet", text))
+    return all(term in text for term in required_terms)
+
+
+def _relevant_facts(atomic_claim: AtomicClaim, facts: list[CanonicalFact]) -> list[CanonicalFact]:
+    if is_corporate_transaction_claim(atomic_claim.text):
+        return []
+    required_aliases = _required_fact_aliases_for_claim(atomic_claim.text)
     return sorted(
-        evidence,
-        key=lambda item: (
-            item.is_official_primary,
-            _text_overlap_hint(atomic_claim.text, item.title + " " + item.text),
-            item.numeric_consistency_score,
-            item.source_authority,
-        ),
+        [
+            fact
+            for fact in facts
+            if _text_overlap_hint(atomic_claim.text, " ".join([fact.fact_name or "", fact.unit or ""])) > 0
+            or (fact.fact_name or "").lower() in required_aliases
+        ],
+        key=lambda fact: (_tier_rank(fact.authority_tier.value), fact.parser_confidence),
         reverse=True,
     )
 
 
-def _relevant_facts(atomic_claim: AtomicClaim, facts: list[CanonicalFact]) -> list[CanonicalFact]:
-    return sorted(
-        [fact for fact in facts if _text_overlap_hint(atomic_claim.text, " ".join([fact.fact_name or "", fact.unit or ""])) > 0],
-        key=lambda fact: (_tier_rank(fact.authority_tier.value), fact.parser_confidence),
-        reverse=True,
-    ) or facts
-
-
 def _text_overlap_hint(left: str, right: str) -> float:
-    left_tokens = {token for token in left.lower().replace("-", " ").split() if len(token) > 2}
-    right_tokens = {token for token in right.lower().replace("-", " ").split() if len(token) > 2}
+    left_tokens = _claim_relevance_tokens(left)
+    right_tokens = _claim_relevance_tokens(right)
     if not left_tokens or not right_tokens:
         return 0.0
     return len(left_tokens & right_tokens) / len(left_tokens)
+
+
+_RELEVANCE_STOPWORDS = {
+    "about",
+    "access",
+    "after",
+    "also",
+    "and",
+    "another",
+    "april",
+    "because",
+    "been",
+    "before",
+    "being",
+    "central",
+    "company",
+    "corp",
+    "corporation",
+    "data",
+    "during",
+    "fact",
+    "facts",
+    "filing",
+    "for",
+    "from",
+    "fiscal",
+    "give",
+    "gives",
+    "had",
+    "has",
+    "have",
+    "inc",
+    "into",
+    "its",
+    "last",
+    "market",
+    "new",
+    "not",
+    "quarter",
+    "previous",
+    "said",
+    "says",
+    "sec",
+    "source",
+    "the",
+    "that",
+    "this",
+    "through",
+    "was",
+    "were",
+    "while",
+    "with",
+}
+
+_RELEVANCE_ALIASES = {
+    "revenues": "revenue",
+    "sales": "revenue",
+    "earnings": "income",
+    "processors": "processor",
+    "cpus": "cpu",
+    "shares": "share",
+    "stockpiles": "inventory",
+}
+
+
+def _claim_relevance_tokens(text: str) -> set[str]:
+    # Split CamelCase XBRL names (e.g. "RevenueFromContract..." → "Revenue From Contract...")
+    # before lowercasing, so long compound identifiers are decomposed into matchable words.
+    expanded = re.sub(r"([a-z])([A-Z])", r"\1 \2", text)
+    tokens = re.findall(r"[a-zA-Z][a-zA-Z0-9]+", expanded.lower().replace("-", " "))
+    normalized = set()
+    for token in tokens:
+        token = _RELEVANCE_ALIASES.get(token, token)
+        if token.endswith("s") and len(token) > 4:
+            token = token[:-1]
+        if len(token) <= 2 or token in _RELEVANCE_STOPWORDS:
+            continue
+        normalized.add(token)
+    return normalized
+
+
+def _required_fact_aliases_for_claim(text: str) -> set[str]:
+    lower = text.lower()
+    aliases: set[str] = set()
+    if "gross margin" in lower:
+        aliases.update({"grossprofit", "revenues", "revenuefromcontractwithcustomerexcludingassessedtax", "salesrevenuenet"})
+    if "operating margin" in lower:
+        aliases.update({"operatingincomeloss", "revenues", "revenuefromcontractwithcustomerexcludingassessedtax", "salesrevenuenet"})
+    if "net margin" in lower:
+        aliases.update({"netincomeloss", "revenues", "revenuefromcontractwithcustomerexcludingassessedtax", "salesrevenuenet"})
+    if "free cash flow" in lower or "fcf" in lower:
+        aliases.update({"netcashprovidedbyusedinoperatingactivities", "paymentstoacquirepropertyplantandequipment"})
+    if "current ratio" in lower:
+        aliases.update({"assetscurrent", "liabilitiescurrent"})
+    if "net debt" in lower:
+        aliases.update(
+            {
+                "longtermdebt",
+                "longtermdebtcurrent",
+                "shorttermborrowings",
+                "shorttermdebt",
+                "cashandcashequivalentsatcarryingvalue",
+                "cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+            }
+        )
+    return aliases
 
 
 def _evidence_key(item: Evidence) -> str:

@@ -142,6 +142,10 @@ def normalize_asset_class(value: Any, entity_type: Any = None) -> str:
         "sovereign_rate": "rates",
         "credit": "credit",
         "credit_derivative": "credit",
+        "derivative": "derivatives",
+        "derivatives": "derivatives",
+        "swap": "derivatives",
+        "options": "derivatives",
         "macro": "macro_indicator",
         "macro_indicator": "macro_indicator",
         "economic_indicator": "macro_indicator",
@@ -193,6 +197,7 @@ def _asset(
 
 BUILT_IN_ASSETS: tuple[AssetUniverseRecord, ...] = (
     _asset("equity_index", "SPX", "S&P 500 Index", "index", ("S&P 500", "SP500", "S&P500")),
+    _asset("equity_index", "NDQ", "Nasdaq Composite Index", "index", ("Nasdaq Composite", "NASDAQ Composite")),
     _asset("equity_index", "NDX", "Nasdaq 100 Index", "index", ("NASDAQ 100", "Nasdaq-100")),
     _asset("equity_index", "DJIA", "Dow Jones Industrial Average", "index", ("Dow Jones", "Dow")),
     _asset("equity_index", "RUT", "Russell 2000 Index", "index", ("Russell 2000",)),
@@ -243,6 +248,10 @@ BUILT_IN_ASSETS: tuple[AssetUniverseRecord, ...] = (
     _asset("credit", "CDX", "CDX Credit Index", "credit_derivative", ("CDX IG", "CDX HY")),
     _asset("credit", "ITRAXX", "iTraxx Credit Index", "credit_derivative", ("iTraxx",)),
     _asset("credit", "CDS", "Credit Default Swap", "credit_derivative", ("credit default swap",)),
+    _asset("fixed_income", "TRACE", "FINRA TRACE Fixed Income", "fixed_income", ("corporate bond trades", "bond trade", "TRACE")),
+    _asset("fixed_income", "USBOND", "US Corporate Bonds", "fixed_income", ("corporate bonds", "fixed income")),
+    _asset("derivatives", "COT", "CFTC Commitments of Traders", "derivatives", ("commitments of traders", "open interest")),
+    _asset("derivatives", "OTC_DERIV", "OTC Derivatives", "derivatives", ("OTC derivatives", "interest-rate derivatives", "FX derivatives")),
     _asset("crypto", "BTC", "Bitcoin", "cryptoasset", ("Bitcoin",)),
     _asset("crypto", "ETH", "Ether", "cryptoasset", ("Ethereum", "Ether")),
 )

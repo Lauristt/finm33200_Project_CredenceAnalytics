@@ -7,6 +7,13 @@ from typing import Any, Callable
 
 from .aggregation import aggregate_scores
 from .argument import classify_argument_type
+from .asset_source_map import asset_source_plan
+from .audit_agent import (
+    audit_verification_chain,
+    review_tool_surface,
+    summarize_audit_report,
+    summarize_evidence_pack,
+)
 from .audit import build_audit_trace as run_build_audit_trace
 from .claim_verification import verify_atomic_claims
 from .claims import decompose_claims
@@ -30,11 +37,14 @@ from .models import (
     to_plain,
 )
 from .modes.agentic import AgenticCredibilityRunner
+from .preprocessing import preprocess_statement
 from .price_history import format_price_history_summary, summarize_price_history
 from .routing import route_sources as run_route_sources
+from .rubrics import FACTUAL_TYPES
 from .search import SearchClient
-from .source_selection import select_sources_for_claims as run_select_sources_for_claims
+from .source_selection import selected_source_details, select_sources_for_claims as run_select_sources_for_claims
 from .sources import assess_source
+from .time_context import infer_time_context
 from .tool_registry import get_registered_tool
 from .toolkit import FinancialCredibilityToolkit
 from .verification import verify_logic_claim as run_logic_verification
@@ -43,6 +53,14 @@ from .verification import verify_sources
 
 
 ToolExecutor = Callable[[dict[str, Any], ToolkitConfig], dict[str, Any]]
+
+# Populated at runtime by tool_synthesis.py when new tools are synthesized
+_DYNAMIC_EXECUTORS: dict[str, ToolExecutor] = {}
+
+
+def register_dynamic_executor(name: str, fn: ToolExecutor) -> None:
+    """Register a synthesized tool executor so execute_tool() can dispatch to it."""
+    _DYNAMIC_EXECUTORS[name] = fn
 
 
 def execute_tool(
@@ -59,9 +77,12 @@ def execute_tool(
 
 
 def _executors() -> dict[str, ToolExecutor]:
-    return {
+    base: dict[str, ToolExecutor] = {
+        "preprocess_statement": _execute_preprocess_statement,
         "classify_claim": _execute_classify_claim,
         "extract_entities": _execute_extract_entities,
+        "map_asset_sources": _execute_map_asset_sources,
+        "load_source_documentation": _execute_load_source_documentation,
         "decompose_claims": _execute_decompose_claims,
         "resolve_entity": _execute_resolve_entity,
         "route_sources": _execute_route_sources,
@@ -72,6 +93,10 @@ def _executors() -> dict[str, ToolExecutor]:
         "get_company_fundamentals": _execute_get_company_fundamentals,
         "get_historical_prices": _execute_get_historical_prices,
         "compare_stock_performance": _execute_compare_stock_performance,
+        "get_income_statement": _execute_get_income_statement,
+        "get_balance_sheet": _execute_get_balance_sheet,
+        "get_cash_flow_statement": _execute_get_cash_flow_statement,
+        "get_earnings_history": _execute_get_earnings_history,
         "retrieve_evidence": _execute_retrieve_evidence,
         "verify_atomic_claim": _execute_verify_atomic_claim,
         "calibrate_uncertainty": _execute_calibrate_uncertainty,
@@ -81,7 +106,18 @@ def _executors() -> dict[str, ToolExecutor]:
         "verify_source_quality": _execute_verify_source_quality,
         "aggregate_credibility": _execute_aggregate_credibility,
         "build_evidence_pack": _execute_build_evidence_pack,
+        "audit_verification_chain": _execute_audit_verification_chain,
+        "summarize_evidence_pack": _execute_summarize_evidence_pack,
+        "summarize_audit_report": _execute_summarize_audit_report,
+        "review_tool_surface": _execute_review_tool_surface,
     }
+    base.update(_DYNAMIC_EXECUTORS)
+    return base
+
+
+def _execute_preprocess_statement(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    result = preprocess_statement(_required_str(args, "statement"))
+    return result.to_dict()
 
 
 def _execute_classify_claim(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
@@ -95,6 +131,29 @@ def _execute_extract_entities(args: dict[str, Any], config: ToolkitConfig) -> di
         config=config,
         max_entities=int(args.get("max_entities", 8)),
     )
+
+
+def _execute_map_asset_sources(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    entities = args.get("entities")
+    if not isinstance(entities, list):
+        entities = run_extract_entities_from_memo(_required_str(args, "claim"), config=config).get("entities", [])
+    return asset_source_plan(
+        claim=_required_str(args, "claim"),
+        entities=[item for item in entities if isinstance(item, dict)],
+        include_planned=bool(args.get("include_planned_sources", True)),
+    )
+
+
+def _execute_load_source_documentation(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    source_ids = _source_ids_from_doc_args(args, config)
+    include_planned = bool(args.get("include_planned_sources", False))
+    details = selected_source_details(source_ids, include_planned=include_planned)
+    found = {item["source_id"] for item in details}
+    return {
+        "source_ids": source_ids,
+        "details": details,
+        "missing_source_ids": [source_id for source_id in source_ids if source_id not in found],
+    }
 
 
 def _execute_decompose_claims(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
@@ -117,16 +176,30 @@ def _execute_route_sources(args: dict[str, Any], config: ToolkitConfig) -> dict[
     return run_route_sources(
         claim=_required_str(args, "claim"),
         official_only=bool(args.get("official_only", True)),
+        asset_classes=_asset_classes_from_tool_args(args),
     )
 
 
 def _execute_select_sources(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    claim = _required_str(args, "claim")
+    classification = classify_argument_type(claim)
+    if classification.argument_type not in FACTUAL_TYPES:
+        return {
+            "selections": [],
+            "skipped": True,
+            "reason": f"not_fact_checkable:{classification.argument_type.value}",
+            "classification": to_plain(classification),
+        }
     selections = run_select_sources_for_claims(
-        claims=_required_str(args, "claim"),
+        claims=claim,
         config=config,
         candidate_limit=int(args.get("candidate_limit", 6)),
         max_selected=int(args.get("max_selected", 4)),
         include_planned=bool(args.get("include_planned_sources", False)),
+        asset_classes=_asset_classes_from_tool_args(args),
+        entities=[item for item in args.get("entities", []) if isinstance(item, dict)]
+        if isinstance(args.get("entities"), list)
+        else None,
     )
     return {"selections": selections}
 
@@ -230,12 +303,58 @@ def _execute_compare_stock_performance(args: dict[str, Any], config: ToolkitConf
     }
 
 
+def _execute_get_income_statement(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    period = str(args.get("period") or "annual")
+    limit = int(args.get("limit") or 4)
+    client = FreeDataSourceClient(config)
+    results = client.get_income_statement(ticker, period=period, limit=limit)
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
+def _execute_get_balance_sheet(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    period = str(args.get("period") or "annual")
+    limit = int(args.get("limit") or 4)
+    client = FreeDataSourceClient(config)
+    results = client.get_balance_sheet(ticker, period=period, limit=limit)
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
+def _execute_get_cash_flow_statement(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    period = str(args.get("period") or "annual")
+    limit = int(args.get("limit") or 4)
+    client = FreeDataSourceClient(config)
+    results = client.get_cash_flow_statement(ticker, period=period, limit=limit)
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
+def _execute_get_earnings_history(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    ticker = _required_str(args, "ticker")
+    limit = int(args.get("limit") or 8)
+    client = FreeDataSourceClient(config)
+    results = client.get_earnings_history(ticker, limit=limit)
+    return {"results": [_search_result_to_dict(item) for item in results], "notes": []}
+
+
 def _execute_retrieve_evidence(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
     claim = _required_str(args, "claim")
     ticker = _required_str(args, "ticker")
-    as_of_date = args.get("as_of_date")
+    time_context = infer_time_context(claim, args.get("as_of_date"))
+    as_of_date = time_context.effective_as_of_date or args.get("as_of_date")
     max_sources = int(args.get("max_sources", 8))
     classification = classify_argument_type(claim)
+    if classification.argument_type not in FACTUAL_TYPES:
+        return {
+            "argument_type": classification.argument_type.value,
+            "classification": to_plain(classification),
+            "evidence": [],
+            "search_notes": [f"retrieval skipped for non-factual claim type: {classification.argument_type.value}"],
+            "extraction_notes": [],
+            "time_context": time_context.to_dict(),
+            "skipped": True,
+        }
     results, search_notes = SearchClient(config).search_financial_sources(
         claim=claim,
         ticker=ticker,
@@ -243,6 +362,8 @@ def _execute_retrieve_evidence(args: dict[str, Any], config: ToolkitConfig) -> d
         max_sources=max_sources,
         as_of_date=as_of_date,
         prefetched_results=args.get("prefetched_results"),
+        source_results=args.get("source_results"),
+        selected_sources=args.get("selected_sources"),
     )
     evidence, extraction_notes = EvidenceExtractor(config).extract(
         claim=claim,
@@ -257,10 +378,39 @@ def _execute_retrieve_evidence(args: dict[str, Any], config: ToolkitConfig) -> d
         "evidence": [_evidence_to_dict(item) for item in evidence],
         "search_notes": search_notes,
         "extraction_notes": extraction_notes,
+        "time_context": time_context.to_dict(),
     }
 
 
 def _execute_verify_atomic_claim(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    claim = _required_str(args, "claim")
+    classification = classify_argument_type(claim)
+    if classification.argument_type not in FACTUAL_TYPES:
+        return {
+            "atomic_claims": [
+                {
+                    "atomic_claim": {
+                        "claim_id": "claim_1",
+                        "text": claim,
+                        "argument_type": classification.argument_type.value,
+                        "classification_confidence": classification.confidence,
+                        "signals": classification.signals,
+                    },
+                    "verdict": "not_applicable",
+                    "evidence_urls": [],
+                    "evidence_keys": [],
+                    "canonical_fact_ids": [],
+                    "numeric_derivation": None,
+                    "confidence_components": None,
+                    "human_review_required": False,
+                    "review_reasons": [],
+                    "issues": [f"Skipped non-factual claim type: {classification.argument_type.value}"],
+                }
+            ],
+            "skipped": True,
+            "reason": f"not_fact_checkable:{classification.argument_type.value}",
+            "classification": to_plain(classification),
+        }
     ticker = _required_str(args, "ticker")
     evidence = _evidence_list_from_args(args)
     facts = _canonical_fact_list_from_args(args)
@@ -268,7 +418,7 @@ def _execute_verify_atomic_claim(args: dict[str, Any], config: ToolkitConfig) ->
     if not facts:
         facts = canonicalize_evidence(evidence, ticker, entity)
     results = verify_atomic_claims(
-        claim=_required_str(args, "claim"),
+        claim=claim,
         evidence=evidence,
         canonical_facts=facts,
         entity_resolution=entity,
@@ -361,11 +511,40 @@ def _execute_build_evidence_pack(args: dict[str, Any], config: ToolkitConfig) ->
         "max_sources": int(args.get("max_sources", 8)),
         "prefetched_results": args.get("prefetched_results"),
     }
+    if args.get("source_results") is not None:
+        kwargs["source_results"] = args.get("source_results")
     if mode == "agentic":
         pack = AgenticCredibilityRunner(toolkit).run(**kwargs)
     else:
         pack = toolkit.build_evidence_pack(**kwargs, mode="strict")
     return pack.to_dict()
+
+
+def _execute_audit_verification_chain(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    report = audit_verification_chain(
+        report_payload=args.get("report_payload"),
+        evidence_pack=args.get("evidence_pack"),
+        audit_trace=args.get("audit_trace"),
+        agent_trace=args.get("agent_trace"),
+        outcome_reference=args.get("outcome_reference"),
+        config=config,
+    )
+    return to_plain(report)
+
+
+def _execute_summarize_evidence_pack(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    return summarize_evidence_pack(
+        report_payload=args.get("report_payload"),
+        evidence_pack=args.get("evidence_pack"),
+    )
+
+
+def _execute_summarize_audit_report(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    return summarize_audit_report(args.get("audit_report") or {})
+
+
+def _execute_review_tool_surface(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    return review_tool_surface(args.get("profile"))
 
 
 def _historical_price_payload(
@@ -382,8 +561,11 @@ def _historical_price_payload(
         ("Alpha Vantage", "alpha_vantage_historical_prices", client.alpha_vantage_historical_prices),
         ("Financial Modeling Prep", "fmp_historical_prices", client.fmp_historical_prices),
         ("Finnhub", "finnhub_historical_prices", client.finnhub_historical_prices),
-        ("Stooq", "stooq_historical_prices", client.stooq_historical_prices),
     ]
+    fred_provider = getattr(client, "fred_historical_prices", None)
+    if callable(fred_provider):
+        providers.append(("FRED", "fred_historical_prices", fred_provider))
+    providers.append(("Stooq", "stooq_historical_prices", client.stooq_historical_prices))
     errors = []
     for provider_label, provider_name, provider in providers:
         try:
@@ -430,6 +612,50 @@ def _search_result_list_from_args(args: dict[str, Any]) -> list[SearchResult]:
 
 def _canonical_fact_list_from_args(args: dict[str, Any]) -> list[CanonicalFact]:
     return [_canonical_fact_from_dict(item) for item in args.get("canonical_facts", [])]
+
+
+def _asset_classes_from_tool_args(args: dict[str, Any]) -> list[str] | None:
+    values = []
+    raw_asset_classes = args.get("asset_classes")
+    if isinstance(raw_asset_classes, str):
+        values.append(raw_asset_classes)
+    elif isinstance(raw_asset_classes, list):
+        values.extend(str(item) for item in raw_asset_classes if item)
+    raw_entities = args.get("entities")
+    if isinstance(raw_entities, list):
+        values.extend(
+            str(item.get("asset_class"))
+            for item in raw_entities
+            if isinstance(item, dict) and item.get("asset_class")
+        )
+    deduped = list(dict.fromkeys(item.strip() for item in values if item and item.strip()))
+    return deduped or None
+
+
+def _source_ids_from_doc_args(args: dict[str, Any], config: ToolkitConfig) -> list[str]:
+    values = []
+    raw_source_ids = args.get("source_ids")
+    if isinstance(raw_source_ids, str):
+        values.append(raw_source_ids)
+    elif isinstance(raw_source_ids, list):
+        values.extend(str(item) for item in raw_source_ids if item)
+    if args.get("source_id"):
+        values.append(str(args["source_id"]))
+    if not values and args.get("claim"):
+        selections = run_select_sources_for_claims(
+            claims=str(args["claim"]),
+            config=config,
+            candidate_limit=int(args.get("candidate_limit", 6)),
+            max_selected=int(args.get("max_selected", 4)),
+            include_planned=bool(args.get("include_planned_sources", False)),
+            asset_classes=_asset_classes_from_tool_args(args),
+            entities=[item for item in args.get("entities", []) if isinstance(item, dict)]
+            if isinstance(args.get("entities"), list)
+            else None,
+        )
+        for selection in selections:
+            values.extend(selection.get("selected_sources") or [])
+    return list(dict.fromkeys(item.strip() for item in values if item and item.strip()))
 
 
 def _evidence_from_dict(item: dict[str, Any]) -> Evidence:

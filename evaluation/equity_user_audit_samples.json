@@ -1,0 +1,74 @@
+[
+  {
+    "id": "live_ap_indexes_2026_05_28",
+    "title": "How major US stock indexes fared Thursday 5/28/2026",
+    "source": "AP News",
+    "url": "https://apnews.com/article/69f6b6c8b2bf904c69087af415812d4c",
+    "published_at": "2026-05-28",
+    "memo": "U.S. stocks added to records Thursday. The S&P 500 added 0.6% to a new all-time high. The Dow Jones Industrial Average rose less than 0.1%, and the Nasdaq Composite climbed 0.9%. The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57."
+  },
+  {
+    "id": "live_ap_equity_movers_2026_05_28",
+    "title": "Wall Street pushes to more records as profits keep piling up for US companies",
+    "source": "AP News",
+    "url": "https://apnews.com/article/559e1f1e5269976ea21bb551e916c941",
+    "published_at": "2026-05-28",
+    "memo": "Wall Street pushed to more records Thursday as corporate profits stayed strong. Dollar Tree, Snowflake, and Hormel Foods were among the companies highlighted after earnings. The S&P 500 added 0.6%, the Dow rose less than 0.1%, and the Nasdaq climbed 0.9%."
+  },
+  {
+    "id": "live_nvda_q1_fy2027",
+    "title": "NVIDIA Announces Financial Results for First Quarter Fiscal 2027",
+    "source": "NVIDIA Investor Relations",
+    "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-First-Quarter-Fiscal-2027/default.aspx",
+    "published_at": "2026-05-20",
+    "memo": "Nvidia reported first-quarter fiscal 2027 revenue of $81.6 billion for the quarter ended April 26, 2026, up 20% sequentially and up 85% from a year earlier. GAAP diluted EPS was $2.39, and non-GAAP diluted EPS was $1.87. The company also described AI infrastructure demand as strong."
+  },
+  {
+    "id": "live_msft_q3_fy2026",
+    "title": "Microsoft Cloud and AI Strength Fuels Third Quarter Results",
+    "source": "Microsoft Investor Relations",
+    "url": "https://www.microsoft.com/en-us/investor/earnings/FY-2026-Q3/press-release-webcast",
+    "published_at": "2026-04-29",
+    "memo": "Microsoft reported fiscal third-quarter revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. The release also said Microsoft Cloud revenue was $55.9 billion."
+  },
+  {
+    "id": "live_amzn_q1_2026",
+    "title": "Amazon.com Announces First Quarter Results",
+    "source": "Amazon Investor Relations",
+    "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+    "published_at": "2026-04-29",
+    "memo": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter."
+  },
+  {
+    "id": "live_googl_q1_2026",
+    "title": "Alphabet Q1 2026 earnings release",
+    "source": "Alphabet Investor Relations",
+    "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2026/q1/2026q1-alphabet-earnings-release.pdf",
+    "published_at": "2026-04-29",
+    "memo": "Alphabet reported first-quarter 2026 total revenue of $109.896 billion, compared with $90.234 billion a year earlier. Google Cloud revenue rose 63% to about $20.0 billion. Total operating income was $39.696 billion."
+  },
+  {
+    "id": "live_jpm_q1_2026",
+    "title": "JPMorgan Chase 1Q26 earnings press release",
+    "source": "JPMorgan Chase Investor Relations",
+    "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+    "published_at": "2026-04-14",
+    "memo": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion."
+  },
+  {
+    "id": "live_aapl_q2_2026_secondary",
+    "title": "Apple earnings narrowly top expectations",
+    "source": "Axios",
+    "url": "https://www.axios.com/2026/04/30/apple-earnings-q2-2026",
+    "published_at": "2026-04-30",
+    "memo": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem."
+  },
+  {
+    "id": "live_tsla_q1_2026_secondary",
+    "title": "Tesla Q1 2026 Earnings: Revenue Up 16%, EPS Up 52%",
+    "source": "TIKR",
+    "url": "https://www.tikr.com/blog/tesla-q1-2026-earnings-revenue-up-16-eps-up-52-but-free-cash-flow-turns-negative",
+    "published_at": "2026-04-23",
+    "memo": "Tesla reported about $22.4 billion in first-quarter 2026 revenue, up about 16% year over year. Adjusted EPS was reported at $0.41. The article also said free cash flow turned negative."
+  }
+]

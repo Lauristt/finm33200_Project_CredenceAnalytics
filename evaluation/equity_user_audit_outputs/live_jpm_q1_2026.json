@@ -1,0 +1,2320 @@
+{
+  "input": {
+    "memo": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+    "original_memo": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 204,
+      "cleaned_length": 204,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion."
+    },
+    "tickers": [
+      "JPM"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "JPMorgan Chase & Co.",
+          "ticker": "JPM",
+          "symbol": "JPM",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0000019617",
+          "exchange": "NYSE"
+        }
+      ],
+      "tickers": [
+        "JPM"
+      ],
+      "asset_classes": [
+        "single_name_equity"
+      ],
+      "asset_groups": {
+        "single_name_equity": [
+          {
+            "name": "JPMorgan Chase & Co.",
+            "ticker": "JPM",
+            "symbol": "JPM",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0000019617",
+            "exchange": "NYSE"
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [],
+      "notes": [
+        "ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json"
+      ]
+    },
+    "as_of_date": "2026-04-14",
+    "requested_as_of_date": "2026-04-14",
+    "time_context": {
+      "effective_as_of_date": "2026-04-14",
+      "user_as_of_date": "2026-04-14",
+      "event_date": null,
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": []
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 1,
+    "detected_entity_count": 1,
+    "asset_class_count": 1,
+    "asset_classes": [
+      "single_name_equity"
+    ],
+    "non_equity_entity_count": 0,
+    "error_count": 0,
+    "atomic_claim_count": 4,
+    "skipped_claim_count": 0,
+    "total_claim_count": 4,
+    "human_review_count": 0,
+    "average_confidence": 0.753,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+      "ticker": "JPM",
+      "as_of_date": "2026-04-14",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.95,
+      "verdict": "supported",
+      "credibility_label": "high",
+      "credibility_score": 0.799,
+      "score_breakdown": {
+        "source_authority": 0.86,
+        "recency": 0.98,
+        "evidence_support": 0.544,
+        "numeric_consistency": 0.95,
+        "independence": 0.85,
+        "reasoning_quality": 0.55,
+        "penalties": 0.0,
+        "final_score": 0.799,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "verified",
+        "confidence": 0.9,
+        "summary": "All material numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf"
+        ],
+        "issues": [
+          "matched $16.5 billion with $16.5 billion",
+          "matched $5.94 with $5.94",
+          "matched $49.8 billion with $49.8 billion",
+          "matched $50.5 billion with $50.5 billion",
+          "matched $11.6 billion with $11.6 billion"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "supported",
+        "confidence": 0.753,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "verified",
+        "confidence": 0.887,
+        "summary": "Sources are strong enough for a useful credibility assessment.",
+        "evidence_urls": [
+          "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+        ],
+        "issues": [],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "High",
+        "final_confidence": 0.845,
+        "numeric_confidence": 0.9,
+        "logic_confidence": 0.753,
+        "source_confidence": 0.887,
+        "summary": "Overall confidence is High. Numeric check: verified; logic check: supported; source check: verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "numeric change",
+              "reported period"
+            ],
+            "context_window": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "context_window_source": "claim"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf"
+          ],
+          "evidence_keys": [
+            "T2:jpmorganchase.com:2026-04-14"
+          ],
+          "canonical_fact_ids": [
+            "fact_8eac7badaad4"
+          ],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$16.5 billion -> $16.5 billion; $5.94 -> $5.94",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.86,
+            "entity_match": 0.9,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.82,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.5,
+            "final_confidence": 0.813
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "matched $16.5 billion with $16.5 billion",
+            "matched $5.94 with $5.94"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_2",
+            "text": "Reported revenue was $49.8 billion",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "financial metric",
+              "numeric change"
+            ],
+            "context_window": "Reported revenue was $49.8 billion and managed revenue was $50.5 billion Reported revenue was $49.8 billion",
+            "context_window_source": "sentence_context"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf"
+          ],
+          "evidence_keys": [
+            "T2:jpmorganchase.com:2026-04-14"
+          ],
+          "canonical_fact_ids": [],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$49.8 billion -> $49.8 billion",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.86,
+            "entity_match": 0.9,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.62,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.733
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "matched $49.8 billion with $49.8 billion"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_3",
+            "text": "managed revenue was $50.5 billion",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "financial metric",
+              "numeric change"
+            ],
+            "context_window": "Reported revenue was $49.8 billion and managed revenue was $50.5 billion managed revenue was $50.5 billion",
+            "context_window_source": "sentence_context"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf"
+          ],
+          "evidence_keys": [
+            "T2:jpmorganchase.com:2026-04-14"
+          ],
+          "canonical_fact_ids": [],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$50.5 billion -> $50.5 billion",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.86,
+            "entity_match": 0.9,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.62,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.733
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "matched $50.5 billion with $50.5 billion"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_4",
+            "text": "Markets revenue reached $11.6 billion",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "financial metric",
+              "numeric change"
+            ],
+            "context_window": "Markets revenue reached $11.6 billion",
+            "context_window_source": "claim"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf"
+          ],
+          "evidence_keys": [
+            "T2:jpmorganchase.com:2026-04-14"
+          ],
+          "canonical_fact_ids": [],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$11.6 billion -> $11.6 billion",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.86,
+            "entity_match": 0.9,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.62,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.733
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "matched $11.6 billion with $11.6 billion"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_8eac7badaad4",
+          "source_type": "company_ir",
+          "authority_tier": "T2",
+          "license_tag": "unknown",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-04-14",
+          "observation_date": "2026-04-14",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "JPMorgan Chase 1Q26 earnings press release",
+          "value": "2026",
+          "provenance_locator": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "audit_sample_source"
+          }
+        },
+        {
+          "fact_id": "fact_3824d8bbaee7",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2025-09-30",
+          "filing_date": "2026-04-06",
+          "observation_date": "2025-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 14393000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_8154ccca4123",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2025-06-30",
+          "filing_date": "2026-04-06",
+          "observation_date": "2025-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 14987000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_420679c33acd",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2025-03-31",
+          "filing_date": "2026-04-06",
+          "observation_date": "2025-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 14643000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_1d9f6919eaa6",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2024-09-30",
+          "filing_date": "2026-04-06",
+          "observation_date": "2024-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 12898000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f3f0c3674ec7",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2024-06-30",
+          "filing_date": "2026-04-06",
+          "observation_date": "2024-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 18149000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_cf6276aace90",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000019617",
+          "ticker": "JPM",
+          "cik": "0000019617",
+          "lei": null,
+          "report_period": "2024-03-31",
+          "filing_date": "2026-04-06",
+          "observation_date": "2024-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 13419000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "JPM",
+        "entity_id": "CIK0000019617",
+        "cik": "0000019617",
+        "lei": null,
+        "figi": null,
+        "confidence": 0.85,
+        "sources": [
+          "SEC",
+          "evidence_entity_match"
+        ],
+        "issues": []
+      },
+      "audit_trace": {
+        "trace_id": "trace_4090c843368e",
+        "created_at": "2026-05-29T03:38:55+00:00",
+        "replayable_inputs": {
+          "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+          "ticker": "JPM",
+          "as_of_date": "2026-04-14",
+          "search_result_urls": [
+            "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 2 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+                "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 2 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "data.sec.gov",
+                "jpmorganchase.com"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "ok",
+            "summary": "Resolved entity as CIK0000019617.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "confidence": 0.85,
+              "issues": []
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 7 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_8eac7badaad4",
+                "fact_3824d8bbaee7",
+                "fact_8154ccca4123",
+                "fact_420679c33acd",
+                "fact_1d9f6919eaa6",
+                "fact_f3f0c3674ec7",
+                "fact_cf6276aace90"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "ok",
+            "summary": "Verified 4 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "supported",
+                "claim_2": "supported",
+                "claim_3": "supported",
+                "claim_4": "supported"
+              },
+              "review_reasons": {}
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: used caller-provided source seed",
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: used caller-provided source seed",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_3: used caller-provided source seed",
+          "claim_3: sec_company_facts: 1 result(s)",
+          "claim_4: used caller-provided source seed",
+          "claim_4: sec_company_facts: 1 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+          "title": "JPMorgan Chase 1Q26 earnings press release",
+          "text": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+          "source_type": "company_ir",
+          "source_tier": "T2",
+          "domain": "jpmorganchase.com",
+          "published_at": "2026-04-14",
+          "license_tag": "unknown",
+          "is_official_primary": true,
+          "source_authority": 0.86,
+          "recency_score": 0.98,
+          "relevance_score": 1.0,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.95,
+          "support_label": "supports",
+          "support_score": 1.0,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "company investor-relations or official press page pattern",
+            "0 days old",
+            "matched numeric values: 2026, $16.5 billion, $5.94, $49.8 billion, $50.5 billion, $11.6 billion",
+            "token overlap=1.00",
+            "reasoning quality is secondary for factual claim type",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "title": "SEC Company Facts for JPM",
+          "text": "NetIncomeLoss (USD) for fiscal year ending 2025-12-31: 57000000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2025-09-30: 14393000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-30: 14987000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-31: 14643000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-12-31: 58500000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2024-09-30: 12898000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-30: 18149000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-31: 13419000000 (form 10-Q)",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "data.sec.gov",
+          "published_at": "2026-04-06",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.978,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.25,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "SEC filing/regulatory source",
+            "8 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type"
+          ]
+        }
+      ],
+      "risk_flags": [],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "financial metric",
+          "numeric change",
+          "reported period"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: used caller-provided source seed",
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: used caller-provided source seed",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_3: used caller-provided source seed",
+          "claim_3: sec_company_facts: 1 result(s)",
+          "claim_4: used caller-provided source seed",
+          "claim_4: sec_company_facts: 1 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-04-14",
+          "user_as_of_date": "2026-04-14",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "context_window": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-14",
+            "time_context": {
+              "effective_as_of_date": "2026-04-14",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Reported revenue was $49.8 billion",
+            "context_window": "Reported revenue was $49.8 billion and managed revenue was $50.5 billion Reported revenue was $49.8 billion",
+            "context_window_source": "sentence_context",
+            "as_of_date": "2026-04-14",
+            "time_context": {
+              "effective_as_of_date": "2026-04-14",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "managed revenue was $50.5 billion",
+            "context_window": "Reported revenue was $49.8 billion and managed revenue was $50.5 billion managed revenue was $50.5 billion",
+            "context_window_source": "sentence_context",
+            "as_of_date": "2026-04-14",
+            "time_context": {
+              "effective_as_of_date": "2026-04-14",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue reached $11.6 billion",
+            "context_window": "Markets revenue reached $11.6 billion",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-14",
+            "time_context": {
+              "effective_as_of_date": "2026-04-14",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "context_window": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-14",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [
+              "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Reported revenue was $49.8 billion",
+            "context_window": "Reported revenue was $49.8 billion and managed revenue was $50.5 billion Reported revenue was $49.8 billion",
+            "context_window_source": "sentence_context",
+            "as_of_date": "2026-04-14",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "managed revenue was $50.5 billion",
+            "context_window": "Reported revenue was $49.8 billion and managed revenue was $50.5 billion managed revenue was $50.5 billion",
+            "context_window_source": "sentence_context",
+            "as_of_date": "2026-04-14",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue reached $11.6 billion",
+            "context_window": "Markets revenue reached $11.6 billion",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-14",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "context_window": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "context_window_source": "claim",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [
+              "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Reported revenue was $49.8 billion",
+            "context_window": "Reported revenue was $49.8 billion and managed revenue was $50.5 billion Reported revenue was $49.8 billion",
+            "context_window_source": "sentence_context",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "managed revenue was $50.5 billion",
+            "context_window": "Reported revenue was $49.8 billion and managed revenue was $50.5 billion managed revenue was $50.5 billion",
+            "context_window_source": "sentence_context",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue reached $11.6 billion",
+            "context_window": "Markets revenue reached $11.6 billion",
+            "context_window_source": "claim",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          }
+        ],
+        "retrieval_budget": 32,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Reported revenue was $49.8 billion",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "managed revenue was $50.5 billion",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue reached $11.6 billion",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "sec_company_facts",
+          "sec_recent_filings"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Reported revenue was $49.8 billion",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "managed revenue was $50.5 billion",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Markets revenue reached $11.6 billion",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 204,
+          "cleaned_length": 204,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion."
+        },
+        "original_claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+        "agentic_search_plan": [
+          "JPM \"JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.\" SEC 10-Q 10-K",
+          "JPM earnings release revenue EPS investor relations",
+          "JPM company facts SEC revenue earnings",
+          "JPM JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion. correction restatement contradiction",
+          "JPM JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion. SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "JPMorgan Chase 1Q26 earnings press release",
+          "domain": "jpmorganchase.com",
+          "source_tier": "T2",
+          "is_official_primary": true,
+          "license_tag": "unknown",
+          "published_at": "2026-04-14",
+          "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+          "used_by_claims": [
+            "claim_1",
+            "claim_2",
+            "claim_3",
+            "claim_4"
+          ]
+        },
+        {
+          "title": "SEC Company Facts for JPM",
+          "domain": "data.sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-06",
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+          "used_by_claims": []
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+          "verdict": "supported",
+          "confidence": 0.813,
+          "summary": "The claim is marked `supported` based on JPMorgan Chase 1Q26 earnings press release with confidence 0.81.",
+          "numeric_summary": "The evidence directly matches $16.5 billion and $5.94 from the claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T2.",
+          "main_evidence": {
+            "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+            "title": "JPMorgan Chase 1Q26 earnings press release",
+            "text": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+            "source_type": "company_ir",
+            "source_tier": "T2",
+            "domain": "jpmorganchase.com",
+            "published_at": "2026-04-14",
+            "license_tag": "unknown",
+            "is_official_primary": true,
+            "source_authority": 0.86,
+            "recency_score": 0.98,
+            "relevance_score": 1.0,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.95,
+            "support_label": "supports",
+            "support_score": 1.0,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "company investor-relations or official press page pattern",
+              "0 days old",
+              "matched numeric values: 2026, $16.5 billion, $5.94, $49.8 billion, $50.5 billion, $11.6 billion",
+              "token overlap=1.00",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "matched $16.5 billion with $16.5 billion",
+            "matched $5.94 with $5.94"
+          ]
+        },
+        {
+          "claim_id": "claim_2",
+          "claim": "Reported revenue was $49.8 billion",
+          "verdict": "supported",
+          "confidence": 0.733,
+          "summary": "The claim is marked `supported` based on JPMorgan Chase 1Q26 earnings press release with confidence 0.73.",
+          "numeric_summary": "The evidence directly matches $49.8 billion from the claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T2.",
+          "main_evidence": {
+            "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+            "title": "JPMorgan Chase 1Q26 earnings press release",
+            "text": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+            "source_type": "company_ir",
+            "source_tier": "T2",
+            "domain": "jpmorganchase.com",
+            "published_at": "2026-04-14",
+            "license_tag": "unknown",
+            "is_official_primary": true,
+            "source_authority": 0.86,
+            "recency_score": 0.98,
+            "relevance_score": 1.0,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.95,
+            "support_label": "supports",
+            "support_score": 1.0,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "company investor-relations or official press page pattern",
+              "0 days old",
+              "matched numeric values: 2026, $16.5 billion, $5.94, $49.8 billion, $50.5 billion, $11.6 billion",
+              "token overlap=1.00",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "matched $49.8 billion with $49.8 billion"
+          ]
+        },
+        {
+          "claim_id": "claim_3",
+          "claim": "managed revenue was $50.5 billion",
+          "verdict": "supported",
+          "confidence": 0.733,
+          "summary": "The claim is marked `supported` based on JPMorgan Chase 1Q26 earnings press release with confidence 0.73.",
+          "numeric_summary": "The evidence directly matches $50.5 billion from the claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T2.",
+          "main_evidence": {
+            "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+            "title": "JPMorgan Chase 1Q26 earnings press release",
+            "text": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+            "source_type": "company_ir",
+            "source_tier": "T2",
+            "domain": "jpmorganchase.com",
+            "published_at": "2026-04-14",
+            "license_tag": "unknown",
+            "is_official_primary": true,
+            "source_authority": 0.86,
+            "recency_score": 0.98,
+            "relevance_score": 1.0,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.95,
+            "support_label": "supports",
+            "support_score": 1.0,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "company investor-relations or official press page pattern",
+              "0 days old",
+              "matched numeric values: 2026, $16.5 billion, $5.94, $49.8 billion, $50.5 billion, $11.6 billion",
+              "token overlap=1.00",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "matched $50.5 billion with $50.5 billion"
+          ]
+        },
+        {
+          "claim_id": "claim_4",
+          "claim": "Markets revenue reached $11.6 billion",
+          "verdict": "supported",
+          "confidence": 0.733,
+          "summary": "The claim is marked `supported` based on JPMorgan Chase 1Q26 earnings press release with confidence 0.73.",
+          "numeric_summary": "The evidence directly matches $11.6 billion from the claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T2.",
+          "main_evidence": {
+            "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+            "title": "JPMorgan Chase 1Q26 earnings press release",
+            "text": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+            "source_type": "company_ir",
+            "source_tier": "T2",
+            "domain": "jpmorganchase.com",
+            "published_at": "2026-04-14",
+            "license_tag": "unknown",
+            "is_official_primary": true,
+            "source_authority": 0.86,
+            "recency_score": 0.98,
+            "relevance_score": 1.0,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.95,
+            "support_label": "supports",
+            "support_score": 1.0,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "company investor-relations or official press page pattern",
+              "0 days old",
+              "matched numeric values: 2026, $16.5 billion, $5.94, $49.8 billion, $50.5 billion, $11.6 billion",
+              "token overlap=1.00",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "matched $11.6 billion with $11.6 billion"
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_2",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_3",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_4",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_4090c843368e",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "JPMorgan Chase & Co. (JPM)",
+        "name": "JPMorgan Chase & Co.",
+        "ticker": "JPM",
+        "symbol": "JPM",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "JPMorgan Chase & Co. (JPM)",
+        "name": "JPMorgan Chase & Co.",
+        "ticker": "JPM",
+        "symbol": "JPM",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 4 fact-checkable claims across 1 entity. No claim was flagged for mandatory human review.\n\n## JPM\n\n- **Consistent.** JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Evidence: T2 JPMorgan Chase 1Q26 earnings press release (jpmorganchase.com). Reason: The evidence directly matches $16.5 billion and $5.94 from the claim.\n- **Consistent.** Reported revenue was $49.8 billion. Evidence: T2 JPMorgan Chase 1Q26 earnings press release (jpmorganchase.com). Reason: The evidence directly matches $49.8 billion from the claim.\n- **Consistent.** managed revenue was $50.5 billion. Evidence: T2 JPMorgan Chase 1Q26 earnings press release (jpmorganchase.com). Reason: The evidence directly matches $50.5 billion from the claim.\n- **Consistent.** Markets revenue reached $11.6 billion. Evidence: T2 JPMorgan Chase 1Q26 earnings press release (jpmorganchase.com). Reason: The evidence directly matches $11.6 billion from the claim.\n",
+  "agent_trace": {
+    "run_id": "agent_f6c3ba91d59e",
+    "created_at": "2026-05-29T03:38:48+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_6a570b08",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 33,
+        "output_preview": "{\"asset_classes\": [\"single_name_equity\"], \"asset_groups\": {\"single_name_equity\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0000019617\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"NYSE\", \"name\": \"JPMorgan Chase & Co.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"JPM\", \"ticker\": \"JPM\"}]}, \"entities\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0000019617\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"NYSE\", \"name\": \"JPMorgan Chase & Co.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"JPM\", \"ticker\": \"JPM\"}], \"method\": \"heuristic\", \"non_equity_entities\": [], \"notes\": [\"ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json\"], \"tickers\": [\"JPM\"], \"u",
+        "output_hash": "dc074d65dc6989a0fbb2a05e61eb8ed30863d57daae932cd3abc055f2dfed7f8"
+      },
+      {
+        "call_id": "fallback_1_805b5343",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"context_window\": \"JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share\", \"context_window_source\": \"claim\", \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.87, \"context_window\": \"Reported revenue was $49.8 billion and managed revenue was $50.5 billion Reported revenue was $49.8 billion\", \"context_window_source\": \"sentence_context\", \"signals\": [\"financial metric\", \"numeric change\"], \"text\": \"Reported revenue was $49.8 billion\"}, {\"argument_type",
+        "output_hash": "29360dd1e89be2f19caeeca68d99f3872d725ccb6295d25bb3c683efaa96cbd0"
+      },
+      {
+        "call_id": "fallback_2_7818a4a4",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 9,
+        "output_preview": "{\"selections\": [{\"candidates\": [{\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.\", \"candidate_score\": 4.85, \"detail_available\": true, \"detected_asset_classes\": [\"single_name_equity\"], \"is_official_primary\": true, \"is_runtime_selectable\": true, \"license_tag\": \"public_official\", \"name\": \"SEC Company Facts\", \"required_inputs\": [\"ticker_or_cik\", \"metric_hint\"], \"source_id\": \"sec_company_facts\"}, {\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.\", \"candidate_score\": 2.5, \"detail_available\": true, \"detected_asset_classes\": [\"single_na",
+        "output_hash": "b5422bb1a2c196d857edc4d4b8af5c12da0a835f947413c2221e026b11688049"
+      },
+      {
+        "call_id": "fallback_3_08c3f172",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+          "ticker": "JPM",
+          "as_of_date": "2026-04-14",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "prefetched_results": null,
+          "source_results": [
+            {
+              "title": "JPMorgan Chase 1Q26 earnings press release",
+              "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+              "snippet": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+              "published_at": "2026-04-14",
+              "source": "JPMorgan Chase Investor Relations",
+              "raw": {
+                "provider": "audit_sample_source",
+                "seed_source": true
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1170,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.95, \"needs_decomposition\": true, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"]}, \"evidence\": [{\"domain\": \"jpmorganchase.com\", \"entity_match_score\": 0.9, \"independence_score\": 0.0, \"is_official_primary\": true, \"license_tag\": \"unknown\", \"notes\": [\"company investor-relations or official press page pattern\", \"0 days old\", \"matched numeric values: 2026, $16.5 billion, $5.94\"], \"numeric_consistency_score\": 0.95, \"published_at\": \"2026-04-14\", \"reasoning_quality_score\": 0.0, \"recency_score\": 0.98, \"relevance_score\": 1.0, \"source_authority\": 0.86, \"source_tier\": \"T2\", \"source_type\": \"company_ir\", \"support_label\": \"not_enough_info\", \"support_score\": 0.0, \"text\": \"JPMorgan Chase ",
+        "output_hash": "658dcdbf9e130ba4e9f10c1b2a7b55399120547649a6f5e5df919660ec5eb90a"
+      },
+      {
+        "call_id": "fallback_4_3ae08fed",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "JPM",
+          "evidence": [
+            {
+              "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+              "title": "JPMorgan Chase 1Q26 earnings press release",
+              "text": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+              "source_type": "company_ir",
+              "source_tier": "T2",
+              "domain": "jpmorganchase.com",
+              "published_at": "2026-04-14",
+              "license_tag": "unknown",
+              "is_official_primary": true,
+              "source_authority": 0.86,
+              "recency_score": 0.98,
+              "relevance_score": 1.0,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.95,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "company investor-relations or official press page pattern",
+                "0 days old",
+                "matched numeric values: 2026, $16.5 billion, $5.94"
+              ]
+            },
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "title": "SEC Company Facts for JPM",
+              "text": "NetIncomeLoss (USD) for fiscal year ending 2025-12-31: 57000000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2025-09-30: 14393000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-30: 14987000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-31: 14643000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-12-31: 58500000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2024-09-30: 12898000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-30: 18149000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-31: 13419000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-06",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.978,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "8 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"canonical_facts\": [{\"authority_tier\": \"T2\", \"cik\": \"0000019617\", \"currency\": null, \"entity_id\": \"CIK0000019617\", \"fact_id\": \"fact_2e59294c9e0a\", \"fact_name\": \"JPMorgan Chase 1Q26 earnings press release\", \"filing_date\": \"2026-04-14\", \"lei\": null, \"license_tag\": \"unknown\", \"observation_date\": \"2026-04-14\", \"parser_confidence\": 0.55, \"provenance_locator\": \"https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf\", \"raw\": {\"domain\": \"jpmorganchase.com\"}, \"report_period\": null, \"source_type\": \"company_ir\", \"ticker\": \"JPM\", \"unit\": null, \"value\": \"2026\", \"vintage_date\": null}, {\"authority_tier\": \"T1\", \"cik\": \"0000019617\", \"currency\": \"USD\", \"entity_id\": \"CIK0000019617\", \"fact_i",
+        "output_hash": "99b8ae26ebda1926a030deb3d26b5d510af46222b518ceb1b5b3cc93a48ef74e"
+      },
+      {
+        "call_id": "fallback_5_f5832b4d",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+          "ticker": "JPM",
+          "evidence": [
+            {
+              "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+              "title": "JPMorgan Chase 1Q26 earnings press release",
+              "text": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+              "source_type": "company_ir",
+              "source_tier": "T2",
+              "domain": "jpmorganchase.com",
+              "published_at": "2026-04-14",
+              "license_tag": "unknown",
+              "is_official_primary": true,
+              "source_authority": 0.86,
+              "recency_score": 0.98,
+              "relevance_score": 1.0,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.95,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "company investor-relations or official press page pattern",
+                "0 days old",
+                "matched numeric values: 2026, $16.5 billion, $5.94"
+              ]
+            },
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "title": "SEC Company Facts for JPM",
+              "text": "NetIncomeLoss (USD) for fiscal year ending 2025-12-31: 57000000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2025-09-30: 14393000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-30: 14987000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-31: 14643000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-12-31: 58500000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2024-09-30: 12898000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-30: 18149000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-31: 13419000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-06",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.978,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "8 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_2e59294c9e0a",
+              "source_type": "company_ir",
+              "authority_tier": "T2",
+              "license_tag": "unknown",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-14",
+              "observation_date": "2026-04-14",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "JPMorgan Chase 1Q26 earnings press release",
+              "value": "2026",
+              "provenance_locator": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "jpmorganchase.com"
+              }
+            },
+            {
+              "fact_id": "fact_3824d8bbaee7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14393000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_8154ccca4123",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14987000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_420679c33acd",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14643000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1d9f6919eaa6",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 12898000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f3f0c3674ec7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 18149000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_cf6276aace90",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-03-31",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 13419000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 4,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"context_window\": \"JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share\", \"context_window_source\": \"claim\", \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share\"}, \"canonical_fact_ids\": [\"fact_2e59294c9e0a\"], \"confidence_components\": {\"cross_source_consistency\": 0.55, \"entity_match\": 0.9, \"final_confidence\": 0.818, \"numeric_exactness\": 0.9, \"parser_confidence\": 0.55, \"retrieval_sufficiency\": 0.82, \"source_authority\": 0.86, \"time_alignment\": 0.98}, \"evidence_keys\": [\"T2:jpmorganchase.com:2026-04-14\"], \"evidence_ur",
+        "output_hash": "e5d0716bbdb0a6bf91f82c93c64fb42a434396b74abe52c9c0115338e3e0fdb8"
+      },
+      {
+        "call_id": "fallback_6_aabae16a",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share",
+          "ticker": "JPM",
+          "as_of_date": "2026-04-14",
+          "evidence": [
+            {
+              "url": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+              "title": "JPMorgan Chase 1Q26 earnings press release",
+              "text": "JPMorgan Chase reported first-quarter 2026 net income of $16.5 billion, or $5.94 per share. Reported revenue was $49.8 billion and managed revenue was $50.5 billion. Markets revenue reached $11.6 billion.",
+              "source_type": "company_ir",
+              "source_tier": "T2",
+              "domain": "jpmorganchase.com",
+              "published_at": "2026-04-14",
+              "license_tag": "unknown",
+              "is_official_primary": true,
+              "source_authority": 0.86,
+              "recency_score": 0.98,
+              "relevance_score": 1.0,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.95,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "company investor-relations or official press page pattern",
+                "0 days old",
+                "matched numeric values: 2026, $16.5 billion, $5.94"
+              ]
+            },
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "title": "SEC Company Facts for JPM",
+              "text": "NetIncomeLoss (USD) for fiscal year ending 2025-12-31: 57000000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2025-09-30: 14393000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-30: 14987000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-31: 14643000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-12-31: 58500000000 (form DEF 14A); NetIncomeLoss (USD) for fiscal quarter ending 2024-09-30: 12898000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-30: 18149000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-31: 13419000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-06",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.978,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "8 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_2e59294c9e0a",
+              "source_type": "company_ir",
+              "authority_tier": "T2",
+              "license_tag": "unknown",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-14",
+              "observation_date": "2026-04-14",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "JPMorgan Chase 1Q26 earnings press release",
+              "value": "2026",
+              "provenance_locator": "https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/1st-quarter/a5fd2d13-877b-43b2-8b58-81bad4399c87.pdf",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "jpmorganchase.com"
+              }
+            },
+            {
+              "fact_id": "fact_3824d8bbaee7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14393000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_8154ccca4123",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14987000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_420679c33acd",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-06",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 14643000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1d9f6919eaa6",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 12898000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f3f0c3674ec7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 18149000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_cf6276aace90",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000019617",
+              "ticker": "JPM",
+              "cik": "0000019617",
+              "lei": null,
+              "report_period": "2024-03-31",
+              "filing_date": "2026-04-06",
+              "observation_date": "2024-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NetIncomeLoss",
+              "value": 13419000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"created_at\": \"2026-05-29T03:38:49+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": [\"data.sec.gov\", \"jpmorganchase.com\"]}, \"status\": \"ok\", \"step\": \"extract_evidence\", \"summary\": \"Built 2 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": \"0000019617\", \"confidence\": 0.85, \"issues\": [], \"lei\": null, \"ticker\": \"JPM\"}, \"status\": \"ok\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as CIK0000019617.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": [\"fact_2e59294c9e0a\", \"fact_3824d8bbaee7\", \"fact_8154ccca4123\", \"fact_420679c33acd\", \"fact_1d9f6919eaa6\", \"fact_f3f0c3674ec7\", \"fact_cf6276aace90\"]}, \"status\": \"ok\", \"step\": \"canonicalize_facts\", \"su",
+        "output_hash": "f7e245fa7aeb1afc07414a2bbcf36b5154bca0c26cf974bb65d7ad873bcc18c6"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_f6c3ba91d59e",
+    "created_at": "2026-05-29T03:38:55+00:00",
+    "verdict": "pass",
+    "score": 1.0,
+    "summary": "Audit pass: no findings; score 1.00.",
+    "findings": []
+  }
+}

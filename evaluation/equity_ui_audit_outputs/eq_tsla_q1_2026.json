@@ -1,0 +1,3470 @@
+{
+  "input": {
+    "memo": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results.",
+    "original_memo": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 245,
+      "cleaned_length": 245,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results."
+    },
+    "tickers": [
+      "TSLA"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "Tesla, Inc.",
+          "ticker": "TSLA",
+          "symbol": "TSLA",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0001318605",
+          "exchange": "Nasdaq"
+        }
+      ],
+      "tickers": [
+        "TSLA"
+      ],
+      "asset_classes": [
+        "single_name_equity"
+      ],
+      "asset_groups": {
+        "single_name_equity": [
+          {
+            "name": "Tesla, Inc.",
+            "ticker": "TSLA",
+            "symbol": "TSLA",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0001318605",
+            "exchange": "Nasdaq"
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [],
+      "notes": [
+        "ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json"
+      ]
+    },
+    "as_of_date": "2026-04-23",
+    "requested_as_of_date": "2026-04-23",
+    "time_context": {
+      "effective_as_of_date": "2026-04-23",
+      "user_as_of_date": "2026-04-23",
+      "event_date": null,
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": []
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 1,
+    "detected_entity_count": 1,
+    "asset_class_count": 1,
+    "asset_classes": [
+      "single_name_equity"
+    ],
+    "non_equity_entity_count": 0,
+    "error_count": 0,
+    "atomic_claim_count": 3,
+    "skipped_claim_count": 1,
+    "total_claim_count": 4,
+    "human_review_count": 2,
+    "average_confidence": 0.526,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results.",
+      "ticker": "TSLA",
+      "as_of_date": "2026-04-23",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.95,
+      "verdict": "supported",
+      "credibility_label": "medium",
+      "credibility_score": 0.574,
+      "score_breakdown": {
+        "source_authority": 0.867,
+        "recency": 0.711,
+        "evidence_support": 0.115,
+        "numeric_consistency": 0.615,
+        "independence": 0.764,
+        "reasoning_quality": 0.55,
+        "penalties": 0.0,
+        "final_score": 0.574,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "partially_verified",
+        "confidence": 0.72,
+        "summary": "Some core numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "https://public.com/stocks/tsla/earnings"
+        ],
+        "issues": [
+          "matched $22.4 billion with 22387000000",
+          "matched $0.41 with $0.41",
+          "unmatched claim numbers: 16%"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "partially_supported",
+        "confidence": 0.504,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://public.com/stocks/tsla/earnings",
+          "https://ir.tesla.com/press",
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "verified",
+        "confidence": 0.802,
+        "summary": "Sources are strong enough for a useful credibility assessment.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+          "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+          "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+          "https://ir.tesla.com/"
+        ],
+        "issues": [],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Medium",
+        "final_confidence": 0.669,
+        "numeric_confidence": 0.72,
+        "logic_confidence": 0.504,
+        "source_confidence": 0.802,
+        "summary": "Overall confidence is Medium. Numeric check: partially_verified; logic check: partially_supported; source check: verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "numeric change",
+              "reported period"
+            ]
+          },
+          "verdict": "partially_supported",
+          "evidence_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+            "https://ir.tesla.com/press",
+            "https://public.com/stocks/tsla/earnings",
+            "https://www.nasdaq.com/market-activity/stocks/tsla/earnings",
+            "https://ir.tesla.com/"
+          ],
+          "evidence_keys": [
+            "T1:data.sec.gov:2026-04-23",
+            "T2:ir.tesla.com:undated",
+            "T4:public.com:undated",
+            "T2:nasdaq.com:undated",
+            "T2:ir.tesla.com:undated"
+          ],
+          "canonical_fact_ids": [
+            "fact_950e3381393d",
+            "fact_a61ba3b42b9c",
+            "fact_08b2f78f6177",
+            "fact_8735a497feb3",
+            "fact_da286f528602",
+            "fact_6db96ad41a5b",
+            "fact_2c306f21a3c6",
+            "fact_9b4123bee89a"
+          ],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$22.4 billion -> 22387000000",
+              "unmatched_values": "16%"
+            },
+            "result": false,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": false,
+            "tolerance": null,
+            "notes": [
+              "Some core numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.788,
+            "entity_match": 0.9,
+            "time_alignment": 0.556,
+            "numeric_exactness": 0.68,
+            "retrieval_sufficiency": 0.82,
+            "cross_source_consistency": 0.78,
+            "parser_confidence": 0.88,
+            "final_confidence": 0.773
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "matched $22.4 billion with 22387000000",
+            "unmatched claim numbers: 16%"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_2",
+            "text": "Adjusted EPS was reported at $0.41",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "financial metric",
+              "numeric change"
+            ]
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://public.com/stocks/tsla/earnings"
+          ],
+          "evidence_keys": [
+            "T4:public.com:undated"
+          ],
+          "canonical_fact_ids": [],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$0.41 -> $0.41",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.4,
+            "entity_match": 0.9,
+            "time_alignment": 0.45,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.35,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.548
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "non_official_sources_only",
+            "low_retrieval_sufficiency"
+          ],
+          "issues": [
+            "matched $0.41 with $0.41"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_3",
+            "text": "The article said free cash flow turned negative",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.58,
+            "signals": [
+              "financial metric"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.85,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.65,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.258
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_retrieval_sufficiency"
+          ],
+          "issues": [
+            "no_evidence"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_4",
+            "text": "Tesla stock initially moved higher after the results",
+            "argument_type": "opinion_analysis",
+            "classification_confidence": 0.35,
+            "signals": [
+              "fallback: no strong factual or forecast markers"
+            ]
+          },
+          "verdict": "not_applicable",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": null,
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "Skipped non-factual claim type: opinion_analysis"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_106a9251c802",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2026-03-31",
+          "filing_date": "2026-04-23",
+          "observation_date": "2026-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 22387000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_a3c4c0cb07cb",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2025-12-31",
+          "filing_date": "2026-04-23",
+          "observation_date": "2025-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 94827000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_2a65c089b012",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2025-09-30",
+          "filing_date": "2026-04-23",
+          "observation_date": "2025-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 28095000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_b4d2a614e747",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2025-06-30",
+          "filing_date": "2026-04-23",
+          "observation_date": "2025-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 22496000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_ef85a9afcd7d",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2025-03-31",
+          "filing_date": "2026-04-23",
+          "observation_date": "2025-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 19335000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_c40c85081632",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2024-12-31",
+          "filing_date": "2026-04-23",
+          "observation_date": "2024-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 97690000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_46d458cb7920",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2024-09-30",
+          "filing_date": "2026-04-23",
+          "observation_date": "2024-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 25182000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_b4dab7b6489f",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2024-06-30",
+          "filing_date": "2026-04-23",
+          "observation_date": "2024-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 25500000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_950e3381393d",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2026-03-31",
+          "filing_date": "2026-04-23",
+          "observation_date": "2026-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 22387000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_a61ba3b42b9c",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2025-12-31",
+          "filing_date": "2026-04-23",
+          "observation_date": "2025-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 94827000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_08b2f78f6177",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2025-09-30",
+          "filing_date": "2026-04-23",
+          "observation_date": "2025-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 28095000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_8735a497feb3",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2025-06-30",
+          "filing_date": "2026-04-23",
+          "observation_date": "2025-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 22496000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_da286f528602",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2025-03-31",
+          "filing_date": "2026-04-23",
+          "observation_date": "2025-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 19335000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_6db96ad41a5b",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2024-12-31",
+          "filing_date": "2026-04-23",
+          "observation_date": "2024-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 97690000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_2c306f21a3c6",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2024-09-30",
+          "filing_date": "2026-04-23",
+          "observation_date": "2024-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 25182000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_9b4123bee89a",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": "2024-06-30",
+          "filing_date": "2026-04-23",
+          "observation_date": "2024-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 25500000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_7a80f7395e5d",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-04-23",
+          "observation_date": "2026-04-23",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 10-Q filing for TSLA",
+          "value": "10",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        },
+        {
+          "fact_id": "fact_75d080d1f575",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-04-22",
+          "observation_date": "2026-04-22",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 8-K filing for TSLA",
+          "value": "8",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        },
+        {
+          "fact_id": "fact_3950329594b4",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001318605",
+          "ticker": "TSLA",
+          "cik": "0001318605",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-04-02",
+          "observation_date": "2026-04-02",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 8-K filing for TSLA",
+          "value": "8",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "TSLA",
+        "entity_id": "CIK0001318605",
+        "cik": "0001318605",
+        "lei": null,
+        "figi": null,
+        "confidence": 0.85,
+        "sources": [
+          "SEC",
+          "evidence_entity_match"
+        ],
+        "issues": []
+      },
+      "audit_trace": {
+        "trace_id": "trace_2acb86d56575",
+        "created_at": "2026-05-28T17:01:07+00:00",
+        "replayable_inputs": {
+          "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results.",
+          "ticker": "TSLA",
+          "as_of_date": "2026-04-23",
+          "search_result_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+            "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+            "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+            "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+            "https://ir.tesla.com/",
+            "https://ir.tesla.com/press",
+            "https://www.nasdaq.com/market-activity/stocks/tsla/earnings",
+            "https://public.com/stocks/tsla/earnings"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 8 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+                "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+                "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+                "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+                "https://ir.tesla.com/",
+                "https://ir.tesla.com/press",
+                "https://www.nasdaq.com/market-activity/stocks/tsla/earnings",
+                "https://public.com/stocks/tsla/earnings"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 8 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "data.sec.gov",
+                "ir.tesla.com",
+                "nasdaq.com",
+                "public.com",
+                "sec.gov"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "ok",
+            "summary": "Resolved entity as CIK0001318605.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "confidence": 0.85,
+              "issues": []
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 19 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_106a9251c802",
+                "fact_a3c4c0cb07cb",
+                "fact_2a65c089b012",
+                "fact_b4d2a614e747",
+                "fact_ef85a9afcd7d",
+                "fact_c40c85081632",
+                "fact_46d458cb7920",
+                "fact_b4dab7b6489f",
+                "fact_950e3381393d",
+                "fact_a61ba3b42b9c",
+                "fact_08b2f78f6177",
+                "fact_8735a497feb3",
+                "fact_da286f528602",
+                "fact_6db96ad41a5b",
+                "fact_2c306f21a3c6",
+                "fact_9b4123bee89a",
+                "fact_7a80f7395e5d",
+                "fact_75d080d1f575",
+                "fact_3950329594b4"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 4 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "partially_supported",
+                "claim_2": "supported",
+                "claim_3": "insufficient",
+                "claim_4": "not_applicable"
+              },
+              "review_reasons": {
+                "claim_2": [
+                  "no_official_primary_source",
+                  "non_official_sources_only",
+                  "low_retrieval_sufficiency"
+                ],
+                "claim_3": [
+                  "no_official_primary_source",
+                  "low_retrieval_sufficiency"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_1: sec_recent_filings: 3 result(s)",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_2: sec_recent_filings: 3 result(s)",
+          "claim_3: sec_company_facts: 1 result(s)",
+          "claim_3: sec_recent_filings: 3 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "title": "SEC Company Facts for TSLA",
+          "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); Revenues (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q)",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "data.sec.gov",
+          "published_at": "2026-04-23",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.98,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "SEC filing/regulatory source",
+            "0 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+          "title": "SEC 10-Q filing for TSLA",
+          "text": "TSLA filed form 10-Q on 2026-04-23.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-04-23",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.98,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.679,
+          "notes": [
+            "SEC filing/regulatory source",
+            "0 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "same canonical domain",
+            "same canonical domain",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+          "title": "SEC 8-K filing for TSLA",
+          "text": "TSLA filed form 8-K on 2026-04-22.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-04-22",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.98,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.679,
+          "notes": [
+            "SEC filing/regulatory source",
+            "1 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "same canonical domain",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+          "title": "SEC 8-K filing for TSLA",
+          "text": "TSLA filed form 8-K on 2026-04-02.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-04-02",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.944,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.679,
+          "notes": [
+            "SEC filing/regulatory source",
+            "21 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://ir.tesla.com/",
+          "title": "Tesla Investor Relations",
+          "text": "Press Release · Download · Listen · Q&A · 10-K · Delivery · Earnings. 2025. Q3. Oct 22, 2025 · Press Release · Download · Listen · Q&A · 10-Q. 2025. Q2. Jul 23, ...",
+          "source_type": "company_ir",
+          "source_tier": "T2",
+          "domain": "ir.tesla.com",
+          "published_at": null,
+          "license_tag": "unknown",
+          "is_official_primary": false,
+          "source_authority": 0.86,
+          "recency_score": 0.45,
+          "relevance_score": 0.427,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.277,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.764,
+          "notes": [
+            "company investor-relations or official press page pattern",
+            "missing publication date",
+            "claim numbers were not found in evidence",
+            "token overlap=0.03",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "same canonical domain",
+            "different domains and title text",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://ir.tesla.com/press",
+          "title": "Press Releases | Tesla Investor Relations",
+          "text": "AUSTIN, Texas, January 28, 2026 – Tesla has released its financial results for the fourth quarter and full year ended December 31, 2025 by posting an update on ...",
+          "source_type": "company_ir",
+          "source_tier": "T2",
+          "domain": "ir.tesla.com",
+          "published_at": null,
+          "license_tag": "unknown",
+          "is_official_primary": false,
+          "source_authority": 0.86,
+          "recency_score": 0.45,
+          "relevance_score": 0.455,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.364,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.764,
+          "notes": [
+            "company investor-relations or official press page pattern",
+            "missing publication date",
+            "partially matched numeric values: 2026",
+            "token overlap=0.06",
+            "reasoning quality is secondary for factual claim type",
+            "different domains and title text",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://www.nasdaq.com/market-activity/stocks/tsla/earnings",
+          "title": "Tesla, Inc. (TSLA) Earnings Report Date - Nasdaq",
+          "text": "Find annual and quearterly earnings data for Tesla, Inc. Common Stock (TSLA) including earnings per share, earnings forecasts at Nasdaq.com.",
+          "source_type": "regulator_exchange",
+          "source_tier": "T2",
+          "domain": "nasdaq.com",
+          "published_at": null,
+          "license_tag": "unknown",
+          "is_official_primary": false,
+          "source_authority": 0.82,
+          "recency_score": 0.45,
+          "relevance_score": 0.455,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.35,
+          "support_label": "not_enough_info",
+          "support_score": 0.305,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "exchange/data source",
+            "missing publication date",
+            "evidence has no explicit numeric value",
+            "token overlap=0.06",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://public.com/stocks/tsla/earnings",
+          "title": "Tesla (TSLA) Earnings: Latest Report, Earnings Call & Financials",
+          "text": "Tesla (TSLA) reported its most recent earnings on Apr 22, 2026 for Q1 2026, posting earnings per share (EPS) of $0.41. This exceeded analysts' expectations of ...",
+          "source_type": "unknown",
+          "source_tier": "T4",
+          "domain": "public.com",
+          "published_at": null,
+          "license_tag": "unknown",
+          "is_official_primary": false,
+          "source_authority": 0.4,
+          "recency_score": 0.45,
+          "relevance_score": 0.537,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.447,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "unknown source; conservative default",
+            "missing publication date",
+            "partially matched numeric values: 2026, $0.41",
+            "token overlap=0.16",
+            "reasoning quality is secondary for factual claim type"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required",
+        "verdict_reconciled_from_verification_checks"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "financial metric",
+          "numeric change",
+          "reported period"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_1: sec_recent_filings: 3 result(s)",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_2: sec_recent_filings: 3 result(s)",
+          "claim_3: sec_company_facts: 1 result(s)",
+          "claim_3: sec_recent_filings: 3 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-04-23",
+          "user_as_of_date": "2026-04-23",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+            "as_of_date": "2026-04-23",
+            "time_context": {
+              "effective_as_of_date": "2026-04-23",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Adjusted EPS was reported at $0.41",
+            "as_of_date": "2026-04-23",
+            "time_context": {
+              "effective_as_of_date": "2026-04-23",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "The article said free cash flow turned negative",
+            "as_of_date": "2026-04-23",
+            "time_context": {
+              "effective_as_of_date": "2026-04-23",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "serper_web"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+            "as_of_date": "2026-04-23",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+              "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+              "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Adjusted EPS was reported at $0.41",
+            "as_of_date": "2026-04-23",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "The article said free cash flow turned negative",
+            "as_of_date": "2026-04-23",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "serper_web"
+            ],
+            "retrieved_count": 8,
+            "added_urls": [
+              "https://ir.tesla.com/",
+              "https://ir.tesla.com/press",
+              "https://www.nasdaq.com/market-activity/stocks/tsla/earnings",
+              "https://public.com/stocks/tsla/earnings"
+            ],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+              "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+              "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm"
+            ],
+            "evidence_url_count": 5,
+            "has_relevant_evidence": true,
+            "verdict": "partially_supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Adjusted EPS was reported at $0.41",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "non_official_sources_only",
+              "low_retrieval_sufficiency"
+            ],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "The article said free cash flow turned negative",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "serper_web"
+            ],
+            "retrieved_count": 8,
+            "added_urls": [
+              "https://ir.tesla.com/",
+              "https://ir.tesla.com/press",
+              "https://www.nasdaq.com/market-activity/stocks/tsla/earnings",
+              "https://public.com/stocks/tsla/earnings"
+            ],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_retrieval_sufficiency"
+            ],
+            "closure_status": "retrieved_but_not_relevant"
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Tesla stock initially moved higher after the results",
+            "fact_checkable": false,
+            "selected_sources": [],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "not_applicable",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "skipped_non_factual"
+          }
+        ],
+        "retrieval_budget": 24,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Adjusted EPS was reported at $0.41",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "The article said free cash flow turned negative",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "serper_web",
+                "name": "Web Search",
+                "authority_tier": "T4",
+                "license_tag": "unknown",
+                "is_official_primary": false,
+                "brief_description": "Supplemental web search for discovery when official structured APIs cannot directly answer a claim.",
+                "detail_available": true,
+                "required_inputs": [
+                  "query"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 1.0,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 3,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings",
+                "serper_web"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings",
+                "serper_web"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md",
+                "serper_web.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              },
+              {
+                "source_id": "serper_web",
+                "name": "Web Search",
+                "detail_file": "serper_web.md",
+                "detail_markdown": "# Web Search\n\nSource id: serper_web\nReference docs: https://serper.dev/\nAuthority tier: T4 supplemental discovery\nLicense tag: unknown\n\nAPI playbook:\n- Auth/env: requires `SERPER_API_KEY`.\n- Endpoint: `POST https://google.serper.dev/search`.\n- Headers: `X-API-KEY: {SERPER_API_KEY}` and `Content-Type: application/json`.\n- Request body: include `q` for the query and usually `num` for result count; keep domain filters or exact quoted phrases in the trace when used.\n- Response schema: common fields include `organic[]`, `title`, `link`, `snippet`, `date`, `source`, and optional news/knowledge panels depending on request type.\n- Query construction: build queries from the claim, entity, time window, and desired official source; prefer official domains or investor-relations/regulator pages over generic news snippets.\n- Adapter output: search results are discovery only. The verifier should fetch/read the destination source before using it as evidence, and web-only support usually requires human review.\n\nUse for:\n- Discovery of relevant pages when structured official APIs cannot directly answer the claim.\n- Finding official URLs, company investor-relations pages, press releases, or secondary context for follow-up.\n\nDo not use for:\n- Primary verification when SEC, FRED, Treasury, GLEIF, or another official structured API can answer the claim.\n- Treating news, blogs, social posts, or scraped snippets as authoritative financial evidence.\n\nImportant metadata:\n- Preserve query, result title, URL, domain, snippet, retrieval time, and whether the destination is official or secondary.\n- Use domain/source governance after retrieval; search result rank alone is not evidence quality.\n- Treat web-only support as human-review or low-confidence for financial factual claims.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source is supplemental web discovery.\n- Load this detail when no structured source is clearly sufficient, or when the task explicitly asks to find external context."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "serper_web"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "serper_web"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "sec_company_facts",
+          "sec_recent_filings",
+          "serper_web"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Adjusted EPS was reported at $0.41",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "The article said free cash flow turned negative",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_4",
+            "claim": "Tesla stock initially moved higher after the results",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 245,
+          "cleaned_length": 245,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results."
+        },
+        "original_claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results.",
+        "agentic_search_plan": [
+          "TSLA \"Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results.\" SEC 10-Q 10-K",
+          "TSLA earnings release revenue EPS investor relations",
+          "TSLA company facts SEC revenue earnings",
+          "TSLA Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results. correction restatement contradiction",
+          "TSLA Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results. SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "SEC Company Facts for TSLA",
+          "domain": "data.sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-23",
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        },
+        {
+          "title": "SEC 10-Q filing for TSLA",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-23",
+          "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+          "used_by_claims": []
+        },
+        {
+          "title": "SEC 8-K filing for TSLA",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-22",
+          "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+          "used_by_claims": []
+        },
+        {
+          "title": "SEC 8-K filing for TSLA",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-02",
+          "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+          "used_by_claims": []
+        },
+        {
+          "title": "Tesla Investor Relations",
+          "domain": "ir.tesla.com",
+          "source_tier": "T2",
+          "is_official_primary": false,
+          "license_tag": "unknown",
+          "published_at": null,
+          "url": "https://ir.tesla.com/",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        },
+        {
+          "title": "Press Releases | Tesla Investor Relations",
+          "domain": "ir.tesla.com",
+          "source_tier": "T2",
+          "is_official_primary": false,
+          "license_tag": "unknown",
+          "published_at": null,
+          "url": "https://ir.tesla.com/press",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        },
+        {
+          "title": "Tesla, Inc. (TSLA) Earnings Report Date - Nasdaq",
+          "domain": "nasdaq.com",
+          "source_tier": "T2",
+          "is_official_primary": false,
+          "license_tag": "unknown",
+          "published_at": null,
+          "url": "https://www.nasdaq.com/market-activity/stocks/tsla/earnings",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        },
+        {
+          "title": "Tesla (TSLA) Earnings: Latest Report, Earnings Call & Financials",
+          "domain": "public.com",
+          "source_tier": "T4",
+          "is_official_primary": false,
+          "license_tag": "unknown",
+          "published_at": null,
+          "url": "https://public.com/stocks/tsla/earnings",
+          "used_by_claims": [
+            "claim_1",
+            "claim_2"
+          ]
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+          "verdict": "partially_supported",
+          "confidence": 0.773,
+          "summary": "The claim is marked `partially_supported` based on SEC Company Facts for TSLA with confidence 0.77.",
+          "numeric_summary": "The numeric derivation `numeric_match_summary` did not pass.",
+          "source_summary": "The main evidence is official primary evidence with source tier T1.",
+          "main_evidence": {
+            "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+            "title": "SEC Company Facts for TSLA",
+            "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); Revenues (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q)",
+            "source_type": "sec_filing",
+            "source_tier": "T1",
+            "domain": "data.sec.gov",
+            "published_at": "2026-04-23",
+            "license_tag": "public_official",
+            "is_official_primary": true,
+            "source_authority": 1.0,
+            "recency_score": 0.98,
+            "relevance_score": 0.4,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.72,
+            "support_label": "not_enough_info",
+            "support_score": 0.309,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "SEC filing/regulatory source",
+              "0 days old",
+              "partially matched numeric values: 2026",
+              "token overlap=0.00",
+              "weak lexical support",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text",
+              "different domains and title text",
+              "different domains and title text",
+              "different domains and title text",
+              "different domains and title text",
+              "different domains and title text",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "matched $22.4 billion with 22387000000",
+            "unmatched claim numbers: 16%"
+          ]
+        },
+        {
+          "claim_id": "claim_2",
+          "claim": "Adjusted EPS was reported at $0.41",
+          "verdict": "supported",
+          "confidence": 0.548,
+          "summary": "The claim is marked `supported` based on Tesla (TSLA) Earnings: Latest Report, Earnings Call & Financials with confidence 0.55.",
+          "numeric_summary": "The numeric derivation `numeric_match_summary` passed.",
+          "source_summary": "The main evidence is non-official or secondary evidence with source tier T4.",
+          "main_evidence": {
+            "url": "https://public.com/stocks/tsla/earnings",
+            "title": "Tesla (TSLA) Earnings: Latest Report, Earnings Call & Financials",
+            "text": "Tesla (TSLA) reported its most recent earnings on Apr 22, 2026 for Q1 2026, posting earnings per share (EPS) of $0.41. This exceeded analysts' expectations of ...",
+            "source_type": "unknown",
+            "source_tier": "T4",
+            "domain": "public.com",
+            "published_at": null,
+            "license_tag": "unknown",
+            "is_official_primary": false,
+            "source_authority": 0.4,
+            "recency_score": 0.45,
+            "relevance_score": 0.537,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.72,
+            "support_label": "not_enough_info",
+            "support_score": 0.447,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "unknown source; conservative default",
+              "missing publication date",
+              "partially matched numeric values: 2026, $0.41",
+              "token overlap=0.16",
+              "reasoning quality is secondary for factual claim type"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "matched $0.41 with $0.41"
+          ]
+        },
+        {
+          "claim_id": "claim_3",
+          "claim": "The article said free cash flow turned negative",
+          "verdict": "insufficient",
+          "confidence": 0.258,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.26.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_2",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_3",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings",
+            "serper_web"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_2acb86d56575",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "Tesla, Inc. (TSLA)",
+        "name": "Tesla, Inc.",
+        "ticker": "TSLA",
+        "symbol": "TSLA",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "Tesla, Inc. (TSLA)",
+        "name": "Tesla, Inc.",
+        "ticker": "TSLA",
+        "symbol": "TSLA",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 3 fact-checkable claims across 1 entity. Skipped 1 opinion, forecast, or non-falsifiable statement. 2 claims need human review.\n\n## TSLA\n\n- **Partially consistent.** Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Evidence: T1 SEC Company Facts for TSLA (data.sec.gov). Reason: Numeric check did not match the claim.\n- **Consistent.** Adjusted EPS was reported at $0.41. Evidence: T4 Tesla (TSLA) Earnings: Latest Report, Earnings Call & Financials (public.com). Reason: Numeric check passed. Needs human review: no official primary source was found, only non-official sources were available.\n- **Insufficient evidence.** The article said free cash flow turned negative. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, retrieved evidence is limited.\n\nNot fact-checked:\n- Skipped `opinion_analysis`: Tesla stock initially moved higher after the results\n",
+  "agent_trace": {
+    "run_id": "agent_b1c69fc8f3ae",
+    "created_at": "2026-05-28T17:01:00+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_49aa6ecd",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 32,
+        "output_preview": "{\"asset_classes\": [\"single_name_equity\"], \"asset_groups\": {\"single_name_equity\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0001318605\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Tesla, Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"TSLA\", \"ticker\": \"TSLA\"}]}, \"entities\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0001318605\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Tesla, Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"TSLA\", \"ticker\": \"TSLA\"}], \"method\": \"heuristic\", \"non_equity_entities\": [], \"notes\": [\"ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json\"], \"tickers\": [\"TSLA\"], \"unresolved",
+        "output_hash": "36cdcd97881c547f77a22b728592d0ae3f3a78c5e83545f8f55c2c6b19c9effa"
+      },
+      {
+        "call_id": "fallback_1_d5b2e069",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year. Adjusted EPS was reported at $0.41. The article said free cash flow turned negative, while Tesla stock initially moved higher after the results."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.87, \"signals\": [\"financial metric\", \"numeric change\"], \"text\": \"Adjusted EPS was reported at $0.41\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_3\", \"classification_confidence\": 0.58, \"signals\": [\"financial metric\"], \"text\": \"The article said free cash flow turned negative\"}, {\"argument_type\": \"opinion_analysis\", \"claim_id\": \"claim_4\", \"classification_confidence\": 0.35, \"signals\": [\"fallback: no strong factual or fo",
+        "output_hash": "5b80ba688907c7c345b86b09b0116e6fff654e294cde5f314dc6ef4dafd197fc"
+      },
+      {
+        "call_id": "fallback_2_3f80cee3",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 9,
+        "output_preview": "{\"selections\": [{\"candidates\": [{\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.\", \"candidate_score\": 4.85, \"detail_available\": true, \"detected_asset_classes\": [\"single_name_equity\"], \"is_official_primary\": true, \"is_runtime_selectable\": true, \"license_tag\": \"public_official\", \"name\": \"SEC Company Facts\", \"required_inputs\": [\"ticker_or_cik\", \"metric_hint\"], \"source_id\": \"sec_company_facts\"}, {\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.\", \"candidate_score\": 2.5, \"detail_available\": true, \"detected_asset_classes\": [\"single_na",
+        "output_hash": "fa6778c27f8e3f4d3558b012a5d754673b3fd617824b032f477e49dbc4dccc9f"
+      },
+      {
+        "call_id": "fallback_3_6f3da9a1",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+          "ticker": "TSLA",
+          "as_of_date": "2026-04-23",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "prefetched_results": null
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1656,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.95, \"needs_decomposition\": false, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"]}, \"evidence\": [{\"domain\": \"data.sec.gov\", \"entity_match_score\": 0.9, \"independence_score\": 0.0, \"is_official_primary\": true, \"license_tag\": \"public_official\", \"notes\": [\"SEC filing/regulatory source\", \"0 days old\", \"partially matched numeric values: 2026\"], \"numeric_consistency_score\": 0.72, \"published_at\": \"2026-04-23\", \"reasoning_quality_score\": 0.0, \"recency_score\": 0.98, \"relevance_score\": 0.465, \"source_authority\": 1.0, \"source_tier\": \"T1\", \"source_type\": \"sec_filing\", \"support_label\": \"not_enough_info\", \"support_score\": 0.0, \"text\": \"RevenueFromContractWithCustomerExcludingAssessedTax",
+        "output_hash": "ca8214d535b99defd32acfbab7ed6add6d4755fe1aa8c6293c0d5f7de0d88a10"
+      },
+      {
+        "call_id": "fallback_4_53cc75ab",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "TSLA",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "title": "SEC Company Facts for TSLA",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); Revenues (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-23",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.465,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+              "title": "SEC 10-Q filing for TSLA",
+              "text": "TSLA filed form 10-Q on 2026-04-23.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-23",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+              "title": "SEC 8-K filing for TSLA",
+              "text": "TSLA filed form 8-K on 2026-04-22.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-22",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "1 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+              "title": "SEC 8-K filing for TSLA",
+              "text": "TSLA filed form 8-K on 2026-04-02.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-02",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.944,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "21 days old",
+                "partially matched numeric values: 2026"
+              ]
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 2,
+        "output_preview": "{\"canonical_facts\": [{\"authority_tier\": \"T1\", \"cik\": \"0001318605\", \"currency\": \"USD\", \"entity_id\": \"CIK0001318605\", \"fact_id\": \"fact_106a9251c802\", \"fact_name\": \"RevenueFromContractWithCustomerExcludingAssessedTax\", \"filing_date\": \"2026-04-23\", \"lei\": null, \"license_tag\": \"public_official\", \"observation_date\": \"2026-03-31\", \"parser_confidence\": 0.88, \"provenance_locator\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json\", \"raw\": {\"form\": \"10-Q\", \"period_kind\": \"fiscal quarter\", \"provider\": \"sec_company_facts\"}, \"report_period\": \"2026-03-31\", \"source_type\": \"sec_filing\", \"ticker\": \"TSLA\", \"unit\": \"USD\", \"value\": 22387000000, \"vintage_date\": null}, {\"authority_tier\": \"T1\", \"cik\": \"0001318605\", \"currency\": \"USD\", \"entity_id\": \"CIK0001318605\", \"fact_id\": \"fact_a3c4c0cb07cb\", \"fac",
+        "output_hash": "245937ed219f99f5036a0f3bbf3cde4f6808aa4fca9cabd64a6045ef5cde5197"
+      },
+      {
+        "call_id": "fallback_5_6e0d5d2b",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+          "ticker": "TSLA",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "title": "SEC Company Facts for TSLA",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); Revenues (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-23",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.465,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+              "title": "SEC 10-Q filing for TSLA",
+              "text": "TSLA filed form 10-Q on 2026-04-23.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-23",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+              "title": "SEC 8-K filing for TSLA",
+              "text": "TSLA filed form 8-K on 2026-04-22.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-22",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "1 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+              "title": "SEC 8-K filing for TSLA",
+              "text": "TSLA filed form 8-K on 2026-04-02.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-02",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.944,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "21 days old",
+                "partially matched numeric values: 2026"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_106a9251c802",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2026-03-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2026-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 22387000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a3c4c0cb07cb",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-12-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 94827000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2a65c089b012",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 28095000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_b4d2a614e747",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 22496000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ef85a9afcd7d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 19335000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_c40c85081632",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-12-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 97690000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_46d458cb7920",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 25182000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_b4dab7b6489f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 25500000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_950e3381393d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2026-03-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2026-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 22387000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a61ba3b42b9c",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-12-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 94827000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_08b2f78f6177",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 28095000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_8735a497feb3",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 22496000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_da286f528602",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 19335000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_6db96ad41a5b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-12-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 97690000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2c306f21a3c6",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 25182000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_9b4123bee89a",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 25500000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_05adb60f68bc",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-23",
+              "observation_date": "2026-04-23",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 10-Q filing for TSLA",
+              "value": "10",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_19928a299958",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-22",
+              "observation_date": "2026-04-22",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for TSLA",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_07cc516dc00b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-02",
+              "observation_date": "2026-04-02",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for TSLA",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 2,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year\"}, \"canonical_fact_ids\": [\"fact_950e3381393d\", \"fact_a61ba3b42b9c\", \"fact_08b2f78f6177\", \"fact_8735a497feb3\", \"fact_da286f528602\", \"fact_6db96ad41a5b\", \"fact_2c306f21a3c6\", \"fact_9b4123bee89a\"], \"confidence_components\": {\"cross_source_consistency\": 0.55, \"entity_match\": 0.9, \"final_confidence\": 0.835, \"numeric_exactness\": 0.68, \"parser_confidence\": 0.88, \"retrieval_sufficiency\": 0.82, \"source_authority\": 1.0, \"time_alignment\": 0.98}, \"evidence_keys\": [\"T1:data.sec.gov:2026-04-23\"], \"eviden",
+        "output_hash": "508909b65bbae51ddd540a7c35399e3884e51377d3c23cbda1a0ba7d2d1fd789"
+      },
+      {
+        "call_id": "fallback_6_a973c2c1",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "Tesla delivered about $22.4 billion in first-quarter 2026 revenue, roughly 16% above the prior year",
+          "ticker": "TSLA",
+          "as_of_date": "2026-04-23",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "title": "SEC Company Facts for TSLA",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2026-03-31: 22387000000 (form 10-Q); Revenues (USD) for fiscal year ending 2025-12-31: 94827000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2025-09-30: 28095000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-06-30: 22496000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2025-03-31: 19335000000 (form 10-Q); Revenues (USD) for fiscal year ending 2024-12-31: 97690000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2024-09-30: 25182000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2024-06-30: 25500000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-23",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.465,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+              "title": "SEC 10-Q filing for TSLA",
+              "text": "TSLA filed form 10-Q on 2026-04-23.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-23",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+              "title": "SEC 8-K filing for TSLA",
+              "text": "TSLA filed form 8-K on 2026-04-22.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-22",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "1 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+              "title": "SEC 8-K filing for TSLA",
+              "text": "TSLA filed form 8-K on 2026-04-02.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-02",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.944,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "21 days old",
+                "partially matched numeric values: 2026"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_106a9251c802",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2026-03-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2026-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 22387000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a3c4c0cb07cb",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-12-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 94827000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2a65c089b012",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 28095000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_b4d2a614e747",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 22496000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ef85a9afcd7d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 19335000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_c40c85081632",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-12-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 97690000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_46d458cb7920",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 25182000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_b4dab7b6489f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 25500000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_950e3381393d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2026-03-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2026-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 22387000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a61ba3b42b9c",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-12-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 94827000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_08b2f78f6177",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 28095000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_8735a497feb3",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 22496000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_da286f528602",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 19335000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_6db96ad41a5b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-12-31",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 97690000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2c306f21a3c6",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 25182000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_9b4123bee89a",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-23",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 25500000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_05adb60f68bc",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-23",
+              "observation_date": "2026-04-23",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 10-Q filing for TSLA",
+              "value": "10",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026673/tsla-20260331.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_19928a299958",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-22",
+              "observation_date": "2026-04-22",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for TSLA",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026026551/tsla-20260422.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_07cc516dc00b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001318605",
+              "ticker": "TSLA",
+              "cik": "0001318605",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-02",
+              "observation_date": "2026-04-02",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for TSLA",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/tsla-20260402.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1,
+        "output_preview": "{\"created_at\": \"2026-05-28T17:01:02+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": [\"data.sec.gov\", \"sec.gov\"]}, \"status\": \"ok\", \"step\": \"extract_evidence\", \"summary\": \"Built 4 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": \"0001318605\", \"confidence\": 0.85, \"issues\": [], \"lei\": null, \"ticker\": \"TSLA\"}, \"status\": \"ok\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as CIK0001318605.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": [\"fact_106a9251c802\", \"fact_a3c4c0cb07cb\", \"fact_2a65c089b012\", \"fact_b4d2a614e747\", \"fact_ef85a9afcd7d\", \"fact_c40c85081632\", \"fact_46d458cb7920\", \"fact_b4dab7b6489f\", \"fact_950e3381393d\", \"fact_a61ba3b42b9c",
+        "output_hash": "9c5408d9d7008a44de261f97b49a77dc969d9749c80e1917790dcc54e7eb9248"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_b1c69fc8f3ae",
+    "created_at": "2026-05-28T17:01:07+00:00",
+    "verdict": "review",
+    "score": 0.86,
+    "summary": "Audit review: 1 finding(s) (major=1); score 0.86.",
+    "findings": [
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_3",
+        "trace_refs": [
+          "sec_company_facts",
+          "sec_recent_filings",
+          "serper_web"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      }
+    ]
+  }
+}

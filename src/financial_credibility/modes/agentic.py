@@ -28,6 +28,7 @@ class AgenticCredibilityRunner:
         as_of_date: str | None = None,
         max_sources: int = 8,
         prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
+        source_results: list[dict[str, Any] | SearchResult] | None = None,
         trace_callback: Callable[[dict[str, Any]], None] | None = None,
     ) -> EvidencePack:
         """Run the toolkit with an expanded search plan and annotated metadata."""
@@ -46,6 +47,7 @@ class AgenticCredibilityRunner:
             as_of_date=as_of_date,
             max_sources=max_sources,
             prefetched_results=prefetched_results,
+            source_results=source_results,
             mode="agentic",
             extra_queries=plan,
             trace_callback=trace_callback,

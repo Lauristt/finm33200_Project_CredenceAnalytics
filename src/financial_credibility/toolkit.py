@@ -21,11 +21,13 @@ from .entity import resolve_entity
 from .extraction import EvidenceExtractor
 from .facts import canonicalize_evidence, canonicalize_search_results
 from .judges import SemanticJudge, create_judge
-from .models import EvidencePack, SearchResult, today_iso, to_plain
+from .models import AtomicClaim, CredibilityLabel, EvidencePack, SearchResult, Verdict, VerificationVerdict, today_iso, to_plain
+from .preprocessing import preprocess_statement
 from .routing import route_sources
 from .rubrics import FACTUAL_TYPES
 from .search import SearchClient
 from .source_selection import selected_provider_names_from_plan, select_sources_for_claims
+from .time_context import infer_time_context
 from .verification import (
     build_overall_conclusion,
     verify_logic_claim,
@@ -62,6 +64,7 @@ class FinancialCredibilityToolkit:
         as_of_date: str | None = None,
         max_sources: int = 8,
         prefetched_results: list[dict[str, Any] | SearchResult] | None = None,
+        source_results: list[dict[str, Any] | SearchResult] | None = None,
         mode: str = "agentic",
         extra_queries: list[str] | None = None,
         trace_callback: Callable[[dict[str, Any]], None] | None = None,
@@ -75,7 +78,25 @@ class FinancialCredibilityToolkit:
         `prefetched_results` is the best hook for tests or demos where network
         retrieval should be skipped.
         """
-        as_of = as_of_date or today_iso()
+        original_claim = claim
+        preprocessed = preprocess_statement(claim)
+        claim = preprocessed.clean_text
+        _emit_trace(
+            trace_callback,
+            "preprocess_statement",
+            "ok" if preprocessed.changed else "unchanged",
+            "Removed copied-page boilerplate before verification." if preprocessed.changed else "Input did not require preprocessing.",
+            outputs=preprocessed.to_dict(),
+        )
+        time_context = infer_time_context(claim, as_of_date)
+        as_of = time_context.effective_as_of_date or today_iso()
+        _emit_trace(
+            trace_callback,
+            "infer_time_context",
+            "ok" if time_context.effective_as_of_date else "fallback",
+            f"Anchored retrieval as of {as_of}.",
+            outputs=time_context.to_dict(),
+        )
         classification = classify_argument_type(claim)
         _emit_trace(
             trace_callback,
@@ -104,6 +125,8 @@ class FinancialCredibilityToolkit:
                     {
                         "claim_id": item.claim_id,
                         "text": item.text,
+                        "context_window": item.context_window,
+                        "context_window_source": item.context_window_source,
                         "argument_type": item.argument_type,
                         "fact_checkable": item.argument_type in FACTUAL_TYPES,
                     }
@@ -119,6 +142,7 @@ class FinancialCredibilityToolkit:
         )
         source_selection_plan = select_sources_for_claims(fact_checkable_claims, self.config)
         selected_providers = selected_provider_names_from_plan(source_selection_plan)
+        retrieval_budget = _retrieval_budget(max_sources, fact_checkable_claims)
         _emit_trace(
             trace_callback,
             "select_sources",
@@ -134,10 +158,16 @@ class FinancialCredibilityToolkit:
                     }
                     for item in source_selection_plan
                 ],
+                "retrieval_budget": retrieval_budget,
             },
         )
 
-        if fact_checkable_claims:
+        claim_time_contexts: list[dict[str, Any]] = []
+        claim_retrievals: list[dict[str, Any]] = []
+        if fact_checkable_claims and not selected_providers:
+            results, search_notes = [], ["retrieval skipped because no compatible source was selected"]
+            risk_flags.append("no_matching_source")
+        elif fact_checkable_claims:
             search_client = SearchClient(self.config, extra_queries=extra_queries or [])
             _emit_trace(
                 trace_callback,
@@ -146,15 +176,113 @@ class FinancialCredibilityToolkit:
                 "Retrieving candidate evidence from selected sources.",
                 outputs={"selected_providers": selected_providers},
             )
-            results, search_notes = search_client.search_financial_sources(
-                claim=claim,
-                ticker=ticker,
-                argument_type=classification.argument_type,
-                max_sources=max_sources,
-                as_of_date=as_of,
-                prefetched_results=prefetched_results,
-                selected_sources=selected_providers,
-            )
+            if prefetched_results is not None:
+                search_kwargs = {
+                    "claim": claim,
+                    "ticker": ticker,
+                    "argument_type": classification.argument_type,
+                    "max_sources": retrieval_budget,
+                    "as_of_date": as_of,
+                    "prefetched_results": prefetched_results,
+                    "selected_sources": selected_providers,
+                }
+                if source_results is not None:
+                    search_kwargs["source_results"] = source_results
+                results, search_notes = search_client.search_financial_sources(**search_kwargs)
+                claim_time_contexts = [
+                    {
+                        "claim_id": item.claim_id,
+                        "claim": item.text,
+                        "context_window": item.context_window,
+                        "context_window_source": item.context_window_source,
+                        "as_of_date": as_of,
+                        "time_context": infer_time_context(_claim_context_text(item), anchor_date=as_of).to_dict(),
+                    }
+                    for item in fact_checkable_claims
+                ]
+                claim_retrievals = [
+                    {
+                        "claim_id": item.claim_id,
+                        "claim": item.text,
+                        "context_window": item.context_window,
+                        "context_window_source": item.context_window_source,
+                        "selected_providers": selected_providers,
+                        "retrieved_count": len(results),
+                        "added_urls": [result.url for result in results[:retrieval_budget]],
+                        "method": "prefetched_results_shared",
+                    }
+                    for item in fact_checkable_claims
+                ]
+            else:
+                results = []
+                search_notes = []
+                seen_urls: set[str] = set()
+                for atom, selection in zip(fact_checkable_claims, source_selection_plan):
+                    providers = selection.get("selected_provider_names") or []
+                    if not providers:
+                        search_notes.append(f"{atom.claim_id}: retrieval skipped because no compatible source was selected")
+                        claim_retrievals.append(
+                            {
+                                "claim_id": atom.claim_id,
+                                "claim": atom.text,
+                                "selected_providers": [],
+                                "retrieved_count": 0,
+                                "added_urls": [],
+                                "method": "no_compatible_source",
+                            }
+                        )
+                        continue
+                    atom_context_text = _claim_context_text(atom)
+                    atom_time_context = infer_time_context(atom_context_text, anchor_date=as_of)
+                    atom_as_of = atom_time_context.effective_as_of_date or as_of
+                    claim_time_contexts.append(
+                        {
+                            "claim_id": atom.claim_id,
+                            "claim": atom.text,
+                            "context_window": atom.context_window,
+                            "context_window_source": atom.context_window_source,
+                            "as_of_date": atom_as_of,
+                            "time_context": atom_time_context.to_dict(),
+                            "selected_providers": providers,
+                        }
+                    )
+                    search_kwargs = {
+                        "claim": atom_context_text,
+                        "ticker": ticker,
+                        "argument_type": atom.argument_type,
+                        "max_sources": max_sources,
+                        "as_of_date": atom_as_of,
+                        "selected_sources": providers,
+                    }
+                    if source_results is not None:
+                        search_kwargs["source_results"] = source_results
+                    atom_results, atom_notes = search_client.search_financial_sources(**search_kwargs)
+                    search_notes.extend([f"{atom.claim_id}: {note}" for note in atom_notes])
+                    added_urls = []
+                    for result in atom_results:
+                        if result.url in seen_urls:
+                            continue
+                        if len(results) >= retrieval_budget:
+                            search_notes.append(
+                                f"{atom.claim_id}: retrieval budget reached after {retrieval_budget} unique result(s)"
+                            )
+                            break
+                        seen_urls.add(result.url)
+                        results.append(result)
+                        added_urls.append(result.url)
+                    claim_retrievals.append(
+                        {
+                            "claim_id": atom.claim_id,
+                            "claim": atom.text,
+                            "context_window": atom.context_window,
+                            "context_window_source": atom.context_window_source,
+                            "as_of_date": atom_as_of,
+                            "selected_providers": providers,
+                            "retrieved_count": len(atom_results),
+                            "added_urls": added_urls,
+                            "method": "per_claim_retrieval",
+                        }
+                    )
         else:
             results, search_notes = [], ["retrieval skipped because no fact-checkable claims were found"]
         if fact_checkable_claims and not results:
@@ -164,7 +292,13 @@ class FinancialCredibilityToolkit:
             "retrieve",
             "ok" if results else "empty",
             f"Retrieved {len(results)} candidate source(s).",
-            outputs={"urls": [item.url for item in results], "notes": search_notes},
+            outputs={
+                "urls": [item.url for item in results],
+                "notes": search_notes,
+                "claim_time_contexts": claim_time_contexts,
+                "claim_retrievals": claim_retrievals,
+                "retrieval_budget": retrieval_budget,
+            },
         )
 
         extractor = EvidenceExtractor(self.config)
@@ -179,7 +313,7 @@ class FinancialCredibilityToolkit:
             ticker=ticker,
             search_results=results,
             as_of_date=as_of,
-            max_sources=max_sources,
+            max_sources=retrieval_budget,
         )
         _emit_trace(
             trace_callback,
@@ -288,8 +422,38 @@ class FinancialCredibilityToolkit:
             entity_resolution=entity_resolution,
             judge=self.judge,
         )
+        evidence_coverage = _build_evidence_coverage(
+            atomic_claims=atomic_claims,
+            source_selection_plan=source_selection_plan,
+            claim_retrievals=claim_retrievals,
+        )
+        incomplete_coverage = [
+            item
+            for item in evidence_coverage
+            if item["fact_checkable"] and not item["has_relevant_evidence"] and item["selected_sources"]
+        ]
+        _emit_trace(
+            trace_callback,
+            "agentic_coverage_check",
+            "review" if incomplete_coverage else "ok",
+            (
+                "Checked whether each fact-checkable atomic claim has relevant evidence before final verdicts."
+                if not incomplete_coverage
+                else f"{len(incomplete_coverage)} fact-checkable claim(s) still lack relevant evidence after retrieval."
+            ),
+            outputs={"coverage": evidence_coverage},
+        )
         if any(item.human_review_required for item in atomic_claims):
             final_flags = sorted(set(final_flags + ["human_review_required"]))
+        verdict, label, final_flags = _reconcile_final_verdict(
+            current_verdict=verdict,
+            current_label=label,
+            final_flags=final_flags,
+            numeric_check=numeric_check,
+            logic_check=logic_check,
+            source_check=source_check,
+            atomic_claims=atomic_claims,
+        )
         _emit_trace(
             trace_callback,
             "verify_atomic_claims",
@@ -352,6 +516,11 @@ class FinancialCredibilityToolkit:
                 "needs_decomposition": classification.needs_decomposition,
                 "search_notes": search_notes,
                 "extraction_notes": extraction_notes,
+                "time_context": time_context.to_dict(),
+                "claim_time_contexts": claim_time_contexts,
+                "claim_retrievals": claim_retrievals,
+                "evidence_coverage": evidence_coverage,
+                "retrieval_budget": retrieval_budget,
                 "source_selection": source_selection_plan,
                 "selected_providers": selected_providers,
                 "source_routes": [
@@ -361,6 +530,8 @@ class FinancialCredibilityToolkit:
                     }
                     for item in atomic_claims
                 ],
+                "preprocessing": preprocessed.to_dict(),
+                "original_claim": original_claim,
             },
         )
 
@@ -397,6 +568,128 @@ class FinancialCredibilityToolkit:
         for item in evidence:
             item_scores = scores[item.url]
             item.independence_score = round(sum(item_scores) / len(item_scores), 3)
+
+
+def _reconcile_final_verdict(
+    current_verdict,
+    current_label,
+    final_flags: list[str],
+    numeric_check,
+    logic_check,
+    source_check,
+    atomic_claims,
+):
+    """Let explicit checks rescue under-supported factual claims without hiding contradictions."""
+    if current_verdict != Verdict.INSUFFICIENT:
+        return current_verdict, current_label, final_flags
+    if numeric_check.verdict == VerificationVerdict.CONTRADICTED.value:
+        return current_verdict, current_label, final_flags
+    if any(item.verdict == VerificationVerdict.CONTRADICTED for item in atomic_claims):
+        return current_verdict, current_label, final_flags
+
+    fact_claims = [item for item in atomic_claims if item.verdict != VerificationVerdict.NOT_APPLICABLE]
+    supportive_atomic = [
+        item
+        for item in fact_claims
+        if item.verdict in {VerificationVerdict.SUPPORTED, VerificationVerdict.PARTIALLY_SUPPORTED}
+    ]
+    numeric_supportive = numeric_check.verdict in {
+        VerificationVerdict.VERIFIED.value,
+        VerificationVerdict.PARTIALLY_VERIFIED.value,
+    }
+    logic_supportive = logic_check.verdict in {
+        VerificationVerdict.SUPPORTED.value,
+        VerificationVerdict.PARTIALLY_SUPPORTED.value,
+    }
+    source_usable = source_check.confidence >= 0.55
+    should_rescue = (
+        bool(supportive_atomic)
+        and len(supportive_atomic) == len(fact_claims)
+        and source_usable
+    ) or (numeric_supportive and logic_supportive and source_usable)
+    if not should_rescue:
+        return current_verdict, current_label, final_flags
+
+    label = current_label
+    if current_label == CredibilityLabel.LOW:
+        label = (
+            CredibilityLabel.HIGH
+            if numeric_check.verdict == VerificationVerdict.VERIFIED.value and source_check.confidence >= 0.75
+            else CredibilityLabel.MEDIUM
+        )
+    return Verdict.SUPPORTED, label, sorted(set(final_flags + ["verdict_reconciled_from_verification_checks"]))
+
+
+def _retrieval_budget(max_sources: int, fact_checkable_claims: list) -> int:
+    """Use a per-claim retrieval budget so early claims cannot starve later ones."""
+    return max(1, int(max_sources)) * max(1, len(fact_checkable_claims))
+
+
+def _claim_context_text(claim: AtomicClaim) -> str:
+    context = " ".join(str(claim.context_window or "").split())
+    if context and claim.text not in context:
+        return f"{context} {claim.text}"
+    return context or claim.text
+
+
+def _build_evidence_coverage(
+    atomic_claims,
+    source_selection_plan: list[dict[str, Any]],
+    claim_retrievals: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Summarize whether each atomic claim reached evidence before final judgment."""
+    selection_by_id = {
+        str(item.get("claim_id")): item
+        for item in source_selection_plan
+        if item.get("claim_id")
+    }
+    retrieval_by_id = {
+        str(item.get("claim_id")): item
+        for item in claim_retrievals
+        if item.get("claim_id")
+    }
+    rows = []
+    for result in atomic_claims:
+        claim = result.atomic_claim
+        selection = selection_by_id.get(claim.claim_id, {})
+        retrieval = retrieval_by_id.get(claim.claim_id, {})
+        selected_sources = (
+            selection.get("selected_provider_names")
+            or selection.get("selected_sources")
+            or retrieval.get("selected_providers")
+            or []
+        )
+        fact_checkable = claim.argument_type in FACTUAL_TYPES
+        has_relevant_evidence = bool(result.evidence_urls)
+        if not fact_checkable:
+            status = "skipped_non_factual"
+        elif has_relevant_evidence:
+            status = "evidence_attached"
+        elif selected_sources and retrieval.get("retrieved_count", 0):
+            status = "retrieved_but_not_relevant"
+        elif selected_sources:
+            status = "selected_source_returned_no_data"
+        else:
+            status = "no_compatible_source"
+        rows.append(
+            {
+                "claim_id": claim.claim_id,
+                "claim": claim.text,
+                "context_window": claim.context_window,
+                "context_window_source": claim.context_window_source,
+                "fact_checkable": fact_checkable,
+                "selected_sources": selected_sources,
+                "retrieved_count": int(retrieval.get("retrieved_count") or 0),
+                "added_urls": retrieval.get("added_urls") or [],
+                "evidence_url_count": len(result.evidence_urls),
+                "has_relevant_evidence": has_relevant_evidence,
+                "verdict": result.verdict.value,
+                "human_review_required": result.human_review_required,
+                "review_reasons": result.review_reasons,
+                "closure_status": status,
+            }
+        )
+    return rows
 
 
 def _emit_trace(

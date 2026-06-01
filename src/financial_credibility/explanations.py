@@ -128,12 +128,45 @@ def _numeric_summary(derivation: dict[str, Any] | None) -> str:
     if not derivation:
         return "No deterministic numeric derivation was attached to this claim."
     expression = derivation.get("expression") or "numeric check"
+    inputs = derivation.get("inputs") or {}
     passed = derivation.get("passed")
+    if expression == "numeric_match_summary":
+        matched = _numeric_value_list(str(inputs.get("matched_values") or ""))
+        unmatched = _numeric_value_list(str(inputs.get("unmatched_values") or ""))
+        if passed is True and matched:
+            return f"The evidence directly matches { _join_human_list(matched) } from the claim."
+        if passed is False and matched and unmatched:
+            return f"The evidence matches { _join_human_list(matched) }, but it does not clearly confirm { _join_human_list(unmatched) }."
+        if passed is False and unmatched:
+            return f"The evidence does not clearly confirm { _join_human_list(unmatched) } from the claim."
     if passed is True:
         return f"The numeric derivation `{expression}` passed."
     if passed is False:
         return f"The numeric derivation `{expression}` did not pass."
     return f"A numeric derivation summary was recorded as `{expression}`."
+
+
+def _numeric_value_list(value: str) -> list[str]:
+    text = value.strip()
+    if not text or text.lower() == "none":
+        return []
+    values = []
+    for item in text.split(";"):
+        cleaned = item.strip()
+        if not cleaned:
+            continue
+        values.append((cleaned.split("->", 1)[0] or cleaned).strip())
+    return values[:4]
+
+
+def _join_human_list(values: list[str]) -> str:
+    if not values:
+        return ""
+    if len(values) == 1:
+        return values[0]
+    if len(values) == 2:
+        return f"{values[0]} and {values[1]}"
+    return ", ".join(values[:-1]) + f", and {values[-1]}"
 
 
 def _source_summary(evidence: dict[str, Any] | None) -> str:
@@ -150,7 +183,22 @@ def _claim_caveats(result: dict[str, Any]) -> list[str]:
     if review_reasons:
         caveats.append("Human review is recommended for this claim.")
     issues = result.get("issues") or []
-    caveats.extend(str(issue) for issue in issues[:3])
+    caveats.extend(_user_facing_issue(str(issue)) for issue in issues)
     if not result.get("evidence_urls") and not result.get("evidence_keys"):
         caveats.append("No claim-linked evidence was available.")
-    return list(dict.fromkeys(caveats))
+    return list(dict.fromkeys(item for item in caveats if item))[:4]
+
+
+def _user_facing_issue(issue: str) -> str:
+    """Return a user-facing caveat, hiding internal provider/debug failures."""
+    text = " ".join(str(issue or "").split())
+    if not text:
+        return ""
+    lower = text.lower()
+    if "http error" in lower or "bad request" in lower or "fallback:" in lower:
+        return ""
+    if text == "llm_judge_unavailable":
+        return ""
+    if text == "ticker_only_entity_resolution":
+        return "Entity resolution is based mainly on the ticker symbol."
+    return text

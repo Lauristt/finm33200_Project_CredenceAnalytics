@@ -1,0 +1,3521 @@
+{
+  "input": {
+    "memo": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+    "original_memo": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 236,
+      "cleaned_length": 236,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter."
+    },
+    "tickers": [
+      "AMZN"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "Amazon.com, Inc.",
+          "ticker": "AMZN",
+          "symbol": "AMZN",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0001018724",
+          "exchange": "Nasdaq"
+        }
+      ],
+      "tickers": [
+        "AMZN"
+      ],
+      "asset_classes": [
+        "single_name_equity"
+      ],
+      "asset_groups": {
+        "single_name_equity": [
+          {
+            "name": "Amazon.com, Inc.",
+            "ticker": "AMZN",
+            "symbol": "AMZN",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0001018724",
+            "exchange": "Nasdaq"
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [],
+      "notes": [
+        "filtered_unlisted_ticker:AWS",
+        "ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json"
+      ]
+    },
+    "as_of_date": "2026-04-29",
+    "requested_as_of_date": "2026-04-29",
+    "time_context": {
+      "effective_as_of_date": "2026-04-29",
+      "user_as_of_date": "2026-04-29",
+      "event_date": null,
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": []
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 1,
+    "detected_entity_count": 1,
+    "asset_class_count": 1,
+    "asset_classes": [
+      "single_name_equity"
+    ],
+    "non_equity_entity_count": 0,
+    "error_count": 0,
+    "atomic_claim_count": 3,
+    "skipped_claim_count": 0,
+    "total_claim_count": 3,
+    "human_review_count": 0,
+    "average_confidence": 0.775,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+      "ticker": "AMZN",
+      "as_of_date": "2026-04-29",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.95,
+      "verdict": "supported",
+      "credibility_label": "high",
+      "credibility_score": 0.8,
+      "score_breakdown": {
+        "source_authority": 0.86,
+        "recency": 0.98,
+        "evidence_support": 0.55,
+        "numeric_consistency": 0.95,
+        "independence": 0.85,
+        "reasoning_quality": 0.55,
+        "penalties": 0.0,
+        "final_score": 0.8,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "verified",
+        "confidence": 0.9,
+        "summary": "All material numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/"
+        ],
+        "issues": [
+          "matched $181.5 billion with $181.5 billion",
+          "matched 17% with 17%",
+          "matched 28% with 28%",
+          "matched $37.6 billion with $37.6 billion",
+          "matched $23.9 billion with $23.9 billion",
+          "matched $18.4 billion with $18.4 billion"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "supported",
+        "confidence": 0.753,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "verified",
+        "confidence": 0.887,
+        "summary": "Sources are strong enough for a useful credibility assessment.",
+        "evidence_urls": [
+          "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+        ],
+        "issues": [],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "High",
+        "final_confidence": 0.845,
+        "numeric_confidence": 0.9,
+        "logic_confidence": 0.753,
+        "source_confidence": 0.887,
+        "summary": "Overall confidence is High. Numeric check: verified; logic check: supported; source check: verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "numeric change",
+              "reported period"
+            ],
+            "context_window": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "context_window_source": "claim"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+          ],
+          "evidence_keys": [
+            "T2:ir.aboutamazon.com:2026-04-29",
+            "T1:data.sec.gov:2018-07-27"
+          ],
+          "canonical_fact_ids": [
+            "fact_941adae4bd73"
+          ],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$181.5 billion -> $181.5 billion; 17% -> 17%",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.93,
+            "entity_match": 0.9,
+            "time_alignment": 0.565,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 1.0,
+            "cross_source_consistency": 0.78,
+            "parser_confidence": 0.5,
+            "final_confidence": 0.836
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "matched $181.5 billion with $181.5 billion",
+            "matched 17% with 17%"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_2",
+            "text": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "numeric change",
+              "reported period"
+            ],
+            "context_window": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "context_window_source": "claim"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+          ],
+          "evidence_keys": [
+            "T2:ir.aboutamazon.com:2026-04-29",
+            "T1:data.sec.gov:2018-07-27"
+          ],
+          "canonical_fact_ids": [],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "28% -> 28%; $37.6 billion -> $37.6 billion",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.93,
+            "entity_match": 0.9,
+            "time_alignment": 0.565,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.8,
+            "cross_source_consistency": 0.78,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.756
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "matched 28% with 28%",
+            "matched $37.6 billion with $37.6 billion"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_3",
+            "text": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "numeric change",
+              "reported period"
+            ],
+            "context_window": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "context_window_source": "claim"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/"
+          ],
+          "evidence_keys": [
+            "T2:ir.aboutamazon.com:2026-04-29"
+          ],
+          "canonical_fact_ids": [],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$23.9 billion -> $23.9 billion; $18.4 billion -> $18.4 billion",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.86,
+            "entity_match": 0.9,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.62,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.733
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "matched $23.9 billion with $23.9 billion",
+            "matched $18.4 billion with $18.4 billion"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_941adae4bd73",
+          "source_type": "company_ir",
+          "authority_tier": "T2",
+          "license_tag": "unknown",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-04-29",
+          "observation_date": "2026-04-29",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "Amazon.com Announces First Quarter Results",
+          "value": "2026",
+          "provenance_locator": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "audit_sample_source"
+          }
+        },
+        {
+          "fact_id": "fact_d586b5362c19",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2018-06-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2018-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 52886000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_63c49b0ec5ca",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2018-03-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2018-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 51042000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_37a043dbeab4",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-12-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 177866000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_c77c4891c3d4",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-12-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 60453000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_a0b5ed63ef22",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-09-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 43744000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_5626b7dc6797",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-06-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 37955000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_66c5a23d7de8",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-03-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 35714000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f4db46e55399",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2016-12-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2016-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 135987000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_aa800e64b8cd",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2010-12-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2010-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NewAccountingPronouncementOrChangeInAccountingPrincipleEffectOfChangeOnNetRevenue",
+          "value": 508000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_5f738b40e9d1",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2018-06-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2018-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueGoodsNet",
+          "value": 31864000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_1dbabd2ce31e",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2018-03-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2018-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueGoodsNet",
+          "value": 31605000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_09066c69441c",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-12-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueGoodsNet",
+          "value": 118573000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_be0e2d10dd08",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-09-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueGoodsNet",
+          "value": 28768000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_ea7a771aee2b",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-06-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueGoodsNet",
+          "value": 24745000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_e3a5ef2ae042",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-03-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueGoodsNet",
+          "value": 23734000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_434a1d8c7673",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2016-12-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2016-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueGoodsNet",
+          "value": 94665000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_3b0d22af7b43",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2016-09-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2016-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueGoodsNet",
+          "value": 22339000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_a679afb2dc41",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2018-06-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2018-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueServicesNet",
+          "value": 21022000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_230838b741f3",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2018-03-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2018-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueServicesNet",
+          "value": 19437000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f177acee8b84",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-12-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueServicesNet",
+          "value": 59293000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_1b5174d9ba7a",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-09-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueServicesNet",
+          "value": 14976000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_698746e0f6c3",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-06-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueServicesNet",
+          "value": 13210000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_07a97b7f649b",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2017-03-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2017-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueServicesNet",
+          "value": 11980000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_4f0da366f9fb",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2016-12-31",
+          "filing_date": "2018-07-27",
+          "observation_date": "2016-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueServicesNet",
+          "value": 41322000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_bb31ad253e44",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0001018724",
+          "ticker": "AMZN",
+          "cik": "0001018724",
+          "lei": null,
+          "report_period": "2016-09-30",
+          "filing_date": "2018-07-27",
+          "observation_date": "2016-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueServicesNet",
+          "value": 10375000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "AMZN",
+        "entity_id": "CIK0001018724",
+        "cik": "0001018724",
+        "lei": null,
+        "figi": null,
+        "confidence": 0.85,
+        "sources": [
+          "SEC",
+          "evidence_entity_match"
+        ],
+        "issues": []
+      },
+      "audit_trace": {
+        "trace_id": "trace_03128a4fe96e",
+        "created_at": "2026-05-29T03:38:43+00:00",
+        "replayable_inputs": {
+          "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+          "ticker": "AMZN",
+          "as_of_date": "2026-04-29",
+          "search_result_urls": [
+            "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 2 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+                "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 2 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "data.sec.gov",
+                "ir.aboutamazon.com"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "ok",
+            "summary": "Resolved entity as CIK0001018724.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "confidence": 0.85,
+              "issues": []
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 26 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_941adae4bd73",
+                "fact_d586b5362c19",
+                "fact_63c49b0ec5ca",
+                "fact_37a043dbeab4",
+                "fact_c77c4891c3d4",
+                "fact_a0b5ed63ef22",
+                "fact_5626b7dc6797",
+                "fact_66c5a23d7de8",
+                "fact_f4db46e55399",
+                "fact_aa800e64b8cd",
+                "fact_5f738b40e9d1",
+                "fact_1dbabd2ce31e",
+                "fact_09066c69441c",
+                "fact_be0e2d10dd08",
+                "fact_ea7a771aee2b",
+                "fact_e3a5ef2ae042",
+                "fact_434a1d8c7673",
+                "fact_3b0d22af7b43",
+                "fact_a679afb2dc41",
+                "fact_230838b741f3"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "ok",
+            "summary": "Verified 3 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "supported",
+                "claim_2": "supported",
+                "claim_3": "supported"
+              },
+              "review_reasons": {}
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: used caller-provided source seed",
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: used caller-provided source seed",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_3: used caller-provided source seed",
+          "claim_3: sec_company_facts: 1 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+          "title": "Amazon.com Announces First Quarter Results",
+          "text": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+          "source_type": "company_ir",
+          "source_tier": "T2",
+          "domain": "ir.aboutamazon.com",
+          "published_at": "2026-04-29",
+          "license_tag": "unknown",
+          "is_official_primary": true,
+          "source_authority": 0.86,
+          "recency_score": 0.98,
+          "relevance_score": 1.0,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.95,
+          "support_label": "supports",
+          "support_score": 1.0,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "company investor-relations or official press page pattern",
+            "0 days old",
+            "matched numeric values: 2026, $181.5 billion, 17%, 28%, $37.6 billion, $23.9 billion, $18.4 billion",
+            "token overlap=1.00",
+            "reasoning quality is secondary for factual claim type",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "title": "SEC Company Facts for AMZN",
+          "text": "SalesRevenueNet (USD) for fiscal quarter ending 2018-06-30: 52886000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 51042000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-12-31: 177866000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 60453000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 43744000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 37955000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 35714000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2016-12-31: 135987000000 (form 10-K); NewAccountingPronouncementOrChangeInAccountingPrincipleEffectOfChangeOnNetRevenue (USD) for fiscal year ending 2010-12-31: 508000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2018-06-30: 31864000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2018-03-31: 31605000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal year ending 2017-12-31: 118573000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-09-30: 28768000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-06-30: 24745000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-03-31: 23734000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal year ending 2016-12-31: 94665000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2016-09-30: 22339000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2018-06-30: 21022000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2018-03-31: 19437000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal year ending 2017-12-31: 59293000000 (form 10-K); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-09-30: 14976000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-06-30: 13210000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-03-31: 11980000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal year ending 2016-12-31: 41322000000 (form 10-K); SalesRevenueServicesNet (USD) for fiscal quarter ending 2016-09-30: 10375000000 (form 10-Q)",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "data.sec.gov",
+          "published_at": "2018-07-27",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.15,
+          "relevance_score": 0.433,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.283,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "SEC filing/regulatory source",
+            "2833 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.04",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type"
+          ]
+        }
+      ],
+      "risk_flags": [],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "financial metric",
+          "numeric change",
+          "reported period"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: used caller-provided source seed",
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: used caller-provided source seed",
+          "claim_2: sec_company_facts: 1 result(s)",
+          "claim_3: used caller-provided source seed",
+          "claim_3: sec_company_facts: 1 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-04-29",
+          "user_as_of_date": "2026-04-29",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "context_window": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-29",
+            "time_context": {
+              "effective_as_of_date": "2026-04-29",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "context_window": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-29",
+            "time_context": {
+              "effective_as_of_date": "2026-04-29",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "context_window": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-29",
+            "time_context": {
+              "effective_as_of_date": "2026-04-29",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "context_window": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-29",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [
+              "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "context_window": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-29",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "context_window": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "context_window_source": "claim",
+            "as_of_date": "2026-04-29",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "context_window": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "context_window_source": "claim",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [
+              "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+            ],
+            "evidence_url_count": 2,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "context_window": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "context_window_source": "claim",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "evidence_url_count": 2,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "context_window": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "context_window_source": "claim",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          }
+        ],
+        "retrieval_budget": 24,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "sec_company_facts",
+          "sec_recent_filings"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "AWS segment sales increased 28% year over year to $37.6 billion",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 236,
+          "cleaned_length": 236,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter."
+        },
+        "original_claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+        "agentic_search_plan": [
+          "AMZN \"Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.\" SEC 10-Q 10-K",
+          "AMZN earnings release revenue EPS investor relations",
+          "AMZN company facts SEC revenue earnings",
+          "AMZN Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter. correction restatement contradiction",
+          "AMZN Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter. SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "Amazon.com Announces First Quarter Results",
+          "domain": "ir.aboutamazon.com",
+          "source_tier": "T2",
+          "is_official_primary": true,
+          "license_tag": "unknown",
+          "published_at": "2026-04-29",
+          "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+          "used_by_claims": [
+            "claim_1",
+            "claim_2",
+            "claim_3"
+          ]
+        },
+        {
+          "title": "SEC Company Facts for AMZN",
+          "domain": "data.sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2018-07-27",
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+          "used_by_claims": [
+            "claim_1",
+            "claim_2"
+          ]
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+          "verdict": "supported",
+          "confidence": 0.836,
+          "summary": "The claim is marked `supported` based on Amazon.com Announces First Quarter Results with confidence 0.84.",
+          "numeric_summary": "The evidence directly matches $181.5 billion and 17% from the claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T2.",
+          "main_evidence": {
+            "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+            "title": "Amazon.com Announces First Quarter Results",
+            "text": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+            "source_type": "company_ir",
+            "source_tier": "T2",
+            "domain": "ir.aboutamazon.com",
+            "published_at": "2026-04-29",
+            "license_tag": "unknown",
+            "is_official_primary": true,
+            "source_authority": 0.86,
+            "recency_score": 0.98,
+            "relevance_score": 1.0,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.95,
+            "support_label": "supports",
+            "support_score": 1.0,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "company investor-relations or official press page pattern",
+              "0 days old",
+              "matched numeric values: 2026, $181.5 billion, 17%, 28%, $37.6 billion, $23.9 billion, $18.4 billion",
+              "token overlap=1.00",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "matched $181.5 billion with $181.5 billion",
+            "matched 17% with 17%"
+          ]
+        },
+        {
+          "claim_id": "claim_2",
+          "claim": "AWS segment sales increased 28% year over year to $37.6 billion",
+          "verdict": "supported",
+          "confidence": 0.756,
+          "summary": "The claim is marked `supported` based on Amazon.com Announces First Quarter Results with confidence 0.76.",
+          "numeric_summary": "The evidence directly matches 28% and $37.6 billion from the claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T2.",
+          "main_evidence": {
+            "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+            "title": "Amazon.com Announces First Quarter Results",
+            "text": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+            "source_type": "company_ir",
+            "source_tier": "T2",
+            "domain": "ir.aboutamazon.com",
+            "published_at": "2026-04-29",
+            "license_tag": "unknown",
+            "is_official_primary": true,
+            "source_authority": 0.86,
+            "recency_score": 0.98,
+            "relevance_score": 1.0,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.95,
+            "support_label": "supports",
+            "support_score": 1.0,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "company investor-relations or official press page pattern",
+              "0 days old",
+              "matched numeric values: 2026, $181.5 billion, 17%, 28%, $37.6 billion, $23.9 billion, $18.4 billion",
+              "token overlap=1.00",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "matched 28% with 28%",
+            "matched $37.6 billion with $37.6 billion"
+          ]
+        },
+        {
+          "claim_id": "claim_3",
+          "claim": "Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter",
+          "verdict": "supported",
+          "confidence": 0.733,
+          "summary": "The claim is marked `supported` based on Amazon.com Announces First Quarter Results with confidence 0.73.",
+          "numeric_summary": "The evidence directly matches $23.9 billion and $18.4 billion from the claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T2.",
+          "main_evidence": {
+            "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+            "title": "Amazon.com Announces First Quarter Results",
+            "text": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+            "source_type": "company_ir",
+            "source_tier": "T2",
+            "domain": "ir.aboutamazon.com",
+            "published_at": "2026-04-29",
+            "license_tag": "unknown",
+            "is_official_primary": true,
+            "source_authority": 0.86,
+            "recency_score": 0.98,
+            "relevance_score": 1.0,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.95,
+            "support_label": "supports",
+            "support_score": 1.0,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "company investor-relations or official press page pattern",
+              "0 days old",
+              "matched numeric values: 2026, $181.5 billion, 17%, 28%, $37.6 billion, $23.9 billion, $18.4 billion",
+              "token overlap=1.00",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "matched $23.9 billion with $23.9 billion",
+            "matched $18.4 billion with $18.4 billion"
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_2",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_3",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_03128a4fe96e",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "Amazon.com, Inc. (AMZN)",
+        "name": "Amazon.com, Inc.",
+        "ticker": "AMZN",
+        "symbol": "AMZN",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "Amazon.com, Inc. (AMZN)",
+        "name": "Amazon.com, Inc.",
+        "ticker": "AMZN",
+        "symbol": "AMZN",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 3 fact-checkable claims across 1 entity. No claim was flagged for mandatory human review.\n\n## AMZN\n\n- **Consistent.** Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. Evidence: T2 Amazon.com Announces First Quarter Results (ir.aboutamazon.com). Reason: The evidence directly matches $181.5 billion and 17% from the claim.\n- **Consistent.** AWS segment sales increased 28% year over year to $37.6 billion. Evidence: T2 Amazon.com Announces First Quarter Results (ir.aboutamazon.com). Reason: The evidence directly matches 28% and $37.6 billion from the claim.\n- **Consistent.** Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter. Evidence: T2 Amazon.com Announces First Quarter Results (ir.aboutamazon.com). Reason: The evidence directly matches $23.9 billion and $18.4 billion from the claim.\n",
+  "agent_trace": {
+    "run_id": "agent_192b23d7459c",
+    "created_at": "2026-05-29T03:38:39+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_1cbde403",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 30,
+        "output_preview": "{\"asset_classes\": [\"single_name_equity\"], \"asset_groups\": {\"single_name_equity\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0001018724\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Amazon.com, Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"AMZN\", \"ticker\": \"AMZN\"}]}, \"entities\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0001018724\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Amazon.com, Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"AMZN\", \"ticker\": \"AMZN\"}], \"method\": \"heuristic\", \"non_equity_entities\": [], \"notes\": [\"filtered_unlisted_ticker:AWS\", \"ticker_universe_source:.cache/financial_credibility/company_tickers_exchang",
+        "output_hash": "c0875c8a9404563f85512893f63c5f36858cb8926383e6657fc3c979cbf78f90"
+      },
+      {
+        "call_id": "fallback_1_a250ee2a",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"context_window\": \"Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year\", \"context_window_source\": \"claim\", \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.95, \"context_window\": \"AWS segment sales increased 28% year over year to $37.6 billion\", \"context_window_source\": \"claim\", \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"AWS segment sales increased 28% year over year to $37.6 billion\"}, {\"argument_type\": \"metric_fact\",",
+        "output_hash": "d5d0ed09c8b686a71d73e0ecfb6010c1baea0474a715de42634aec3648c88291"
+      },
+      {
+        "call_id": "fallback_2_bff06029",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 8,
+        "output_preview": "{\"selections\": [{\"candidates\": [{\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.\", \"candidate_score\": 3.85, \"detail_available\": true, \"detected_asset_classes\": [\"single_name_equity\"], \"is_official_primary\": true, \"is_runtime_selectable\": true, \"license_tag\": \"public_official\", \"name\": \"SEC Company Facts\", \"required_inputs\": [\"ticker_or_cik\", \"metric_hint\"], \"source_id\": \"sec_company_facts\"}, {\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.\", \"candidate_score\": 2.5, \"detail_available\": true, \"detected_asset_classes\": [\"single_na",
+        "output_hash": "2bd5e8fe03dbcb05895c37e80664a68c039308aec1bcdf05d4e8c4f82fad3676"
+      },
+      {
+        "call_id": "fallback_3_cde922bd",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+          "ticker": "AMZN",
+          "as_of_date": "2026-04-29",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "prefetched_results": null,
+          "source_results": [
+            {
+              "title": "Amazon.com Announces First Quarter Results",
+              "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+              "snippet": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+              "published_at": "2026-04-29",
+              "source": "Amazon Investor Relations",
+              "raw": {
+                "provider": "audit_sample_source",
+                "seed_source": true
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1167,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.95, \"needs_decomposition\": false, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"]}, \"evidence\": [{\"domain\": \"ir.aboutamazon.com\", \"entity_match_score\": 0.9, \"independence_score\": 0.0, \"is_official_primary\": true, \"license_tag\": \"unknown\", \"notes\": [\"company investor-relations or official press page pattern\", \"0 days old\", \"matched numeric values: 2026, $181.5 billion, 17%\"], \"numeric_consistency_score\": 0.95, \"published_at\": \"2026-04-29\", \"reasoning_quality_score\": 0.0, \"recency_score\": 0.98, \"relevance_score\": 1.0, \"source_authority\": 0.86, \"source_tier\": \"T2\", \"source_type\": \"company_ir\", \"support_label\": \"not_enough_info\", \"support_score\": 0.0, \"text\": \"Amazon reporte",
+        "output_hash": "cc94ed4eece48e52062e0b9bef6bcb0c04dc0f9ea4e7d62adffa8b4322182bb8"
+      },
+      {
+        "call_id": "fallback_4_5801fa3e",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "AMZN",
+          "evidence": [
+            {
+              "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+              "title": "Amazon.com Announces First Quarter Results",
+              "text": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+              "source_type": "company_ir",
+              "source_tier": "T2",
+              "domain": "ir.aboutamazon.com",
+              "published_at": "2026-04-29",
+              "license_tag": "unknown",
+              "is_official_primary": true,
+              "source_authority": 0.86,
+              "recency_score": 0.98,
+              "relevance_score": 1.0,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.95,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "company investor-relations or official press page pattern",
+                "0 days old",
+                "matched numeric values: 2026, $181.5 billion, 17%"
+              ]
+            },
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "title": "SEC Company Facts for AMZN",
+              "text": "SalesRevenueNet (USD) for fiscal quarter ending 2018-06-30: 52886000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 51042000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-12-31: 177866000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 60453000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 43744000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 37955000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 35714000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2016-12-31: 135987000000 (form 10-K); NewAccountingPronouncementOrChangeInAccountingPrincipleEffectOfChangeOnNetRevenue (USD) for fiscal year ending 2010-12-31: 508000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2018-06-30: 31864000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2018-03-31: 31605000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal year ending 2017-12-31: 118573000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-09-30: 28768000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-06-30: 24745000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-03-31: 23734000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal year ending 2016-12-31: 94665000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2016-09-30: 22339000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2018-06-30: 21022000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2018-03-31: 19437000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal year ending 2017-12-31: 59293000000 (form 10-K); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-09-30: 14976000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-06-30: 13210000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-03-31: 11980000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal year ending 2016-12-31: 41322000000 (form 10-K); SalesRevenueServicesNet (USD) for fiscal quarter ending 2016-09-30: 10375000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2018-07-27",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.15,
+              "relevance_score": 0.471,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "2833 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 2,
+        "output_preview": "{\"canonical_facts\": [{\"authority_tier\": \"T2\", \"cik\": \"0001018724\", \"currency\": null, \"entity_id\": \"CIK0001018724\", \"fact_id\": \"fact_f32a2079a248\", \"fact_name\": \"Amazon.com Announces First Quarter Results\", \"filing_date\": \"2026-04-29\", \"lei\": null, \"license_tag\": \"unknown\", \"observation_date\": \"2026-04-29\", \"parser_confidence\": 0.55, \"provenance_locator\": \"https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/\", \"raw\": {\"domain\": \"ir.aboutamazon.com\"}, \"report_period\": null, \"source_type\": \"company_ir\", \"ticker\": \"AMZN\", \"unit\": null, \"value\": \"2026\", \"vintage_date\": null}, {\"authority_tier\": \"T1\", \"cik\": \"0001018724\", \"currency\": \"USD\", \"entity_id\": \"CIK0001018724\", \"fact_id\": \"fact_d586b5362c19\", \"fact_name\": \"SalesRevenueNet\", \"filin",
+        "output_hash": "16d37a3cd16b2c5350187ed8d9c11acec02bd6388c5808eaff64859563bb5667"
+      },
+      {
+        "call_id": "fallback_5_483fd67a",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+          "ticker": "AMZN",
+          "evidence": [
+            {
+              "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+              "title": "Amazon.com Announces First Quarter Results",
+              "text": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+              "source_type": "company_ir",
+              "source_tier": "T2",
+              "domain": "ir.aboutamazon.com",
+              "published_at": "2026-04-29",
+              "license_tag": "unknown",
+              "is_official_primary": true,
+              "source_authority": 0.86,
+              "recency_score": 0.98,
+              "relevance_score": 1.0,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.95,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "company investor-relations or official press page pattern",
+                "0 days old",
+                "matched numeric values: 2026, $181.5 billion, 17%"
+              ]
+            },
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "title": "SEC Company Facts for AMZN",
+              "text": "SalesRevenueNet (USD) for fiscal quarter ending 2018-06-30: 52886000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 51042000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-12-31: 177866000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 60453000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 43744000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 37955000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 35714000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2016-12-31: 135987000000 (form 10-K); NewAccountingPronouncementOrChangeInAccountingPrincipleEffectOfChangeOnNetRevenue (USD) for fiscal year ending 2010-12-31: 508000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2018-06-30: 31864000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2018-03-31: 31605000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal year ending 2017-12-31: 118573000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-09-30: 28768000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-06-30: 24745000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-03-31: 23734000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal year ending 2016-12-31: 94665000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2016-09-30: 22339000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2018-06-30: 21022000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2018-03-31: 19437000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal year ending 2017-12-31: 59293000000 (form 10-K); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-09-30: 14976000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-06-30: 13210000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-03-31: 11980000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal year ending 2016-12-31: 41322000000 (form 10-K); SalesRevenueServicesNet (USD) for fiscal quarter ending 2016-09-30: 10375000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2018-07-27",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.15,
+              "relevance_score": 0.471,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "2833 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_f32a2079a248",
+              "source_type": "company_ir",
+              "authority_tier": "T2",
+              "license_tag": "unknown",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-29",
+              "observation_date": "2026-04-29",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "Amazon.com Announces First Quarter Results",
+              "value": "2026",
+              "provenance_locator": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "ir.aboutamazon.com"
+              }
+            },
+            {
+              "fact_id": "fact_d586b5362c19",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 52886000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_63c49b0ec5ca",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 51042000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_37a043dbeab4",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 177866000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_c77c4891c3d4",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 60453000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a0b5ed63ef22",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 43744000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5626b7dc6797",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 37955000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_66c5a23d7de8",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 35714000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f4db46e55399",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 135987000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_aa800e64b8cd",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2010-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2010-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NewAccountingPronouncementOrChangeInAccountingPrincipleEffectOfChangeOnNetRevenue",
+              "value": 508000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5f738b40e9d1",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 31864000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1dbabd2ce31e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 31605000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_09066c69441c",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 118573000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_be0e2d10dd08",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 28768000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ea7a771aee2b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 24745000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_e3a5ef2ae042",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 23734000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_434a1d8c7673",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 94665000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_3b0d22af7b43",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 22339000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a679afb2dc41",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 21022000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_230838b741f3",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 19437000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f177acee8b84",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 59293000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1b5174d9ba7a",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 14976000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_698746e0f6c3",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 13210000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_07a97b7f649b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 11980000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_4f0da366f9fb",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 41322000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_bb31ad253e44",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 10375000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 5,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"context_window\": \"Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year\", \"context_window_source\": \"claim\", \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year\"}, \"canonical_fact_ids\": [\"fact_f32a2079a248\"], \"confidence_components\": {\"cross_source_consistency\": 0.78, \"entity_match\": 0.9, \"final_confidence\": 0.841, \"numeric_exactness\": 0.9, \"parser_confidence\": 0.55, \"retrieval_sufficiency\": 1.0, \"source_authority\": 0.93, \"time_alignment\": 0.565}, \"evidence_keys\": [\"T2:ir.aboutamazon.com:2026-04-29\", \"T1:data.sec.gov:2018-",
+        "output_hash": "78efa11cf39470a10f822d34fb2cb37193ffc6aec06379b6f858ffc20c296a1b"
+      },
+      {
+        "call_id": "fallback_6_ef8b335e",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year",
+          "ticker": "AMZN",
+          "as_of_date": "2026-04-29",
+          "evidence": [
+            {
+              "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+              "title": "Amazon.com Announces First Quarter Results",
+              "text": "Amazon reported first-quarter 2026 net sales of $181.5 billion, up 17% year over year. AWS segment sales increased 28% year over year to $37.6 billion. Operating income rose to $23.9 billion from $18.4 billion in the prior-year quarter.",
+              "source_type": "company_ir",
+              "source_tier": "T2",
+              "domain": "ir.aboutamazon.com",
+              "published_at": "2026-04-29",
+              "license_tag": "unknown",
+              "is_official_primary": true,
+              "source_authority": 0.86,
+              "recency_score": 0.98,
+              "relevance_score": 1.0,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.95,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "company investor-relations or official press page pattern",
+                "0 days old",
+                "matched numeric values: 2026, $181.5 billion, 17%"
+              ]
+            },
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "title": "SEC Company Facts for AMZN",
+              "text": "SalesRevenueNet (USD) for fiscal quarter ending 2018-06-30: 52886000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 51042000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-12-31: 177866000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 60453000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 43744000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 37955000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 35714000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2016-12-31: 135987000000 (form 10-K); NewAccountingPronouncementOrChangeInAccountingPrincipleEffectOfChangeOnNetRevenue (USD) for fiscal year ending 2010-12-31: 508000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2018-06-30: 31864000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2018-03-31: 31605000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal year ending 2017-12-31: 118573000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-09-30: 28768000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-06-30: 24745000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2017-03-31: 23734000000 (form 10-Q); SalesRevenueGoodsNet (USD) for fiscal year ending 2016-12-31: 94665000000 (form 10-K); SalesRevenueGoodsNet (USD) for fiscal quarter ending 2016-09-30: 22339000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2018-06-30: 21022000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2018-03-31: 19437000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal year ending 2017-12-31: 59293000000 (form 10-K); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-09-30: 14976000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-06-30: 13210000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal quarter ending 2017-03-31: 11980000000 (form 10-Q); SalesRevenueServicesNet (USD) for fiscal year ending 2016-12-31: 41322000000 (form 10-K); SalesRevenueServicesNet (USD) for fiscal quarter ending 2016-09-30: 10375000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2018-07-27",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.15,
+              "relevance_score": 0.471,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "2833 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_f32a2079a248",
+              "source_type": "company_ir",
+              "authority_tier": "T2",
+              "license_tag": "unknown",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-29",
+              "observation_date": "2026-04-29",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "Amazon.com Announces First Quarter Results",
+              "value": "2026",
+              "provenance_locator": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-First-Quarter-Results/",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "ir.aboutamazon.com"
+              }
+            },
+            {
+              "fact_id": "fact_d586b5362c19",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 52886000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_63c49b0ec5ca",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 51042000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_37a043dbeab4",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 177866000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_c77c4891c3d4",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 60453000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a0b5ed63ef22",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 43744000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5626b7dc6797",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 37955000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_66c5a23d7de8",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 35714000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f4db46e55399",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 135987000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_aa800e64b8cd",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2010-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2010-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "NewAccountingPronouncementOrChangeInAccountingPrincipleEffectOfChangeOnNetRevenue",
+              "value": 508000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5f738b40e9d1",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 31864000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1dbabd2ce31e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 31605000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_09066c69441c",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 118573000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_be0e2d10dd08",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 28768000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ea7a771aee2b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 24745000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_e3a5ef2ae042",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 23734000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_434a1d8c7673",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 94665000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_3b0d22af7b43",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueGoodsNet",
+              "value": 22339000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a679afb2dc41",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 21022000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_230838b741f3",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 19437000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f177acee8b84",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 59293000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1b5174d9ba7a",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 14976000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_698746e0f6c3",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 13210000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_07a97b7f649b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2017-03-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2017-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 11980000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_4f0da366f9fb",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 41322000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_bb31ad253e44",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0001018724",
+              "ticker": "AMZN",
+              "cik": "0001018724",
+              "lei": null,
+              "report_period": "2016-09-30",
+              "filing_date": "2018-07-27",
+              "observation_date": "2016-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueServicesNet",
+              "value": 10375000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1,
+        "output_preview": "{\"created_at\": \"2026-05-29T03:38:40+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": [\"data.sec.gov\", \"ir.aboutamazon.com\"]}, \"status\": \"ok\", \"step\": \"extract_evidence\", \"summary\": \"Built 2 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": \"0001018724\", \"confidence\": 0.85, \"issues\": [], \"lei\": null, \"ticker\": \"AMZN\"}, \"status\": \"ok\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as CIK0001018724.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": [\"fact_f32a2079a248\", \"fact_d586b5362c19\", \"fact_63c49b0ec5ca\", \"fact_37a043dbeab4\", \"fact_c77c4891c3d4\", \"fact_a0b5ed63ef22\", \"fact_5626b7dc6797\", \"fact_66c5a23d7de8\", \"fact_f4db46e55399\", \"fact_a",
+        "output_hash": "e74fa8962a84f55e8ffb497bee7fde066e37e491f575f29fcdb63b9c058b6c63"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_192b23d7459c",
+    "created_at": "2026-05-29T03:38:43+00:00",
+    "verdict": "pass",
+    "score": 1.0,
+    "summary": "Audit pass: no findings; score 1.00.",
+    "findings": []
+  }
+}

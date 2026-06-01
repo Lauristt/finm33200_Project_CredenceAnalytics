@@ -19,6 +19,10 @@ from .reporting import build_verification_report
 DEFAULT_PORT = 8765
 
 
+class ClientDisconnected(Exception):
+    """Raised when the browser cancels an in-flight streaming report."""
+
+
 def run_server(
     host: str = "127.0.0.1",
     port: int = DEFAULT_PORT,
@@ -102,8 +106,11 @@ def _handler(config: ToolkitConfig):
 
             def emit(message: dict[str, Any]) -> None:
                 data = json.dumps(message, ensure_ascii=False).encode("utf-8") + b"\n"
-                self.wfile.write(data)
-                self.wfile.flush()
+                try:
+                    self.wfile.write(data)
+                    self.wfile.flush()
+                except (BrokenPipeError, ConnectionResetError, OSError) as exc:
+                    raise ClientDisconnected from exc
 
             try:
                 report = self._build_report(
@@ -111,8 +118,13 @@ def _handler(config: ToolkitConfig):
                     progress_callback=lambda event: emit({"type": "trace", "event": event}),
                 )
                 emit({"type": "report", "report": report})
+            except ClientDisconnected:
+                return
             except Exception as exc:
-                emit({"type": "error", **error_payload(exc)})
+                try:
+                    emit({"type": "error", **error_payload(exc)})
+                except ClientDisconnected:
+                    return
 
         def _build_report(
             self,
@@ -130,6 +142,9 @@ def _handler(config: ToolkitConfig):
                 mode=str(payload.get("mode") or "agentic"),
                 prefetched_results=prefetched_results,
                 progress_callback=progress_callback,
+                tool_profile=str(payload.get("tool_profile") or "agent_core"),
+                agent_max_steps=int(payload.get("agent_max_steps") or 20),
+                audit=bool(payload.get("audit", True)),
             )
             if demo_preset:
                 report["demo_mode"] = True
@@ -163,37 +178,34 @@ HTML = r"""<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Credence Analytics Agent</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
     :root {
       color-scheme: light;
-      --bg: #eef3f3;
-      --panel: #fbfcfd;
-      --panel-cool: #f5f8f8;
-      --terminal: #111b20;
-      --terminal-2: #17262c;
-      --ink: #11181d;
-      --muted: #66737c;
-      --line: #cbd5da;
-      --line-strong: #aebec6;
-      --teal: #0f766e;
-      --cyan: #247f93;
-      --teal-soft: #d9ece9;
-      --amber: #a26a16;
-      --red: #a63b43;
-      --green: #227146;
-      --shadow: 0 14px 34px rgba(17, 27, 32, 0.10);
-      --shadow-tight: 0 5px 16px rgba(17, 27, 32, 0.08);
+      --bg: #FAFAF7;
+      --panel: #FFFFFF;
+      --panel-cool: #F7F6F1;
+      --ink: #1a1a1a;
+      --muted: #6B7280;
+      --line: #EAEAE5;
+      --line-strong: #D8D8D2;
+      --accent: #1B3A57;
+      --conf-green: #2F7D5B;
+      --conf-amber: #B8923A;
+      --conf-orange: #C2602E;
+      --conf-red: #A4332B;
+      --amber: #B8923A;
+      --red: #A4332B;
+      --green: #2F7D5B;
+      --shadow: none;
+      --shadow-tight: none;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
-      background:
-        linear-gradient(180deg, rgba(238, 243, 243, 0.94), rgba(247, 249, 249, 0.96) 42%, rgba(235, 240, 239, 0.98)),
-        repeating-linear-gradient(0deg, rgba(18, 57, 63, 0.045) 0 1px, transparent 1px 42px),
-        repeating-linear-gradient(90deg, rgba(18, 57, 63, 0.04) 0 1px, transparent 1px 42px),
-        var(--bg);
+      background: var(--bg);
       font-variant-numeric: tabular-nums;
     }
     .shell {
@@ -202,10 +214,10 @@ HTML = r"""<!doctype html>
       flex-direction: column;
     }
     .topbar {
-      height: 60px;
-      border-bottom: 1px solid rgba(202, 218, 224, 0.22);
-      background: rgba(17, 27, 32, 0.94);
-      color: #edf4f3;
+      height: 56px;
+      border-bottom: 1px solid var(--line);
+      background: #FFFFFF;
+      color: var(--ink);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -214,22 +226,11 @@ HTML = r"""<!doctype html>
       position: sticky;
       top: 0;
       z-index: 2;
-      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 34px rgba(16, 27, 33, 0.16);
-      backdrop-filter: blur(14px);
-    }
-    .topbar::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -1px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(39, 151, 141, 0.72), rgba(36, 127, 147, 0.55), transparent);
     }
     .chat {
       flex: 1;
       overflow: auto;
-      padding: 26px 18px 150px;
+      padding: 28px 18px 150px;
     }
     .messages {
       width: min(1120px, 100%);
@@ -252,12 +253,10 @@ HTML = r"""<!doctype html>
     }
     .brand h1::before {
       content: "";
-      width: 11px;
-      height: 11px;
-      border: 1px solid rgba(86, 206, 190, 0.82);
-      background: linear-gradient(135deg, rgba(86, 206, 190, 0.85), rgba(17, 27, 32, 0));
-      box-shadow: 0 0 0 4px rgba(86, 206, 190, 0.10);
-      transform: rotate(45deg);
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      background: var(--accent);
       flex: 0 0 auto;
     }
     h2 { font-size: 18px; }
@@ -278,7 +277,7 @@ HTML = r"""<!doctype html>
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #fbfcfc;
+      background: var(--panel);
       color: var(--ink);
       font: inherit;
       font-size: 14px;
@@ -286,23 +285,24 @@ HTML = r"""<!doctype html>
       outline: none;
     }
     textarea { min-height: 120px; resize: vertical; line-height: 1.45; }
-    input:focus, textarea:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(27, 58, 87, 0.10); }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .actions { display: flex; gap: 10px; align-items: center; }
     button {
-      border: 0;
+      border: 1px solid transparent;
       border-radius: 8px;
-      background: var(--terminal);
+      background: var(--accent);
       color: #fff;
       font: inherit;
-      font-weight: 700;
+      font-weight: 600;
       padding: 10px 14px;
       cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 7px 18px rgba(17, 27, 32, 0.14);
     }
-    button:hover { background: #1a2a31; }
-    button.secondary { background: #eef1f2; color: var(--ink); }
+    button:hover { background: #142d45; }
+    button.secondary { background: var(--panel); color: var(--ink); border-color: var(--line); }
+    button.secondary:hover { border-color: var(--line-strong); background: var(--panel-cool); }
     button:disabled { opacity: 0.55; cursor: wait; }
+    button[hidden] { display: none !important; }
     .status {
       font-size: 13px;
       color: var(--muted);
@@ -325,21 +325,19 @@ HTML = r"""<!doctype html>
       right: 0;
       bottom: 0;
       padding: 18px;
-      background: linear-gradient(180deg, rgba(238, 243, 243, 0), rgba(238, 243, 243, 0.95) 24%, var(--bg));
+      background: linear-gradient(180deg, rgba(250, 250, 247, 0), rgba(250, 250, 247, 0.95) 24%, var(--bg));
     }
     .composer {
       width: min(920px, 100%);
       margin: 0 auto;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 10px;
       align-items: end;
-      background: rgba(251, 252, 253, 0.94);
+      background: var(--panel);
       border: 1px solid var(--line-strong);
       border-radius: 8px;
-      box-shadow: var(--shadow);
       padding: 10px;
-      backdrop-filter: blur(12px);
     }
     .composer textarea {
       min-height: 52px;
@@ -355,6 +353,17 @@ HTML = r"""<!doctype html>
       height: 42px;
       align-self: end;
     }
+    .stop-button {
+      min-width: 74px;
+      height: 42px;
+      align-self: end;
+      background: #FEF2F2;
+      color: var(--red);
+      border: 1px solid #FCA5A5;
+    }
+    .stop-button:hover {
+      background: #FEE2E2;
+    }
     .composer-wrap .status {
       width: min(920px, 100%);
       margin: 8px auto 0;
@@ -366,10 +375,11 @@ HTML = r"""<!doctype html>
     }
     .message-label {
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 720;
+      font-size: 11px;
+      font-weight: 500;
       text-transform: uppercase;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: 0.07em;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
     }
     .message.user {
       justify-items: end;
@@ -377,10 +387,9 @@ HTML = r"""<!doctype html>
     .user-query {
       width: min(760px, 92%);
       justify-self: end;
-      background: #e4efed;
-      border: 1px solid #b9d6d1;
+      background: #EEF2F7;
+      border: 1px solid #C7D5E6;
       border-radius: 8px;
-      box-shadow: var(--shadow-tight);
       overflow: hidden;
     }
     .user-query summary {
@@ -396,13 +405,14 @@ HTML = r"""<!doctype html>
     .user-query summary::after {
       content: "Expand";
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 720;
+      font-size: 11px;
+      font-weight: 500;
       text-transform: uppercase;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: 0.06em;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
     }
     .user-query[open] summary {
-      border-bottom: 1px solid #b9d6d1;
+      border-bottom: 1px solid #C7D5E6;
     }
     .user-query[open] summary::after { content: "Collapse"; }
     .user-query-title {
@@ -410,7 +420,7 @@ HTML = r"""<!doctype html>
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      font-weight: 650;
+      font-weight: 500;
       line-height: 1.35;
     }
     .user-bubble {
@@ -433,12 +443,10 @@ HTML = r"""<!doctype html>
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 8px;
-      box-shadow: var(--shadow);
     }
     .metric {
       position: relative;
       padding: 14px;
-      background: linear-gradient(180deg, #ffffff, var(--panel-cool));
       overflow: hidden;
     }
     .metric::before {
@@ -448,13 +456,13 @@ HTML = r"""<!doctype html>
       right: 0;
       top: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--teal), var(--cyan));
+      background: var(--accent);
     }
     .metric .value {
       font-size: 24px;
-      font-weight: 780;
+      font-weight: 600;
       margin-top: 4px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
     }
     .section { padding: 16px; margin-bottom: 16px; }
     .entity { margin-bottom: 18px; overflow: hidden; }
@@ -463,12 +471,12 @@ HTML = r"""<!doctype html>
       justify-content: space-between;
       gap: 12px;
       align-items: center;
-      padding: 15px 16px;
-      border-bottom: 1px solid rgba(202, 218, 224, 0.28);
-      background: linear-gradient(135deg, var(--terminal), var(--terminal-2));
-      color: #eef5f4;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-cool);
+      color: var(--ink);
     }
-    .entity-head .subtle { color: #aebfc5; }
+    .entity-head .subtle { color: var(--muted); }
     .pill {
       display: inline-flex;
       align-items: center;
@@ -476,15 +484,16 @@ HTML = r"""<!doctype html>
       border-radius: 999px;
       padding: 3px 9px;
       font-size: 12px;
-      font-weight: 720;
-      background: #edf1f2;
+      font-weight: 500;
+      background: var(--panel-cool);
       color: var(--ink);
       white-space: nowrap;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      border: 1px solid var(--line);
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
     }
-    .pill.good { background: #dff0e6; color: var(--green); }
-    .pill.warn { background: #fff0d8; color: var(--amber); }
-    .pill.bad { background: #f7dddd; color: var(--red); }
+    .pill.good { background: rgba(47, 125, 91, 0.10); color: var(--conf-green); border-color: rgba(47, 125, 91, 0.22); }
+    .pill.warn { background: rgba(184, 146, 58, 0.10); color: var(--conf-amber); border-color: rgba(184, 146, 58, 0.22); }
+    .pill.bad { background: rgba(164, 51, 43, 0.10); color: var(--conf-red); border-color: rgba(164, 51, 43, 0.22); }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -496,17 +505,17 @@ HTML = r"""<!doctype html>
       padding: 11px 12px;
       border-bottom: 1px solid var(--line);
     }
-    th { color: var(--muted); font-size: 12px; background: var(--panel-cool); }
+    th { color: var(--muted); font-size: 11px; font-family: 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.05em; text-transform: uppercase; background: var(--panel-cool); }
     .claim-text { max-width: 460px; line-height: 1.35; }
     .bar {
-      height: 8px;
+      height: 6px;
       width: 92px;
-      background: #e4e8eb;
+      background: var(--line);
       border-radius: 999px;
       overflow: hidden;
       margin-top: 5px;
     }
-    .bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), var(--cyan)); }
+    .bar span { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
     .evidence {
       padding: 14px 16px 16px;
       display: grid;
@@ -530,20 +539,21 @@ HTML = r"""<!doctype html>
       gap: 10px;
       padding: 11px 12px;
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 760;
+      font-size: 11px;
+      font-weight: 500;
       text-transform: uppercase;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: 0.06em;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
       cursor: pointer;
       list-style: none;
-      background: linear-gradient(180deg, #ffffff, var(--panel-cool));
+      background: var(--panel-cool);
     }
     .asset-group summary.asset-group-title::-webkit-details-marker { display: none; }
     .asset-group summary.asset-group-title::after {
       content: "Expand";
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 720;
+      font-size: 11px;
+      font-weight: 500;
       margin-left: auto;
     }
     .asset-group[open] summary.asset-group-title {
@@ -571,13 +581,12 @@ HTML = r"""<!doctype html>
     .claim-card {
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #ffffff;
+      background: var(--panel);
       overflow: hidden;
-      box-shadow: var(--shadow-tight);
     }
     .claim-card.needs-review {
-      border-color: #e3bd74;
-      box-shadow: inset 3px 0 0 var(--amber);
+      border-color: rgba(184, 146, 58, 0.45);
+      border-left: 3px solid var(--conf-amber);
     }
     .claim-card-head {
       display: flex;
@@ -585,7 +594,7 @@ HTML = r"""<!doctype html>
       align-items: flex-start;
       gap: 12px;
       padding: 13px 14px;
-      background: linear-gradient(180deg, #fbfcfd, #f3f6f6);
+      background: var(--panel-cool);
       border-bottom: 1px solid var(--line);
     }
     .claim-card-title {
@@ -610,9 +619,10 @@ HTML = r"""<!doctype html>
       border-radius: 999px;
       padding: 3px 9px;
       font-size: 12px;
-      font-weight: 720;
-      background: #fff0d8;
-      color: var(--amber);
+      font-weight: 500;
+      background: rgba(184, 146, 58, 0.10);
+      color: var(--conf-amber);
+      border: 1px solid rgba(184, 146, 58, 0.22);
       white-space: nowrap;
     }
     .claim-grid {
@@ -629,9 +639,11 @@ HTML = r"""<!doctype html>
     }
     .claim-field-label {
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 760;
+      font-size: 11px;
+      font-weight: 500;
       text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
     }
     .source-box, .quote-box, .match-box {
       border: 1px solid var(--line);
@@ -641,7 +653,6 @@ HTML = r"""<!doctype html>
       font-size: 13px;
       line-height: 1.45;
       min-height: 82px;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
     }
     .quote-box {
       white-space: pre-wrap;
@@ -652,9 +663,9 @@ HTML = r"""<!doctype html>
       margin-bottom: 3px;
     }
     .source-link {
-      color: var(--teal);
+      color: var(--accent);
       text-decoration: none;
-      font-weight: 650;
+      font-weight: 500;
       overflow-wrap: anywhere;
     }
     .source-link:hover { text-decoration: underline; }
@@ -675,7 +686,7 @@ HTML = r"""<!doctype html>
     .trace-panel {
       border-top: 1px solid var(--line);
       padding: 14px 16px 16px;
-      background: #fff;
+      background: var(--panel);
     }
     details.trace-panel {
       padding: 0;
@@ -690,8 +701,10 @@ HTML = r"""<!doctype html>
     details.trace-panel > summary::after {
       content: "Collapse";
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 650;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
     }
     details.trace-panel:not([open]) > summary {
       border-bottom: 0;
@@ -717,14 +730,14 @@ HTML = r"""<!doctype html>
       gap: 8px;
     }
     .trace-step {
-      border-left: 3px solid var(--teal);
+      border-left: 3px solid var(--accent);
       border-radius: 6px;
       background: var(--panel-cool);
       padding: 9px 10px;
       font-size: 13px;
     }
-    .trace-step.warn { border-left-color: var(--amber); }
-    .trace-step.bad { border-left-color: var(--red); }
+    .trace-step.warn { border-left-color: var(--conf-amber); }
+    .trace-step.bad { border-left-color: var(--conf-red); }
     .trace-step-top {
       display: flex;
       justify-content: space-between;
@@ -739,11 +752,11 @@ HTML = r"""<!doctype html>
       margin: 8px 0 0;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: #f5f8f8;
+      background: var(--panel-cool);
       padding: 9px;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
       font-size: 12px;
       line-height: 1.4;
     }
@@ -757,20 +770,19 @@ HTML = r"""<!doctype html>
       background: var(--panel);
       border: 1px solid var(--line-strong);
       border-radius: 8px;
-      box-shadow: var(--shadow);
       overflow: hidden;
     }
     .live-trace > summary.trace-head {
       display: grid;
       grid-template-columns: minmax(140px, 1fr) auto minmax(68px, 1fr);
       align-items: center;
-      background: linear-gradient(135deg, var(--terminal), var(--terminal-2));
-      color: #edf4f3;
-      border-bottom: 1px solid rgba(202, 218, 224, 0.22);
+      background: var(--panel-cool);
+      color: var(--ink);
+      border-bottom: 1px solid var(--line);
     }
     .live-trace > summary.trace-head::after {
       justify-self: end;
-      color: #aebfc5;
+      color: var(--muted);
     }
     .live-progress {
       display: inline-flex;
@@ -778,22 +790,23 @@ HTML = r"""<!doctype html>
       gap: 9px;
       justify-content: center;
       min-width: min(360px, 42vw);
-      color: #dcefed;
+      color: var(--accent);
       font-size: 13px;
-      font-weight: 650;
+      font-weight: 500;
       white-space: nowrap;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
     }
     .live-progress.done .pulse-dot,
-    .live-progress.error .pulse-dot {
+    .live-progress.error .pulse-dot,
+    .live-progress.stopped .pulse-dot {
       animation: none;
     }
     .pulse-dot {
       width: 9px;
       height: 9px;
       border-radius: 999px;
-      background: #56cebe;
-      box-shadow: 0 0 0 0 rgba(34, 128, 111, 0.35);
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(27, 58, 87, 0.35);
       animation: pulse 1.25s ease-out infinite;
       flex: 0 0 auto;
     }
@@ -803,7 +816,7 @@ HTML = r"""<!doctype html>
       height: 6px;
       border-radius: 999px;
       overflow: hidden;
-      background: rgba(220, 239, 237, 0.20);
+      background: rgba(27, 58, 87, 0.12);
       flex: 0 0 auto;
     }
     .activity-bar::after {
@@ -812,22 +825,27 @@ HTML = r"""<!doctype html>
       inset: 0;
       width: 38%;
       border-radius: inherit;
-      background: #56cebe;
+      background: var(--accent);
       animation: scan 1.05s ease-in-out infinite;
     }
     .live-progress.done .activity-bar::after,
-    .live-progress.error .activity-bar::after {
+    .live-progress.error .activity-bar::after,
+    .live-progress.stopped .activity-bar::after {
       animation: none;
       width: 100%;
     }
     .live-progress.error .pulse-dot,
     .live-progress.error .activity-bar::after {
-      background: var(--red);
+      background: var(--conf-red);
+    }
+    .live-progress.stopped .pulse-dot,
+    .live-progress.stopped .activity-bar::after {
+      background: var(--conf-amber);
     }
     @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(34, 128, 111, 0.34); }
-      70% { box-shadow: 0 0 0 9px rgba(34, 128, 111, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(34, 128, 111, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(27, 58, 87, 0.34); }
+      70% { box-shadow: 0 0 0 9px rgba(27, 58, 87, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(27, 58, 87, 0); }
     }
     @keyframes scan {
       0% { transform: translateX(-110%); }
@@ -840,7 +858,7 @@ HTML = r"""<!doctype html>
     .report-text {
       width: 100%;
       min-height: 320px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
       font-size: 12px;
       line-height: 1.45;
     }
@@ -886,7 +904,7 @@ HTML = r"""<!doctype html>
       border-radius: 6px;
       background: var(--panel-cool);
       padding: 1px 5px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
       font-size: 0.92em;
     }
     .markdown-body pre {
@@ -903,9 +921,9 @@ HTML = r"""<!doctype html>
       padding: 0;
     }
     .markdown-body a {
-      color: var(--teal);
+      color: var(--accent);
       text-decoration: none;
-      font-weight: 650;
+      font-weight: 500;
     }
     .markdown-body a:hover { text-decoration: underline; }
     .markdown-table-wrap {
@@ -926,17 +944,16 @@ HTML = r"""<!doctype html>
       font-weight: 650;
     }
     .empty {
-      border: 1px dashed #c7ced3;
+      border: 1.5px dashed var(--line-strong);
       border-radius: 8px;
       padding: 40px 20px;
       text-align: center;
       color: var(--muted);
-      background: rgba(251, 252, 253, 0.82);
-      box-shadow: var(--shadow-tight);
+      background: var(--panel);
     }
     .error { color: var(--red); font-weight: 650; }
     @media (max-width: 900px) {
-      .chat { padding: 18px 12px 150px; }
+      .chat { padding: 18px 12px 160px; }
       .summary { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
       .row { grid-template-columns: 1fr; }
       .trace-grid { grid-template-columns: 1fr; }
@@ -954,8 +971,119 @@ HTML = r"""<!doctype html>
       }
       .composer-wrap { padding: 12px; }
       .composer { grid-template-columns: minmax(0, 1fr); }
-      .send-button { width: 100%; }
+      .send-button, .stop-button { width: 100%; }
+      .topbar-meta { display: none; }
+      .welcome { padding: 36px 16px 28px; }
+      .example-chips { gap: 7px; }
     }
+
+    /* ── Welcome / empty state ───────────────────────────── */
+    .welcome {
+      display: grid;
+      gap: 20px;
+      place-items: center;
+      text-align: center;
+      padding: 64px 20px 56px;
+    }
+    .welcome-icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border: 1.5px solid rgba(27, 58, 87, 0.30);
+      background: rgba(27, 58, 87, 0.06);
+      border-radius: 12px;
+    }
+    .welcome-icon svg { display: block; }
+    .welcome-title { font-size: 20px; font-weight: 600; margin: 0; }
+    .welcome-sub {
+      max-width: 520px;
+      color: var(--muted);
+      line-height: 1.60;
+      font-size: 14.5px;
+      margin: 0;
+    }
+    .example-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      max-width: 720px;
+    }
+    .example-chip {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+      padding: 7px 13px;
+      cursor: pointer;
+      text-align: left;
+      line-height: 1.35;
+    }
+    .example-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(27, 58, 87, 0.04);
+    }
+    .example-chips-label {
+      width: 100%;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      color: var(--muted);
+      margin-bottom: -2px;
+    }
+
+    /* ── Trace panel inner (single-column, no raw JSON) ─── */
+    .trace-panel-inner {
+      padding: 14px 16px 16px;
+    }
+
+    /* ── Composer header ─────────────────────────────────── */
+    .composer-hdr {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 2px;
+    }
+    .composer-lbl {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      color: var(--muted);
+    }
+    .composer-hint { font-size: 12px; color: var(--muted); }
+
+    /* ── Topbar meta row ─────────────────────────────────── */
+    .topbar-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .topbar-sep {
+      width: 1px;
+      height: 13px;
+      background: var(--line);
+      flex: 0 0 auto;
+    }
+
+    /* ── Verify (primary) button ─────────────────────────── */
+    button.verify-button {
+      background: var(--accent);
+    }
+    button.verify-button:hover:not(:disabled) { background: #142d45; }
   </style>
 </head>
 <body>
@@ -964,30 +1092,67 @@ HTML = r"""<!doctype html>
       <div class="brand">
         <h1>Credence Analytics Agent</h1>
       </div>
+      <div class="topbar-meta">
+        <span>Financial claim verification</span>
+        <span class="topbar-sep"></span>
+        <span>SEC · FRED · Prices · News</span>
+      </div>
     </header>
     <span id="status" class="sr-status" aria-live="polite"></span>
     <main class="chat">
       <div id="report" class="messages">
-        <div class="message assistant">
-          <div class="empty">Credence report output will appear here.</div>
+        <div class="welcome">
+          <div class="welcome-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9 12L11 14L15 10" stroke="rgba(27,58,87,0.80)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="3.5" y="3.5" width="17" height="17" rx="4" stroke="rgba(27,58,87,0.45)" stroke-width="1.25" fill="none"/>
+              <path d="M7 8h4M7 12.5h1M7 16h6" stroke="rgba(27,58,87,0.30)" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h2 class="welcome-title">Financial Claim Verifier</h2>
+          <p class="welcome-sub">Paste an investment memo, earnings note, or market claim. The agent extracts entities, routes each fact to SEC filings, price history, or news, then returns a structured verdict with source evidence.</p>
+          <div class="example-chips">
+            <span class="example-chips-label">Try an example</span>
+            <button type="button" class="example-chip" data-example="NVIDIA reported $81.6 billion in revenue for fiscal Q1 2025.">NVIDIA reported $81.6B in revenue for fiscal Q1 2025</button>
+            <button type="button" class="example-chip" data-example="Apple Q2 2025 revenue was $111.2 billion.">Apple Q2 2025 revenue was $111.2B</button>
+            <button type="button" class="example-chip" data-example="The S&amp;P 500 rose 2.3% last week.">S&amp;P 500 rose 2.3% last week</button>
+            <button type="button" class="example-chip" data-example="U.S. CPI rose 3.8% year-over-year in January 2024.">U.S. CPI rose 3.8% YoY in Jan 2024</button>
+          </div>
         </div>
       </div>
     </main>
     <form id="form" class="composer-wrap">
       <div class="composer">
+        <div class="composer-hdr">
+          <span class="composer-lbl">Claim to verify</span>
+          <span class="composer-hint">Enter to submit &middot; Shift+Enter for newline</span>
+        </div>
         <label for="statement">Statement</label>
-        <textarea id="statement" name="statement" rows="1" placeholder="Paste an investment note or financial statement for verification."></textarea>
-        <button id="run" class="send-button" type="submit">Run</button>
+        <textarea id="statement" name="statement" rows="1" placeholder="Paste an investment memo, earnings summary, or market claim&hellip;"></textarea>
+        <button id="run" class="send-button verify-button" type="submit">Verify</button>
+        <button id="stop" class="stop-button" type="button" hidden>Stop</button>
       </div>
     </form>
   </div>
   <script>
     const form = document.getElementById("form");
     const runButton = document.getElementById("run");
+    const stopButton = document.getElementById("stop");
     const statusEl = document.getElementById("status");
     const reportEl = document.getElementById("report");
     const statementEl = document.getElementById("statement");
     let liveTraceEvents = [];
+    let liveTraceOpenDetails = new Set();
+    let currentRunController = null;
+
+    document.addEventListener("click", (event) => {
+      const chip = event.target.closest(".example-chip");
+      if (!chip) return;
+      const example = chip.dataset.example || chip.textContent.trim();
+      statementEl.value = example;
+      statementEl.focus();
+      resizeComposer();
+    });
 
     statementEl.addEventListener("input", resizeComposer);
     statementEl.addEventListener("keydown", (event) => {
@@ -998,6 +1163,14 @@ HTML = r"""<!doctype html>
     });
     resizeComposer();
 
+    stopButton.addEventListener("click", () => {
+      if (!currentRunController) return;
+      currentRunController.abort();
+      stopButton.disabled = true;
+      statusEl.textContent = "Stopping";
+      setLiveTraceFinished("stopped", "Stopping run...");
+    });
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const statement = statementEl.value.trim();
@@ -1006,31 +1179,53 @@ HTML = r"""<!doctype html>
         statementEl.focus();
         return;
       }
+      if (currentRunController) {
+        currentRunController.abort();
+      }
+      currentRunController = new AbortController();
       runButton.disabled = true;
+      stopButton.hidden = false;
+      stopButton.disabled = false;
       statementEl.disabled = true;
       statusEl.textContent = "Running";
       liveTraceEvents = [];
+      liveTraceOpenDetails = new Set();
       reportEl.innerHTML = renderUserMessage(statement, true) + renderLiveTraceShell();
-      const payload = {statement};
+      const payload = {
+        statement,
+        mode: "multi_tool",
+        tool_profile: "agent_core",
+        agent_max_steps: 20,
+        audit: true
+      };
       try {
-        const data = await runStreamingReport(payload);
+        const data = await runStreamingReport(payload, currentRunController.signal);
         renderReport(data, statement);
         statusEl.textContent = "Ready";
       } catch (error) {
+        if (isAbortError(error)) {
+          setLiveTraceFinished("stopped", "Run stopped");
+          statusEl.textContent = "Stopped";
+          return;
+        }
         reportEl.innerHTML = renderUserMessage(statement, true) + `<div class="message assistant"><div class="section error">${escapeHtml(error.message)}</div></div>`;
         statusEl.textContent = "Error";
       } finally {
+        currentRunController = null;
         runButton.disabled = false;
+        stopButton.disabled = false;
+        stopButton.hidden = true;
         statementEl.disabled = false;
         statementEl.focus();
       }
     });
 
-    async function runStreamingReport(payload) {
+    async function runStreamingReport(payload, signal) {
       const response = await fetch("/api/report/stream", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
@@ -1040,7 +1235,8 @@ HTML = r"""<!doctype html>
         const fallback = await fetch("/api/report", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          signal
         });
         const data = await fallback.json();
         if (!fallback.ok) throw new Error(formatError(data.error || "Request failed"));
@@ -1052,6 +1248,7 @@ HTML = r"""<!doctype html>
       let buffer = "";
       let finalReport = null;
       while (true) {
+        if (signal && signal.aborted) throw abortError();
         const {value, done} = await reader.read();
         if (done) break;
         buffer += decoder.decode(value, {stream: true});
@@ -1076,6 +1273,16 @@ HTML = r"""<!doctype html>
       }
       if (!finalReport) throw new Error("Report stream ended before a final report was returned.");
       return finalReport;
+    }
+
+    function isAbortError(error) {
+      return Boolean(error && (error.name === "AbortError" || error.message === "Run stopped"));
+    }
+
+    function abortError() {
+      const error = new Error("Run stopped");
+      error.name = "AbortError";
+      return error;
     }
 
     function formatError(error) {
@@ -1118,26 +1325,22 @@ HTML = r"""<!doctype html>
           <div class="message-label">Running</div>
           <details class="trace-panel live-trace">
             <summary class="trace-head">
-              <h3>Trace</h3>
+              <h3>Verification in progress</h3>
               <span class="live-progress" id="liveTraceProgress">
                 <span class="pulse-dot" aria-hidden="true"></span>
                 <span id="liveTraceStatus">Starting verification</span>
                 <span class="activity-bar" aria-hidden="true"></span>
               </span>
             </summary>
-            <div class="trace-grid">
+            <div class="trace-panel-inner">
               <div class="trace-list" id="liveTraceList">
                 <div class="trace-step">
                   <div class="trace-step-top">
                     <strong>Starting</strong>
-                    <span class="subtle">pending</span>
+                    <span class="subtle">Preparing</span>
                   </div>
                   <div>Preparing the verification workflow.</div>
                 </div>
-              </div>
-              <div>
-                <h3>Stream</h3>
-                <pre class="trace-meta" id="liveTraceRaw">[]</pre>
               </div>
             </div>
           </details>
@@ -1148,30 +1351,27 @@ HTML = r"""<!doctype html>
     function appendLiveTrace(event) {
       liveTraceEvents.push(event);
       const list = document.getElementById("liveTraceList");
-      const raw = document.getElementById("liveTraceRaw");
       const status = document.getElementById("liveTraceStatus");
       const progress = document.getElementById("liveTraceProgress");
       if (list) {
-        list.innerHTML = liveTraceEvents.map(renderTraceEvent).join("");
-      }
-      if (raw) {
-        raw.textContent = JSON.stringify(liveTraceEvents, null, 2);
+        list.innerHTML = liveTraceEvents.map((traceEvent, index) => renderTraceEvent(traceEvent, index, false)).join("");
       }
       if (status) {
         const last = liveTraceEvents[liveTraceEvents.length - 1] || {};
-        const label = last.step ? `${formatStepName(last.step)} - ${last.status || "running"}` : "Running verification";
-        status.textContent = `${label} (${liveTraceEvents.length} event${liveTraceEvents.length === 1 ? "" : "s"})`;
+        const label = last.step ? friendlyStepLabel(last.step) : "Verifying";
+        const statusLabel = last.status ? friendlyStatusLabel(last.status) : "";
+        status.textContent = statusLabel ? `${label} — ${statusLabel}` : label;
       }
-      if (progress) progress.classList.remove("done", "error");
+      if (progress) progress.classList.remove("done", "error", "stopped");
       const last = liveTraceEvents[liveTraceEvents.length - 1] || {};
-      statusEl.textContent = last.step ? `${last.step}: ${last.status || "running"}` : "Running";
+      statusEl.textContent = last.step ? friendlyStepLabel(last.step) : "Running";
     }
 
     function setLiveTraceFinished(state, label) {
       const progress = document.getElementById("liveTraceProgress");
       const status = document.getElementById("liveTraceStatus");
       if (progress) {
-        progress.classList.remove("done", "error");
+        progress.classList.remove("done", "error", "stopped");
         progress.classList.add(state);
       }
       if (status) status.textContent = label;
@@ -1190,8 +1390,7 @@ HTML = r"""<!doctype html>
         ["Asset Classes", summary.asset_class_count ?? 0],
         ["Fact Checks", summary.atomic_claim_count ?? 0],
         ["Not Fact-Checked", summary.skipped_claim_count ?? 0],
-        ["Needs Review", summary.human_review_count ?? 0],
-        ["Verification Confidence", fmtConfidence(summary.average_confidence)]
+        ["Needs Review", summary.human_review_count ?? 0]
       ];
       const runs = (data.runs || []).map(renderEntity).join("");
       const errors = (data.errors || []).map(err => `<div class="section error">${escapeHtml(err.ticker)}: ${escapeHtml(err.error)}</div>`).join("");
@@ -1322,6 +1521,7 @@ HTML = r"""<!doctype html>
         return `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${label}</a>`;
       });
       html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
+      html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
       return html;
     }
 
@@ -1411,13 +1611,15 @@ HTML = r"""<!doctype html>
       const claims = checkedResults.map(result => renderClaimCard(result, run)).join("");
       const skippedClaims = renderSkippedClaims(skippedResults);
       const trace = renderAgentTrace(audit);
-      const evidence = (run.evidence || []).slice(0, 8).map(item => `
-        <div class="evidence-item">
-          <strong>${escapeHtml(item.source_tier || "")}</strong>
-          ${escapeHtml(item.title || "")}
-          <div class="subtle">${escapeHtml(item.domain || "")} - ${escapeHtml(item.published_at || "undated")}</div>
-        </div>
-      `).join("");
+      const evidence = (run.evidence || []).slice(0, 8).map(item => {
+        const tier = item.source_tier ? `<span class="pill">${escapeHtml(friendlySourceTier(item.source_tier))}</span> ` : "";
+        return `
+          <div class="evidence-item">
+            ${tier}<strong>${escapeHtml(item.title || item.domain || "Source")}</strong>
+            <div class="subtle">${escapeHtml(item.domain || "")}${item.published_at ? " · " + escapeHtml(item.published_at) : ""}</div>
+          </div>
+        `;
+      }).join("");
       return `
         <section class="entity">
           <div class="entity-head">
@@ -1454,11 +1656,12 @@ HTML = r"""<!doctype html>
           <div class="evidence">
             ${results.map(result => {
               const claim = result.atomic_claim || {};
+              const typeLabel = skippedClaimTypeLabel(claim.argument_type);
               return `
                 <div class="evidence-item">
-                  <strong>${escapeHtml(claim.argument_type || "not_applicable")}</strong>
+                  <strong>${escapeHtml(typeLabel)}</strong>
                   <div>${escapeHtml(claim.text || "")}</div>
-                  <div class="subtle">Skipped because this is not a historical factual claim.</div>
+                  <div class="subtle">This is a ${escapeHtml(typeLabel.toLowerCase())} — not a verifiable historical fact.</div>
                 </div>
               `;
             }).join("")}
@@ -1467,73 +1670,167 @@ HTML = r"""<!doctype html>
       `;
     }
 
+    function skippedClaimTypeLabel(argumentType) {
+      const labels = {
+        opinion_analysis: "Opinion or analysis",
+        forecast: "Forecast or prediction",
+        causal: "Causal claim",
+        qualitative: "Qualitative statement",
+        not_applicable: "Non-factual statement",
+      };
+      return labels[String(argumentType || "").toLowerCase()] || formatStepName(argumentType) || "Non-factual statement";
+    }
+
     function renderAgentTrace(audit) {
       const events = audit.events || [];
-      const replay = audit.replayable_inputs || {};
-      const sourceNotes = audit.source_notes || [];
-      if (!events.length && !Object.keys(replay).length && !sourceNotes.length) return "";
+      if (!events.length) return "";
       return `
         <details class="trace-panel">
           <summary class="trace-head">
-            <h3>Agent Trace</h3>
-            <span class="subtle">${escapeHtml(audit.trace_id || "trace unavailable")}</span>
+            <h3>Trace</h3>
+            <span class="subtle">How the agent checked this claim</span>
           </summary>
-          <div class="trace-grid">
+          <div class="trace-panel-inner">
             <div class="trace-list">
-              ${events.map(renderTraceEvent).join("") || '<div class="subtle">No trace events.</div>'}
-            </div>
-            <div>
-              <h3>Replay</h3>
-              <pre class="trace-meta">${escapeHtml(JSON.stringify(replay, null, 2))}</pre>
-              ${sourceNotes.length ? `<div class="subtle">${escapeHtml(sourceNotes.join(", "))}</div>` : ""}
+              ${events.map(renderTraceEvent).join("")}
             </div>
           </div>
         </details>
       `;
     }
 
-    function renderTraceEvent(event, index) {
+    function rememberLiveTraceDetailState(list) {
+      list.querySelectorAll("details.trace-details[data-detail-key]").forEach(detail => {
+        const key = detail.getAttribute("data-detail-key");
+        if (!key) return;
+        if (detail.open) liveTraceOpenDetails.add(key);
+        else liveTraceOpenDetails.delete(key);
+      });
+    }
+
+    function restoreLiveTraceDetailState(list) {
+      list.querySelectorAll("details.trace-details[data-detail-key]").forEach(detail => {
+        const key = detail.getAttribute("data-detail-key");
+        if (key && liveTraceOpenDetails.has(key)) detail.open = true;
+      });
+    }
+
+    function renderTraceEvent(event, index, _preserveOpen = false) {
       const status = String(event.status || "").toLowerCase();
       const statusClass = status.includes("review") || status.includes("warn") ? "warn" : (status.includes("fail") || status.includes("error") ? "bad" : "");
-      const outputs = event.outputs && Object.keys(event.outputs).length ? JSON.stringify(event.outputs, null, 2) : "";
+      const stepLabel = friendlyStepLabel(event.step);
+      const statusLabel = friendlyStatusLabel(event.status);
       return `
         <div class="trace-step ${statusClass}">
           <div class="trace-step-top">
-            <strong>${escapeHtml(index + 1)}. ${escapeHtml(event.step || "step")}</strong>
-            <span class="subtle">${escapeHtml(event.status || "n/a")}</span>
+            <strong>${escapeHtml(index + 1)}. ${escapeHtml(stepLabel)}</strong>
+            <span class="subtle">${escapeHtml(statusLabel)}</span>
           </div>
           <div>${escapeHtml(event.summary || "")}</div>
-          ${outputs ? `<details class="trace-details"><summary>Outputs</summary><pre class="trace-meta">${escapeHtml(outputs)}</pre></details>` : ""}
         </div>
       `;
     }
 
+    function friendlyStepLabel(step) {
+      const labels = {
+        retrieve: "Retrieve sources",
+        extract_evidence: "Extract evidence",
+        resolve_entity: "Identify entity",
+        canonicalize_facts: "Structure facts",
+        verify_atomic_claims: "Verify claims",
+        search: "Search",
+        fetch: "Fetch document",
+        score: "Score evidence",
+        judge: "Judge claim",
+        summarize: "Summarize",
+        classify: "Classify claim",
+        route: "Route to source",
+        decompose: "Decompose claims",
+        select_sources: "Select sources",
+      };
+      const key = String(step || "").toLowerCase();
+      return labels[key] || formatStepName(step);
+    }
+
+    function friendlyStatusLabel(status) {
+      const labels = {
+        ok: "Done",
+        done: "Done",
+        success: "Done",
+        empty: "No data found",
+        review: "Needs review",
+        warn: "Warning",
+        warning: "Warning",
+        error: "Error",
+        fail: "Failed",
+        failed: "Failed",
+        running: "In progress",
+        skipped: "Skipped",
+        pending: "Pending",
+        partial: "Partially done",
+        insufficient: "Insufficient data",
+      };
+      const key = String(status || "").toLowerCase();
+      return labels[key] || formatStepName(status);
+    }
+
+    function friendlySourceName(sourceId) {
+      const labels = {
+        sec_company_facts: "SEC XBRL Filings",
+        sec_recent_filings: "SEC Filing History",
+        fred: "FRED (Federal Reserve)",
+        bls: "BLS Statistics",
+        bea: "BEA Economic Data",
+        eia: "EIA Energy Data",
+        web_search: "Web Search",
+        yahoo_finance: "Yahoo Finance",
+        finra: "FINRA",
+        cftc: "CFTC",
+        fmp: "Financial Modeling Prep",
+        alpha_vantage: "Alpha Vantage",
+        tiingo: "Tiingo",
+        finnhub: "Finnhub",
+        historical_prices: "Historical Price Data",
+        news: "News",
+      };
+      const key = String(sourceId || "").toLowerCase();
+      return labels[key] || String(sourceId || "").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function friendlySourceTier(tier) {
+      const labels = {
+        T1: "Official primary",
+        T2: "Official secondary",
+        T3: "Vendor data",
+        T4: "News",
+        T5: "Web",
+      };
+      return labels[String(tier || "").toUpperCase()] || String(tier || "");
+    }
+
     function renderSourceSelection(selection) {
-      const sources = (selection.selected_sources || []).join(", ") || "n/a";
+      const claimText = escapeHtml(selection.claim || selection.claim_id || "Claim");
+      const sourceIds = selection.selected_provider_names || selection.selected_sources || [];
+      const sourceNames = sourceIds.map(friendlySourceName).join(", ") || "n/a";
       return `
         <div class="evidence-item">
-          <strong>${escapeHtml(selection.claim_id || "claim")}</strong>
-          <div>${escapeHtml(sources)}</div>
-          ${selection.rationale ? `<div class="subtle">${escapeHtml(selection.rationale)}</div>` : ""}
+          <strong>${claimText}</strong>
+          <div class="subtle">Databases checked: ${escapeHtml(sourceNames)}</div>
         </div>
       `;
     }
 
     function renderClaimCard(result, run) {
       const claim = result.atomic_claim || {};
-      const components = result.confidence_components || {};
-      const confidence = Number(components.final_confidence || 0);
       const source = bestSourceForClaim(result, run.evidence || []);
       const facts = factsForClaim(result, run.canonical_facts || []);
-      const derivation = formatDerivation(result.numeric_derivation);
-      const match = consistencySummary(result, derivation);
+      const match = consistencySummary(result);
       const review = humanReviewSummary(result);
       const needsReview = Boolean(result.human_review_required || (result.review_reasons || []).length);
       return `
         <article class="claim-card ${needsReview ? "needs-review" : ""}">
           <div class="claim-card-head">
             <div class="claim-card-title">
-              <span class="subtle">${escapeHtml(claim.claim_id || "claim")}</span>
               <strong>${escapeHtml(claim.text || "")}</strong>
             </div>
             <div class="claim-status">
@@ -1548,7 +1845,7 @@ HTML = r"""<!doctype html>
             </div>
             <div class="claim-field">
               <div class="claim-field-label">What The Source Says</div>
-              <div class="quote-box">${renderSourceSays(source, facts)}</div>
+              <div class="quote-box">${renderSourceSays(source, facts, result)}</div>
             </div>
             <div class="claim-field">
               <div class="claim-field-label">Does It Match The Claim?</div>
@@ -1556,7 +1853,6 @@ HTML = r"""<!doctype html>
             </div>
           </div>
           <div class="claim-foot">
-            <span class="mini-meter">Verification confidence ${fmtConfidence(confidence)} <span class="bar"><span style="width:${Math.max(0, Math.min(100, confidence * 100))}%"></span></span></span>
             <span>${review}</span>
           </div>
         </article>
@@ -1566,12 +1862,24 @@ HTML = r"""<!doctype html>
     function bestSourceForClaim(result, evidence) {
       const keys = new Set(result.evidence_keys || []);
       const urls = new Set(result.evidence_urls || []);
-      return evidence.find(item => keys.has(evidenceKey(item))) || evidence.find(item => urls.has(item.url)) || evidence[0] || null;
+      if (!keys.size && !urls.size) return null;
+      return evidence.find(item => keys.has(evidenceKey(item))) || evidence.find(item => urls.has(item.url)) || null;
     }
 
     function factsForClaim(result, facts) {
       const ids = new Set(result.canonical_fact_ids || []);
-      return facts.filter(fact => ids.has(fact.fact_id)).slice(0, 4);
+      return facts.filter(fact => ids.has(fact.fact_id)).filter(isDisplayableFact).slice(0, 4);
+    }
+
+    function isDisplayableFact(fact) {
+      const name = String(fact.fact_name || "");
+      if (!name) return false;
+      if (/^SEC Company Facts\b/i.test(name)) return false;
+      if ((fact.unit || fact.currency || "").toString().toUpperCase() === "") {
+        const numeric = Number(fact.value);
+        if (Number.isFinite(numeric) && numeric >= 1900 && numeric <= 2200) return false;
+      }
+      return fact.value !== null && fact.value !== undefined && fact.value !== "";
     }
 
     function evidenceKey(item) {
@@ -1581,44 +1889,262 @@ HTML = r"""<!doctype html>
     function renderSourceBox(source) {
       if (!source) return '<span class="subtle">No displayable source was found.</span>';
       const title = source.title || source.domain || source.url || "Source";
-      const tier = source.source_tier || "n/a";
+      const tierLabel = source.source_tier ? friendlySourceTier(source.source_tier) : "";
       const date = source.published_at || "undated";
       const domain = source.domain || "";
       const url = source.url || "";
       return `
-        <div class="source-title">${escapeHtml(tier)} - ${escapeHtml(title)}</div>
-        <div class="subtle">${escapeHtml(domain)} - ${escapeHtml(date)}</div>
-        ${url ? `<a class="source-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open source</a>` : ""}
+        <div class="source-title">${tierLabel ? `<span class="pill">${escapeHtml(tierLabel)}</span> ` : ""}${escapeHtml(title)}</div>
+        <div class="subtle">${escapeHtml(domain)}${domain && date ? " · " : ""}${escapeHtml(date)}</div>
+        ${url ? `<a class="source-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open source →</a>` : ""}
       `;
     }
 
-    function renderSourceSays(source, facts) {
+    function renderSourceSays(source, facts, result) {
       const factLines = (facts || []).map(fact => {
-        const value = fact.value === null || fact.value === undefined ? "n/a" : fact.value;
-        const unit = fact.unit || fact.currency || "";
-        const period = fact.report_period || fact.observation_date || "period n/a";
-        return `${fact.fact_name || "Fact"}: ${value}${unit ? " " + unit : ""} (${period})`;
+        const value = formatFactValue(fact.value, fact.unit || fact.currency);
+        const period = humanFactPeriod(fact.report_period || fact.observation_date);
+        return `${humanFactName(fact.fact_name || "Fact")}: ${value}${period ? " for " + period : ""}`;
       });
-      const snippet = source && source.text ? excerpt(source.text, 360) : "";
+      const priceLines = source && source.text ? humanPriceHistoryLines(source, result) : [];
+      const sourceLines = source && source.text ? humanSourceLines(source.text) : [];
       const parts = [];
+      if (priceLines.length) {
+        parts.push(`<div><strong>Evidence summary</strong><br>${priceLines.map(escapeHtml).join("<br>")}</div>`);
+        return parts.join("<br>");
+      }
       if (factLines.length) {
         parts.push(`<div><strong>Structured values</strong><br>${factLines.map(escapeHtml).join("<br>")}</div>`);
       }
-      if (snippet) {
-        parts.push(`<div><strong>Source excerpt</strong><br>${escapeHtml(snippet)}</div>`);
+      if (sourceLines.length && !factLines.length) {
+        parts.push(`<div><strong>Source excerpt</strong><br>${sourceLines.map(escapeHtml).join("<br>")}</div>`);
+      } else if (sourceLines.length) {
+        parts.push(
+          `<details class="raw-markdown"><summary>More source values</summary><div>${sourceLines.slice(0, 4).map(escapeHtml).join("<br>")}</div></details>`
+        );
       }
       return parts.join("<br>") || '<span class="subtle">No displayable source excerpt is attached to this claim.</span>';
     }
 
-    function consistencySummary(result, derivation) {
+    function humanSourceLines(text) {
+      const rawParts = String(text || "").split(";").map(item => item.trim()).filter(Boolean);
+      const converted = rawParts.map(humanSecFactLine).filter(Boolean);
+      if (converted.length) return converted.slice(0, 5);
+      const fallback = excerpt(text, 300);
+      return fallback ? [fallback] : [];
+    }
+
+    function humanPriceHistoryLines(source, result) {
+      const parsed = parsePriceHistoryEvidence(source.text || "");
+      if (!parsed) return [];
+      const mode = parsed.windowSource === "single_session_context" ? "daily" : "total";
+      const pointChange = mode === "daily" ? parsed.latestDailyPointChange : parsed.totalPointChange;
+      const returnPct = mode === "daily" ? parsed.latestDailyReturnPct : parsed.totalReturnPct;
+      const startClose = mode === "daily" ? parsed.previousClose : parsed.startClose;
+      const provider = priceProviderName(source);
+      const claimText = ((result || {}).atomic_claim || {}).text || "";
+      const comparison = priceClaimComparison(claimText, pointChange, returnPct);
+      const lines = [
+        `Tool called: historical_prices adapter using ${provider}.`,
+        `Data retrieved: ${parsed.assetName} daily close prices from ${formatDateLabel(parsed.startDate)} to ${formatDateLabel(parsed.endDate)} (${parsed.windowLabel || "requested window"}; ${parsed.observations || "n/a"} observations).`,
+      ];
+      if (Number.isFinite(startClose) && Number.isFinite(parsed.endClose)) {
+        lines.push(
+          `Calculation: close moved from ${formatNumber(startClose)} to ${formatNumber(parsed.endClose)}, which equals ${signedNumber(pointChange)} points and ${signedPercent(returnPct)}.`
+        );
+      }
+      if (comparison) lines.push(comparison);
+      return lines;
+    }
+
+    function parsePriceHistoryEvidence(text) {
+      const value = String(text || "");
+      if (!/historical daily close prices/i.test(value)) return null;
+      const parts = value.split(";").map(item => item.trim()).filter(Boolean);
+      const parsed = {};
+      parts.forEach(part => {
+        let match;
+        if ((match = part.match(/^retrieval_window\s+(.+)$/i))) parsed.windowLabel = match[1];
+        else if ((match = part.match(/^window_source\s+(.+)$/i))) parsed.windowSource = match[1];
+        else if ((match = part.match(/^(.+?)\s+historical daily close prices over/i))) {
+          parsed.assetName = match[1];
+          const observations = part.match(/observations\s+(\d+)/i);
+          if (observations) parsed.observations = observations[1];
+        }
+        else if ((match = part.match(/^observations\s+(\d+)/i))) parsed.observations = match[1];
+        else if ((match = part.match(/^period\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i))) {
+          parsed.startDate = match[1];
+          parsed.endDate = match[2];
+        } else if ((match = part.match(/^start_close\s+(-?[\d.]+)/i))) parsed.startClose = Number(match[1]);
+        else if ((match = part.match(/^end_close\s+(-?[\d.]+)/i))) parsed.endClose = Number(match[1]);
+        else if ((match = part.match(/^latest_daily_calculation\s+previous_close\s+(-?[\d.]+|n\/a)\s+to\s+end_close\s+(-?[\d.]+)/i))) {
+          parsed.previousClose = match[1].toLowerCase() === "n/a" ? NaN : Number(match[1]);
+          parsed.endClose = Number(match[2]);
+        } else if ((match = part.match(/^latest_daily_point_change\s+(-?[\d.]+)/i))) parsed.latestDailyPointChange = Number(match[1]);
+        else if ((match = part.match(/^latest_daily_return_pct\s+(-?[\d.]+)%?/i))) parsed.latestDailyReturnPct = Number(match[1]);
+        else if ((match = part.match(/^total_point_change\s+(-?[\d.]+)/i))) parsed.totalPointChange = Number(match[1]);
+        else if ((match = part.match(/^total_return_pct\s+(-?[\d.]+)%?/i))) parsed.totalReturnPct = Number(match[1]);
+      });
+      if (!parsed.assetName || !parsed.startDate || !parsed.endDate) return null;
+      return parsed;
+    }
+
+    function priceClaimComparison(claimText, pointChange, returnPct) {
+      const claimedPoint = parseClaimedPointChange(claimText);
+      const claimedPct = parseClaimedPercent(claimText);
+      const pieces = [];
+      if (Number.isFinite(claimedPoint) && Number.isFinite(pointChange)) {
+        pieces.push(`claim says ${signedNumber(claimedPoint)} points; calculated ${signedNumber(pointChange)} points`);
+      }
+      if (Number.isFinite(claimedPct) && Number.isFinite(returnPct)) {
+        pieces.push(`claim says ${signedPercent(claimedPct)}; calculated ${signedPercent(returnPct)}`);
+      }
+      if (!pieces.length) return "";
+      const pointOk = !Number.isFinite(claimedPoint) || !Number.isFinite(pointChange) || nearlyEqual(claimedPoint, pointChange, 0.15, 0.005);
+      const pctOk = !Number.isFinite(claimedPct) || !Number.isFinite(returnPct) || nearlyEqual(claimedPct, returnPct, 0.15, 0.06);
+      const conclusion = pointOk && pctOk ? "the price evidence matches within rounding." : "the price evidence does not fully match the claim.";
+      return `Claim comparison: ${pieces.join("; ")}; ${conclusion}`;
+    }
+
+    function parseClaimedPointChange(text) {
+      const match = String(text || "").match(/(-?[\d,]+(?:\.\d+)?)\s+points?/i);
+      return match ? Number(match[1].replace(/,/g, "")) : NaN;
+    }
+
+    function parseClaimedPercent(text) {
+      const match = String(text || "").match(/(-?\d+(?:\.\d+)?)\s*%/);
+      return match ? Number(match[1]) : NaN;
+    }
+
+    function priceProviderName(source) {
+      const title = String((source || {}).title || "");
+      const match = title.match(/^(.+?)\s+\d+-month historical prices/i);
+      if (match) return match[1];
+      return (source || {}).domain || title || "historical price provider";
+    }
+
+    function nearlyEqual(left, right, absoluteTolerance, relativeTolerance) {
+      const diff = Math.abs(Number(left) - Number(right));
+      const scale = Math.max(Math.abs(Number(left)), Math.abs(Number(right)), 1);
+      return diff <= Math.max(absoluteTolerance, scale * relativeTolerance);
+    }
+
+    function signedNumber(value) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return "n/a";
+      return `${numeric > 0 ? "+" : ""}${formatNumber(numeric)}`;
+    }
+
+    function signedPercent(value) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return "n/a";
+      return `${numeric > 0 ? "+" : ""}${trimTrailingZeros(numeric.toFixed(2))}%`;
+    }
+
+    function formatNumber(value) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return "n/a";
+      return trimTrailingZeros(numeric.toLocaleString(undefined, { maximumFractionDigits: 2 }));
+    }
+
+    function humanSecFactLine(line) {
+      const match = String(line || "").match(/^(.+?) \(([^)]+)\) for (fiscal quarter|fiscal year) ending (\d{4}-\d{2}-\d{2}): (-?\d+(?:\.\d+)?) \(form ([^)]+)\)$/);
+      if (!match) return "";
+      const [_all, concept, unit, periodKind, endDate, rawValue, form] = match;
+      const label = humanFactName(concept);
+      const value = formatFactValue(rawValue, unit);
+      const period = `${periodKind} ended ${formatDateLabel(endDate)}`;
+      return `${label}: ${value} for ${period} (${form})`;
+    }
+
+    function humanFactName(name) {
+      const labels = {
+        RevenueFromContractWithCustomerExcludingAssessedTax: "Revenue",
+        SalesRevenueNet: "Revenue",
+        Revenues: "Revenue",
+        CostOfRevenue: "Cost of revenue",
+        CostOfGoodsAndServicesSold: "Cost of revenue",
+        GrossProfit: "Gross profit",
+        OperatingIncomeLoss: "Operating income",
+        NetIncomeLoss: "Net income",
+        EarningsPerShareBasic: "Basic EPS",
+        EarningsPerShareDiluted: "Diluted EPS",
+        Assets: "Total assets",
+        Liabilities: "Total liabilities",
+        StockholdersEquity: "Shareholders' equity",
+        CashAndCashEquivalentsAtCarryingValue: "Cash and equivalents",
+        CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents: "Cash and equivalents",
+        NetCashProvidedByUsedInOperatingActivities: "Operating cash flow",
+        PaymentsToAcquirePropertyPlantAndEquipment: "Capital expenditures",
+        ResearchAndDevelopmentExpense: "Research and development expense",
+        SellingGeneralAndAdministrativeExpense: "SG&A expense",
+        CommonStocksIncludingAdditionalPaidInCapital: "Common stock and paid-in capital",
+      };
+      if (labels[name]) return labels[name];
+      return String(name || "Fact")
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .replace(/And/g, "and")
+        .replace(/\bUsd\b/g, "USD")
+        .trim();
+    }
+
+    function humanFactPeriod(period) {
+      const text = String(period || "").trim();
+      if (!text) return "";
+      const fyQuarter = text.match(/^(\d{4})\s+(Q[1-4])/i);
+      if (fyQuarter) return `FY${fyQuarter[1]} ${fyQuarter[2].toUpperCase()}`;
+      const dateOnly = text.match(/^\d{4}-\d{2}-\d{2}$/);
+      if (dateOnly) return `period ended ${formatDateLabel(text)}`;
+      return text.replace(/\s+CY\d{4}Q[1-4]\b/i, "");
+    }
+
+    function formatFactValue(value, unit) {
+      if (value === null || value === undefined || value === "") return "n/a";
+      const numeric = Number(value);
+      const unitText = String(unit || "").toUpperCase();
+      if (!Number.isFinite(numeric)) return String(value);
+      const compact = compactNumber(numeric);
+      if (unitText === "USD") return `$${compact}`;
+      if (unitText === "SHARES") return `${compact} shares`;
+      if (unitText) return `${compact} ${unit}`;
+      return compact;
+    }
+
+    function compactNumber(value) {
+      const number = Number(value);
+      const sign = number < 0 ? "-" : "";
+      const abs = Math.abs(number);
+      const format = (divisor, suffix) => `${sign}${trimTrailingZeros((abs / divisor).toFixed(abs >= divisor * 100 ? 0 : 1))}${suffix}`;
+      if (abs >= 1e12) return format(1e12, "T");
+      if (abs >= 1e9) return format(1e9, "B");
+      if (abs >= 1e6) return format(1e6, "M");
+      if (abs >= 1e3) return format(1e3, "K");
+      return trimTrailingZeros(abs.toFixed(2));
+    }
+
+    function trimTrailingZeros(value) {
+      return String(value).replace(/\.0+$/, "").replace(/(\.\d*[1-9])0+$/, "$1");
+    }
+
+    function formatDateLabel(value) {
+      const text = String(value || "");
+      const match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return text;
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      return `${months[Number(match[2]) - 1]} ${Number(match[3])}, ${match[1]}`;
+    }
+
+    function consistencySummary(result) {
       const verdict = verdictLabel(result.verdict);
       const issues = result.issues || [];
       const lines = [`<strong>${escapeHtml(verdict)}</strong>`];
-      if (derivation !== "n/a") {
-        lines.push(`Calculation/check: ${escapeHtml(derivation)}`);
+      const numericSummary = naturalNumericSummary(result.numeric_derivation, issues);
+      if (numericSummary) {
+        lines.push(escapeHtml(numericSummary));
+        return lines.join("<br>");
       }
       if (issues.length) {
-        lines.push(`Reason: ${escapeHtml(readableIssues(issues).slice(0, 3).join("; "))}`);
+        lines.push(escapeHtml(naturalIssueSummary(issues)));
       } else if (String(result.verdict || "").includes("support")) {
         lines.push("The source values or description broadly match the claim.");
       } else {
@@ -1627,17 +2153,167 @@ HTML = r"""<!doctype html>
       return lines.join("<br>");
     }
 
+    function naturalNumericSummary(derivation, issues) {
+      const matchSummary = numericMatchParts(derivation, issues);
+      if (!matchSummary.confirmed.length && !matchSummary.unconfirmed.length) {
+        return naturalFormulaSummary(derivation);
+      }
+      const confirmed = matchSummary.confirmed.length
+        ? `The source confirms ${joinHumanList(matchSummary.confirmed)}.`
+        : "";
+      const unconfirmed = matchSummary.unconfirmed.length
+        ? `It does not clearly confirm ${joinHumanList(matchSummary.unconfirmed)} in this excerpt.`
+        : "";
+      if (confirmed && unconfirmed) {
+        return `${confirmed} ${unconfirmed} That is why this claim is marked as partially consistent.`;
+      }
+      if (confirmed) {
+        return `${confirmed} The displayed evidence supports the numeric part of the claim.`;
+      }
+      return `${unconfirmed || "The displayed evidence is related, but it is not enough to verify the numeric claim."}`;
+    }
+
+    function numericMatchParts(derivation, issues) {
+      const confirmed = [];
+      const unconfirmed = [];
+      if (derivation && derivation.expression === "numeric_match_summary") {
+        confirmed.push(...parseMatchedValues(derivation.inputs?.matched_values));
+        unconfirmed.push(...parseUnmatchedValues(derivation.inputs?.unmatched_values));
+      }
+      (issues || []).forEach(issue => {
+        const text = String(issue || "");
+        if (text.startsWith("matched ")) {
+          confirmed.push(...parseMatchedValues(text.replace(/^matched\s+/, "")));
+        }
+        if (text.startsWith("unmatched claim numbers:")) {
+          unconfirmed.push(...parseUnmatchedValues(text.replace(/^unmatched claim numbers:\s*/, "")));
+        }
+      });
+      return {
+        confirmed: uniqueStrings(confirmed).slice(0, 3),
+        unconfirmed: uniqueStrings(unconfirmed).slice(0, 3),
+      };
+    }
+
+    function parseMatchedValues(value) {
+      const text = String(value || "").trim();
+      if (!text || text === "none") return [];
+      return text.split(";").map(item => item.trim()).filter(Boolean).map(item => {
+        const [claimValue, sourceValue] = item.split("->").map(part => part && part.trim());
+        const display = claimValue || sourceValue || item;
+        return `the claimed value ${humanClaimValue(display, sourceValue)}`;
+      });
+    }
+
+    function parseUnmatchedValues(value) {
+      const text = String(value || "").trim();
+      if (!text || text === "none") return [];
+      const dateFragments = [];
+      const values = [];
+      text.split(",").map(item => item.trim()).filter(Boolean).forEach(item => {
+        if (/^\d{1,2}$/.test(item)) {
+          dateFragments.push(item);
+        } else {
+          values.push(humanClaimValue(item));
+        }
+      });
+      const output = values.map(item => `the claimed ${claimValueKind(item)} ${item}`);
+      if (dateFragments.length && !values.length) {
+        output.push("the exact date or period detail");
+      } else if (dateFragments.length) {
+        output.push("the date or period detail");
+      }
+      return output;
+    }
+
+    function humanClaimValue(value, sourceValue) {
+      const text = String(value || "").trim();
+      const sourceText = String(sourceValue || "").trim();
+      const moneyText = text.match(/\$?\s*(-?\d+(?:\.\d+)?)\s*(billion|million|trillion|bn|mm|m|b|t)?/i);
+      if (text.includes("$") && moneyText) {
+        const number = Number(moneyText[1]);
+        const scale = (moneyText[2] || "").toLowerCase();
+        if (Number.isFinite(number)) {
+          if (["trillion", "t"].includes(scale)) return `$${trimTrailingZeros(number.toFixed(1))}T`;
+          if (["billion", "bn", "b"].includes(scale)) return `$${trimTrailingZeros(number.toFixed(1))}B`;
+          if (["million", "mm", "m"].includes(scale)) return `$${trimTrailingZeros(number.toFixed(1))}M`;
+        }
+      }
+      if (/^-?\d+(\.\d+)?%$/.test(text)) return text;
+      const sourceNumber = Number(sourceText.replace(/,/g, ""));
+      if (Number.isFinite(sourceNumber) && Math.abs(sourceNumber) >= 1e6 && text.includes("$")) {
+        return `$${compactNumber(sourceNumber)}`;
+      }
+      return text;
+    }
+
+    function claimValueKind(value) {
+      const text = String(value || "").toLowerCase();
+      if (text.includes("%")) return "percentage";
+      if (text.includes("$")) return "amount";
+      return "value";
+    }
+
+    function naturalFormulaSummary(derivation) {
+      if (!derivation) return "";
+      if (derivation.expression && derivation.expression.includes("current - prior")) {
+        const result = derivation.result === null || derivation.result === undefined ? "" : `${(Number(derivation.result) * 100).toFixed(2)}%`;
+        const status = derivation.passed ? "matches" : "does not match";
+        return result
+          ? `Recomputing the growth rate from the stored values gives ${result}, which ${status} the claim.`
+          : "The growth-rate check could not be recomputed from the displayed values.";
+      }
+      if (derivation.passed === true) return "The numeric calculation is consistent with the stored evidence.";
+      if (derivation.passed === false) return "The numeric calculation does not match the stored evidence.";
+      return "";
+    }
+
+    function naturalIssueSummary(issues) {
+      const readable = readableIssues(issues).filter(Boolean);
+      if (!readable.length) return "The current source is not enough to fully confirm this claim.";
+      return `The verifier found ${joinHumanList(readable.slice(0, 3))}.`;
+    }
+
     function readableIssues(issues) {
       return (issues || []).map(issue => {
         const text = String(issue || "");
+        const lower = text.toLowerCase();
+        if (
+          !text ||
+          lower.includes("http error") ||
+          lower.includes("bad request") ||
+          lower.includes("fallback:") ||
+          text === "llm_judge_unavailable"
+        ) {
+          return "";
+        }
         if (text.startsWith("matched ")) {
-          return text.replace(/^matched /, "matched claim value ");
+          return text.replace(/^matched /, "a matching claim value: ");
         }
         if (text.startsWith("unmatched claim numbers:")) {
-          return text.replace(/^unmatched claim numbers:/, "not verified from this source:");
+          const values = parseUnmatchedValues(text.replace(/^unmatched claim numbers:\s*/, ""));
+          return values.length ? `${joinHumanList(values)} is not clearly shown in this source` : "some claimed numbers are not clearly shown in this source";
+        }
+        if (text === "ticker_only_entity_resolution") {
+          return "entity resolution is based mainly on the ticker symbol";
         }
         if (text === "ambiguous_unit_currency_or_period") {
           return "the unit, currency, or period is ambiguous";
+        }
+        if (text === "no_evidence") {
+          return "no supporting evidence was found for this claim";
+        }
+        if (text === "no_primary_source") {
+          return "no primary source was found";
+        }
+        if (text === "low_confidence") {
+          return "evidence confidence is low";
+        }
+        if (text === "partial_match") {
+          return "only a partial match was found in the source";
+        }
+        if (/^[a-z][a-z0-9_]*$/.test(text)) {
+          return text.replace(/_/g, " ");
         }
         return text;
       });
@@ -1679,28 +2355,16 @@ HTML = r"""<!doctype html>
       return `${text.slice(0, maxLength - 1)}...`;
     }
 
-    function formatDerivation(derivation) {
-      if (!derivation) return "n/a";
-      if (derivation.expression === "numeric_match_summary") {
-        const matched = derivation.inputs?.matched_values || "none";
-        const unmatched = derivation.inputs?.unmatched_values || "none";
-        if (unmatched !== "none") {
-          return `matched: ${matched}; not verified: ${unmatched}`;
-        }
-        return `matched: ${matched}`;
-      }
-      if (derivation.expression && derivation.expression.includes("current - prior")) {
-        const result = derivation.result === null || derivation.result === undefined ? "n/a" : `${(Number(derivation.result) * 100).toFixed(2)}%`;
-        return `recomputed with ${derivation.expression}; result ${result}; expected ${derivation.comparator || "n/a"}; ${derivation.passed ? "passed" : "failed"}`;
-      }
-      if (derivation.passed === null || derivation.passed === undefined) return derivation.expression || "numeric check";
-      return `numeric check ${derivation.passed ? "passed" : "failed"}: ${derivation.result || derivation.expression || "n/a"}`;
+    function uniqueStrings(values) {
+      return [...new Set((values || []).map(value => String(value || "").trim()).filter(Boolean))];
     }
 
-    function fmtConfidence(value) {
-      if (value === null || value === undefined || value === "n/a") return "n/a";
-      const numeric = Number(value);
-      return Number.isFinite(numeric) ? numeric.toFixed(2) : String(value);
+    function joinHumanList(values) {
+      const items = uniqueStrings(values);
+      if (!items.length) return "";
+      if (items.length === 1) return items[0];
+      if (items.length === 2) return `${items[0]} and ${items[1]}`;
+      return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
     }
 
     function pillClass(value) {

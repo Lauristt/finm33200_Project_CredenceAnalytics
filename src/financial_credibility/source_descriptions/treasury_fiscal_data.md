@@ -11,6 +11,14 @@ Official description summary:
 - Dataset pages expose fields, descriptions, units, date ranges, release cadence, and API quick guides.
 - It is the default primary evidence source for U.S. federal fiscal, debt, and Treasury-published values.
 
+API playbook:
+- Auth/env: no API key.
+- Current adapter endpoint: `GET https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny`.
+- Current params: `sort=-record_date`, `page[size]=3`; when an as-of date is known add `filter=record_date:lte:YYYY-MM-DD`.
+- Response schema: JSON object with `data[]` rows and `meta`; Debt to the Penny rows include `record_date`, `debt_held_public_amt`, `intragov_hold_amt`, and `tot_pub_debt_out_amt`.
+- General Fiscal Data rules: dataset path encodes API version, category, and dataset name; most endpoints support `fields`, `filter`, `sort`, `page[number]`, `page[size]`, and `format`.
+- Adapter output: return record-date-specific debt values and preserve the exact filter/sort URL. Do not substitute FRED federal debt series when the claim names Treasury Fiscal Data or a daily Treasury value.
+
 Use for:
 - U.S. federal debt, debt held by the public, intragovernmental holdings, Daily Treasury Statement, Monthly Statement of the Public Debt, rates, auctions, receipts, and fiscal datasets.
 - Claims about Treasury-published federal fiscal metrics and record-date-specific values.

@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Credence Analytics 全资产 API 注册与配置指南</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7f8;
+      --ink: #152026;
+      --muted: #5f6d76;
+      --line: #d8e0e4;
+      --panel: #ffffff;
+      --panel-soft: #eef5f4;
+      --teal: #0f766e;
+      --blue: #2563eb;
+      --amber: #946200;
+      --red: #a33b3b;
+      --green: #1f7a4c;
+      --code: #101820;
+      --code-ink: #e9f2ef;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 34px 22px 64px;
+    }
+
+    header {
+      padding: 28px 0 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 920px;
+      font-size: clamp(30px, 4.2vw, 54px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 880px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .pill,
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .pill { min-height: 28px; padding: 4px 10px; }
+    .tag { padding: 2px 8px; font-size: 12px; }
+    .tag.required { color: var(--red); background: #fff1f1; border-color: #edc4c4; }
+    .tag.recommended { color: var(--green); background: #eef8f2; border-color: #bfe4cd; }
+    .tag.optional { color: var(--amber); background: #fff8e7; border-color: #ead49a; }
+    .tag.nokey { color: var(--teal); background: #eef7f5; border-color: #b8dfd8; }
+
+    nav {
+      margin: 24px 0 30px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+    }
+
+    nav strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    nav a {
+      display: inline-block;
+      margin: 4px 14px 4px 0;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    section { margin-top: 34px; }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 28px;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 24px 0 10px;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    p { margin: 10px 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .card h3 { margin-top: 0; }
+
+    .callout {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border: 1px solid #bfe4cd;
+      border-left: 4px solid var(--green);
+      background: #f0fbf4;
+      border-radius: 8px;
+    }
+
+    .warning {
+      margin: 16px 0;
+      padding: 14px 16px;
+      border: 1px solid #ead49a;
+      border-left: 4px solid var(--amber);
+      background: #fff8e7;
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--panel-soft);
+      font-weight: 750;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 5px;
+      background: #e9eef1;
+      color: #111820;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    pre {
+      margin: 12px 0;
+      padding: 16px;
+      border-radius: 8px;
+      overflow: auto;
+      background: var(--code);
+      color: var(--code-ink);
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    ul,
+    ol { padding-left: 22px; }
+
+    .small { color: var(--muted); font-size: 14px; }
+
+    @media (max-width: 880px) {
+      .grid { grid-template-columns: 1fr; }
+      th,
+      td { font-size: 13px; }
+      .page { padding: 24px 16px 52px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <p class="eyebrow">Credence Analytics</p>
+      <h1>全资产 API 注册与环境变量配置指南</h1>
+      <p class="subtitle">
+        目标是把当前项目从 US equity + 少量 macro demo，扩展成能覆盖 equities、commodities、credit、FX、rates、fixed income、derivatives 和 global macro finance indicators 的证据底座。
+      </p>
+      <div class="meta">
+        <span class="pill">更新日期：2026-05-27</span>
+        <span class="pill">优先官方源</span>
+        <span class="pill">Key 与无 key API 分离</span>
+      </div>
+    </header>
+
+    <nav>
+      <strong>目录</strong>
+	      <a href="#decision">先配什么</a>
+	      <a href="#env">环境变量模板</a>
+	      <a href="#gaps">当前缺口</a>
+	      <a href="#coverage">覆盖矩阵</a>
+	      <a href="#fred-series">FRED series</a>
+	      <a href="#register">逐个注册</a>
+      <a href="#no-key">无需 key</a>
+      <a href="#notes">实现备注</a>
+    </nav>
+
+    <section id="decision">
+      <h2>先配什么</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>必须先有</h3>
+          <p><span class="tag required">核心运行</span></p>
+          <ul>
+            <li><code>OPENAI_API_KEY</code> 或 <code>ANTHROPIC_API_KEY</code>：LLM entity extraction、source selection、semantic judge。</li>
+            <li><code>SEC_USER_AGENT</code>：SEC 不需要 key，但自动化请求应带清晰联系信息。</li>
+            <li><code>FRED_API_KEY</code>：第一阶段扩 rates、macro、credit spreads、WTI/Brent/gold、major FX 最快。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>官方宏观增强</h3>
+          <p><span class="tag recommended">强烈推荐</span></p>
+          <ul>
+            <li><code>BLS_API_KEY</code>：CPI、PPI、NFP、JOLTS、wages、labor metadata。</li>
+            <li><code>BEA_API_KEY</code>：GDP、NIPA、PCE、industry、regional accounts。</li>
+            <li><code>EIA_API_KEY</code>：oil、natural gas、petroleum inventory、energy fundamentals。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>市场结构与全球层</h3>
+          <p><span class="tag optional">按范围接入</span></p>
+          <ul>
+            <li><code>FINRA_CLIENT_ID</code> / <code>FINRA_CLIENT_SECRET</code>：TRACE / fixed income。</li>
+            <li><code>OPENFIGI_API_KEY</code>：证券标识映射，key 可选但建议。</li>
+            <li>ECB、BIS、IMF、World Bank、BOE、CFTC：多数可无 key 先接。</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="callout">
+        <strong>工程建议：</strong>FRED、BLS、BEA、EIA starter typed adapters 已接入；无 key 层已可跑 SEC、Treasury、GLEIF、CFTC、ECB、BIS、IMF、World Bank、BOE 与 OpenFIGI fallback；FINRA 的授权与条款最重，适合作为第二阶段。
+      </div>
+    </section>
+
+	    <section id="env">
+	      <h2>推荐 .env 模板</h2>
+      <pre><code># LLM providers
+OPENAI_API_KEY=
+OPENAI_MODEL=
+ANTHROPIC_API_KEY=
+ANTHROPIC_MODEL=
+CREDIBILITY_LLM_PROVIDER=auto
+
+# Search / extraction
+SERPER_API_KEY=
+JINA_API_KEY=
+
+# Equity vendor and market-price providers
+FINNHUB_API_KEY=
+ALPHA_VANTAGE_API_KEY=
+FMP_API_KEY=
+MARKETSTACK_API_KEY=
+TIINGO_API_KEY=
+
+# Official macro, rates, commodities, credit, fixed income, derivatives
+FRED_API_KEY=
+BLS_API_KEY=
+BEA_API_KEY=
+EIA_API_KEY=
+CFTC_APP_TOKEN=
+FINRA_CLIENT_ID=
+FINRA_CLIENT_SECRET=
+OPENFIGI_API_KEY=
+
+# No-key public API base URLs
+CFTC_BASE_URL=https://publicreporting.cftc.gov/resource
+ECB_BASE_URL=https://data-api.ecb.europa.eu/service
+BIS_BASE_URL=https://stats.bis.org/api/v2
+IMF_BASE_URL=https://api.imf.org/external/sdmx/3.0
+WORLD_BANK_BASE_URL=https://api.worldbank.org/v2
+BOE_IADB_BASE_URL=https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp
+
+# SEC
+SEC_USER_AGENT="Your Name your.email@example.com"
+
+# Runtime settings
+CREDIBILITY_LIVE_EXTRACTION=false
+CREDIBILITY_STRUCTURED_SOURCES=true
+CREDIBILITY_YAHOO_FALLBACK=false
+CREDIBILITY_ALLOW_INSECURE_SSL_FALLBACK=false
+CREDIBILITY_REQUEST_TIMEOUT=25
+
+# Entity extraction guardrails
+CREDIBILITY_TICKER_UNIVERSE_FILTER=true
+CREDIBILITY_TICKER_UNIVERSE_FETCH=true
+CREDIBILITY_TICKER_UNIVERSE_FILE=
+CREDIBILITY_TICKER_UNIVERSE_CACHE=.cache/financial_credibility/company_tickers_exchange.json
+CREDIBILITY_ASSET_UNIVERSE_FILTER=true
+	CREDIBILITY_ASSET_UNIVERSE_FILE=</code></pre>
+	    </section>
+
+	    <section id="gaps">
+	      <h2>当前缺口与接入蓝图</h2>
+	      <p>截至 2026-05-27，项目已经能跑的官方 / key 可选源包括 SEC、Treasury Fiscal Data、GLEIF、FRED、BLS、BEA、EIA、CFTC COT、ECB、BIS、IMF、World Bank、BOE、FINRA 与 OpenFIGI。真正还缺的是更多高价值 series/table/dataset mapping、FINRA entitlement-aware dataset discovery，以及 SDMX 维度发现缓存。</p>
+	      <div class="warning">
+	        当前本机 <code>.env</code> 状态：<code>FRED_API_KEY</code>、<code>BLS_API_KEY</code>、<code>BEA_API_KEY</code>、<code>EIA_API_KEY</code>、<code>FINRA_CLIENT_ID</code>、<code>FINRA_CLIENT_SECRET</code>、<code>OPENFIGI_API_KEY</code>、<code>SERPER_API_KEY</code>、<code>SEC_USER_AGENT</code> 与 no-key base URLs 已配置。不要把真实 key 写进文档或提交到 git。
+	      </div>
+	      <table>
+	        <thead>
+	          <tr>
+	            <th>缺口</th>
+	            <th>当前状态</th>
+	            <th>影响</th>
+	            <th>你要做什么</th>
+	            <th>代码要补什么</th>
+	          </tr>
+	        </thead>
+	        <tbody>
+	          <tr>
+	            <td>FRED series mapping 扩容</td>
+	            <td><code>FRED_API_KEY</code> 已有；reader 已实现，starter map 已扩到 rates、credit spreads、commodities、FX 与 macro。</td>
+	            <td>覆盖已经能跑，但还需要继续补更多 series alias、频率/单位 metadata 与 vintage/ALFRED 支持。</td>
+	            <td>无需新 key；确认 <code>FRED_API_KEY</code> 有效即可。</td>
+	            <td>继续扩 <code>FRED_SERIES</code> keyword map；保留 <code>observation_end=as_of_date</code>，避免旧新闻被最新数据污染。</td>
+	          </tr>
+	          <tr>
+	            <td>BLS official labor / CPI / PPI</td>
+	            <td><code>BLS_API_KEY</code> 已有；catalog 已是 implemented；runtime reader 已接入 v2 endpoint。</td>
+	            <td>CPI、core CPI、PPI、NFP、unemployment、wages、JOLTS 已可优先走 BLS primary source。</td>
+	            <td>无需继续申请；后续只需要维护 series id mapping。</td>
+	            <td><code>bls_api()</code> 已实现：POST <code>https://api.bls.gov/publicAPI/v2/timeseries/data/</code>，支持 series id、start/end year、可选 registration key。</td>
+	          </tr>
+	          <tr>
+	            <td>BEA official GDP / PCE / NIPA</td>
+	            <td><code>BEA_API_KEY</code> 已有；catalog 已是 implemented；starter NIPA reader 已接入。</td>
+	            <td>GDP、PCE、NIPA starter checks 已可优先走 BEA 原始源；industry/regional 还需要扩 table mapping。</td>
+	            <td>无需继续申请；后续要确认 claim taxonomy 到 BEA table/line/frequency 的映射。</td>
+	            <td><code>bea_api()</code> 已实现 starter <code>GetData</code>；下一步补 <code>GetDataSetList</code> / <code>GetParameterList</code> / <code>GetParameterValues</code> discovery cache。</td>
+	          </tr>
+	          <tr>
+	            <td>EIA official energy commodities</td>
+	            <td><code>EIA_API_KEY</code> 已有；source catalog 已有 <code>eia_api</code> implemented entry；WTI/Brent starter reader 已接入。</td>
+	            <td>WTI/Brent/oil price claim 已能走 EIA primary source；natural gas、inventory、energy balance 需要继续扩 route/facet mapping。</td>
+	            <td>无需继续申请；后续确认重点 route 与 frequency。</td>
+	            <td><code>eia_api()</code> 已实现 APIv2 starter request；下一步接 route discovery、natural gas、weekly petroleum inventory、电力与能源平衡。</td>
+	          </tr>
+	          <tr>
+	            <td>FINRA TRACE / fixed income</td>
+	            <td><code>FINRA_CLIENT_ID</code> / <code>FINRA_CLIENT_SECRET</code> 已有；catalog 已是 implemented；starter Query API adapter 已接入。</td>
+	            <td>corporate bond market breadth/sentiment、Treasury aggregates 等 fixed-income regulatory datasets 已可进入 source-of-record check；具体 dataset 仍受 FINRA entitlement/terms 限制。</td>
+	            <td>无需继续申请；确认 credential 权限覆盖 fixedIncomeMarket 数据集。</td>
+	            <td><code>finra_query_api()</code> 已实现 OAuth client-credentials token flow，然后调用 <code>/data/group/{group}/name/{dataset}</code>。下一步补 dataset discovery、async jobs、POST filters 与字段级 mapping。</td>
+	          </tr>
+	        </tbody>
+	      </table>
+
+	      <div class="callout">
+	        <strong>建议接入顺序：</strong>现在 FRED、BLS、BEA、EIA、FINRA starter adapters 都已经落地；下一步先扩 mapping、metadata、FINRA dataset entitlement handling 与 SDMX discovery cache。
+	      </div>
+	    </section>
+
+	    <section id="coverage">
+      <h2>全资产数据源覆盖矩阵</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>资产/主题</th>
+            <th>优先 API</th>
+            <th>需要 key?</th>
+            <th>适合核验</th>
+            <th>环境变量</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>US equity fundamentals</td>
+            <td>SEC EDGAR / data.sec.gov</td>
+            <td><span class="tag nokey">无 key</span></td>
+            <td>10-K/10-Q/8-K、XBRL revenue、EPS、cash flow、assets、debt。</td>
+            <td><code>SEC_USER_AGENT</code></td>
+          </tr>
+          <tr>
+            <td>Equity prices / vendor fundamentals</td>
+            <td>Alpha Vantage、Finnhub、FMP、Marketstack、Tiingo、Stooq</td>
+            <td><span class="tag optional">多数需 key</span></td>
+            <td>price、EOD、basic ratios、vendor comparison。正式核验要标记为 vendor/supplemental。</td>
+            <td><code>ALPHA_VANTAGE_API_KEY</code> 等</td>
+          </tr>
+          <tr>
+            <td>US macro / rates / credit spreads</td>
+            <td>FRED / ALFRED</td>
+            <td><span class="tag recommended">需 key</span></td>
+            <td>SOFR、Treasury yields、PCE、NFP、HY/IG OAS、FX、commodities time series。</td>
+            <td><code>FRED_API_KEY</code></td>
+          </tr>
+          <tr>
+            <td>CPI / PPI / labor</td>
+            <td>BLS Public Data API v2</td>
+            <td><span class="tag recommended">建议注册</span></td>
+            <td>CPI、core CPI、PPI、payrolls、unemployment、wages、JOLTS；官方源优于只用 FRED 聚合。</td>
+            <td><code>BLS_API_KEY</code></td>
+          </tr>
+          <tr>
+            <td>GDP / PCE / NIPA</td>
+            <td>BEA API</td>
+            <td><span class="tag recommended">需 UserID</span></td>
+            <td>GDP、NIPA tables、PCE、industry accounts、regional accounts。</td>
+            <td><code>BEA_API_KEY</code></td>
+          </tr>
+          <tr>
+            <td>Energy commodities</td>
+            <td>EIA Open Data API v2</td>
+            <td><span class="tag recommended">需 key</span></td>
+            <td>oil、gas、petroleum products、storage/inventory、energy balances。</td>
+            <td><code>EIA_API_KEY</code></td>
+          </tr>
+          <tr>
+            <td>Futures / derivatives positioning</td>
+            <td>CFTC COT Public Reporting Environment</td>
+            <td><span class="tag nokey">通常无 key</span></td>
+            <td>COT、futures/options positioning、open interest、trader category、weekly positioning trend。</td>
+            <td><code>CFTC_BASE_URL</code>、<code>CFTC_APP_TOKEN</code></td>
+          </tr>
+          <tr>
+            <td>Fixed income / TRACE</td>
+            <td>FINRA Query API</td>
+            <td><span class="tag required">需 OAuth credential</span></td>
+            <td>OTC fixed-income transaction / aggregate datasets, TRACE-related market breadth and volume checks。</td>
+            <td><code>FINRA_CLIENT_ID</code>、<code>FINRA_CLIENT_SECRET</code></td>
+          </tr>
+          <tr>
+            <td>Instrument identity</td>
+            <td>OpenFIGI</td>
+            <td><span class="tag optional">key 可选</span></td>
+            <td>Ticker、ISIN、CUSIP、SEDOL 到 FIGI 的 instrument mapping。</td>
+            <td><code>OPENFIGI_API_KEY</code></td>
+          </tr>
+          <tr>
+            <td>Euro area rates / FX / macro finance</td>
+            <td>ECB Data Portal SDMX API</td>
+            <td><span class="tag nokey">无 key</span></td>
+            <td>ECB rates、EUR FX reference rates、HICP、banking、payments、monetary statistics。</td>
+            <td><code>ECB_BASE_URL</code></td>
+          </tr>
+          <tr>
+            <td>Global banking / debt / derivatives</td>
+            <td>BIS SDMX API</td>
+            <td><span class="tag nokey">无 key</span></td>
+            <td>international banking、debt securities、credit-to-GDP、FX/IR derivatives、global liquidity。</td>
+            <td><code>BIS_BASE_URL</code></td>
+          </tr>
+          <tr>
+            <td>Global macro / BOP / reserves</td>
+            <td>IMF Data API</td>
+            <td><span class="tag nokey">公开数据无 key；权限数据走 MSAL/OAuth</span></td>
+            <td>WEO、BOP、reserves、fiscal monitor、exchange-rate/global macro datasets。</td>
+            <td><code>IMF_BASE_URL</code></td>
+          </tr>
+          <tr>
+            <td>Country indicators / development finance</td>
+            <td>World Bank Indicators API v2</td>
+            <td><span class="tag nokey">无 key</span></td>
+            <td>WDI、International Debt Statistics、long-run country comparisons。</td>
+            <td><code>WORLD_BANK_BASE_URL</code></td>
+          </tr>
+          <tr>
+            <td>UK rates / GBP FX / credit / monetary</td>
+            <td>Bank of England IADB downloads</td>
+            <td><span class="tag nokey">无 key</span></td>
+            <td>Bank Rate、yield curves、GBP spot rates、monetary and credit statistics。</td>
+            <td><code>BOE_IADB_BASE_URL</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+	    <section id="fred-series">
+	      <h2>FRED 第一批建议 Series</h2>
+	      <p>这些 series 可以最快扩大 Credence check 覆盖面。FRED 适合作为统一时间序列入口；若 claim 明确指向 BLS/BEA/EIA 等原始发布机构，最终 verifier 应优先取官方原始 API。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>主题</th>
+            <th>Series id</th>
+            <th>含义</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>SOFR</td><td><code>SOFR</code></td><td>Secured Overnight Financing Rate。</td></tr>
+          <tr><td>2Y / 10Y / 30Y Treasury</td><td><code>DGS2</code>, <code>DGS10</code>, <code>DGS30</code></td><td>Constant maturity Treasury yields。</td></tr>
+          <tr><td>Fed funds</td><td><code>FEDFUNDS</code></td><td>Effective federal funds rate。</td></tr>
+          <tr><td>PCE / Core PCE price index</td><td><code>PCEPI</code>, <code>PCEPILFE</code></td><td>PCE price index and ex-food-and-energy PCE price index。</td></tr>
+          <tr><td>Nonfarm payrolls</td><td><code>PAYEMS</code></td><td>All Employees, Total Nonfarm。</td></tr>
+          <tr><td>Unemployment</td><td><code>UNRATE</code></td><td>Unemployment rate。</td></tr>
+          <tr><td>GDP</td><td><code>GDP</code></td><td>Gross Domestic Product。</td></tr>
+          <tr><td>HY / IG OAS</td><td><code>BAMLH0A0HYM2</code>, <code>BAMLC0A0CM</code></td><td>High-yield and investment-grade option-adjusted spreads。</td></tr>
+          <tr><td>WTI / Brent</td><td><code>DCOILWTICO</code>, <code>DCOILBRENTEU</code></td><td>Daily crude oil spot prices。</td></tr>
+          <tr><td>Gold</td><td><code>GOLDAMGBD228NLBM</code></td><td>London Bullion Market gold fixing price。</td></tr>
+          <tr><td>Major FX</td><td><code>DEXUSEU</code>, <code>DEXJPUS</code>, <code>DEXUSUK</code>, <code>DEXCAUS</code>, <code>DEXCHUS</code>, <code>DEXUSAL</code></td><td>EUR, JPY, GBP, CAD, CHF, AUD exchange-rate series。</td></tr>
+	          <tr><td>Dollar index proxy</td><td><code>DTWEXBGS</code></td><td>Trade Weighted U.S. Dollar Index: Broad, Goods and Services。</td></tr>
+	        </tbody>
+	      </table>
+	      <h3>代码层当前 keyword map</h3>
+	      <p class="small">下面这些关键词已经补进 <code>src/financial_credibility/data_sources.py</code> 的 <code>FRED_SERIES</code>；后续再逐步改成更强的 metadata selector。</p>
+	      <pre><code>FRED_SERIES starter map:
+sofr -> SOFR
+2 year treasury, 2y treasury, dgs2 -> DGS2
+10 year treasury, 10y treasury, dgs10 -> DGS10
+30 year treasury, 30y treasury, dgs30 -> DGS30
+pce price, pce inflation -> PCEPI
+core pce -> PCEPILFE
+nonfarm payrolls, nfp, payrolls -> PAYEMS
+unemployment -> UNRATE
+high yield spread, hy oas -> BAMLH0A0HYM2
+investment grade spread, ig oas -> BAMLC0A0CM
+wti, crude oil -> DCOILWTICO
+brent -> DCOILBRENTEU
+gold -> GOLDAMGBD228NLBM
+eur/usd, euro dollar -> DEXUSEU
+usd/jpy, yen -> DEXJPUS
+gbp/usd, sterling -> DEXUSUK
+usd/cad, canadian dollar -> DEXCAUS
+usd/chf, swiss franc -> DEXCHUS
+aud/usd, australian dollar -> DEXUSAL
+dollar index, trade weighted dollar -> DTWEXBGS</code></pre>
+	    </section>
+
+    <section id="register">
+      <h2>逐个平台注册步骤</h2>
+
+	      <h3>FRED / St. Louis Fed <span class="tag required">优先注册</span></h3>
+	      <p class="small">写入：<code>FRED_API_KEY</code></p>
+	      <ol>
+	        <li>打开 <a href="https://fred.stlouisfed.org/docs/api/api_key.html" target="_blank" rel="noreferrer">FRED API Keys</a>。</li>
+	        <li>登录 FRED account 后 request or view API keys。</li>
+	        <li>复制 32-character lower-case alpha-numeric key 到 <code>.env</code> 的 <code>FRED_API_KEY</code>。</li>
+	        <li>FRED reader 应使用 <code>fred/series/observations</code>，并在旧新闻验证时传 <code>observation_end={as_of_date}</code>。</li>
+	      </ol>
+
+	      <h3>BLS Public Data API v2 <span class="tag recommended">建议注册</span></h3>
+	      <p class="small">写入：<code>BLS_API_KEY</code></p>
+	      <ol>
+	        <li>打开 <a href="https://data.bls.gov/registrationEngine/" target="_blank" rel="noreferrer">BLS registration page</a>。</li>
+	        <li>填写 email 与 organization name，完成 CAPTCHA。</li>
+	        <li>收到 registration key 后写入 <code>BLS_API_KEY</code>。</li>
+	        <li>实现时用 POST <code>https://api.bls.gov/publicAPI/v2/timeseries/data/</code>；payload 至少包含 <code>seriesid</code>、<code>startyear</code>、<code>endyear</code>，有 key 时加 <code>registrationkey</code>。</li>
+	      </ol>
+	      <p>BLS Public Data API 可公开使用；注册 key 主要用于更完整的 v2 可选参数和更稳的额度。常用 starter series：CPI <code>CUSR0000SA0</code>、core CPI <code>CUSR0000SA0L1E</code>、nonfarm payrolls <code>CES0000000001</code>、unemployment <code>LNS14000000</code>、average hourly earnings <code>CES0500000003</code>、JOLTS openings <code>JTSJOL</code>。</p>
+
+	      <h3>BEA API <span class="tag recommended">建议注册</span></h3>
+	      <p class="small">写入：<code>BEA_API_KEY</code></p>
+	      <ol>
+	        <li>打开 <a href="https://apps.bea.gov/api/signup/" target="_blank" rel="noreferrer">BEA API signup</a>。</li>
+	        <li>使用有效 email 注册；BEA 会发 36-character UserID。</li>
+	        <li>把 UserID 写入 <code>BEA_API_KEY</code>。</li>
+	        <li>实现时先跑 discovery：<code>method=GetDataSetList</code>、<code>method=GetParameterList&amp;DataSetName=NIPA</code>、<code>method=GetParameterValues&amp;DataSetName=NIPA&amp;ParameterName=TableName</code>。</li>
+	        <li>确认 table/line 后再跑 <code>method=GetData&amp;DataSetName=NIPA&amp;TableName=...&amp;Frequency=...&amp;Year=...&amp;ResultFormat=JSON</code>。</li>
+	      </ol>
+	      <p>工程上不要把 BEA table id 写死在 verifier 逻辑里；建议单独维护 BEA topic-to-table mapping，并把 table、line、frequency、unit、release/vintage metadata 写进 raw provenance。</p>
+
+	      <h3>EIA Open Data API <span class="tag recommended">商品能源建议注册</span></h3>
+	      <p class="small">写入：<code>EIA_API_KEY</code></p>
+	      <ol>
+	        <li>打开 <a href="https://www.eia.gov/opendata/register.php" target="_blank" rel="noreferrer">EIA Open Data registration</a>。</li>
+	        <li>申请 API key；bulk download 通常不需要 key，但 APIv2 查询需要。</li>
+	        <li>把 key 写入 <code>EIA_API_KEY</code>。</li>
+	        <li>实现时使用 APIv2：<code>https://api.eia.gov/v2/{route}/data/?api_key=...</code>。</li>
+	        <li>先接 route discovery，再接 petroleum spot prices、natural gas、weekly petroleum inventory、electricity / energy balance 等高价值 route。</li>
+	      </ol>
+
+	      <h3>CFTC COT Public Reporting Environment <span class="tag nokey">通常无需 key</span></h3>
+      <p class="small">写入：<code>CFTC_BASE_URL</code>；可选 <code>CFTC_APP_TOKEN</code></p>
+      <ol>
+        <li>打开 <a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm" target="_blank" rel="noreferrer">CFTC Commitments of Traders</a>。</li>
+        <li>进入 Public Reporting Environment，选择 COT dataset。</li>
+        <li>实现 adapter 时通过 PRE / Socrata-style endpoint 过滤 report date、market、commodity group、trader category。</li>
+      </ol>
+
+	      <h3>FINRA Query API <span class="tag required">fixed income 阶段需要</span></h3>
+	      <p class="small">写入：<code>FINRA_CLIENT_ID</code>、<code>FINRA_CLIENT_SECRET</code></p>
+	      <ol>
+	        <li>打开 <a href="https://developer.finra.org/products/query-api" target="_blank" rel="noreferrer">FINRA Query API</a> 和 <a href="https://developer.finra.org/getting-started" target="_blank" rel="noreferrer">Getting Started</a>。</li>
+	        <li>申请 API Console access。机构账号通常需要 SAA / AA 授权；个人账号可查看可用 credential type。</li>
+	        <li>在 FINRA Gateway 的 API Console 创建 API Credential，获得 API Client ID。</li>
+	        <li>根据 FINRA 邮件中的 activation link 设置 API Client Secret；注意 User ID 填 API Client ID，不是登录 FINRA Gateway 的用户名。</li>
+	        <li>运行时先用 Client ID / Client Secret 通过 FINRA Identify Platform 获取 access token，再调用 <code>https://api.finra.org/data/group/{group}/name/{dataset}</code>。</li>
+	      </ol>
+      <div class="warning">
+        FINRA fixed-income 数据可能有条款和费用限制。把 FINRA 当作正式 fixed income/TRACE 层，不要把它混同于免费公共宏观 API。
+      </div>
+
+      <h3>OpenFIGI <span class="tag recommended">建议注册 key</span></h3>
+      <p class="small">写入：<code>OPENFIGI_API_KEY</code></p>
+      <ol>
+        <li>打开 <a href="https://www.openfigi.com/api/documentation" target="_blank" rel="noreferrer">OpenFIGI API documentation</a>。</li>
+        <li>注册并登录 OpenFIGI account。</li>
+        <li>Account page 查看或创建 API key，写入 <code>OPENFIGI_API_KEY</code>。</li>
+      </ol>
+
+      <h3>ECB Data Portal SDMX <span class="tag nokey">无需 key</span></h3>
+      <p class="small">写入：<code>ECB_BASE_URL=https://data-api.ecb.europa.eu/service</code></p>
+      <ol>
+        <li>打开 <a href="https://data.ecb.europa.eu/help/getting-data-web-services-sdmx-0" target="_blank" rel="noreferrer">ECB SDMX web services</a>。</li>
+        <li>用 API help 查询 dataflow、key 和 metadata。</li>
+        <li>适合 euro-area rates、FX、HICP、banking、payments。</li>
+      </ol>
+
+      <h3>BIS SDMX API <span class="tag nokey">无需 key</span></h3>
+      <p class="small">写入：<code>BIS_BASE_URL=https://stats.bis.org/api/v2</code></p>
+      <ol>
+        <li>打开 <a href="https://stats.bis.org/api-doc/v2/" target="_blank" rel="noreferrer">BIS Stats API v2 documentation</a> 或 <a href="https://www.bis.org/statistics/sdmx_techspec.htm" target="_blank" rel="noreferrer">BIS SDMX technical standards</a>。</li>
+        <li>无需注册、无需 API key、无需 token；直接通过 HTTPS 请求公开 SDMX RESTful API。</li>
+        <li>v2 data endpoint 形态是 <code>/data/{context}/{agencyID}/{resourceID}/{version}/{key}</code>，本项目默认用 <code>/data/dataflow/BIS/{dataset}/1.0/{series_key}</code>。</li>
+        <li>通过 BIS Data Portal 找到 topic、dataset、series key。</li>
+        <li>适合 global banking、debt securities、credit-to-GDP、derivatives、global liquidity。</li>
+      </ol>
+
+      <h3>IMF Data API <span class="tag nokey">无 API key</span></h3>
+      <p class="small">写入：<code>IMF_BASE_URL=https://api.imf.org/external/sdmx/3.0</code></p>
+      <ol>
+        <li>打开 <a href="https://data.imf.org/en/Resource-Pages/IMF-API" target="_blank" rel="noreferrer">IMF Data APIs</a>。</li>
+        <li>公开数据直接用 SDMX 2.1 / 3.0 API 访问，不需要 <code>IMF_API_KEY</code>、token 或 client secret。</li>
+        <li>本项目的 public reader 默认使用 SDMX 3.0：<code>/data/dataflow/{agency}/{dataflow}/+/{series_key}</code>。</li>
+        <li>当前实现支持显式传 <code>agency/dataflow/key</code>，并内置少量 WEO mapping：GDP growth、inflation、unemployment、current account。</li>
+        <li>Python 快速试验可以用 <code>sdmx1</code>；项目 adapter 层仍建议保留无依赖的 HTTP client。</li>
+        <li>Swagger exploration 需要 beta portal account 登录；这只是交互式探索页面，不等于 API key。</li>
+        <li>如果访问权限数据，IMF 使用 Azure AD B2C / MSAL 交互式登录拿 bearer token；需要 IMF iData 账号，不是申请 API key。</li>
+        <li>适合 WEO、BOP、reserves、fiscal、cross-country macro。</li>
+      </ol>
+
+      <h3>World Bank Indicators API <span class="tag nokey">无需 key</span></h3>
+      <p class="small">写入：<code>WORLD_BANK_BASE_URL=https://api.worldbank.org/v2</code></p>
+      <ol>
+        <li>打开 <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/889392" target="_blank" rel="noreferrer">World Bank Indicators API docs</a>。</li>
+        <li>使用 v2 endpoints，例如 <code>/country/all/indicator/SP.POP.TOTL</code>。v1 已下线，不要使用。</li>
+        <li>Indicators API v2 不需要 API key、token 或任何 authentication。</li>
+        <li>常用参数：<code>format=json</code>、<code>date=2015:2023</code>、<code>per_page=500</code>、<code>page=2</code>。</li>
+        <li>适合 WDI、IDS、long-run country and development finance indicators。</li>
+      </ol>
+
+      <h3>Bank of England IADB <span class="tag nokey">无需 key</span></h3>
+      <p class="small">写入：<code>BOE_IADB_BASE_URL</code></p>
+      <ol>
+        <li>打开 <a href="https://www.bankofengland.co.uk/boeapps/database/help.asp" target="_blank" rel="noreferrer">BOE Database help</a>。</li>
+        <li>无需注册、无需 API key、无需 token；使用 URL 参数式 download endpoint。</li>
+        <li>CSV 基础端点：<code>_iadb-fromshowcolumns.asp?csv.x=yes</code>。</li>
+        <li>必填参数：<code>Datefrom</code>、<code>Dateto</code>、<code>SeriesCodes</code>、<code>UsingCodes=Y</code>、<code>CSVF=TN</code>。常用可选参数：<code>VPD=Y</code>、<code>VFD=N</code>。</li>
+        <li>本项目默认生成 <code>csv.x=yes&amp;Datefrom=01/Jan/2020&amp;Dateto=now&amp;SeriesCodes={code}&amp;UsingCodes=Y&amp;CSVF=TN&amp;VPD=Y&amp;VFD=N</code>。</li>
+        <li>CSV/HTML/XML 一次最多 300 个 series codes；Excel 一次最多 250 个。</li>
+        <li>适合 UK Bank Rate、GBP rates、FX、monetary and credit statistics。</li>
+      </ol>
+    </section>
+
+    <section id="no-key">
+      <h2>无需 key 或 key 可选的数据源</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>数据源</th>
+            <th>Key 状态</th>
+            <th>注意事项</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>SEC EDGAR / data.sec.gov</td><td>无 key</td><td>设置 <code>SEC_USER_AGENT</code> 并遵守 fair access。</td></tr>
+          <tr><td>U.S. Treasury Fiscal Data</td><td>无 key</td><td>当前项目已有 debt-to-the-penny adapter，可继续扩 auctions/rates/fiscal datasets。</td></tr>
+          <tr><td>GLEIF</td><td>无 key</td><td>LEI entity lookup 已有轻量 adapter。</td></tr>
+          <tr><td>CFTC COT PRE</td><td>通常无 key</td><td>可加 <code>CFTC_APP_TOKEN</code> 作为未来 rate-limit/identify 余量。</td></tr>
+          <tr><td>ECB Data Portal</td><td>无 key</td><td>SDMX 2.1 RESTful API；重点是 dataflow/key discovery。</td></tr>
+          <tr><td>BIS Data Portal</td><td>无 key</td><td>SDMX REST API；适合 global financial statistics。</td></tr>
+          <tr><td>World Bank Indicators</td><td>无 key</td><td>v2 API；支持多个 database 和 indicator。</td></tr>
+          <tr><td>Bank of England IADB</td><td>无 key</td><td>URL 参数式 CSV/XML/HTML endpoint；需要 series code mapping。</td></tr>
+          <tr><td>OpenFIGI</td><td>key 可选</td><td>无 key 可用但额度低；建议注册。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="notes">
+      <h2>实现备注</h2>
+      <ul>
+        <li><strong>credence check 的优先级</strong>：官方原始发布 API &gt; 官方聚合 API &gt; licensed/vendor data &gt; web search。</li>
+        <li><strong>FRED 不等于所有宏观 claim 的最终权威源</strong>：它是很好的统一入口，但 CPI/PPI/labor 应补 BLS，GDP/PCE/NIPA 应补 BEA，energy commodities 应补 EIA。</li>
+        <li><strong>market data 要标 license/source tier</strong>：Stooq/Yahoo/vendor prices 不应和 SEC、BLS、BEA、CFTC、ECB、BIS 这类官方源同权重。</li>
+        <li><strong>SDMX 系接口的难点不是 key</strong>：ECB/BIS/IMF 的基础 reader 已接入；下一步主要难在 dataflow、dimension、series key、metadata discovery 和单位/频率归一化。</li>
+        <li><strong>FINRA 是重接入</strong>：OAuth2、credential expiry、terms、possible fees 和 dataset entitlement 都要在 adapter 层显式处理。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>官方参考</h2>
+      <p class="small">
+	        主要参考：<a href="https://fred.stlouisfed.org/docs/api/fred/index.html" target="_blank" rel="noreferrer">FRED API</a>、
+	        <a href="https://fred.stlouisfed.org/docs/api/api_key.html" target="_blank" rel="noreferrer">FRED API Keys</a>、
+	        <a href="https://www.bls.gov/developers/api_FAQs.htm" target="_blank" rel="noreferrer">BLS API FAQ</a>、
+	        <a href="https://www.bls.gov/developers/api_signature_v2.htm" target="_blank" rel="noreferrer">BLS API v2 signatures</a>、
+	        <a href="https://apps.bea.gov/api/_pdf/bea_web_service_api_user_guide.pdf" target="_blank" rel="noreferrer">BEA API User Guide</a>、
+	        <a href="https://www.eia.gov/opendata/documentation.php" target="_blank" rel="noreferrer">EIA APIv2 docs</a>、
+	        <a href="https://www.eia.gov/opendata/register.php" target="_blank" rel="noreferrer">EIA API key registration</a>、
+	        <a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm" target="_blank" rel="noreferrer">CFTC COT</a>、
+	        <a href="https://developer.finra.org/products/query-api" target="_blank" rel="noreferrer">FINRA Query API</a>、
+	        <a href="https://developer.finra.org/getting-started" target="_blank" rel="noreferrer">FINRA Getting Started</a>、
+        <a href="https://www.openfigi.com/api/documentation" target="_blank" rel="noreferrer">OpenFIGI</a>、
+        <a href="https://data.ecb.europa.eu/help/getting-data-web-services-sdmx-0" target="_blank" rel="noreferrer">ECB SDMX</a>、
+        <a href="https://www.bis.org/statistics/sdmx_techspec.htm" target="_blank" rel="noreferrer">BIS SDMX</a>、
+        <a href="https://data.imf.org/en/Resource-Pages/IMF-API" target="_blank" rel="noreferrer">IMF Data API</a>、
+        <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/889392" target="_blank" rel="noreferrer">World Bank Indicators API</a>、
+        <a href="https://www.bankofengland.co.uk/boeapps/database/help.asp" target="_blank" rel="noreferrer">Bank of England Database help</a>。
+      </p>
+    </section>
+  </main>
+</body>
+</html>

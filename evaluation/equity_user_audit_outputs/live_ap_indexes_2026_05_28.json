@@ -1,0 +1,2901 @@
+{
+  "input": {
+    "memo": "U.S. stocks added to records Thursday. The S&P 500 added 0.6% to a new all-time high. The Dow Jones Industrial Average rose less than 0.1%, and the Nasdaq Composite climbed 0.9%. The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57.",
+    "original_memo": "U.S. stocks added to records Thursday. The S&P 500 added 0.6% to a new all-time high. The Dow Jones Industrial Average rose less than 0.1%, and the Nasdaq Composite climbed 0.9%. The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 236,
+      "cleaned_length": 236,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "U.S. stocks added to records Thursday. The S&P 500 added 0.6% to a new all-time high. The Dow Jones Industrial Average rose less than 0.1%, and the Nasdaq Composite climbed 0.9%. The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57."
+    },
+    "tickers": [
+      "SPX",
+      "NDQ",
+      "DJIA",
+      "RUT"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "S&P 500 Index",
+          "ticker": null,
+          "symbol": "SPX",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        },
+        {
+          "name": "Nasdaq Composite Index",
+          "ticker": null,
+          "symbol": "NDQ",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        },
+        {
+          "name": "Dow Jones Industrial Average",
+          "ticker": null,
+          "symbol": "DJIA",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        },
+        {
+          "name": "Russell 2000 Index",
+          "ticker": null,
+          "symbol": "RUT",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        }
+      ],
+      "tickers": [],
+      "asset_classes": [
+        "equity_index"
+      ],
+      "asset_groups": {
+        "equity_index": [
+          {
+            "name": "S&P 500 Index",
+            "ticker": null,
+            "symbol": "SPX",
+            "entity_type": "index",
+            "asset_class": "equity_index",
+            "confidence": 0.78,
+            "source": "asset_class_pattern+built_in_asset_universe",
+            "reason": ""
+          },
+          {
+            "name": "Nasdaq Composite Index",
+            "ticker": null,
+            "symbol": "NDQ",
+            "entity_type": "index",
+            "asset_class": "equity_index",
+            "confidence": 0.78,
+            "source": "asset_class_pattern+built_in_asset_universe",
+            "reason": ""
+          },
+          {
+            "name": "Dow Jones Industrial Average",
+            "ticker": null,
+            "symbol": "DJIA",
+            "entity_type": "index",
+            "asset_class": "equity_index",
+            "confidence": 0.78,
+            "source": "asset_class_pattern+built_in_asset_universe",
+            "reason": ""
+          },
+          {
+            "name": "Russell 2000 Index",
+            "ticker": null,
+            "symbol": "RUT",
+            "entity_type": "index",
+            "asset_class": "equity_index",
+            "confidence": 0.78,
+            "source": "asset_class_pattern+built_in_asset_universe",
+            "reason": ""
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [
+        {
+          "name": "S&P 500 Index",
+          "ticker": null,
+          "symbol": "SPX",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        },
+        {
+          "name": "Nasdaq Composite Index",
+          "ticker": null,
+          "symbol": "NDQ",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        },
+        {
+          "name": "Dow Jones Industrial Average",
+          "ticker": null,
+          "symbol": "DJIA",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        },
+        {
+          "name": "Russell 2000 Index",
+          "ticker": null,
+          "symbol": "RUT",
+          "entity_type": "index",
+          "asset_class": "equity_index",
+          "confidence": 0.78,
+          "source": "asset_class_pattern+built_in_asset_universe",
+          "reason": ""
+        }
+      ],
+      "notes": [
+        "asset_universe_source:built_in"
+      ]
+    },
+    "as_of_date": "2026-05-28",
+    "requested_as_of_date": "2026-05-28",
+    "time_context": {
+      "effective_as_of_date": "2026-05-28",
+      "user_as_of_date": "2026-05-28",
+      "event_date": null,
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": []
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 4,
+    "detected_entity_count": 4,
+    "asset_class_count": 1,
+    "asset_classes": [
+      "equity_index"
+    ],
+    "non_equity_entity_count": 4,
+    "error_count": 0,
+    "atomic_claim_count": 4,
+    "skipped_claim_count": 0,
+    "total_claim_count": 4,
+    "human_review_count": 4,
+    "average_confidence": 0.643,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "The S&P 500 added 0.6% to a new all-time high",
+      "ticker": "SPX",
+      "as_of_date": "2026-05-28",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.66,
+      "verdict": "supported",
+      "credibility_label": "medium",
+      "credibility_score": 0.5,
+      "score_breakdown": {
+        "source_authority": 0.68,
+        "recency": 0.98,
+        "evidence_support": 0.158,
+        "numeric_consistency": 0.72,
+        "independence": 0.35,
+        "reasoning_quality": 0.55,
+        "penalties": 0.05,
+        "final_score": 0.5,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "verified",
+        "confidence": 0.9,
+        "summary": "All material numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC"
+        ],
+        "issues": [
+          "matched 0.6% with 0.58%"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "partially_supported",
+        "confidence": 0.505,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "partially_verified",
+        "confidence": 0.672,
+        "summary": "Sources are usable but have limitations in authority, recency, or independence.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC"
+        ],
+        "issues": [
+          "single_source_domain",
+          "single_evidence_item"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Medium",
+        "final_confidence": 0.693,
+        "numeric_confidence": 0.9,
+        "logic_confidence": 0.505,
+        "source_confidence": 0.672,
+        "summary": "Overall confidence is Medium. Numeric check: verified; logic check: partially_supported; source check: partially_verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "The S&P 500 added 0.6% to a new all-time high",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ],
+            "context_window": "The S&P 500 added 0.6% to a new all-time high",
+            "context_window_source": "claim"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC"
+          ],
+          "evidence_keys": [
+            "T3:financialmodelingprep.com:2026-05-28"
+          ],
+          "canonical_fact_ids": [],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "0.6% -> 0.58%",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.68,
+            "entity_match": 0.45,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.35,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.589
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "non_official_sources_only",
+            "low_entity_resolution_confidence",
+            "low_retrieval_sufficiency"
+          ],
+          "issues": [
+            "low_evidence_entity_match",
+            "matched 0.6% with 0.58%"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_03cfcd5bb0c3",
+          "source_type": "data_vendor",
+          "authority_tier": "T3",
+          "license_tag": "third_party_restricted",
+          "entity_id": "SPX",
+          "ticker": "SPX",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-05-28",
+          "observation_date": "2026-05-28",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "Financial Modeling Prep 1-month historical prices for S&P 500 Index",
+          "value": "1",
+          "provenance_locator": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "fmp_historical_prices"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "SPX",
+        "entity_id": "SPX",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.45,
+        "sources": [
+          "asset_symbol_map"
+        ],
+        "issues": [
+          "low_evidence_entity_match"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_ed63f3758a99",
+        "created_at": "2026-05-29T03:38:24+00:00",
+        "replayable_inputs": {
+          "claim": "The S&P 500 added 0.6% to a new all-time high",
+          "ticker": "SPX",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": [
+            "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 1 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 1 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "financialmodelingprep.com"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as SPX.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "SPX",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.45,
+              "issues": [
+                "low_evidence_entity_match"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 1 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_03cfcd5bb0c3"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "supported"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "no_official_primary_source",
+                  "non_official_sources_only",
+                  "low_entity_resolution_confidence",
+                  "low_retrieval_sufficiency"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC",
+          "title": "Financial Modeling Prep 1-month historical prices for S&P 500 Index",
+          "text": "retrieval_window approximately 1 month(s); window_source lookback_months; S&P 500 INDEX historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 7173.92; end_close 7563.62; min_close 7135.96; max_close 7563.62; latest_daily_calculation previous_close 7520.37 to end_close 7563.62; latest_daily_point_change 43.25; latest_daily_abs_point_change 43.25; latest_daily_return_pct 0.58% from close-to-close calculation; latest_daily_abs_return_pct 0.58%; previous_daily_return_pct 0.02%; previous_daily_abs_return_pct 0.02%; total_point_change 389.7; total_return_pct 5.43%; range_pct 5.96%; annualized_volatility_pct 10.33; up_days 14; down_days 8; daily_direction_changes 9; daily_direction_change_ratio 0.5; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+          "source_type": "data_vendor",
+          "source_tier": "T3",
+          "domain": "financialmodelingprep.com",
+          "published_at": "2026-05-28",
+          "license_tag": "third_party_restricted",
+          "is_official_primary": false,
+          "source_authority": 0.68,
+          "recency_score": 0.98,
+          "relevance_score": 0.342,
+          "entity_match_score": 0.45,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.451,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.35,
+          "notes": [
+            "financial data API",
+            "0 days old",
+            "partially matched numeric values: 500",
+            "token overlap=0.17",
+            "reasoning quality is secondary for factual claim type",
+            "single evidence source"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required",
+        "single_source_domain",
+        "verdict_reconciled_from_verification_checks"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "numeric change"
+        ],
+        "needs_decomposition": false,
+        "search_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.6% to a new all-time high",
+            "context_window": "The S&P 500 added 0.6% to a new all-time high",
+            "context_window_source": "claim",
+            "as_of_date": "2026-05-28",
+            "time_context": {
+              "effective_as_of_date": "2026-05-28",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.6% to a new all-time high",
+            "context_window": "The S&P 500 added 0.6% to a new all-time high",
+            "context_window_source": "claim",
+            "as_of_date": "2026-05-28",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC"
+            ],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.6% to a new all-time high",
+            "context_window": "The S&P 500 added 0.6% to a new all-time high",
+            "context_window_source": "claim",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "non_official_sources_only",
+              "low_entity_resolution_confidence",
+              "low_retrieval_sufficiency"
+            ],
+            "closure_status": "evidence_attached"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.6% to a new all-time high",
+            "detected_asset_classes": [
+              "equity_index"
+            ],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The S&P 500 added 0.6% to a new all-time high",
+            "official_only": true,
+            "asset_classes": [
+              "equity_index"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset",
+              "market price or index-performance claim"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 45,
+          "cleaned_length": 45,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "The S&P 500 added 0.6% to a new all-time high"
+        },
+        "original_claim": "The S&P 500 added 0.6% to a new all-time high",
+        "agentic_search_plan": [
+          "SPX \"The S&P 500 added 0.6% to a new all-time high\" SEC 10-Q 10-K",
+          "SPX earnings release revenue EPS investor relations",
+          "SPX company facts SEC revenue earnings",
+          "SPX The S&P 500 added 0.6% to a new all-time high correction restatement contradiction",
+          "SPX The S&P 500 added 0.6% to a new all-time high SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "Financial Modeling Prep 1-month historical prices for S&P 500 Index",
+          "domain": "financialmodelingprep.com",
+          "source_tier": "T3",
+          "is_official_primary": false,
+          "license_tag": "third_party_restricted",
+          "published_at": "2026-05-28",
+          "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "The S&P 500 added 0.6% to a new all-time high",
+          "verdict": "supported",
+          "confidence": 0.589,
+          "summary": "The claim is marked `supported` based on Financial Modeling Prep 1-month historical prices for S&P 500 Index with confidence 0.59.",
+          "numeric_summary": "The evidence directly matches 0.6% from the claim.",
+          "source_summary": "The main evidence is non-official or secondary evidence with source tier T3.",
+          "main_evidence": {
+            "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC",
+            "title": "Financial Modeling Prep 1-month historical prices for S&P 500 Index",
+            "text": "retrieval_window approximately 1 month(s); window_source lookback_months; S&P 500 INDEX historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 7173.92; end_close 7563.62; min_close 7135.96; max_close 7563.62; latest_daily_calculation previous_close 7520.37 to end_close 7563.62; latest_daily_point_change 43.25; latest_daily_abs_point_change 43.25; latest_daily_return_pct 0.58% from close-to-close calculation; latest_daily_abs_return_pct 0.58%; previous_daily_return_pct 0.02%; previous_daily_abs_return_pct 0.02%; total_point_change 389.7; total_return_pct 5.43%; range_pct 5.96%; annualized_volatility_pct 10.33; up_days 14; down_days 8; daily_direction_changes 9; daily_direction_change_ratio 0.5; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+            "source_type": "data_vendor",
+            "source_tier": "T3",
+            "domain": "financialmodelingprep.com",
+            "published_at": "2026-05-28",
+            "license_tag": "third_party_restricted",
+            "is_official_primary": false,
+            "source_authority": 0.68,
+            "recency_score": 0.98,
+            "relevance_score": 0.342,
+            "entity_match_score": 0.45,
+            "numeric_consistency_score": 0.72,
+            "support_label": "not_enough_info",
+            "support_score": 0.451,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.35,
+            "notes": [
+              "financial data API",
+              "0 days old",
+              "partially matched numeric values: 500",
+              "token overlap=0.17",
+              "reasoning quality is secondary for factual claim type",
+              "single evidence source"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "low_evidence_entity_match",
+            "matched 0.6% with 0.58%"
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_ed63f3758a99",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    },
+    {
+      "claim": "the Nasdaq Composite climbed 0.9%",
+      "ticker": "NDQ",
+      "as_of_date": "2026-05-28",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.66,
+      "verdict": "supported",
+      "credibility_label": "medium",
+      "credibility_score": 0.568,
+      "score_breakdown": {
+        "source_authority": 0.68,
+        "recency": 0.98,
+        "evidence_support": 0.9,
+        "numeric_consistency": 0.25,
+        "independence": 0.35,
+        "reasoning_quality": 0.55,
+        "penalties": 0.05,
+        "final_score": 0.568,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "verified",
+        "confidence": 0.9,
+        "summary": "All material numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC"
+        ],
+        "issues": [
+          "matched 0.9% with 0.91%"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "supported",
+        "confidence": 0.708,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "partially_verified",
+        "confidence": 0.672,
+        "summary": "Sources are usable but have limitations in authority, recency, or independence.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC"
+        ],
+        "issues": [
+          "single_source_domain",
+          "single_evidence_item"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "High",
+        "final_confidence": 0.764,
+        "numeric_confidence": 0.9,
+        "logic_confidence": 0.708,
+        "source_confidence": 0.672,
+        "summary": "Overall confidence is High. Numeric check: verified; logic check: supported; source check: partially_verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "the Nasdaq Composite climbed 0.9%",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ],
+            "context_window": "the Nasdaq Composite climbed 0.9%",
+            "context_window_source": "claim"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC"
+          ],
+          "evidence_keys": [
+            "T3:financialmodelingprep.com:2026-05-28"
+          ],
+          "canonical_fact_ids": [
+            "fact_05e210fd4e88"
+          ],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "0.9% -> 0.91%",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.68,
+            "entity_match": 0.45,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.35,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.5,
+            "final_confidence": 0.639
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "non_official_sources_only",
+            "low_entity_resolution_confidence",
+            "low_retrieval_sufficiency"
+          ],
+          "issues": [
+            "low_evidence_entity_match",
+            "matched 0.9% with 0.91%"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_05e210fd4e88",
+          "source_type": "data_vendor",
+          "authority_tier": "T3",
+          "license_tag": "third_party_restricted",
+          "entity_id": "NDQ",
+          "ticker": "NDQ",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-05-28",
+          "observation_date": "2026-05-28",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "Financial Modeling Prep 1-month historical prices for Nasdaq Composite Index",
+          "value": "1",
+          "provenance_locator": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "fmp_historical_prices"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "NDQ",
+        "entity_id": "NDQ",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.45,
+        "sources": [
+          "asset_symbol_map"
+        ],
+        "issues": [
+          "low_evidence_entity_match"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_c9879e976342",
+        "created_at": "2026-05-29T03:38:24+00:00",
+        "replayable_inputs": {
+          "claim": "the Nasdaq Composite climbed 0.9%",
+          "ticker": "NDQ",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": [
+            "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 1 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 1 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "financialmodelingprep.com"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as NDQ.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "NDQ",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.45,
+              "issues": [
+                "low_evidence_entity_match"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 1 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_05e210fd4e88"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "supported"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "no_official_primary_source",
+                  "non_official_sources_only",
+                  "low_entity_resolution_confidence",
+                  "low_retrieval_sufficiency"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC",
+          "title": "Financial Modeling Prep 1-month historical prices for Nasdaq Composite Index",
+          "text": "retrieval_window approximately 1 month(s); window_source lookback_months; NASDAQ COMPOSITE INDEX historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 24887.1; end_close 26917.47; min_close 24663.8; max_close 26917.47; latest_daily_calculation previous_close 26674.73 to end_close 26917.47; latest_daily_point_change 242.74; latest_daily_abs_point_change 242.74; latest_daily_return_pct 0.91% from close-to-close calculation; latest_daily_abs_return_pct 0.91%; previous_daily_return_pct 0.07%; previous_daily_abs_return_pct 0.07%; total_point_change 2030.37; total_return_pct 8.16%; range_pct 9.06%; annualized_volatility_pct 14.86; up_days 15; down_days 7; daily_direction_changes 9; daily_direction_change_ratio 0.5; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+          "source_type": "data_vendor",
+          "source_tier": "T3",
+          "domain": "financialmodelingprep.com",
+          "published_at": "2026-05-28",
+          "license_tag": "third_party_restricted",
+          "is_official_primary": false,
+          "source_authority": 0.68,
+          "recency_score": 0.98,
+          "relevance_score": 0.625,
+          "entity_match_score": 0.45,
+          "numeric_consistency_score": 0.25,
+          "support_label": "supports",
+          "support_score": 0.9,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.35,
+          "notes": [
+            "financial data API",
+            "0 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.50",
+            "price direction matched latest daily return",
+            "reasoning quality is secondary for factual claim type",
+            "single evidence source"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required",
+        "single_source_domain"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "numeric change"
+        ],
+        "needs_decomposition": false,
+        "search_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "the Nasdaq Composite climbed 0.9%",
+            "context_window": "the Nasdaq Composite climbed 0.9%",
+            "context_window_source": "claim",
+            "as_of_date": "2026-05-28",
+            "time_context": {
+              "effective_as_of_date": "2026-05-28",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "the Nasdaq Composite climbed 0.9%",
+            "context_window": "the Nasdaq Composite climbed 0.9%",
+            "context_window_source": "claim",
+            "as_of_date": "2026-05-28",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC"
+            ],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "the Nasdaq Composite climbed 0.9%",
+            "context_window": "the Nasdaq Composite climbed 0.9%",
+            "context_window_source": "claim",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "non_official_sources_only",
+              "low_entity_resolution_confidence",
+              "low_retrieval_sufficiency"
+            ],
+            "closure_status": "evidence_attached"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "the Nasdaq Composite climbed 0.9%",
+            "detected_asset_classes": [
+              "equity_index"
+            ],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "the Nasdaq Composite climbed 0.9%",
+            "official_only": true,
+            "asset_classes": [
+              "equity_index"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 33,
+          "cleaned_length": 33,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "the Nasdaq Composite climbed 0.9%"
+        },
+        "original_claim": "the Nasdaq Composite climbed 0.9%",
+        "agentic_search_plan": [
+          "NDQ \"the Nasdaq Composite climbed 0.9%\" SEC 10-Q 10-K",
+          "NDQ earnings release revenue EPS investor relations",
+          "NDQ company facts SEC revenue earnings",
+          "NDQ the Nasdaq Composite climbed 0.9% correction restatement contradiction",
+          "NDQ the Nasdaq Composite climbed 0.9% SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "Financial Modeling Prep 1-month historical prices for Nasdaq Composite Index",
+          "domain": "financialmodelingprep.com",
+          "source_tier": "T3",
+          "is_official_primary": false,
+          "license_tag": "third_party_restricted",
+          "published_at": "2026-05-28",
+          "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "the Nasdaq Composite climbed 0.9%",
+          "verdict": "supported",
+          "confidence": 0.639,
+          "summary": "The claim is marked `supported` based on Financial Modeling Prep 1-month historical prices for Nasdaq Composite Index with confidence 0.64.",
+          "numeric_summary": "The evidence directly matches 0.9% from the claim.",
+          "source_summary": "The main evidence is non-official or secondary evidence with source tier T3.",
+          "main_evidence": {
+            "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^IXIC",
+            "title": "Financial Modeling Prep 1-month historical prices for Nasdaq Composite Index",
+            "text": "retrieval_window approximately 1 month(s); window_source lookback_months; NASDAQ COMPOSITE INDEX historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 24887.1; end_close 26917.47; min_close 24663.8; max_close 26917.47; latest_daily_calculation previous_close 26674.73 to end_close 26917.47; latest_daily_point_change 242.74; latest_daily_abs_point_change 242.74; latest_daily_return_pct 0.91% from close-to-close calculation; latest_daily_abs_return_pct 0.91%; previous_daily_return_pct 0.07%; previous_daily_abs_return_pct 0.07%; total_point_change 2030.37; total_return_pct 8.16%; range_pct 9.06%; annualized_volatility_pct 14.86; up_days 15; down_days 7; daily_direction_changes 9; daily_direction_change_ratio 0.5; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+            "source_type": "data_vendor",
+            "source_tier": "T3",
+            "domain": "financialmodelingprep.com",
+            "published_at": "2026-05-28",
+            "license_tag": "third_party_restricted",
+            "is_official_primary": false,
+            "source_authority": 0.68,
+            "recency_score": 0.98,
+            "relevance_score": 0.625,
+            "entity_match_score": 0.45,
+            "numeric_consistency_score": 0.25,
+            "support_label": "supports",
+            "support_score": 0.9,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.35,
+            "notes": [
+              "financial data API",
+              "0 days old",
+              "claim numbers were not found in evidence",
+              "token overlap=0.50",
+              "price direction matched latest daily return",
+              "reasoning quality is secondary for factual claim type",
+              "single evidence source"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "low_evidence_entity_match",
+            "matched 0.9% with 0.91%"
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_c9879e976342",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    },
+    {
+      "claim": "The Dow Jones Industrial Average rose less than 0.1%",
+      "ticker": "DJIA",
+      "as_of_date": "2026-05-28",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.66,
+      "verdict": "supported",
+      "credibility_label": "medium",
+      "credibility_score": 0.568,
+      "score_breakdown": {
+        "source_authority": 0.68,
+        "recency": 0.98,
+        "evidence_support": 0.9,
+        "numeric_consistency": 0.25,
+        "independence": 0.35,
+        "reasoning_quality": 0.55,
+        "penalties": 0.05,
+        "final_score": 0.568,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "verified",
+        "confidence": 0.9,
+        "summary": "All material numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI"
+        ],
+        "issues": [
+          "matched 0.1% with 0.05%"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "supported",
+        "confidence": 0.708,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "partially_verified",
+        "confidence": 0.672,
+        "summary": "Sources are usable but have limitations in authority, recency, or independence.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI"
+        ],
+        "issues": [
+          "single_source_domain",
+          "single_evidence_item"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "High",
+        "final_confidence": 0.764,
+        "numeric_confidence": 0.9,
+        "logic_confidence": 0.708,
+        "source_confidence": 0.672,
+        "summary": "Overall confidence is High. Numeric check: verified; logic check: supported; source check: partially_verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "The Dow Jones Industrial Average rose less than 0.1%",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ],
+            "context_window": "The Dow Jones Industrial Average rose less than 0.1%",
+            "context_window_source": "claim"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI"
+          ],
+          "evidence_keys": [
+            "T3:financialmodelingprep.com:2026-05-28"
+          ],
+          "canonical_fact_ids": [
+            "fact_bf7ee08ed2ce"
+          ],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "0.1% -> 0.05%",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.68,
+            "entity_match": 0.45,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.35,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.5,
+            "final_confidence": 0.639
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "non_official_sources_only",
+            "low_entity_resolution_confidence",
+            "low_retrieval_sufficiency"
+          ],
+          "issues": [
+            "low_evidence_entity_match",
+            "matched 0.1% with 0.05%"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_bf7ee08ed2ce",
+          "source_type": "data_vendor",
+          "authority_tier": "T3",
+          "license_tag": "third_party_restricted",
+          "entity_id": "DJIA",
+          "ticker": "DJIA",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-05-28",
+          "observation_date": "2026-05-28",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "Financial Modeling Prep 1-month historical prices for Dow Jones Industrial Average",
+          "value": "1",
+          "provenance_locator": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "fmp_historical_prices"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "DJIA",
+        "entity_id": "DJIA",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.45,
+        "sources": [
+          "asset_symbol_map"
+        ],
+        "issues": [
+          "low_evidence_entity_match"
+        ]
+      },
+      "audit_trace": {
+        "trace_id": "trace_09e9161c6b21",
+        "created_at": "2026-05-29T03:38:24+00:00",
+        "replayable_inputs": {
+          "claim": "The Dow Jones Industrial Average rose less than 0.1%",
+          "ticker": "DJIA",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": [
+            "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 1 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 1 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "financialmodelingprep.com"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "review",
+            "summary": "Resolved entity as DJIA.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "DJIA",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.45,
+              "issues": [
+                "low_evidence_entity_match"
+              ]
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 1 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_bf7ee08ed2ce"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "supported"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "no_official_primary_source",
+                  "non_official_sources_only",
+                  "low_entity_resolution_confidence",
+                  "low_retrieval_sufficiency"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI",
+          "title": "Financial Modeling Prep 1-month historical prices for Dow Jones Industrial Average",
+          "text": "retrieval_window approximately 1 month(s); window_source lookback_months; DOW JONES INDUSTRIAL AVERAGE historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 49167.8; end_close 50668.97; min_close 48861.82; max_close 50668.97; latest_daily_calculation previous_close 50644.29 to end_close 50668.97; latest_daily_point_change 24.68; latest_daily_abs_point_change 24.68; latest_daily_return_pct 0.05% from close-to-close calculation; latest_daily_abs_return_pct 0.05%; previous_daily_return_pct 0.36%; previous_daily_abs_return_pct 0.36%; total_point_change 1501.17; total_return_pct 3.05%; range_pct 3.68%; annualized_volatility_pct 11.59; up_days 13; down_days 9; daily_direction_changes 13; daily_direction_change_ratio 0.722; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+          "source_type": "data_vendor",
+          "source_tier": "T3",
+          "domain": "financialmodelingprep.com",
+          "published_at": "2026-05-28",
+          "license_tag": "third_party_restricted",
+          "is_official_primary": false,
+          "source_authority": 0.68,
+          "recency_score": 0.98,
+          "relevance_score": 0.625,
+          "entity_match_score": 0.45,
+          "numeric_consistency_score": 0.25,
+          "support_label": "supports",
+          "support_score": 0.9,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.35,
+          "notes": [
+            "financial data API",
+            "0 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.50",
+            "price direction matched latest daily return",
+            "reasoning quality is secondary for factual claim type",
+            "single evidence source"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required",
+        "single_source_domain"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "numeric change"
+        ],
+        "needs_decomposition": false,
+        "search_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Dow Jones Industrial Average rose less than 0.1%",
+            "context_window": "The Dow Jones Industrial Average rose less than 0.1%",
+            "context_window_source": "claim",
+            "as_of_date": "2026-05-28",
+            "time_context": {
+              "effective_as_of_date": "2026-05-28",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Dow Jones Industrial Average rose less than 0.1%",
+            "context_window": "The Dow Jones Industrial Average rose less than 0.1%",
+            "context_window_source": "claim",
+            "as_of_date": "2026-05-28",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI"
+            ],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Dow Jones Industrial Average rose less than 0.1%",
+            "context_window": "The Dow Jones Industrial Average rose less than 0.1%",
+            "context_window_source": "claim",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "non_official_sources_only",
+              "low_entity_resolution_confidence",
+              "low_retrieval_sufficiency"
+            ],
+            "closure_status": "evidence_attached"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Dow Jones Industrial Average rose less than 0.1%",
+            "detected_asset_classes": [
+              "equity_index"
+            ],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Dow Jones Industrial Average rose less than 0.1%",
+            "official_only": true,
+            "asset_classes": [
+              "equity_index"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset",
+              "market price or index-performance claim"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 52,
+          "cleaned_length": 52,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "The Dow Jones Industrial Average rose less than 0.1%"
+        },
+        "original_claim": "The Dow Jones Industrial Average rose less than 0.1%",
+        "agentic_search_plan": [
+          "DJIA \"The Dow Jones Industrial Average rose less than 0.1%\" SEC 10-Q 10-K",
+          "DJIA earnings release revenue EPS investor relations",
+          "DJIA company facts SEC revenue earnings",
+          "DJIA The Dow Jones Industrial Average rose less than 0.1% correction restatement contradiction",
+          "DJIA The Dow Jones Industrial Average rose less than 0.1% SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "Financial Modeling Prep 1-month historical prices for Dow Jones Industrial Average",
+          "domain": "financialmodelingprep.com",
+          "source_tier": "T3",
+          "is_official_primary": false,
+          "license_tag": "third_party_restricted",
+          "published_at": "2026-05-28",
+          "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "The Dow Jones Industrial Average rose less than 0.1%",
+          "verdict": "supported",
+          "confidence": 0.639,
+          "summary": "The claim is marked `supported` based on Financial Modeling Prep 1-month historical prices for Dow Jones Industrial Average with confidence 0.64.",
+          "numeric_summary": "The evidence directly matches 0.1% from the claim.",
+          "source_summary": "The main evidence is non-official or secondary evidence with source tier T3.",
+          "main_evidence": {
+            "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^DJI",
+            "title": "Financial Modeling Prep 1-month historical prices for Dow Jones Industrial Average",
+            "text": "retrieval_window approximately 1 month(s); window_source lookback_months; DOW JONES INDUSTRIAL AVERAGE historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 49167.8; end_close 50668.97; min_close 48861.82; max_close 50668.97; latest_daily_calculation previous_close 50644.29 to end_close 50668.97; latest_daily_point_change 24.68; latest_daily_abs_point_change 24.68; latest_daily_return_pct 0.05% from close-to-close calculation; latest_daily_abs_return_pct 0.05%; previous_daily_return_pct 0.36%; previous_daily_abs_return_pct 0.36%; total_point_change 1501.17; total_return_pct 3.05%; range_pct 3.68%; annualized_volatility_pct 11.59; up_days 13; down_days 9; daily_direction_changes 13; daily_direction_change_ratio 0.722; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+            "source_type": "data_vendor",
+            "source_tier": "T3",
+            "domain": "financialmodelingprep.com",
+            "published_at": "2026-05-28",
+            "license_tag": "third_party_restricted",
+            "is_official_primary": false,
+            "source_authority": 0.68,
+            "recency_score": 0.98,
+            "relevance_score": 0.625,
+            "entity_match_score": 0.45,
+            "numeric_consistency_score": 0.25,
+            "support_label": "supports",
+            "support_score": 0.9,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.35,
+            "notes": [
+              "financial data API",
+              "0 days old",
+              "claim numbers were not found in evidence",
+              "token overlap=0.50",
+              "price direction matched latest daily return",
+              "reasoning quality is secondary for factual claim type",
+              "single evidence source"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "low_evidence_entity_match",
+            "matched 0.1% with 0.05%"
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_09e9161c6b21",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    },
+    {
+      "claim": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+      "ticker": "RUT",
+      "as_of_date": "2026-05-28",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.66,
+      "verdict": "supported",
+      "credibility_label": "medium",
+      "credibility_score": 0.736,
+      "score_breakdown": {
+        "source_authority": 0.68,
+        "recency": 0.98,
+        "evidence_support": 0.9,
+        "numeric_consistency": 0.72,
+        "independence": 0.35,
+        "reasoning_quality": 0.55,
+        "penalties": 0.0,
+        "final_score": 0.736,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "verified",
+        "confidence": 0.9,
+        "summary": "All material numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT"
+        ],
+        "issues": [
+          "matched 16.63 with 16.63",
+          "matched 0.6% with 0.57%",
+          "matched 2,936.57 with 2936.57"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "supported",
+        "confidence": 0.708,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "partially_verified",
+        "confidence": 0.672,
+        "summary": "Sources are usable but have limitations in authority, recency, or independence.",
+        "evidence_urls": [
+          "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT"
+        ],
+        "issues": [
+          "single_source_domain",
+          "single_evidence_item"
+        ],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "High",
+        "final_confidence": 0.764,
+        "numeric_confidence": 0.9,
+        "logic_confidence": 0.708,
+        "source_confidence": 0.672,
+        "summary": "Overall confidence is High. Numeric check: verified; logic check: supported; source check: partially_verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ],
+            "context_window": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "context_window_source": "claim"
+          },
+          "verdict": "supported",
+          "evidence_urls": [
+            "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT"
+          ],
+          "evidence_keys": [
+            "T3:financialmodelingprep.com:2026-05-28"
+          ],
+          "canonical_fact_ids": [
+            "fact_e06b23ba37ba"
+          ],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "16.63 -> 16.63; 0.6% -> 0.57%; 2,936.57 -> 2936.57",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 0.68,
+            "entity_match": 0.9,
+            "time_alignment": 0.98,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.35,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.5,
+            "final_confidence": 0.707
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "non_official_sources_only",
+            "low_retrieval_sufficiency"
+          ],
+          "issues": [
+            "matched 16.63 with 16.63",
+            "matched 0.6% with 0.57%",
+            "matched 2,936.57 with 2936.57"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_e06b23ba37ba",
+          "source_type": "data_vendor",
+          "authority_tier": "T3",
+          "license_tag": "third_party_restricted",
+          "entity_id": "RUT",
+          "ticker": "RUT",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-05-28",
+          "observation_date": "2026-05-28",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "Financial Modeling Prep 1-month historical prices for Russell 2000 Index",
+          "value": "1",
+          "provenance_locator": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "fmp_historical_prices"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "RUT",
+        "entity_id": "RUT",
+        "cik": null,
+        "lei": null,
+        "figi": null,
+        "confidence": 0.78,
+        "sources": [
+          "evidence_entity_match",
+          "asset_symbol_map"
+        ],
+        "issues": []
+      },
+      "audit_trace": {
+        "trace_id": "trace_90be127b0025",
+        "created_at": "2026-05-29T03:38:24+00:00",
+        "replayable_inputs": {
+          "claim": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+          "ticker": "RUT",
+          "as_of_date": "2026-05-28",
+          "search_result_urls": [
+            "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 1 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 1 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "financialmodelingprep.com"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "ok",
+            "summary": "Resolved entity as RUT.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "RUT",
+              "cik": null,
+              "lei": null,
+              "confidence": 0.78,
+              "issues": []
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 1 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_e06b23ba37ba"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 1 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "supported"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "no_official_primary_source",
+                  "non_official_sources_only",
+                  "low_retrieval_sufficiency"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT",
+          "title": "Financial Modeling Prep 1-month historical prices for Russell 2000 Index",
+          "text": "retrieval_window approximately 1 month(s); window_source lookback_months; RUSSELL 2000 INDEX historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 2788.19; end_close 2936.57; min_close 2739.47; max_close 2936.57; latest_daily_calculation previous_close 2919.94 to end_close 2936.57; latest_daily_point_change 16.63; latest_daily_abs_point_change 16.63; latest_daily_return_pct 0.57% from close-to-close calculation; latest_daily_abs_return_pct 0.57%; previous_daily_return_pct -0.02%; previous_daily_abs_return_pct 0.02%; total_point_change 148.38; total_return_pct 5.32%; range_pct 7.07%; annualized_volatility_pct 20.47; up_days 13; down_days 9; daily_direction_changes 9; daily_direction_change_ratio 0.474; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+          "source_type": "data_vendor",
+          "source_tier": "T3",
+          "domain": "financialmodelingprep.com",
+          "published_at": "2026-05-28",
+          "license_tag": "third_party_restricted",
+          "is_official_primary": false,
+          "source_authority": 0.68,
+          "recency_score": 0.98,
+          "relevance_score": 0.886,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "supports",
+          "support_score": 0.9,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.35,
+          "notes": [
+            "financial data API",
+            "0 days old",
+            "partially matched numeric values: 2000, 16.63, 2,936.57",
+            "token overlap=0.57",
+            "price direction matched latest daily return",
+            "reasoning quality is secondary for factual claim type",
+            "single evidence source"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required",
+        "single_source_domain"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "numeric change"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: historical_prices: 1 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-05-28",
+          "user_as_of_date": "2026-05-28",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "context_window": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "context_window_source": "claim",
+            "as_of_date": "2026-05-28",
+            "time_context": {
+              "effective_as_of_date": "2026-05-28",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "context_window": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "context_window_source": "claim",
+            "as_of_date": "2026-05-28",
+            "selected_providers": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT"
+            ],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "context_window": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "context_window_source": "claim",
+            "fact_checkable": true,
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "non_official_sources_only",
+              "low_retrieval_sufficiency"
+            ],
+            "closure_status": "evidence_attached"
+          }
+        ],
+        "retrieval_budget": 8,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "detected_asset_classes": [
+              "equity_index"
+            ],
+            "candidates": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental historical equity price source group for price, return, volatility, and drawdown claims.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker",
+                  "date_window"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "authority_tier": "T3",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": false,
+                "brief_description": "Supplemental market-data vendor group for latest quotes and end-of-day price checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "equity_index"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "historical_prices",
+                "market_prices_vendor"
+              ],
+              "stage_2_loaded_detail_files": [
+                "historical_prices.md",
+                "market_prices_vendor.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "historical_prices",
+                "name": "Historical Price Series",
+                "detail_file": "historical_prices.md",
+                "detail_markdown": "# Historical Price Series\n\nSource id: historical_prices\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nReference docs:\n- Financial Modeling Prep historical EOD: https://site.financialmodelingprep.com/developer/docs/stable/index-historical-price-eod-full\n- Alpha Vantage TIME_SERIES_DAILY: https://www.alphavantage.co/documentation/#daily\n- Finnhub stock candles: https://finnhub.io/docs/api/stock-candles\n- FRED observations: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\n- Stooq historical/latest quote browser: https://stooq.com/db/h/\n\nUse for:\n- Daily price, return, drawdown, volatility, relative performance, record-high, closing-high, and price-action claims.\n- Equity, ETF, equity-index, volatility-index, and equity-index-future claims when the claim is about price/return rather than fundamentals.\n\nDo not use for:\n- Reported financial statement metrics, supply/backlog metrics, guidance, macro observations, or regulatory facts.\n- Compliance-critical official exchange data unless the organization has a licensed market-data source.\n- Old-date price claims when only a latest quote is available.\n\nAdapter retrieval order:\n1. Alpha Vantage historical daily prices if `ALPHA_VANTAGE_API_KEY` exists.\n2. Financial Modeling Prep historical EOD prices if `FMP_API_KEY` exists.\n3. Finnhub stock candles if `FINNHUB_API_KEY` exists.\n4. FRED daily index-level series for `SPX`, `NDQ`, and `DJIA` when `FRED_API_KEY` exists and vendor price APIs are unavailable.\n5. Stooq historical CSV fallback when available. Some Stooq historical CSV downloads may require an API plan; if unavailable, do not treat latest quote as historical evidence.\n\nFinancial Modeling Prep API playbook:\n- Env var: `FMP_API_KEY`\n- Endpoint used by adapter: `GET https://financialmodelingprep.com/stable/historical-price-eod/full`\n- Required params: `symbol`, `from`, `to`, `apikey`\n- Example: `symbol=^GSPC&from=2026-01-01&to=2026-05-26&apikey=<FMP_API_KEY>`\n- Expected response shape: a JSON object with `historical` list, or a JSON list depending on plan/version.\n- Row fields consumed: `date`, `open`, `high`, `low`, `close`, `volume`; adjusted variants such as `adjOpen`, `adjHigh`, `adjLow`, `adjClose` may be used when regular OHLC values are missing.\n- Symbol naming rules for major US indexes:\n  - `SPX` claim target -> FMP `^GSPC`; ETF fallback `SPY`.\n  - `NDQ` Nasdaq Composite claim target -> FMP `^IXIC`; ETF fallback `QQQ`.\n  - `NDX` Nasdaq 100 claim target -> FMP `^NDX`; ETF fallback `QQQ`.\n  - `DJIA` claim target -> FMP `^DJI`; ETF fallback `DIA`.\n  - `RUT` claim target -> FMP `^RUT`; ETF fallback `IWM`.\n  - `VIX` claim target -> FMP `^VIX`.\n\nAlpha Vantage API playbook:\n- Env var: `ALPHA_VANTAGE_API_KEY`\n- Endpoint: `GET https://www.alphavantage.co/query`\n- Required params used by adapter: `function=TIME_SERIES_DAILY`, `symbol`, `outputsize=full`, `apikey`\n- Expected response key: `Time Series (Daily)`.\n- Row fields consumed: `1. open`, `2. high`, `3. low`, `4. close`, `5. volume`.\n- Free-tier limitations and historical depth can affect availability; keep provider notes in audit output.\n\nFinnhub API playbook:\n- Env var: `FINNHUB_API_KEY`\n- Endpoint: `GET https://finnhub.io/api/v1/stock/candle`\n- Required params: `symbol`, `resolution=D`, `from`, `to`, `token`\n- `from` and `to` are UTC Unix timestamps.\n- Expected response shape: `{ \"s\": \"ok\", \"t\": [...], \"o\": [...], \"h\": [...], \"l\": [...], \"c\": [...], \"v\": [...] }`.\n- Row fields consumed by index: date from `t`, open from `o`, high from `h`, low from `l`, close from `c`, volume from `v`.\n\nFRED index fallback playbook:\n- Env var: `FRED_API_KEY`\n- Endpoint: `GET https://api.stlouisfed.org/fred/series/observations`\n- Required params: `series_id`, `observation_start`, `observation_end`, `api_key`, `file_type=json`\n- Internal index mappings:\n  - `SPX` -> `SP500`\n  - `NDQ` -> `NASDAQCOM`\n  - `DJIA` -> `DJIA`\n- FRED provides index levels, not full OHLCV bars. The adapter stores each observation as a close-only price point so point changes and close-to-close returns can still be replayed.\n- Do not use this fallback for Russell 2000 (`RUT`) unless a real Russell price series or licensed provider is configured.\n\nStooq playbook:\n- Latest quote endpoint: `GET https://stooq.com/q/l/?s=<symbol>&f=sd2t2ohlcv&h&e=csv`\n- Historical CSV endpoint used by adapter: `GET https://stooq.com/q/d/l/?s=<symbol>&d1=<YYYYMMDD>&d2=<YYYYMMDD>&i=d`\n- Historical CSV fields consumed: `Date`, `Open`, `High`, `Low`, `Close`, `Volume`.\n- Stooq symbol naming:\n  - Indexes often use lowercase caret symbols such as `^spx`, `^dji`, `^ndq`.\n  - US equities/ETFs use `.us` suffix, e.g. `spy.us`, `iwm.us`.\n- Latest quotes are useful only for current-date/near-current quote claims. Do not use a latest quote to verify a claim whose inferred `as_of_date` is before the quote date.\n\nWindow rules:\n- `Tuesday`, `session`, `today`, `yesterday`, or a daily move claim -> single-session context ending at inferred event date.\n- `For the year`, `this year`, `YTD`, `year-to-date` -> January 1 of the event year through inferred as-of date.\n- `recently`, `recent gains`, or `sharp gains` -> approximate one-month window.\n- `recent months` -> approximate three-month window.\n- Explicit lookbacks like `last 6 weeks` or `past 10 months` -> use the stated lookback.\n\nImportant metadata:\n- Preserve provider, requested symbol, provider symbol, date window, observation date, open/high/low/close, adjusted close if used, volume, and API request URL or parameter summary.\n- Preserve `window_label` and `window_source` in `raw` and evidence text.\n- Treat missing historical series, provider entitlement/rate limits, unavailable dates, unclear adjustment policy, and vendor disagreement as human-review triggers.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental historical equity prices.\n- Load this detail before retrieving price/return claims, especially when the claim requires index aliases, an event-date window, or a YTD calculation."
+              },
+              {
+                "source_id": "market_prices_vendor",
+                "name": "Market Price Vendors",
+                "detail_file": "market_prices_vendor.md",
+                "detail_markdown": "# Market Price Vendors\n\nSource id: market_prices_vendor\nReference docs:\n- Marketstack: https://marketstack.com/documentation\n- Tiingo: https://www.tiingo.com/documentation/end-of-day\n- Financial Modeling Prep developer docs: https://site.financialmodelingprep.com/developer/docs\n- Alpha Vantage documentation: https://www.alphavantage.co/documentation/\nAuthority tier: T3 supplemental\nLicense tag: third_party_restricted\n\nAPI playbook:\n- Auth/env: latest/EOD quote group supports `MARKETSTACK_API_KEY`, `TIINGO_API_KEY`, and no-key Stooq. Historical-return claims should use `historical_prices`, which can use `ALPHA_VANTAGE_API_KEY`, `FMP_API_KEY`, `FINNHUB_API_KEY`, or Stooq CSV.\n- Marketstack latest EOD: `GET https://api.marketstack.com/v1/eod/latest?access_key={key}&symbols={symbol}&limit=1`; fields include `date`, `close`, `volume`, `exchange`, and `symbol`.\n- Tiingo daily prices: `GET https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={YYYY-MM-DD}&token={key}`; fields include `date`, `close`, `adjClose`, and `volume`.\n- Stooq latest quote: `GET https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv`; fields include `Date`, `Open`, `High`, `Low`, `Close`, and `Volume`.\n- Symbol rules: internal index symbols are mapped per provider, for example `SPX -> ^GSPC/^spx/SPY`, `NDQ -> ^IXIC/^ndq/QQQ`, `DJIA -> ^DJI/^dji/DIA`, `RUT -> ^RUT/IWM`, and `VIX -> ^VIX/^vix`.\n- Time alignment: latest quotes must not be used for old articles unless `published_at/as_of_date` confirms the quote date is not after the article context.\n- Adapter output: return vendor, requested symbol, provider symbol, quote date, close, volume, and URL. Different vendor values or adjustment policies trigger human review.\n\nUse for:\n- Latest quote, end-of-day price, and recent market-price checks from configured vendor APIs.\n- Supplemental price evidence when the claim needs recent quotes and the project has a configured vendor key.\n\nDo not use for:\n- Reported financial statements, official regulatory facts, macro observations, or entity identity.\n- Compliance-critical market data unless the organization has licensed the source for that use.\n\nImportant metadata:\n- Preserve vendor, symbol, exchange, timestamp/date, price type, currency, adjustment policy, and API request URL or parameter summary.\n- Treat different vendor values, delayed data, missing market calendars, and unclear adjustment policy as human-review triggers.\n\nProvider naming rules:\n- Project-level index targets are normalized to internal symbols such as `SPX`, `NDQ`, `NDX`, `DJIA`, `RUT`, and `VIX`.\n- Provider symbols differ by vendor. For example, S&P 500 can be `^GSPC` on FMP/Finnhub/Marketstack and `^spx` on Stooq.\n- ETF fallbacks such as `SPY`, `QQQ`, `DIA`, and `IWM` are supplemental proxies, not the same thing as index-level official evidence.\n- If the claim needs a historical return, prefer `historical_prices`; use this latest/EOD quote group only when the claim is about a current or latest quote.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source group covers supplemental latest/EOD prices.\n- Load this detail when a claim is specifically about current price, quote, recent market value, or EOD price."
+              }
+            ],
+            "selected_sources": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "selected_provider_names": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+            "official_only": true,
+            "asset_classes": [
+              "equity_index"
+            ],
+            "routes": [
+              "historical_prices",
+              "market_prices_vendor"
+            ],
+            "reasons": [
+              "asset-class-aware historical price action claim",
+              "supplemental market price source for traded asset",
+              "market price or index-performance claim"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 56,
+          "cleaned_length": 56,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57"
+        },
+        "original_claim": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+        "agentic_search_plan": [
+          "RUT \"The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57\" SEC 10-Q 10-K",
+          "RUT earnings release revenue EPS investor relations",
+          "RUT company facts SEC revenue earnings",
+          "RUT The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57 correction restatement contradiction",
+          "RUT The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57 SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "Financial Modeling Prep 1-month historical prices for Russell 2000 Index",
+          "domain": "financialmodelingprep.com",
+          "source_tier": "T3",
+          "is_official_primary": false,
+          "license_tag": "third_party_restricted",
+          "published_at": "2026-05-28",
+          "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT",
+          "used_by_claims": [
+            "claim_1"
+          ]
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57",
+          "verdict": "supported",
+          "confidence": 0.707,
+          "summary": "The claim is marked `supported` based on Financial Modeling Prep 1-month historical prices for Russell 2000 Index with confidence 0.71.",
+          "numeric_summary": "The evidence directly matches 16.63, 0.6%, and 2,936.57 from the claim.",
+          "source_summary": "The main evidence is non-official or secondary evidence with source tier T3.",
+          "main_evidence": {
+            "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^RUT",
+            "title": "Financial Modeling Prep 1-month historical prices for Russell 2000 Index",
+            "text": "retrieval_window approximately 1 month(s); window_source lookback_months; RUSSELL 2000 INDEX historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 2788.19; end_close 2936.57; min_close 2739.47; max_close 2936.57; latest_daily_calculation previous_close 2919.94 to end_close 2936.57; latest_daily_point_change 16.63; latest_daily_abs_point_change 16.63; latest_daily_return_pct 0.57% from close-to-close calculation; latest_daily_abs_return_pct 0.57%; previous_daily_return_pct -0.02%; previous_daily_abs_return_pct 0.02%; total_point_change 148.38; total_return_pct 5.32%; range_pct 7.07%; annualized_volatility_pct 20.47; up_days 13; down_days 9; daily_direction_changes 9; daily_direction_change_ratio 0.474; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+            "source_type": "data_vendor",
+            "source_tier": "T3",
+            "domain": "financialmodelingprep.com",
+            "published_at": "2026-05-28",
+            "license_tag": "third_party_restricted",
+            "is_official_primary": false,
+            "source_authority": 0.68,
+            "recency_score": 0.98,
+            "relevance_score": 0.886,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.72,
+            "support_label": "supports",
+            "support_score": 0.9,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.35,
+            "notes": [
+              "financial data API",
+              "0 days old",
+              "partially matched numeric values: 2000, 16.63, 2,936.57",
+              "token overlap=0.57",
+              "price direction matched latest daily return",
+              "reasoning quality is secondary for factual claim type",
+              "single evidence source"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "matched 16.63 with 16.63",
+            "matched 0.6% with 0.57%",
+            "matched 2,936.57 with 2936.57"
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_90be127b0025",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "S&P 500 Index (SPX)",
+        "name": "S&P 500 Index",
+        "ticker": null,
+        "symbol": "SPX",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      },
+      {
+        "label": "Nasdaq Composite Index (NDQ)",
+        "name": "Nasdaq Composite Index",
+        "ticker": null,
+        "symbol": "NDQ",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      },
+      {
+        "label": "Dow Jones Industrial Average (DJIA)",
+        "name": "Dow Jones Industrial Average",
+        "ticker": null,
+        "symbol": "DJIA",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      },
+      {
+        "label": "Russell 2000 Index (RUT)",
+        "name": "Russell 2000 Index",
+        "ticker": null,
+        "symbol": "RUT",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "S&P 500 Index (SPX)",
+        "name": "S&P 500 Index",
+        "ticker": null,
+        "symbol": "SPX",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      },
+      {
+        "label": "Nasdaq Composite Index (NDQ)",
+        "name": "Nasdaq Composite Index",
+        "ticker": null,
+        "symbol": "NDQ",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      },
+      {
+        "label": "Dow Jones Industrial Average (DJIA)",
+        "name": "Dow Jones Industrial Average",
+        "ticker": null,
+        "symbol": "DJIA",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      },
+      {
+        "label": "Russell 2000 Index (RUT)",
+        "name": "Russell 2000 Index",
+        "ticker": null,
+        "symbol": "RUT",
+        "asset_class": "equity_index",
+        "verification_status": "fully_verified",
+        "reason": "Price/market-data verification path was run for this asset."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 4 fact-checkable claims across 4 entities. 4 claims need human review.\n\n## SPX\n\n- **Consistent.** The S&P 500 added 0.6% to a new all-time high. Evidence: T3 Financial Modeling Prep 1-month historical prices for S&P 500 Index (financialmodelingprep.com). Reason: The evidence directly matches 0.6% from the claim. Needs human review: no official primary source was found, only supplemental or third-party sources were available.\n\n## NDQ\n\n- **Consistent.** the Nasdaq Composite climbed 0.9%. Evidence: T3 Financial Modeling Prep 1-month historical prices for Nasdaq Composite Index (financialmodelingprep.com). Reason: The evidence directly matches 0.9% from the claim. Needs human review: no official primary source was found, only supplemental or third-party sources were available.\n\n## DJIA\n\n- **Consistent.** The Dow Jones Industrial Average rose less than 0.1%. Evidence: T3 Financial Modeling Prep 1-month historical prices for Dow Jones Industrial Average (financialmodelingprep.com). Reason: The evidence directly matches 0.1% from the claim. Needs human review: no official primary source was found, only supplemental or third-party sources were available.\n\n## RUT\n\n- **Consistent.** The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57. Evidence: T3 Financial Modeling Prep 1-month historical prices for Russell 2000 Index (financialmodelingprep.com). Reason: The evidence directly matches 16.63, 0.6%, and 2,936.57 from the claim. Needs human review: no official primary source was found, only supplemental or third-party sources were available.\n",
+  "agent_trace": {
+    "run_id": "agent_8f3cdf668d44",
+    "created_at": "2026-05-29T03:38:23+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_261bc725",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "U.S. stocks added to records Thursday. The S&P 500 added 0.6% to a new all-time high. The Dow Jones Industrial Average rose less than 0.1%, and the Nasdaq Composite climbed 0.9%. The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 32,
+        "output_preview": "{\"asset_classes\": [\"equity_index\"], \"asset_groups\": {\"equity_index\": [{\"asset_class\": \"equity_index\", \"confidence\": 0.78, \"entity_type\": \"index\", \"name\": \"S&P 500 Index\", \"reason\": \"\", \"source\": \"asset_class_pattern+built_in_asset_universe\", \"symbol\": \"SPX\", \"ticker\": null}, {\"asset_class\": \"equity_index\", \"confidence\": 0.78, \"entity_type\": \"index\", \"name\": \"Nasdaq Composite Index\", \"reason\": \"\", \"source\": \"asset_class_pattern+built_in_asset_universe\", \"symbol\": \"NDQ\", \"ticker\": null}, {\"asset_class\": \"equity_index\", \"confidence\": 0.78, \"entity_type\": \"index\", \"name\": \"Dow Jones Industrial Average\", \"reason\": \"\", \"source\": \"asset_class_pattern+built_in_asset_universe\", \"symbol\": \"DJIA\", \"ticker\": null}, {\"asset_class\": \"equity_index\", \"confidence\": 0.78, \"entity_type\": \"index\", \"name\": \"Ru",
+        "output_hash": "50048a2a0a0f96527e786360cfc2a50269e3671ca05e59e879d705bdc54156f4"
+      },
+      {
+        "call_id": "fallback_1_c414dc12",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "U.S. stocks added to records Thursday. The S&P 500 added 0.6% to a new all-time high. The Dow Jones Industrial Average rose less than 0.1%, and the Nasdaq Composite climbed 0.9%. The Russell 2000 rose 16.63 points, or 0.6%, to 2,936.57."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 5,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"opinion_analysis\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.35, \"context_window\": \"U.S\", \"context_window_source\": \"claim\", \"signals\": [\"fallback: no strong factual or forecast markers\"], \"text\": \"U.S\"}, {\"argument_type\": \"opinion_analysis\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.35, \"context_window\": \"stocks added to records Thursday\", \"context_window_source\": \"claim\", \"signals\": [\"fallback: no strong factual or forecast markers\"], \"text\": \"stocks added to records Thursday\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_3\", \"classification_confidence\": 0.66, \"context_window\": \"stocks added to records Thursday The S&P 500 added 0.6% to a new all-time high\", \"context_window_source\": \"surrounding_context\", \"signals\": [\"numeric ",
+        "output_hash": "1bc626097d3a71b672dcde6f2a1ceb644074c192d090645d27dfcad7f32a87f9"
+      },
+      {
+        "call_id": "fallback_2_d2136c22",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "The S&P 500 added 0.6% to a new all-time high"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 11,
+        "output_preview": "{\"selections\": [{\"candidates\": [{\"adapter_status\": \"implemented\", \"authority_tier\": \"T3\", \"brief_description\": \"Supplemental historical equity price source group for price, return, volatility, and drawdown claims.\", \"candidate_score\": 3.5, \"detail_available\": true, \"detected_asset_classes\": [\"equity_index\"], \"is_official_primary\": false, \"is_runtime_selectable\": true, \"license_tag\": \"third_party_restricted\", \"name\": \"Historical Price Series\", \"required_inputs\": [\"ticker\", \"date_window\"], \"source_id\": \"historical_prices\"}, {\"adapter_status\": \"implemented\", \"authority_tier\": \"T3\", \"brief_description\": \"Supplemental market-data vendor group for latest quotes and end-of-day price checks.\", \"candidate_score\": 2.5, \"detail_available\": true, \"detected_asset_classes\": [\"equity_index\"], \"is_officia",
+        "output_hash": "a3428ef4d18601e8fab5845eddf229d52e3a1ce20c131324e9222fea997223e4"
+      },
+      {
+        "call_id": "fallback_3_b23c5be6",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "The S&P 500 added 0.6% to a new all-time high",
+          "ticker": "SPX",
+          "as_of_date": "2026-05-28",
+          "selected_sources": [
+            "historical_prices",
+            "market_prices_vendor"
+          ],
+          "prefetched_results": null,
+          "source_results": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 195,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.66, \"needs_decomposition\": false, \"signals\": [\"numeric change\"]}, \"evidence\": [{\"domain\": \"financialmodelingprep.com\", \"entity_match_score\": 0.45, \"independence_score\": 0.0, \"is_official_primary\": false, \"license_tag\": \"third_party_restricted\", \"notes\": [\"financial data API\", \"0 days old\", \"partially matched numeric values: 500\"], \"numeric_consistency_score\": 0.72, \"published_at\": \"2026-05-28\", \"reasoning_quality_score\": 0.0, \"recency_score\": 0.98, \"relevance_score\": 0.342, \"source_authority\": 0.68, \"source_tier\": \"T3\", \"source_type\": \"data_vendor\", \"support_label\": \"not_enough_info\", \"support_score\": 0.0, \"text\": \"retrieval_window approximately 1 month(s); window_source lookback_months; S&P",
+        "output_hash": "87cde6e65ac42ae2b0e1cfe2e906f63f10d80e029e9f9df93d98d10cdc075391"
+      },
+      {
+        "call_id": "fallback_4_8fae4fb4",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "SPX",
+          "evidence": [
+            {
+              "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC",
+              "title": "Financial Modeling Prep 1-month historical prices for S&P 500 Index",
+              "text": "retrieval_window approximately 1 month(s); window_source lookback_months; S&P 500 INDEX historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 7173.92; end_close 7563.62; min_close 7135.96; max_close 7563.62; latest_daily_calculation previous_close 7520.37 to end_close 7563.62; latest_daily_point_change 43.25; latest_daily_abs_point_change 43.25; latest_daily_return_pct 0.58% from close-to-close calculation; latest_daily_abs_return_pct 0.58%; previous_daily_return_pct 0.02%; previous_daily_abs_return_pct 0.02%; total_point_change 389.7; total_return_pct 5.43%; range_pct 5.96%; annualized_volatility_pct 10.33; up_days 14; down_days 8; daily_direction_changes 9; daily_direction_change_ratio 0.5; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+              "source_type": "data_vendor",
+              "source_tier": "T3",
+              "domain": "financialmodelingprep.com",
+              "published_at": "2026-05-28",
+              "license_tag": "third_party_restricted",
+              "is_official_primary": false,
+              "source_authority": 0.68,
+              "recency_score": 0.98,
+              "relevance_score": 0.342,
+              "entity_match_score": 0.45,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "financial data API",
+                "0 days old",
+                "partially matched numeric values: 500"
+              ]
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"canonical_facts\": [], \"entity_resolution\": {\"cik\": null, \"confidence\": 0.45, \"entity_id\": \"SPX\", \"figi\": null, \"issues\": [\"low_evidence_entity_match\"], \"lei\": null, \"sources\": [\"asset_symbol_map\"], \"ticker\": \"SPX\"}}",
+        "output_hash": "0b4a0005f9e91a1e1bb5b4972057ca9a03378fa23f23e6a50514e560e2d05d0e"
+      },
+      {
+        "call_id": "fallback_5_accf4584",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "The S&P 500 added 0.6% to a new all-time high",
+          "ticker": "SPX",
+          "evidence": [
+            {
+              "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC",
+              "title": "Financial Modeling Prep 1-month historical prices for S&P 500 Index",
+              "text": "retrieval_window approximately 1 month(s); window_source lookback_months; S&P 500 INDEX historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 7173.92; end_close 7563.62; min_close 7135.96; max_close 7563.62; latest_daily_calculation previous_close 7520.37 to end_close 7563.62; latest_daily_point_change 43.25; latest_daily_abs_point_change 43.25; latest_daily_return_pct 0.58% from close-to-close calculation; latest_daily_abs_return_pct 0.58%; previous_daily_return_pct 0.02%; previous_daily_abs_return_pct 0.02%; total_point_change 389.7; total_return_pct 5.43%; range_pct 5.96%; annualized_volatility_pct 10.33; up_days 14; down_days 8; daily_direction_changes 9; daily_direction_change_ratio 0.5; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+              "source_type": "data_vendor",
+              "source_tier": "T3",
+              "domain": "financialmodelingprep.com",
+              "published_at": "2026-05-28",
+              "license_tag": "third_party_restricted",
+              "is_official_primary": false,
+              "source_authority": 0.68,
+              "recency_score": 0.98,
+              "relevance_score": 0.342,
+              "entity_match_score": 0.45,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "financial data API",
+                "0 days old",
+                "partially matched numeric values: 500"
+              ]
+            }
+          ],
+          "canonical_facts": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 3,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.66, \"context_window\": \"The S&P 500 added 0.6% to a new all-time high\", \"context_window_source\": \"claim\", \"signals\": [\"numeric change\"], \"text\": \"The S&P 500 added 0.6% to a new all-time high\"}, \"canonical_fact_ids\": [], \"confidence_components\": {\"cross_source_consistency\": 0.55, \"entity_match\": 0.45, \"final_confidence\": 0.589, \"numeric_exactness\": 0.9, \"parser_confidence\": 0.0, \"retrieval_sufficiency\": 0.35, \"source_authority\": 0.68, \"time_alignment\": 0.98}, \"evidence_keys\": [\"T3:financialmodelingprep.com:2026-05-28\"], \"evidence_urls\": [\"https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC\"], \"human_review_required\": true, \"issues\": [\"low_evi",
+        "output_hash": "254dbdbec60014111bcd9b13080c2c549db505dfdecc74deee1fa84daf4e981e"
+      },
+      {
+        "call_id": "fallback_6_f6313afe",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "The S&P 500 added 0.6% to a new all-time high",
+          "ticker": "SPX",
+          "as_of_date": "2026-05-28",
+          "evidence": [
+            {
+              "url": "https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=^GSPC",
+              "title": "Financial Modeling Prep 1-month historical prices for S&P 500 Index",
+              "text": "retrieval_window approximately 1 month(s); window_source lookback_months; S&P 500 INDEX historical daily close prices over approximately 1 months: observations 23; period 2026-04-27 to 2026-05-28; start_close 7173.92; end_close 7563.62; min_close 7135.96; max_close 7563.62; latest_daily_calculation previous_close 7520.37 to end_close 7563.62; latest_daily_point_change 43.25; latest_daily_abs_point_change 43.25; latest_daily_return_pct 0.58% from close-to-close calculation; latest_daily_abs_return_pct 0.58%; previous_daily_return_pct 0.02%; previous_daily_abs_return_pct 0.02%; total_point_change 389.7; total_return_pct 5.43%; range_pct 5.96%; annualized_volatility_pct 10.33; up_days 14; down_days 8; daily_direction_changes 9; daily_direction_change_ratio 0.5; monthly_points 2; monthly_direction_changes 0; monthly_direction_change_ratio 0.0; oscillation_signal weak.",
+              "source_type": "data_vendor",
+              "source_tier": "T3",
+              "domain": "financialmodelingprep.com",
+              "published_at": "2026-05-28",
+              "license_tag": "third_party_restricted",
+              "is_official_primary": false,
+              "source_authority": 0.68,
+              "recency_score": 0.98,
+              "relevance_score": 0.342,
+              "entity_match_score": 0.45,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "financial data API",
+                "0 days old",
+                "partially matched numeric values: 500"
+              ]
+            }
+          ],
+          "canonical_facts": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 6,
+        "output_preview": "{\"created_at\": \"2026-05-29T03:38:24+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": [\"financialmodelingprep.com\"]}, \"status\": \"ok\", \"step\": \"extract_evidence\", \"summary\": \"Built 1 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": null, \"confidence\": 0.45, \"issues\": [\"low_evidence_entity_match\"], \"lei\": null, \"ticker\": \"SPX\"}, \"status\": \"review\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as SPX.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": []}, \"status\": \"empty\", \"step\": \"canonicalize_facts\", \"summary\": \"Created 0 canonical fact(s).\"}, {\"inputs\": {}, \"outputs\": {\"review_reasons\": {\"claim_1\": [\"no_official_primary_source\", \"non_off",
+        "output_hash": "50b497beb623c43905e50066bc70258d6a08ee2c75571f67fdc8923de2219c37"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_8f3cdf668d44",
+    "created_at": "2026-05-29T03:38:24+00:00",
+    "verdict": "review",
+    "score": 0.84,
+    "summary": "Audit review: 4 finding(s) (minor=4); score 0.84.",
+    "findings": [
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      },
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      },
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      },
+      {
+        "severity": "minor",
+        "category": "constraint",
+        "summary": "Source selection lacks an obvious official primary source.",
+        "affected": "claim_1",
+        "trace_refs": [
+          "historical_prices",
+          "market_prices_vendor"
+        ],
+        "recommendation": "Prefer official primary sources for factual verification or require human review."
+      }
+    ]
+  }
+}

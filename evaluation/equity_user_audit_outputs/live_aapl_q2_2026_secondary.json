@@ -1,0 +1,3444 @@
+{
+  "input": {
+    "memo": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem.",
+    "original_memo": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 216,
+      "cleaned_length": 216,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem."
+    },
+    "tickers": [
+      "AAPL"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "Apple Inc.",
+          "ticker": "AAPL",
+          "symbol": "AAPL",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0000320193",
+          "exchange": "Nasdaq"
+        }
+      ],
+      "tickers": [
+        "AAPL"
+      ],
+      "asset_classes": [
+        "single_name_equity"
+      ],
+      "asset_groups": {
+        "single_name_equity": [
+          {
+            "name": "Apple Inc.",
+            "ticker": "AAPL",
+            "symbol": "AAPL",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0000320193",
+            "exchange": "Nasdaq"
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [],
+      "notes": [
+        "ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json"
+      ]
+    },
+    "as_of_date": "2026-04-30",
+    "requested_as_of_date": "2026-04-30",
+    "time_context": {
+      "effective_as_of_date": "2026-04-30",
+      "user_as_of_date": "2026-04-30",
+      "event_date": null,
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": []
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 1,
+    "detected_entity_count": 1,
+    "asset_class_count": 1,
+    "asset_classes": [
+      "single_name_equity"
+    ],
+    "non_equity_entity_count": 0,
+    "error_count": 0,
+    "atomic_claim_count": 2,
+    "skipped_claim_count": 1,
+    "total_claim_count": 3,
+    "human_review_count": 0,
+    "average_confidence": 0.794,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem.",
+      "ticker": "AAPL",
+      "as_of_date": "2026-04-30",
+      "argument_type": "forecast",
+      "classification_confidence": 0.92,
+      "verdict": "insufficient",
+      "credibility_label": "low",
+      "credibility_score": 0.486,
+      "score_breakdown": {
+        "source_authority": 1.0,
+        "recency": 0.911,
+        "evidence_support": 0.092,
+        "numeric_consistency": 0.25,
+        "independence": 0.65,
+        "reasoning_quality": 0.337,
+        "penalties": 0.0,
+        "final_score": 0.486,
+        "weights": {
+          "source_authority": 0.1,
+          "recency": 0.1,
+          "evidence_support": 0.2,
+          "numeric_consistency": 0.05,
+          "independence": 0.25,
+          "reasoning_quality": 0.3
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "partially_verified",
+        "confidence": 0.64,
+        "summary": "Some core numeric values in the claim were matched directly in the evidence.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json"
+        ],
+        "issues": [
+          "matched $111.2 billion with 112010000000",
+          "unmatched claim numbers: $29.6 billion, $2.01"
+        ],
+        "method": "fuzzy_local"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "weak",
+        "confidence": 0.315,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+          "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "verified",
+        "confidence": 0.89,
+        "summary": "Sources are strong enough for a useful credibility assessment.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+          "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm"
+        ],
+        "issues": [],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Medium",
+        "final_confidence": 0.601,
+        "numeric_confidence": 0.64,
+        "logic_confidence": 0.315,
+        "source_confidence": 0.89,
+        "summary": "Overall confidence is Medium. Numeric check: partially_verified; logic check: weak; source check: verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "numeric change",
+              "reported period"
+            ],
+            "context_window": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "context_window_source": "sentence_context"
+          },
+          "verdict": "partially_supported",
+          "evidence_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json"
+          ],
+          "evidence_keys": [
+            "T1:data.sec.gov:2026-01-30"
+          ],
+          "canonical_fact_ids": [
+            "fact_60f6cb79622f",
+            "fact_2571a7f9e7f9",
+            "fact_c028e70936b9",
+            "fact_94b05ac87910",
+            "fact_d4b128f40a02",
+            "fact_f26145545bb4"
+          ],
+          "numeric_derivation": {
+            "expression": "numeric_match_summary",
+            "inputs": {
+              "matched_values": "$111.2 billion -> 112010000000",
+              "unmatched_values": "none"
+            },
+            "result": true,
+            "comparator": "all material claim numbers must be verified",
+            "threshold": null,
+            "passed": true,
+            "tolerance": null,
+            "notes": [
+              "All material numeric values in the claim were matched directly in the evidence."
+            ]
+          },
+          "confidence_components": {
+            "source_authority": 1.0,
+            "entity_match": 0.9,
+            "time_alignment": 0.781,
+            "numeric_exactness": 0.9,
+            "retrieval_sufficiency": 0.82,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.88,
+            "final_confidence": 0.859
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "matched $111.2 billion with 112010000000"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_2",
+            "text": "earnings of $29.6 billion, or $2.01 per share",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.87,
+            "signals": [
+              "financial metric",
+              "numeric change"
+            ],
+            "context_window": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share earnings of $29.6 billion, or $2.01 per share",
+            "context_window_source": "sentence_context"
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json"
+          ],
+          "evidence_keys": [
+            "T1:data.sec.gov:2026-01-30"
+          ],
+          "canonical_fact_ids": [
+            "fact_55b720958ba0",
+            "fact_bf02f12acec5",
+            "fact_683052f26011",
+            "fact_28afb0d5450c",
+            "fact_bd2858c104b7",
+            "fact_bf9971ebe7e8",
+            "fact_71aca5cd1a8e",
+            "fact_78b2450ced82"
+          ],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 1.0,
+            "entity_match": 0.9,
+            "time_alignment": 0.781,
+            "numeric_exactness": 0.25,
+            "retrieval_sufficiency": 0.82,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.88,
+            "final_confidence": 0.729
+          },
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": []
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_3",
+            "text": "The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem",
+            "argument_type": "forecast",
+            "classification_confidence": 0.92,
+            "signals": [
+              "forecast word"
+            ],
+            "context_window": "The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem",
+            "context_window_source": "claim"
+          },
+          "verdict": "not_applicable",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": null,
+          "human_review_required": false,
+          "review_reasons": [],
+          "issues": [
+            "Skipped non-factual claim type: forecast"
+          ]
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_55b720958ba0",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-12-27",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-12-27",
+          "vintage_date": null,
+          "unit": "USD/shares",
+          "currency": null,
+          "fact_name": "EarningsPerShareDiluted",
+          "value": 2.84,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_bf02f12acec5",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-09-27",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-09-27",
+          "vintage_date": null,
+          "unit": "USD/shares",
+          "currency": null,
+          "fact_name": "EarningsPerShareDiluted",
+          "value": 7.46,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_683052f26011",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-06-28",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-06-28",
+          "vintage_date": null,
+          "unit": "USD/shares",
+          "currency": null,
+          "fact_name": "EarningsPerShareDiluted",
+          "value": 1.57,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_28afb0d5450c",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-03-29",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-03-29",
+          "vintage_date": null,
+          "unit": "USD/shares",
+          "currency": null,
+          "fact_name": "EarningsPerShareDiluted",
+          "value": 1.65,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_bd2858c104b7",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-12-28",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-12-28",
+          "vintage_date": null,
+          "unit": "USD/shares",
+          "currency": null,
+          "fact_name": "EarningsPerShareDiluted",
+          "value": 2.4,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_bf9971ebe7e8",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-09-28",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-09-28",
+          "vintage_date": null,
+          "unit": "USD/shares",
+          "currency": null,
+          "fact_name": "EarningsPerShareDiluted",
+          "value": 6.08,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_71aca5cd1a8e",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-06-29",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-06-29",
+          "vintage_date": null,
+          "unit": "USD/shares",
+          "currency": null,
+          "fact_name": "EarningsPerShareDiluted",
+          "value": 1.4,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_78b2450ced82",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-03-30",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-03-30",
+          "vintage_date": null,
+          "unit": "USD/shares",
+          "currency": null,
+          "fact_name": "EarningsPerShareDiluted",
+          "value": 1.53,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_5b6567985d7b",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-12-27",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-12-27",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 42097000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_aa0bf2c3be0a",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-09-27",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-09-27",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 112010000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_fdc6695d855a",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-06-28",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-06-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 23434000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_972a58a26155",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-03-29",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-03-29",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 24780000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_47c9b0d677d3",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-12-28",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-12-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 36330000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_b057812ec79b",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-09-28",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-09-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 93736000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_6049585b714e",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-06-29",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-06-29",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 21448000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_467d746fa94a",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-03-30",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-03-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "NetIncomeLoss",
+          "value": 23636000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_00811d69e7ac",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-12-27",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-12-27",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 143756000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_8253fb5a6a24",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-09-27",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-09-27",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 416161000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_56b2c1246b99",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-06-28",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-06-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 94036000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_9a6d68bad57f",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2025-03-29",
+          "filing_date": "2026-01-30",
+          "observation_date": "2025-03-29",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 95359000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_2b7e3e24d66d",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-12-28",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-12-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 124300000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_a4a05a958354",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-09-28",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-09-28",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 391035000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_5193bd42c4b7",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-06-29",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-06-29",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 85777000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_0b478c43febc",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2024-03-30",
+          "filing_date": "2026-01-30",
+          "observation_date": "2024-03-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 90753000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_60f6cb79622f",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2018-09-29",
+          "filing_date": "2026-01-30",
+          "observation_date": "2018-09-29",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 265595000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_2571a7f9e7f9",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2018-09-29",
+          "filing_date": "2026-01-30",
+          "observation_date": "2018-09-29",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 62900000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_c028e70936b9",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2018-06-30",
+          "filing_date": "2026-01-30",
+          "observation_date": "2018-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 53265000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_94b05ac87910",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2018-03-31",
+          "filing_date": "2026-01-30",
+          "observation_date": "2018-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 61137000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_d4b128f40a02",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2017-12-30",
+          "filing_date": "2026-01-30",
+          "observation_date": "2017-12-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 88293000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f26145545bb4",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": "2017-09-30",
+          "filing_date": "2026-01-30",
+          "observation_date": "2017-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 229234000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_114edf02fea1",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-04-30",
+          "observation_date": "2026-04-30",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 8-K filing for AAPL",
+          "value": "8",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        },
+        {
+          "fact_id": "fact_c4e18c94a5fd",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000320193",
+          "ticker": "AAPL",
+          "cik": "0000320193",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-04-20",
+          "observation_date": "2026-04-20",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 8-K filing for AAPL",
+          "value": "8",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "AAPL",
+        "entity_id": "CIK0000320193",
+        "cik": "0000320193",
+        "lei": null,
+        "figi": null,
+        "confidence": 0.85,
+        "sources": [
+          "SEC",
+          "evidence_entity_match"
+        ],
+        "issues": []
+      },
+      "audit_trace": {
+        "trace_id": "trace_fb84edb6781f",
+        "created_at": "2026-05-29T03:38:57+00:00",
+        "replayable_inputs": {
+          "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem.",
+          "ticker": "AAPL",
+          "as_of_date": "2026-04-30",
+          "search_result_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+            "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+            "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 3 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+                "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+                "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 3 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "data.sec.gov",
+                "sec.gov"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "ok",
+            "summary": "Resolved entity as CIK0000320193.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "confidence": 0.85,
+              "issues": []
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 32 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_55b720958ba0",
+                "fact_bf02f12acec5",
+                "fact_683052f26011",
+                "fact_28afb0d5450c",
+                "fact_bd2858c104b7",
+                "fact_bf9971ebe7e8",
+                "fact_71aca5cd1a8e",
+                "fact_78b2450ced82",
+                "fact_5b6567985d7b",
+                "fact_aa0bf2c3be0a",
+                "fact_fdc6695d855a",
+                "fact_972a58a26155",
+                "fact_47c9b0d677d3",
+                "fact_b057812ec79b",
+                "fact_6049585b714e",
+                "fact_467d746fa94a",
+                "fact_00811d69e7ac",
+                "fact_8253fb5a6a24",
+                "fact_56b2c1246b99",
+                "fact_9a6d68bad57f"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "ok",
+            "summary": "Verified 3 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "partially_supported",
+                "claim_2": "insufficient",
+                "claim_3": "not_applicable"
+              },
+              "review_reasons": {}
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_1: sec_recent_filings: 2 result(s)",
+          "claim_2: retrieval skipped because no compatible source was selected"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "title": "SEC Company Facts for AAPL",
+          "text": "EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2025-12-27: 2.84 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal year ending 2025-09-27: 7.46 (form 10-K); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2025-06-28: 1.57 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2025-03-29: 1.65 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2024-12-28: 2.4 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal year ending 2024-09-28: 6.08 (form 10-K); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2024-06-29: 1.4 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2024-03-30: 1.53 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-12-27: 42097000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2025-09-27: 112010000000 (form 10-K); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-28: 23434000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-29: 24780000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-12-28: 36330000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-09-28: 93736000000 (form 10-K); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-29: 21448000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-30: 23636000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-27: 143756000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-09-27: 416161000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-28: 94036000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-29: 95359000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-28: 124300000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-09-28: 391035000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-29: 85777000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-30: 90753000000 (form 10-Q); Revenues (USD) for fiscal year ending 2018-09-29: 265595000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-09-29: 62900000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-06-30: 53265000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-03-31: 61137000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-12-30: 88293000000 (form 10-K); Revenues (USD) for fiscal year ending 2017-09-30: 229234000000 (form 10-K)",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "data.sec.gov",
+          "published_at": "2026-01-30",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.781,
+          "relevance_score": 0.439,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.289,
+          "reasoning_quality_score": 0.337,
+          "independence_score": 0.85,
+          "notes": [
+            "SEC filing/regulatory source",
+            "90 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.05",
+            "weak lexical support",
+            "reasoning markers=0",
+            "different domains and title text",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+          "title": "SEC 8-K filing for AAPL",
+          "text": "AAPL filed form 8-K on 2026-04-30.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-04-30",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.98,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.25,
+          "reasoning_quality_score": 0.337,
+          "independence_score": 0.55,
+          "notes": [
+            "SEC filing/regulatory source",
+            "0 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning markers=0",
+            "same canonical domain"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm",
+          "title": "SEC 8-K filing for AAPL",
+          "text": "AAPL filed form 8-K on 2026-04-20.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-04-20",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.973,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.25,
+          "reasoning_quality_score": 0.337,
+          "independence_score": 0.55,
+          "notes": [
+            "SEC filing/regulatory source",
+            "10 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning markers=0"
+          ]
+        }
+      ],
+      "risk_flags": [],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "forecast word"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_1: sec_recent_filings: 2 result(s)",
+          "claim_2: retrieval skipped because no compatible source was selected"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-04-30",
+          "user_as_of_date": "2026-04-30",
+          "event_date": null,
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "context_window": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "context_window_source": "sentence_context",
+            "as_of_date": "2026-04-30",
+            "time_context": {
+              "effective_as_of_date": "2026-04-30",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "context_window": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "context_window_source": "sentence_context",
+            "as_of_date": "2026-04-30",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 3,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+              "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "earnings of $29.6 billion, or $2.01 per share",
+            "selected_providers": [],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "method": "no_compatible_source"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "context_window": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "context_window_source": "sentence_context",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 3,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+              "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "partially_supported",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "earnings of $29.6 billion, or $2.01 per share",
+            "context_window": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share earnings of $29.6 billion, or $2.01 per share",
+            "context_window_source": "sentence_context",
+            "fact_checkable": true,
+            "selected_sources": [],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "insufficient",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem",
+            "context_window": "The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem",
+            "context_window_source": "claim",
+            "fact_checkable": false,
+            "selected_sources": [],
+            "retrieved_count": 0,
+            "added_urls": [],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "not_applicable",
+            "human_review_required": false,
+            "review_reasons": [],
+            "closure_status": "skipped_non_factual"
+          }
+        ],
+        "retrieval_budget": 16,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "earnings of $29.6 billion, or $2.01 per share",
+            "detected_asset_classes": [],
+            "candidates": [],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 0,
+              "stage_1_selected_sources": [],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [],
+              "stage_2_loaded_detail_files": []
+            },
+            "selected_source_details": [],
+            "selected_sources": [],
+            "selected_provider_names": [],
+            "rationale": "No source-catalog candidates matched this claim closely enough for automated retrieval.",
+            "confidence": 0.15,
+            "needs_cross_check": false,
+            "method": "deterministic_fallback",
+            "policy_notes": [
+              "no_matching_source_candidates",
+              "no_matching_source_candidates"
+            ]
+          }
+        ],
+        "selected_providers": [
+          "sec_company_facts",
+          "sec_recent_filings"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "earnings of $29.6 billion, or $2.01 per share",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [],
+            "reasons": [
+              "no structured official route matched"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [],
+            "reasons": [
+              "no structured official route matched"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 216,
+          "cleaned_length": 216,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem."
+        },
+        "original_claim": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem.",
+        "agentic_search_plan": [
+          "AAPL \"Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem.\" guidance outlook consensus estimates",
+          "AAPL forecast assumptions guidance investor relations",
+          "AAPL analyst estimates forecast independent sources",
+          "AAPL Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem. correction restatement contradiction",
+          "AAPL Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem. SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "SEC Company Facts for AAPL",
+          "domain": "data.sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-01-30",
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+          "used_by_claims": [
+            "claim_1",
+            "claim_2"
+          ]
+        },
+        {
+          "title": "SEC 8-K filing for AAPL",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-30",
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+          "used_by_claims": []
+        },
+        {
+          "title": "SEC 8-K filing for AAPL",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-20",
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm",
+          "used_by_claims": []
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+          "verdict": "partially_supported",
+          "confidence": 0.859,
+          "summary": "The claim is marked `partially_supported` based on SEC Company Facts for AAPL with confidence 0.86.",
+          "numeric_summary": "The evidence directly matches $111.2 billion from the claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T1.",
+          "main_evidence": {
+            "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+            "title": "SEC Company Facts for AAPL",
+            "text": "EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2025-12-27: 2.84 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal year ending 2025-09-27: 7.46 (form 10-K); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2025-06-28: 1.57 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2025-03-29: 1.65 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2024-12-28: 2.4 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal year ending 2024-09-28: 6.08 (form 10-K); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2024-06-29: 1.4 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2024-03-30: 1.53 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-12-27: 42097000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2025-09-27: 112010000000 (form 10-K); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-28: 23434000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-29: 24780000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-12-28: 36330000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-09-28: 93736000000 (form 10-K); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-29: 21448000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-30: 23636000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-27: 143756000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-09-27: 416161000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-28: 94036000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-29: 95359000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-28: 124300000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-09-28: 391035000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-29: 85777000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-30: 90753000000 (form 10-Q); Revenues (USD) for fiscal year ending 2018-09-29: 265595000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-09-29: 62900000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-06-30: 53265000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-03-31: 61137000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-12-30: 88293000000 (form 10-K); Revenues (USD) for fiscal year ending 2017-09-30: 229234000000 (form 10-K)",
+            "source_type": "sec_filing",
+            "source_tier": "T1",
+            "domain": "data.sec.gov",
+            "published_at": "2026-01-30",
+            "license_tag": "public_official",
+            "is_official_primary": true,
+            "source_authority": 1.0,
+            "recency_score": 0.781,
+            "relevance_score": 0.439,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.25,
+            "support_label": "not_enough_info",
+            "support_score": 0.289,
+            "reasoning_quality_score": 0.337,
+            "independence_score": 0.85,
+            "notes": [
+              "SEC filing/regulatory source",
+              "90 days old",
+              "claim numbers were not found in evidence",
+              "token overlap=0.05",
+              "weak lexical support",
+              "reasoning markers=0",
+              "different domains and title text",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "matched $111.2 billion with 112010000000"
+          ]
+        },
+        {
+          "claim_id": "claim_2",
+          "claim": "earnings of $29.6 billion, or $2.01 per share",
+          "verdict": "insufficient",
+          "confidence": 0.729,
+          "summary": "The claim is marked `insufficient` based on SEC Company Facts for AAPL with confidence 0.73.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T1.",
+          "main_evidence": {
+            "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+            "title": "SEC Company Facts for AAPL",
+            "text": "EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2025-12-27: 2.84 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal year ending 2025-09-27: 7.46 (form 10-K); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2025-06-28: 1.57 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2025-03-29: 1.65 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2024-12-28: 2.4 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal year ending 2024-09-28: 6.08 (form 10-K); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2024-06-29: 1.4 (form 10-Q); EarningsPerShareDiluted (USD/shares) for fiscal quarter ending 2024-03-30: 1.53 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-12-27: 42097000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2025-09-27: 112010000000 (form 10-K); NetIncomeLoss (USD) for fiscal quarter ending 2025-06-28: 23434000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2025-03-29: 24780000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-12-28: 36330000000 (form 10-Q); NetIncomeLoss (USD) for fiscal year ending 2024-09-28: 93736000000 (form 10-K); NetIncomeLoss (USD) for fiscal quarter ending 2024-06-29: 21448000000 (form 10-Q); NetIncomeLoss (USD) for fiscal quarter ending 2024-03-30: 23636000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-27: 143756000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-09-27: 416161000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-28: 94036000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-29: 95359000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-28: 124300000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-09-28: 391035000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-29: 85777000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-30: 90753000000 (form 10-Q); Revenues (USD) for fiscal year ending 2018-09-29: 265595000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-09-29: 62900000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-06-30: 53265000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-03-31: 61137000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-12-30: 88293000000 (form 10-K); Revenues (USD) for fiscal year ending 2017-09-30: 229234000000 (form 10-K)",
+            "source_type": "sec_filing",
+            "source_tier": "T1",
+            "domain": "data.sec.gov",
+            "published_at": "2026-01-30",
+            "license_tag": "public_official",
+            "is_official_primary": true,
+            "source_authority": 1.0,
+            "recency_score": 0.781,
+            "relevance_score": 0.439,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.25,
+            "support_label": "not_enough_info",
+            "support_score": 0.289,
+            "reasoning_quality_score": 0.337,
+            "independence_score": 0.85,
+            "notes": [
+              "SEC filing/regulatory source",
+              "90 days old",
+              "claim numbers were not found in evidence",
+              "token overlap=0.05",
+              "weak lexical support",
+              "reasoning markers=0",
+              "different domains and title text",
+              "different domains and title text"
+            ]
+          },
+          "caveats": []
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_2",
+          "selected_sources": [],
+          "rationale": "No source-catalog candidates matched this claim closely enough for automated retrieval.",
+          "method": "deterministic_fallback",
+          "official_first_policy": "needs_review"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_fb84edb6781f",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "Apple Inc. (AAPL)",
+        "name": "Apple Inc.",
+        "ticker": "AAPL",
+        "symbol": "AAPL",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "Apple Inc. (AAPL)",
+        "name": "Apple Inc.",
+        "ticker": "AAPL",
+        "symbol": "AAPL",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 2 fact-checkable claims across 1 entity. Skipped 1 opinion, forecast, or non-falsifiable statement. No claim was flagged for mandatory human review.\n\n## AAPL\n\n- **Partially consistent.** Apple reported fiscal second-quarter revenue of $111.2 billion. Evidence: T1 SEC Company Facts for AAPL (data.sec.gov). Reason: The evidence directly matches $111.2 billion from the claim.\n- **Insufficient evidence.** earnings of $29.6 billion, or $2.01 per share. Evidence: T1 SEC Company Facts for AAPL (data.sec.gov). Reason: Evidence was retrieved, but it was not sufficient to verify the claim.\n\nNot fact-checked:\n- Skipped `forecast`: The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem\n",
+  "agent_trace": {
+    "run_id": "agent_4424a0a2ad99",
+    "created_at": "2026-05-29T03:38:55+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_5370dfc8",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 27,
+        "output_preview": "{\"asset_classes\": [\"single_name_equity\"], \"asset_groups\": {\"single_name_equity\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0000320193\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Apple Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"AAPL\", \"ticker\": \"AAPL\"}]}, \"entities\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0000320193\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Apple Inc.\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"AAPL\", \"ticker\": \"AAPL\"}], \"method\": \"heuristic\", \"non_equity_entities\": [], \"notes\": [\"ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json\"], \"tickers\": [\"AAPL\"], \"unresolved_e",
+        "output_hash": "cc00728bedb863f7132c3b7c91a699413026e1f4fc2f63afe9d727dcfebbfeac"
+      },
+      {
+        "call_id": "fallback_1_1f91790b",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share. The article said Apple's results shape demand expectations for suppliers tied to the iPhone ecosystem."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"context_window\": \"Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share Apple reported fiscal second-quarter revenue of $111.2 billion\", \"context_window_source\": \"sentence_context\", \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Apple reported fiscal second-quarter revenue of $111.2 billion\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.87, \"context_window\": \"Apple reported fiscal second-quarter revenue of $111.2 billion and earnings of $29.6 billion, or $2.01 per share earnings of $29.6 billion, or $2.01 per share\", \"context_window_source\": \"sentence_cont",
+        "output_hash": "65f5bc7a70910fe5ffc4b06be12a8ea788b3081d7175f13a388a05b8b3fc2a66"
+      },
+      {
+        "call_id": "fallback_2_65b8353c",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 8,
+        "output_preview": "{\"selections\": [{\"candidates\": [{\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.\", \"candidate_score\": 4.85, \"detail_available\": true, \"detected_asset_classes\": [\"single_name_equity\"], \"is_official_primary\": true, \"is_runtime_selectable\": true, \"license_tag\": \"public_official\", \"name\": \"SEC Company Facts\", \"required_inputs\": [\"ticker_or_cik\", \"metric_hint\"], \"source_id\": \"sec_company_facts\"}, {\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.\", \"candidate_score\": 2.5, \"detail_available\": true, \"detected_asset_classes\": [\"single_na",
+        "output_hash": "53671a18df6d7732466daf2581241cbbf4a98b1ca863ad2dd70dab8ad053ff48"
+      },
+      {
+        "call_id": "fallback_3_922b20a9",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+          "ticker": "AAPL",
+          "as_of_date": "2026-04-30",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "prefetched_results": null,
+          "source_results": []
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 1259,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.95, \"needs_decomposition\": false, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"]}, \"evidence\": [{\"domain\": \"data.sec.gov\", \"entity_match_score\": 0.9, \"independence_score\": 0.0, \"is_official_primary\": true, \"license_tag\": \"public_official\", \"notes\": [\"SEC filing/regulatory source\", \"90 days old\", \"claim numbers were not found in evidence\"], \"numeric_consistency_score\": 0.25, \"published_at\": \"2026-01-30\", \"reasoning_quality_score\": 0.0, \"recency_score\": 0.781, \"relevance_score\": 0.521, \"source_authority\": 1.0, \"source_tier\": \"T1\", \"source_type\": \"sec_filing\", \"support_label\": \"not_enough_info\", \"support_score\": 0.0, \"text\": \"RevenueFromContractWithCustomerExcludingAssesse",
+        "output_hash": "e39077da9d7563b1310b857125877fe217ec0f6fb35b30a01213fc073c8c3fba"
+      },
+      {
+        "call_id": "fallback_4_59817821",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "AAPL",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "title": "SEC Company Facts for AAPL",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-27: 143756000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-09-27: 416161000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-28: 94036000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-29: 95359000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-28: 124300000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-09-28: 391035000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-29: 85777000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-30: 90753000000 (form 10-Q); Revenues (USD) for fiscal year ending 2018-09-29: 265595000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-09-29: 62900000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-06-30: 53265000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-03-31: 61137000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-12-30: 88293000000 (form 10-K); Revenues (USD) for fiscal year ending 2017-09-30: 229234000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-09-30: 52579000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-07-01: 45408000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2018-06-30: 53265000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 61137000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-30: 88293000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-09-30: 229234000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 52579000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-07-01: 45408000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-04-01: 52896000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-12-31: 78351000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-01-30",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.781,
+              "relevance_score": 0.521,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "90 days old",
+                "claim numbers were not found in evidence"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+              "title": "SEC 8-K filing for AAPL",
+              "text": "AAPL filed form 8-K on 2026-04-30.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-30",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "claim numbers were not found in evidence"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm",
+              "title": "SEC 8-K filing for AAPL",
+              "text": "AAPL filed form 8-K on 2026-04-20.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.973,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "10 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 2,
+        "output_preview": "{\"canonical_facts\": [{\"authority_tier\": \"T1\", \"cik\": \"0000320193\", \"currency\": \"USD\", \"entity_id\": \"CIK0000320193\", \"fact_id\": \"fact_00811d69e7ac\", \"fact_name\": \"RevenueFromContractWithCustomerExcludingAssessedTax\", \"filing_date\": \"2026-01-30\", \"lei\": null, \"license_tag\": \"public_official\", \"observation_date\": \"2025-12-27\", \"parser_confidence\": 0.88, \"provenance_locator\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json\", \"raw\": {\"form\": \"10-Q\", \"period_kind\": \"fiscal quarter\", \"provider\": \"sec_company_facts\"}, \"report_period\": \"2025-12-27\", \"source_type\": \"sec_filing\", \"ticker\": \"AAPL\", \"unit\": \"USD\", \"value\": 143756000000, \"vintage_date\": null}, {\"authority_tier\": \"T1\", \"cik\": \"0000320193\", \"currency\": \"USD\", \"entity_id\": \"CIK0000320193\", \"fact_id\": \"fact_8253fb5a6a24\", \"fa",
+        "output_hash": "a27a457b36db15fd2caa75653fc53092f9b6c9f8942712893d1a6c775fcf98c1"
+      },
+      {
+        "call_id": "fallback_5_e9aa253d",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+          "ticker": "AAPL",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "title": "SEC Company Facts for AAPL",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-27: 143756000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-09-27: 416161000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-28: 94036000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-29: 95359000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-28: 124300000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-09-28: 391035000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-29: 85777000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-30: 90753000000 (form 10-Q); Revenues (USD) for fiscal year ending 2018-09-29: 265595000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-09-29: 62900000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-06-30: 53265000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-03-31: 61137000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-12-30: 88293000000 (form 10-K); Revenues (USD) for fiscal year ending 2017-09-30: 229234000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-09-30: 52579000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-07-01: 45408000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2018-06-30: 53265000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 61137000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-30: 88293000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-09-30: 229234000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 52579000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-07-01: 45408000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-04-01: 52896000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-12-31: 78351000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-01-30",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.781,
+              "relevance_score": 0.521,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "90 days old",
+                "claim numbers were not found in evidence"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+              "title": "SEC 8-K filing for AAPL",
+              "text": "AAPL filed form 8-K on 2026-04-30.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-30",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "claim numbers were not found in evidence"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm",
+              "title": "SEC 8-K filing for AAPL",
+              "text": "AAPL filed form 8-K on 2026-04-20.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.973,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "10 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_00811d69e7ac",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2025-12-27",
+              "filing_date": "2026-01-30",
+              "observation_date": "2025-12-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 143756000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_8253fb5a6a24",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2025-09-27",
+              "filing_date": "2026-01-30",
+              "observation_date": "2025-09-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 416161000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_56b2c1246b99",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2025-06-28",
+              "filing_date": "2026-01-30",
+              "observation_date": "2025-06-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 94036000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_9a6d68bad57f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2025-03-29",
+              "filing_date": "2026-01-30",
+              "observation_date": "2025-03-29",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 95359000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2b7e3e24d66d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2024-12-28",
+              "filing_date": "2026-01-30",
+              "observation_date": "2024-12-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 124300000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a4a05a958354",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2024-09-28",
+              "filing_date": "2026-01-30",
+              "observation_date": "2024-09-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 391035000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5193bd42c4b7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2024-06-29",
+              "filing_date": "2026-01-30",
+              "observation_date": "2024-06-29",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 85777000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0b478c43febc",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2024-03-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2024-03-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 90753000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_60f6cb79622f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-09-29",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-09-29",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 265595000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2571a7f9e7f9",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-09-29",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-09-29",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 62900000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_c028e70936b9",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 53265000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_94b05ac87910",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 61137000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d4b128f40a02",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-12-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-12-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 88293000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f26145545bb4",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 229234000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a9048f3e530c",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 52579000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1d098b100db4",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-07-01",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-07-01",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 45408000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_bc41fc51ed9f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 53265000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_88bdad440e85",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 61137000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d241485d6f06",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-12-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-12-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 88293000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_03c95be49edf",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 229234000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_e092716ac471",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 52579000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a291f03f2952",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-07-01",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-07-01",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 45408000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_6ee4e77a587e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-04-01",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-04-01",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 52896000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_7efd4280311d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2026-01-30",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 78351000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_c37f9d0143fb",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-30",
+              "observation_date": "2026-04-30",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for AAPL",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_38ed35b3455e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-20",
+              "observation_date": "2026-04-20",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for AAPL",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 6,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"context_window\": \"Apple reported fiscal second-quarter revenue of $111.2 billion\", \"context_window_source\": \"claim\", \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Apple reported fiscal second-quarter revenue of $111.2 billion\"}, \"canonical_fact_ids\": [\"fact_60f6cb79622f\", \"fact_2571a7f9e7f9\", \"fact_c028e70936b9\", \"fact_94b05ac87910\", \"fact_d4b128f40a02\", \"fact_f26145545bb4\", \"fact_a9048f3e530c\", \"fact_1d098b100db4\"], \"confidence_components\": {\"cross_source_consistency\": 0.55, \"entity_match\": 0.9, \"final_confidence\": 0.729, \"numeric_exactness\": 0.25, \"parser_confidence\": 0.88, \"retrieval_sufficiency\": 0.82, \"source_authority\": 1.0, ",
+        "output_hash": "0f712367e0f9413004e12d778b4c381f68e0a13c614c793d1b9fe828c711ce63"
+      },
+      {
+        "call_id": "fallback_6_726fa081",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "Apple reported fiscal second-quarter revenue of $111.2 billion",
+          "ticker": "AAPL",
+          "as_of_date": "2026-04-30",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "title": "SEC Company Facts for AAPL",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-27: 143756000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-09-27: 416161000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-06-28: 94036000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-29: 95359000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-28: 124300000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-09-28: 391035000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-06-29: 85777000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-30: 90753000000 (form 10-Q); Revenues (USD) for fiscal year ending 2018-09-29: 265595000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-09-29: 62900000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-06-30: 53265000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2018-03-31: 61137000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-12-30: 88293000000 (form 10-K); Revenues (USD) for fiscal year ending 2017-09-30: 229234000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-09-30: 52579000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2017-07-01: 45408000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2018-06-30: 53265000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 61137000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-30: 88293000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-09-30: 229234000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 52579000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-07-01: 45408000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-04-01: 52896000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-12-31: 78351000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-01-30",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.781,
+              "relevance_score": 0.521,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "90 days old",
+                "claim numbers were not found in evidence"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+              "title": "SEC 8-K filing for AAPL",
+              "text": "AAPL filed form 8-K on 2026-04-30.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-30",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "claim numbers were not found in evidence"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm",
+              "title": "SEC 8-K filing for AAPL",
+              "text": "AAPL filed form 8-K on 2026-04-20.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-20",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.973,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.25,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "10 days old",
+                "claim numbers were not found in evidence"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_00811d69e7ac",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2025-12-27",
+              "filing_date": "2026-01-30",
+              "observation_date": "2025-12-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 143756000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_8253fb5a6a24",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2025-09-27",
+              "filing_date": "2026-01-30",
+              "observation_date": "2025-09-27",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 416161000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_56b2c1246b99",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2025-06-28",
+              "filing_date": "2026-01-30",
+              "observation_date": "2025-06-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 94036000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_9a6d68bad57f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2025-03-29",
+              "filing_date": "2026-01-30",
+              "observation_date": "2025-03-29",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 95359000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2b7e3e24d66d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2024-12-28",
+              "filing_date": "2026-01-30",
+              "observation_date": "2024-12-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 124300000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a4a05a958354",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2024-09-28",
+              "filing_date": "2026-01-30",
+              "observation_date": "2024-09-28",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 391035000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_5193bd42c4b7",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2024-06-29",
+              "filing_date": "2026-01-30",
+              "observation_date": "2024-06-29",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 85777000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0b478c43febc",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2024-03-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2024-03-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 90753000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_60f6cb79622f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-09-29",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-09-29",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 265595000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2571a7f9e7f9",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-09-29",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-09-29",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 62900000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_c028e70936b9",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 53265000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_94b05ac87910",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 61137000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d4b128f40a02",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-12-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-12-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 88293000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_f26145545bb4",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 229234000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a9048f3e530c",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 52579000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1d098b100db4",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-07-01",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-07-01",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 45408000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_bc41fc51ed9f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-06-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 53265000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_88bdad440e85",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2026-01-30",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 61137000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d241485d6f06",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-12-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-12-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 88293000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_03c95be49edf",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 229234000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_e092716ac471",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 52579000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a291f03f2952",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-07-01",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-07-01",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 45408000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_6ee4e77a587e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2017-04-01",
+              "filing_date": "2026-01-30",
+              "observation_date": "2017-04-01",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 52896000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_7efd4280311d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2026-01-30",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 78351000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_c37f9d0143fb",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-30",
+              "observation_date": "2026-04-30",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for AAPL",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_38ed35b3455e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000320193",
+              "ticker": "AAPL",
+              "cik": "0000320193",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-20",
+              "observation_date": "2026-04-20",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for AAPL",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 2,
+        "output_preview": "{\"created_at\": \"2026-05-29T03:38:56+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": [\"data.sec.gov\", \"sec.gov\"]}, \"status\": \"ok\", \"step\": \"extract_evidence\", \"summary\": \"Built 3 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": \"0000320193\", \"confidence\": 0.85, \"issues\": [], \"lei\": null, \"ticker\": \"AAPL\"}, \"status\": \"ok\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as CIK0000320193.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": [\"fact_00811d69e7ac\", \"fact_8253fb5a6a24\", \"fact_56b2c1246b99\", \"fact_9a6d68bad57f\", \"fact_2b7e3e24d66d\", \"fact_a4a05a958354\", \"fact_5193bd42c4b7\", \"fact_0b478c43febc\", \"fact_60f6cb79622f\", \"fact_2571a7f9e7f9",
+        "output_hash": "973a8777e3538ff2b12f34894e36a013fa40dec6338726807bbb0e6af4569e75"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_4424a0a2ad99",
+    "created_at": "2026-05-29T03:38:57+00:00",
+    "verdict": "pass",
+    "score": 1.0,
+    "summary": "Audit pass: no findings; score 1.00.",
+    "findings": []
+  }
+}

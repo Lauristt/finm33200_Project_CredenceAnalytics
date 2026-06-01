@@ -14,6 +14,11 @@ class WebappTests(unittest.TestCase):
         self.assertIn("Credence Analytics Agent", HTML)
         self.assertNotIn("Official Evidence Verifier", HTML)
         self.assertIn("/api/report/stream", HTML)
+        self.assertIn('id="stop"', HTML)
+        self.assertIn("AbortController", HTML)
+        self.assertIn("currentRunController.abort()", HTML)
+        self.assertIn("Run stopped", HTML)
+        self.assertIn('replace(/\\*\\*([^*]+)\\*\\*/g, "<strong>$1</strong>")', HTML)
         self.assertIn(">Trace<", HTML)
         self.assertNotIn("Live Agent Trace", HTML)
         self.assertIn("details class=\"trace-panel", HTML)
@@ -30,9 +35,29 @@ class WebappTests(unittest.TestCase):
         self.assertIn("Not Fact-Checked", HTML)
         self.assertIn("Data Source Checked", HTML)
         self.assertIn("What The Source Says", HTML)
+        self.assertIn("humanPriceHistoryLines", HTML)
+        self.assertIn("parsePriceHistoryEvidence", HTML)
+        self.assertIn("Tool called: historical_prices adapter", HTML)
+        self.assertIn("Claim comparison:", HTML)
+        self.assertIn("Evidence summary", HTML)
+        self.assertNotIn("Price evidence", HTML)
         self.assertIn("Does It Match The Claim?", HTML)
+        self.assertIn('text === "ticker_only_entity_resolution"', HTML)
+        self.assertIn('text === "llm_judge_unavailable"', HTML)
+        self.assertIn("entity resolution is based mainly on the ticker symbol", HTML)
+        self.assertIn("humanFactName", HTML)
+        self.assertIn("RevenueFromContractWithCustomerExcludingAssessedTax: \"Revenue\"", HTML)
+        self.assertIn("formatFactValue", HTML)
+        self.assertIn("isDisplayableFact", HTML)
+        self.assertIn("/^SEC Company Facts", HTML)
         self.assertIn("Human Review", HTML)
+        self.assertNotIn("Verification Confidence", HTML)
+        self.assertNotIn("Verification confidence", HTML)
         self.assertIn("needs-review", HTML)
+        self.assertIn("liveTraceOpenDetails", HTML)
+        self.assertIn("rememberLiveTraceDetailState", HTML)
+        self.assertIn("restoreLiveTraceDetailState", HTML)
+        self.assertIn("data-detail-key", HTML)
         self.assertIn("Selected Sources", HTML)
         self.assertNotIn("Why These Sources Were Selected", HTML)
         self.assertNotIn("Source routing", HTML)
@@ -51,20 +76,29 @@ class WebappTests(unittest.TestCase):
         )
         self.assertEqual(_statement_from_payload({"memo": "legacy"}), "legacy")
 
-    def test_web_report_loads_demo_preset_from_payload(self):
+    def test_report_api_accepts_multi_tool_mode(self):
         handler_cls = _handler(ToolkitConfig())
         handler = object.__new__(handler_cls)
-        payload = {
-            "statement": "Apple revenue grew 6% year over year.",
-            "tickers": ["AAPL"],
-            "demo_preset": "equity_supported",
-        }
+        payload = handler._build_report(
+            {
+                "statement": "Apple revenue grew 6% year over year.",
+                "tickers": ["AAPL"],
+                "mode": "multi_tool",
+                "prefetched_results": [
+                    {
+                        "title": "SEC Company Facts for AAPL",
+                        "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+                        "snippet": "Revenues (USD) 2025 Q4: 102500000000 filed 2025-10-31 form 10-K",
+                        "published_at": "2025-10-31",
+                        "source": "SEC EDGAR",
+                        "raw": {"provider": "sec_company_facts", "cik": 320193},
+                    }
+                ],
+            }
+        )
 
-        report = handler._build_report(payload)
-
-        self.assertTrue(report["demo_mode"])
-        self.assertEqual(report["demo_preset"], "equity_supported")
-        self.assertEqual(report["input"]["evidence_mode"], "prefetched")
+        self.assertIn("agent_trace", payload)
+        self.assertEqual(payload["input"]["mode"], "multi_tool")
 
 
 if __name__ == "__main__":

@@ -29,6 +29,33 @@ macro indicators, commodities, FX, credit, rates, indexes, futures, ETFs, and
 crypto are now detected and grouped in the report; full claim-level verification
 for all of those classes is the next expansion layer.
 
+## Workflow
+
+GitHub renders the diagram below with Mermaid.
+
+```mermaid
+flowchart TD
+    A[Input memo or article] --> B[Clean copied-page noise]
+    B --> C[Extract assets and atomic claims]
+    C --> D{Fact-checkable?}
+    D -- No: opinion, forecast, vague discussion --> E[Skip or human review]
+    D -- Yes --> F[Select source and time window]
+    F --> G[Retrieve official or structured evidence]
+    G --> H[Normalize facts and calculate checks]
+    H --> I{Evidence matches claim?}
+    I -- Yes --> J[Consistent]
+    I -- No --> K[Inconsistent]
+    I -- Ambiguous or missing --> E
+    E --> L[Audit and compact report]
+    J --> L
+    K --> L
+```
+
+The key design rule is that a claim is only verified against evidence that
+matches the asset class, metric, and time window. If the system cannot find a
+compatible source, it should show insufficient evidence or human review instead
+of forcing a mismatched data source.
+
 ## Quick Start
 
 The package currently has no required third-party runtime dependencies.
@@ -206,6 +233,16 @@ These sources have runtime adapters today:
 | `treasury_fiscal_data` | U.S. Treasury fiscal/debt data | No | Implemented |
 | `gleif_entity` | GLEIF LEI legal-entity lookup | No | Implemented |
 | `fred` | FRED macro time series | Yes, `FRED_API_KEY` | Implemented |
+| `bls_api` | BLS CPI, PPI, employment, wages, JOLTS | Optional but recommended, `BLS_API_KEY` | Implemented |
+| `bea_api` | BEA GDP/NIPA/PCE/industry/regional data | Yes, `BEA_API_KEY` | Implemented |
+| `eia_api` | EIA official energy prices and fundamentals | Yes, `EIA_API_KEY` | Implemented |
+| `cftc_cot` | CFTC COT futures/options positioning | No, optional `CFTC_APP_TOKEN` | Implemented |
+| `ecb_data_portal` | ECB SDMX statistics | No | Implemented |
+| `bis_data_portal` | BIS banking, debt, liquidity, financial stability data | No | Implemented |
+| `world_bank_indicators` | World Bank country-level indicators via API v2 | No | Implemented |
+| `bank_of_england` | Bank of England IADB statistics | No | Implemented |
+| `finra_query_api` | FINRA fixed-income/regulatory Query API datasets | Yes, `FINRA_CLIENT_ID` and `FINRA_CLIENT_SECRET` | Implemented |
+| `openfigi` | FIGI / ISIN / CUSIP / ticker mapping | Optional `OPENFIGI_API_KEY` | Implemented |
 | `historical_prices` | Historical price evidence via Alpha Vantage, FMP, Finnhub, or Stooq | Stooq no; others yes | Implemented |
 | `company_fundamentals_vendor` | Alpha Vantage, Finnhub, FMP fundamentals | Yes, corresponding vendor key | Implemented |
 | `market_prices_vendor` | Marketstack, Tiingo, Stooq latest/EOD prices | Stooq no; others yes | Implemented |
@@ -214,8 +251,11 @@ These sources have runtime adapters today:
 
 Cost/access summary:
 
-- Usually free/no key: SEC, Treasury Fiscal Data, GLEIF, Stooq.
-- Free key or modest friction: FRED.
+- Usually free/no key: SEC, Treasury Fiscal Data, GLEIF, CFTC, ECB, BIS,
+  World Bank, Bank of England, Stooq.
+- Free key or modest friction: FRED, BLS, BEA, EIA.
+- OAuth/client credentials: FINRA.
+- Key optional but useful for limits: OpenFIGI, CFTC app token.
 - Vendor keys: Alpha Vantage, Finnhub, FMP, Marketstack, Tiingo.
 - Web search: Serper key.
 - Live page extraction: optional Jina Reader key.
@@ -250,24 +290,15 @@ runtime-callable by default:
 | `xbrl_us_api` | XBRL US Public Filings API | Planned |
 | `arelle` | Local XBRL/iXBRL parser and validator | Planned parser |
 | `federal_reserve_ddp` | Federal Reserve DDP / Z.1 data | Planned |
-| `bea_api` | BEA GDP/NIPA/industry/regional/international data | Planned |
-| `bls_api` | BLS CPI, PPI, employment, wages, JOLTS | Planned |
-| `cftc_cot` | CFTC COT futures/options positioning | Planned |
-| `finra_query_api` | FINRA regulatory data | Planned |
 | `ofr_stfm` | OFR short-term funding monitor | Planned |
-| `openfigi` | FIGI / ISIN / CUSIP / ticker mapping | Planned |
-| `ecb_data_portal` | ECB SDMX statistics | Planned |
-| `bis_data_portal` | BIS banking, debt, liquidity, financial stability data | Planned |
 | `imf_data_api` | IMF WEO, BOP, reserves, fiscal, CPI data | Planned |
-| `world_bank_indicators` | World Bank indicator API | Planned |
 | `esma_registers` | ESMA regulatory registers | Planned |
-| `bank_of_england` | Bank of England statistics | Planned |
 | `nasdaq_data_link` | Nasdaq Data Link / Quandl datasets | Planned |
 
 Cost/access caution:
 
 - Potentially expensive or subscription-heavy: `nasdaq_data_link`,
-  `finra_query_api`, `xbrl_us_api`.
+  FINRA fixed-income entitlements, `xbrl_us_api`.
 - Mostly public/free official APIs: BEA, BLS, CFTC, OFR, ECB, BIS, World Bank,
   Bank of England, Federal Reserve DDP.
 - Free but license/redistribution terms still matter: IMF, World Bank, ECB/BIS,
@@ -298,6 +329,7 @@ src/financial_credibility/
   entity_extraction.py   # Asset-class aware entity extraction.
   asset_universe.py      # Per-asset-class hard filters and custom universes.
   ticker_universe.py     # SEC ticker universe for public-company filtering.
+  news_benchmark.py      # Cross-asset recent-news benchmark cases.
   reporting.py           # Memo-level report payload and Markdown rendering.
   webapp.py              # Local chat-style report UI.
   source_selection.py    # Source catalog, progressive disclosure, policy checks.
@@ -350,6 +382,36 @@ print(payload["report_markdown"])
 
 Use `prefetched_results` for deterministic tests without network calls.
 
+Use `MultiToolAgentRunner` when the model should decide how many tool calls to
+make within a controlled profile:
+
+```python
+from financial_credibility import MultiToolAgentRunner, ToolkitConfig
+
+payload = MultiToolAgentRunner(ToolkitConfig.from_env()).run(
+    memo="Apple revenue grew 6% year over year.",
+    tickers=["AAPL"],
+    as_of_date="2025-11-01",
+    tool_profile="agent_core",
+    max_steps=12,
+    audit=True,
+)
+print(payload["agent_trace"])
+print(payload["audit_report"])
+```
+
+CLI:
+
+```bash
+PYTHONPATH=src python3 -m financial_credibility \
+  "Apple revenue grew 6% year over year." \
+  --ticker AAPL \
+  --mode multi-tool \
+  --tool-profile agent_core \
+  --agent-trace-out agent_trace.json \
+  --pretty
+```
+
 ## Agent Tool Layer
 
 The package exposes provider-neutral tools that can be exported to OpenAI or
@@ -358,6 +420,14 @@ Anthropic schemas.
 Core files:
 
 - `tool_registry.py`: declarative tool metadata and JSON schemas.
+- `asset_source_map.py`: structured asset-class, source, series, and endpoint
+  coverage map used before retrieval.
+- `tool_profiles.py`: narrow tool profiles for one-shot, core agent, deep
+  retrieval, audit, and review workflows.
+- `multi_tool_agent.py`: model-directed multi-tool loop with fallback trace
+  capture.
+- `audit_agent.py`: independent evidence, computation, tool-use, constraint,
+  reasoning, prompt, and tool-surface review.
 - `tool_runtime.py`: executes a registered tool by name.
 - `adapters.py`: exports OpenAI/Anthropic-compatible tool schemas.
 
@@ -365,6 +435,7 @@ Registered tools include:
 
 - `classify_claim`
 - `extract_entities`
+- `map_asset_sources`
 - `decompose_claims`
 - `resolve_entity`
 - `route_sources`
@@ -384,6 +455,22 @@ Registered tools include:
 - `verify_source_quality`
 - `aggregate_credibility`
 - `build_evidence_pack`
+- `audit_verification_chain`
+- `summarize_evidence_pack`
+- `summarize_audit_report`
+- `review_tool_surface`
+
+Default tool profiles:
+
+- `one_shot`: only `build_evidence_pack`.
+- `agent_core`: extraction, decomposition, source selection, retrieval,
+  canonicalization, verification, aggregation, and trace construction.
+- `retrieval_deep`: `agent_core` plus source-specific SEC, price, benchmark,
+  and vendor fundamentals tools.
+- `audit`: audit verifier tools only.
+- `review`: summary and tool-surface review tools.
+
+See `docs/AGENTIC_ARCHITECTURE.md` for the trace schema and audit categories.
 
 Example:
 
@@ -426,7 +513,28 @@ PYTHONPATH=src python3 -m pytest -q
 Current local test suite:
 
 ```text
-62 passed
+155 passed, 3 skipped
+```
+
+Run the cross-asset recent-news mapping benchmark:
+
+```bash
+PYTHONPATH=src python3 -m pytest -q tests/test_cross_asset_news_benchmark.py
+```
+
+The benchmark uses 30 recent-news-style cases across single-name equities,
+equity indexes, index futures, ETFs, macro indicators, rates, credit, fixed
+income, commodities, commodity futures, FX, and derivatives. It checks entity
+extraction, asset-class routing, candidate source selection, and source/series
+mapping without calling live APIs.
+
+Inspect the benchmark payload directly:
+
+```python
+from financial_credibility import ToolkitConfig, evaluate_news_benchmark
+
+result = evaluate_news_benchmark(ToolkitConfig(enable_ticker_universe_filter=False))
+print(result["case_count"], result["failed_count"])
 ```
 
 Compile check:
@@ -439,14 +547,13 @@ PYTHONPATH=src python3 -m compileall src tests
 
 - The strongest end-to-end verification path is public-company factual claims
   backed by SEC Company Facts and SEC filings.
-- Non-equity assets are now detected and grouped, but most non-equity
-  asset-class verifiers are still planned.
+- Non-equity assets are now detected and routed to starter official adapters,
+  but deep claim-level verdict logic still needs more per-source semantics.
 - Non-equity extraction is intentionally conservative: unknown symbols are
   filtered unless they appear in the built-in asset universe or a configured
   `CREDIBILITY_ASSET_UNIVERSE_FILE`.
-- Macro-only report inputs currently produce detected asset-class scope unless a
-  public-company ticker is also present; independent macro verification is a
-  next-stage adapter/routing task.
+- Macro-only report inputs can route to official adapters, but period/vintage
+  alignment and release-specific verdict calibration are still early.
 - SEC Company Facts concept mapping is still keyword-based, not a full XBRL
   taxonomy planner.
 - Live page extraction is snippet-first unless `CREDIBILITY_LIVE_EXTRACTION` is

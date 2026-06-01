@@ -11,6 +11,15 @@ Official description summary:
 - Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.
 - It is the default primary source for filing-context and disclosure-document claims.
 
+API playbook:
+- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.
+- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.
+- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.
+- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.
+- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.
+- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.
+- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.
+
 Use for:
 - Official filing history, filing dates, form types, accession numbers, and document links.
 - Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.

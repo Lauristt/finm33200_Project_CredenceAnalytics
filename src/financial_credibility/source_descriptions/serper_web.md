@@ -5,6 +5,15 @@ Reference docs: https://serper.dev/
 Authority tier: T4 supplemental discovery
 License tag: unknown
 
+API playbook:
+- Auth/env: requires `SERPER_API_KEY`.
+- Endpoint: `POST https://google.serper.dev/search`.
+- Headers: `X-API-KEY: {SERPER_API_KEY}` and `Content-Type: application/json`.
+- Request body: include `q` for the query and usually `num` for result count; keep domain filters or exact quoted phrases in the trace when used.
+- Response schema: common fields include `organic[]`, `title`, `link`, `snippet`, `date`, `source`, and optional news/knowledge panels depending on request type.
+- Query construction: build queries from the claim, entity, time window, and desired official source; prefer official domains or investor-relations/regulator pages over generic news snippets.
+- Adapter output: search results are discovery only. The verifier should fetch/read the destination source before using it as evidence, and web-only support usually requires human review.
+
 Use for:
 - Discovery of relevant pages when structured official APIs cannot directly answer the claim.
 - Finding official URLs, company investor-relations pages, press releases, or secondary context for follow-up.

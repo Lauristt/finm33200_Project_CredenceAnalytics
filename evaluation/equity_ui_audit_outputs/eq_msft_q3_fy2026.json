@@ -1,0 +1,3756 @@
+{
+  "input": {
+    "memo": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year.",
+    "original_memo": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year.",
+    "preprocessing": {
+      "changed": false,
+      "original_length": 252,
+      "cleaned_length": 252,
+      "original_line_count": 1,
+      "kept_line_count": 1,
+      "removed_line_count": 0,
+      "removed_examples": [],
+      "notes": [],
+      "cleaned_statement": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year."
+    },
+    "tickers": [
+      "MSFT"
+    ],
+    "entity_extraction": {
+      "method": "heuristic",
+      "entities": [
+        {
+          "name": "Microsoft Corporation",
+          "ticker": "MSFT",
+          "symbol": "MSFT",
+          "entity_type": "public_company",
+          "asset_class": "single_name_equity",
+          "confidence": 0.86,
+          "source": "known_alias+sec_company_tickers_exchange",
+          "reason": "",
+          "cik": "0000789019",
+          "exchange": "Nasdaq"
+        }
+      ],
+      "tickers": [
+        "MSFT"
+      ],
+      "asset_classes": [
+        "single_name_equity"
+      ],
+      "asset_groups": {
+        "single_name_equity": [
+          {
+            "name": "Microsoft Corporation",
+            "ticker": "MSFT",
+            "symbol": "MSFT",
+            "entity_type": "public_company",
+            "asset_class": "single_name_equity",
+            "confidence": 0.86,
+            "source": "known_alias+sec_company_tickers_exchange",
+            "reason": "",
+            "cik": "0000789019",
+            "exchange": "Nasdaq"
+          }
+        ]
+      },
+      "unresolved_entities": [],
+      "non_equity_entities": [],
+      "notes": [
+        "filtered_ambiguous_ticker:AI",
+        "ticker_universe_source:.cache/financial_credibility/company_tickers_exchange.json"
+      ]
+    },
+    "as_of_date": "2026-04-29",
+    "requested_as_of_date": "2026-04-29",
+    "time_context": {
+      "effective_as_of_date": "2026-04-29",
+      "user_as_of_date": "2026-04-29",
+      "event_date": "2026-03-31",
+      "publication_date": null,
+      "source": "user_as_of_date",
+      "confidence": 1.0,
+      "notes": [
+        "absolute_date_detected"
+      ]
+    },
+    "mode": "multi_tool",
+    "max_sources": 8,
+    "tool_profile": "agent_core",
+    "agent_max_steps": 20
+  },
+  "summary": {
+    "entity_count": 1,
+    "detected_entity_count": 1,
+    "asset_class_count": 1,
+    "asset_classes": [
+      "single_name_equity"
+    ],
+    "non_equity_entity_count": 0,
+    "error_count": 0,
+    "atomic_claim_count": 3,
+    "skipped_claim_count": 0,
+    "total_claim_count": 3,
+    "human_review_count": 3,
+    "average_confidence": 0.535,
+    "agent_tool_call_count": 7,
+    "agent_termination_reason": "no_provider_fallback"
+  },
+  "runs": [
+    {
+      "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year.",
+      "ticker": "MSFT",
+      "as_of_date": "2026-04-29",
+      "argument_type": "metric_fact",
+      "classification_confidence": 0.95,
+      "verdict": "insufficient",
+      "credibility_label": "medium",
+      "credibility_score": 0.564,
+      "score_breakdown": {
+        "source_authority": 0.97,
+        "recency": 0.916,
+        "evidence_support": 0.108,
+        "numeric_consistency": 0.603,
+        "independence": 0.75,
+        "reasoning_quality": 0.55,
+        "penalties": 0.05,
+        "final_score": 0.564,
+        "weights": {
+          "source_authority": 0.25,
+          "recency": 0.1,
+          "evidence_support": 0.25,
+          "numeric_consistency": 0.25,
+          "independence": 0.1,
+          "reasoning_quality": 0.05
+        }
+      },
+      "numeric_check": {
+        "check_type": "numeric_check",
+        "verdict": "partially_verified",
+        "confidence": 0.72,
+        "summary": "Numeric values are partially supported by available evidence.",
+        "evidence_urls": [
+          "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+          "https://fred.stlouisfed.org/series/FEDFUNDS"
+        ],
+        "issues": [],
+        "method": "heuristic_llm_fallback"
+      },
+      "logic_check": {
+        "check_type": "logic_check",
+        "verdict": "weak",
+        "confidence": 0.442,
+        "summary": "Heuristic logic check based on evidence support and reasoning markers.",
+        "evidence_urls": [
+          "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+          "https://fred.stlouisfed.org/series/FEDFUNDS"
+        ],
+        "issues": [],
+        "method": "heuristic"
+      },
+      "source_check": {
+        "check_type": "source_check",
+        "verdict": "verified",
+        "confidence": 0.901,
+        "summary": "Sources are strong enough for a useful credibility assessment.",
+        "evidence_urls": [
+          "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+          "https://fred.stlouisfed.org/series/FEDFUNDS"
+        ],
+        "issues": [],
+        "method": "scoring"
+      },
+      "overall_conclusion": {
+        "overall_label": "Medium",
+        "final_confidence": 0.677,
+        "numeric_confidence": 0.72,
+        "logic_confidence": 0.442,
+        "source_confidence": 0.901,
+        "summary": "Overall confidence is Medium. Numeric check: partially_verified; logic check: weak; source check: verified."
+      },
+      "atomic_claims": [
+        {
+          "atomic_claim": {
+            "claim_id": "claim_1",
+            "text": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "numeric change",
+              "reported period"
+            ]
+          },
+          "verdict": "partially_supported",
+          "evidence_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json"
+          ],
+          "evidence_keys": [
+            "T1:data.sec.gov:2026-01-28"
+          ],
+          "canonical_fact_ids": [
+            "fact_fea16c0ac7f7",
+            "fact_faac81d8c39f",
+            "fact_cc140a5f7fe6",
+            "fact_2c424a89e97c",
+            "fact_f25307ab1456",
+            "fact_6b287abaaaca",
+            "fact_545e2bce5b35",
+            "fact_64b1e399b9ea"
+          ],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 1.0,
+            "entity_match": 0.9,
+            "time_alignment": 0.779,
+            "numeric_exactness": 0.25,
+            "retrieval_sufficiency": 0.82,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.88,
+            "final_confidence": 0.729
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": []
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_2",
+            "text": "Operating income was $38.4 billion, up 20%",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.66,
+            "signals": [
+              "numeric change"
+            ]
+          },
+          "verdict": "insufficient",
+          "evidence_urls": [],
+          "evidence_keys": [],
+          "canonical_fact_ids": [],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 0.0,
+            "entity_match": 0.85,
+            "time_alignment": 0.0,
+            "numeric_exactness": 0.1,
+            "retrieval_sufficiency": 0.0,
+            "cross_source_consistency": 0.0,
+            "parser_confidence": 0.0,
+            "final_confidence": 0.148
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "no_official_primary_source",
+            "low_retrieval_sufficiency",
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": [
+            "no_evidence"
+          ]
+        },
+        {
+          "atomic_claim": {
+            "claim_id": "claim_3",
+            "text": "Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year",
+            "argument_type": "metric_fact",
+            "classification_confidence": 0.95,
+            "signals": [
+              "financial metric",
+              "macro or market metric",
+              "numeric change",
+              "reported period"
+            ]
+          },
+          "verdict": "partially_supported",
+          "evidence_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json"
+          ],
+          "evidence_keys": [
+            "T1:data.sec.gov:2026-01-28"
+          ],
+          "canonical_fact_ids": [
+            "fact_fea16c0ac7f7",
+            "fact_faac81d8c39f",
+            "fact_cc140a5f7fe6",
+            "fact_2c424a89e97c",
+            "fact_f25307ab1456",
+            "fact_6b287abaaaca",
+            "fact_545e2bce5b35",
+            "fact_64b1e399b9ea"
+          ],
+          "numeric_derivation": null,
+          "confidence_components": {
+            "source_authority": 1.0,
+            "entity_match": 0.9,
+            "time_alignment": 0.779,
+            "numeric_exactness": 0.25,
+            "retrieval_sufficiency": 0.82,
+            "cross_source_consistency": 0.55,
+            "parser_confidence": 0.88,
+            "final_confidence": 0.729
+          },
+          "human_review_required": true,
+          "review_reasons": [
+            "ambiguous_unit_currency_or_period"
+          ],
+          "issues": []
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact_id": "fact_9012f3c22deb",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2025-12-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2025-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 81273000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_1a43e7a6c53d",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2025-09-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2025-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 77673000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_29319f03679d",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2025-06-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2025-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 281724000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_895f0c6dd684",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2025-03-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2025-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 70066000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_fb0dc5c8b2ba",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2024-12-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2024-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 69632000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_2b5e18d734b7",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2024-09-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2024-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 65585000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_d3824b9d3e45",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2024-06-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2024-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 245122000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_7e487f6bb144",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2024-03-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2024-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "value": 61858000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_fea16c0ac7f7",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2010-12-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2010-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 19953000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_faac81d8c39f",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2010-09-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2010-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 16195000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_cc140a5f7fe6",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2010-06-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2010-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 62484000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_2c424a89e97c",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2010-06-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2010-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 16039000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_f25307ab1456",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2010-03-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2010-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 14503000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_6b287abaaaca",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2009-12-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2009-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 19022000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_545e2bce5b35",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2009-09-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2009-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 12920000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_64b1e399b9ea",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2009-06-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2009-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "Revenues",
+          "value": 58437000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_ddfc8b43db87",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2018-03-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2018-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 26819000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_56a70a87907c",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2017-12-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2017-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 28918000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_8c917f62943d",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2017-09-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2017-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 24538000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_1c097faf65f4",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2017-06-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2017-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 89950000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal year",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_22e0c077f72c",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2017-06-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2017-06-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 23317000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-K",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_4541e039d476",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2017-03-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2017-03-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 23212000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_b03c9148ea13",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2016-12-31",
+          "filing_date": "2026-01-28",
+          "observation_date": "2016-12-31",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 25826000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_99aa50b3ec35",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": "2016-09-30",
+          "filing_date": "2026-01-28",
+          "observation_date": "2016-09-30",
+          "vintage_date": null,
+          "unit": "USD",
+          "currency": "USD",
+          "fact_name": "SalesRevenueNet",
+          "value": 21928000000,
+          "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "parser_confidence": 0.88,
+          "raw": {
+            "form": "10-Q",
+            "period_kind": "fiscal quarter",
+            "provider": "sec_company_facts"
+          }
+        },
+        {
+          "fact_id": "fact_4a6da41abeda",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-04-29",
+          "observation_date": "2026-04-29",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 10-Q filing for MSFT",
+          "value": "10",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        },
+        {
+          "fact_id": "fact_dc02b6efd982",
+          "source_type": "sec_filing",
+          "authority_tier": "T1",
+          "license_tag": "public_official",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": "0000789019",
+          "lei": null,
+          "report_period": null,
+          "filing_date": "2026-04-29",
+          "observation_date": "2026-04-29",
+          "vintage_date": null,
+          "unit": null,
+          "currency": null,
+          "fact_name": "SEC 8-K filing for MSFT",
+          "value": "8",
+          "provenance_locator": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+          "parser_confidence": 0.5,
+          "raw": {
+            "provider": "sec_recent_filings"
+          }
+        },
+        {
+          "fact_id": "fact_dfab334e399b",
+          "source_type": "regulator_exchange",
+          "authority_tier": "T2",
+          "license_tag": "third_party_restricted",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": null,
+          "observation_date": "2026-04-01",
+          "vintage_date": "2026-05-28",
+          "unit": null,
+          "currency": null,
+          "fact_name": "FEDFUNDS",
+          "value": 3.64,
+          "provenance_locator": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "parser_confidence": 0.88,
+          "raw": {
+            "provider": "fred",
+            "series_id": "FEDFUNDS",
+            "realtime_start": "2026-05-28",
+            "realtime_end": "2026-05-28"
+          }
+        },
+        {
+          "fact_id": "fact_169b2b507061",
+          "source_type": "regulator_exchange",
+          "authority_tier": "T2",
+          "license_tag": "third_party_restricted",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": null,
+          "observation_date": "2026-03-01",
+          "vintage_date": "2026-05-28",
+          "unit": null,
+          "currency": null,
+          "fact_name": "FEDFUNDS",
+          "value": 3.64,
+          "provenance_locator": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "parser_confidence": 0.88,
+          "raw": {
+            "provider": "fred",
+            "series_id": "FEDFUNDS",
+            "realtime_start": "2026-05-28",
+            "realtime_end": "2026-05-28"
+          }
+        },
+        {
+          "fact_id": "fact_7fd72e052a00",
+          "source_type": "regulator_exchange",
+          "authority_tier": "T2",
+          "license_tag": "third_party_restricted",
+          "entity_id": "CIK0000789019",
+          "ticker": "MSFT",
+          "cik": null,
+          "lei": null,
+          "report_period": null,
+          "filing_date": null,
+          "observation_date": "2026-02-01",
+          "vintage_date": "2026-05-28",
+          "unit": null,
+          "currency": null,
+          "fact_name": "FEDFUNDS",
+          "value": 3.64,
+          "provenance_locator": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "parser_confidence": 0.88,
+          "raw": {
+            "provider": "fred",
+            "series_id": "FEDFUNDS",
+            "realtime_start": "2026-05-28",
+            "realtime_end": "2026-05-28"
+          }
+        }
+      ],
+      "entity_resolution": {
+        "ticker": "MSFT",
+        "entity_id": "CIK0000789019",
+        "cik": "0000789019",
+        "lei": null,
+        "figi": null,
+        "confidence": 0.85,
+        "sources": [
+          "SEC",
+          "evidence_entity_match"
+        ],
+        "issues": []
+      },
+      "audit_trace": {
+        "trace_id": "trace_a7c08e01f574",
+        "created_at": "2026-05-28T17:00:51+00:00",
+        "replayable_inputs": {
+          "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year.",
+          "ticker": "MSFT",
+          "as_of_date": "2026-04-29",
+          "search_result_urls": [
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+            "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+            "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+            "https://fred.stlouisfed.org/series/FEDFUNDS"
+          ]
+        },
+        "events": [
+          {
+            "step": "retrieve",
+            "status": "ok",
+            "summary": "Retrieved 4 candidate source(s).",
+            "inputs": {},
+            "outputs": {
+              "urls": [
+                "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+                "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+                "https://fred.stlouisfed.org/series/FEDFUNDS"
+              ]
+            }
+          },
+          {
+            "step": "extract_evidence",
+            "status": "ok",
+            "summary": "Built 4 normalized evidence object(s).",
+            "inputs": {},
+            "outputs": {
+              "domains": [
+                "data.sec.gov",
+                "fred.stlouisfed.org",
+                "sec.gov"
+              ]
+            }
+          },
+          {
+            "step": "resolve_entity",
+            "status": "ok",
+            "summary": "Resolved entity as CIK0000789019.",
+            "inputs": {},
+            "outputs": {
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "confidence": 0.85,
+              "issues": []
+            }
+          },
+          {
+            "step": "canonicalize_facts",
+            "status": "ok",
+            "summary": "Created 29 canonical fact(s).",
+            "inputs": {},
+            "outputs": {
+              "fact_ids": [
+                "fact_9012f3c22deb",
+                "fact_1a43e7a6c53d",
+                "fact_29319f03679d",
+                "fact_895f0c6dd684",
+                "fact_fb0dc5c8b2ba",
+                "fact_2b5e18d734b7",
+                "fact_d3824b9d3e45",
+                "fact_7e487f6bb144",
+                "fact_fea16c0ac7f7",
+                "fact_faac81d8c39f",
+                "fact_cc140a5f7fe6",
+                "fact_2c424a89e97c",
+                "fact_f25307ab1456",
+                "fact_6b287abaaaca",
+                "fact_545e2bce5b35",
+                "fact_64b1e399b9ea",
+                "fact_ddfc8b43db87",
+                "fact_56a70a87907c",
+                "fact_8c917f62943d",
+                "fact_1c097faf65f4"
+              ]
+            }
+          },
+          {
+            "step": "verify_atomic_claims",
+            "status": "review",
+            "summary": "Verified 3 atomic claim(s).",
+            "inputs": {},
+            "outputs": {
+              "verdicts": {
+                "claim_1": "partially_supported",
+                "claim_2": "insufficient",
+                "claim_3": "partially_supported"
+              },
+              "review_reasons": {
+                "claim_1": [
+                  "ambiguous_unit_currency_or_period"
+                ],
+                "claim_2": [
+                  "no_official_primary_source",
+                  "low_retrieval_sufficiency",
+                  "ambiguous_unit_currency_or_period"
+                ],
+                "claim_3": [
+                  "ambiguous_unit_currency_or_period"
+                ]
+              }
+            }
+          }
+        ],
+        "source_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: sec_recent_filings: 2 result(s)",
+          "claim_3: sec_company_facts: 1 result(s)",
+          "claim_3: sec_recent_filings: 2 result(s)",
+          "claim_3: fred: 1 result(s)"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "title": "SEC Company Facts for MSFT",
+          "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-31: 81273000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 77673000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-06-30: 281724000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 70066000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-31: 69632000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 65585000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-06-30: 245122000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-31: 61858000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2010-12-31: 19953000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2010-09-30: 16195000000 (form 10-Q); Revenues (USD) for fiscal year ending 2010-06-30: 62484000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-06-30: 16039000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-03-31: 14503000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2009-12-31: 19022000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2009-09-30: 12920000000 (form 10-Q); Revenues (USD) for fiscal year ending 2009-06-30: 58437000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 26819000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 28918000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 24538000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-06-30: 89950000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 23317000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 23212000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-12-31: 25826000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-09-30: 21928000000 (form 10-Q)",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "data.sec.gov",
+          "published_at": "2026-01-28",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.779,
+          "relevance_score": 0.459,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.25,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "SEC filing/regulatory source",
+            "91 days old",
+            "claim numbers were not found in evidence",
+            "token overlap=0.07",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "different domains and title text",
+            "different domains and title text",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "title": "SEC 10-Q filing for MSFT",
+          "text": "MSFT filed form 10-Q on 2026-04-29.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-04-29",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.98,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.65,
+          "notes": [
+            "SEC filing/regulatory source",
+            "0 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "same canonical domain",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+          "title": "SEC 8-K filing for MSFT",
+          "text": "MSFT filed form 8-K on 2026-04-29.",
+          "source_type": "sec_filing",
+          "source_tier": "T1",
+          "domain": "sec.gov",
+          "published_at": "2026-04-29",
+          "license_tag": "public_official",
+          "is_official_primary": true,
+          "source_authority": 1.0,
+          "recency_score": 0.98,
+          "relevance_score": 0.4,
+          "entity_match_score": 0.9,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.65,
+          "notes": [
+            "SEC filing/regulatory source",
+            "0 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type",
+            "different domains and title text"
+          ]
+        },
+        {
+          "url": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "title": "FRED macro series FEDFUNDS",
+          "text": "2026-04-01: 3.64; 2026-03-01: 3.64; 2026-02-01: 3.64",
+          "source_type": "regulator_exchange",
+          "source_tier": "T2",
+          "domain": "fred.stlouisfed.org",
+          "published_at": "2026-04-01",
+          "license_tag": "third_party_restricted",
+          "is_official_primary": true,
+          "source_authority": 0.88,
+          "recency_score": 0.926,
+          "relevance_score": 0.2,
+          "entity_match_score": 0.45,
+          "numeric_consistency_score": 0.72,
+          "support_label": "not_enough_info",
+          "support_score": 0.309,
+          "reasoning_quality_score": 0.55,
+          "independence_score": 0.85,
+          "notes": [
+            "Federal Reserve economic data",
+            "28 days old",
+            "partially matched numeric values: 2026",
+            "token overlap=0.00",
+            "weak lexical support",
+            "reasoning quality is secondary for factual claim type"
+          ]
+        }
+      ],
+      "risk_flags": [
+        "human_review_required"
+      ],
+      "mode": "agentic",
+      "metadata": {
+        "classification_signals": [
+          "financial metric",
+          "macro or market metric",
+          "numeric change",
+          "reported period"
+        ],
+        "needs_decomposition": true,
+        "search_notes": [
+          "claim_1: sec_company_facts: 1 result(s)",
+          "claim_2: sec_recent_filings: 2 result(s)",
+          "claim_3: sec_company_facts: 1 result(s)",
+          "claim_3: sec_recent_filings: 2 result(s)",
+          "claim_3: fred: 1 result(s)"
+        ],
+        "extraction_notes": [],
+        "time_context": {
+          "effective_as_of_date": "2026-04-29",
+          "user_as_of_date": "2026-04-29",
+          "event_date": "2026-03-31",
+          "publication_date": null,
+          "source": "user_as_of_date",
+          "confidence": 1.0,
+          "notes": [
+            "absolute_date_detected"
+          ]
+        },
+        "claim_time_contexts": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+            "as_of_date": "2026-03-31",
+            "time_context": {
+              "effective_as_of_date": "2026-03-31",
+              "user_as_of_date": null,
+              "event_date": "2026-03-31",
+              "publication_date": null,
+              "source": "explicit_event_date",
+              "confidence": 0.95,
+              "notes": [
+                "absolute_date_detected"
+              ]
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Operating income was $38.4 billion, up 20%",
+            "as_of_date": "2026-04-29",
+            "time_context": {
+              "effective_as_of_date": "2026-04-29",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year",
+            "as_of_date": "2026-04-29",
+            "time_context": {
+              "effective_as_of_date": "2026-04-29",
+              "user_as_of_date": null,
+              "event_date": null,
+              "publication_date": null,
+              "source": "anchor_date",
+              "confidence": 0.55,
+              "notes": []
+            },
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ]
+          }
+        ],
+        "claim_retrievals": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+            "as_of_date": "2026-03-31",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Operating income was $38.4 billion, up 20%",
+            "as_of_date": "2026-04-29",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [
+              "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+              "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm"
+            ],
+            "method": "per_claim_retrieval"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year",
+            "as_of_date": "2026-04-29",
+            "selected_providers": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [
+              "https://fred.stlouisfed.org/series/FEDFUNDS"
+            ],
+            "method": "per_claim_retrieval"
+          }
+        ],
+        "evidence_coverage": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 1,
+            "added_urls": [
+              "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "partially_supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "evidence_attached"
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Operating income was $38.4 billion, up 20%",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "retrieved_count": 2,
+            "added_urls": [
+              "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+              "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm"
+            ],
+            "evidence_url_count": 0,
+            "has_relevant_evidence": false,
+            "verdict": "insufficient",
+            "human_review_required": true,
+            "review_reasons": [
+              "no_official_primary_source",
+              "low_retrieval_sufficiency",
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "retrieved_but_not_relevant"
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year",
+            "fact_checkable": true,
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ],
+            "retrieved_count": 4,
+            "added_urls": [
+              "https://fred.stlouisfed.org/series/FEDFUNDS"
+            ],
+            "evidence_url_count": 1,
+            "has_relevant_evidence": true,
+            "verdict": "partially_supported",
+            "human_review_required": true,
+            "review_reasons": [
+              "ambiguous_unit_currency_or_period"
+            ],
+            "closure_status": "evidence_attached"
+          }
+        ],
+        "retrieval_budget": 24,
+        "source_selection": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Operating income was $38.4 billion, up 20%",
+            "detected_asset_classes": [],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 3.85,
+                "detected_asset_classes": []
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": []
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 2,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year",
+            "detected_asset_classes": [
+              "single_name_equity"
+            ],
+            "candidates": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik",
+                  "metric_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 4.85,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "authority_tier": "T1",
+                "license_tag": "public_official",
+                "is_official_primary": true,
+                "brief_description": "Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.",
+                "detail_available": true,
+                "required_inputs": [
+                  "ticker_or_cik"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 2.5,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "fred",
+                "name": "FRED Macro Series",
+                "authority_tier": "T2",
+                "license_tag": "third_party_restricted",
+                "is_official_primary": true,
+                "brief_description": "St. Louis Fed FRED/ALFRED economic time-series API for macro observations and vintage-aware checks.",
+                "detail_available": true,
+                "required_inputs": [
+                  "series_hint"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 1.35,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              },
+              {
+                "source_id": "serper_web",
+                "name": "Web Search",
+                "authority_tier": "T4",
+                "license_tag": "unknown",
+                "is_official_primary": false,
+                "brief_description": "Supplemental web search for discovery when official structured APIs cannot directly answer a claim.",
+                "detail_available": true,
+                "required_inputs": [
+                  "query"
+                ],
+                "adapter_status": "implemented",
+                "is_runtime_selectable": true,
+                "candidate_score": 1.0,
+                "detected_asset_classes": [
+                  "single_name_equity"
+                ]
+              }
+            ],
+            "disclosure_stages": {
+              "stage_1": "brief_candidate_cards",
+              "stage_1_includes_planned_sources": false,
+              "stage_1_candidate_count": 4,
+              "stage_1_selected_sources": [
+                "sec_company_facts",
+                "sec_recent_filings",
+                "fred"
+              ],
+              "stage_2": "details_for_selected_sources",
+              "stage_2_loaded_source_ids": [
+                "sec_company_facts",
+                "sec_recent_filings",
+                "fred"
+              ],
+              "stage_2_loaded_detail_files": [
+                "sec_company_facts.md",
+                "sec_recent_filings.md",
+                "fred.md"
+              ]
+            },
+            "selected_source_details": [
+              {
+                "source_id": "sec_company_facts",
+                "name": "SEC Company Facts",
+                "detail_file": "sec_company_facts.md",
+                "detail_markdown": "# SEC Company Facts\n\nSource id: sec_company_facts\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that company submissions and extracted XBRL data are available through RESTful JSON APIs on data.sec.gov.\n- Company Facts is the SEC endpoint family for normalized XBRL facts by CIK.\n- It is the default primary evidence source for US public-company financial-statement metric claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT` to a descriptive contact string and use it on every SEC request.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`; match the uppercase `ticker` and keep `cik_str`.\n- Data endpoint: `GET https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json`.\n- Request parameters: none beyond the CIK path. Apply `as_of_date` inside the adapter by ignoring facts whose `filed` date is after the article/time context.\n- Response schema: `facts -> {taxonomy} -> {concept} -> units -> {unit}[]`; fact rows expose `val`, `start`, `end`, `filed`, `form`, `frame`, `accn`, and sometimes dimensional metadata.\n- Naming rules: map claim language to `SEC_CONCEPTS` first, then allow concept-name fuzzy matching only for clearly related financial-statement terms. Do not use EPS/revenue facts for product-market, supply-chain, price, or quote claims.\n- Adapter output: return the matched concept/unit/period rows plus CIK and source URL; mark human review when unit, fiscal period, restatement/amendment, or concept mapping is ambiguous.\n\nUse for:\n- US public-company reported financial statement facts extracted from XBRL.\n- Numeric checks for revenue, net income, EPS, assets, debt, cash flow, shares, and other taxonomy-backed facts.\n- Comparisons across periods when period, unit, accession number, and filing date can be preserved.\n\nDo not use for:\n- Management explanation claims that require MD&A wording or narrative attribution.\n- Earnings-call transcript, sell-side estimate, news, or market-price claims.\n- Custom non-standard company metrics unless the concept mapping is explicitly confirmed.\n\nImportant metadata:\n- Preserve CIK, taxonomy, concept/tag, unit, value, start/end/instant period, form, filing date, frame, accession number, and source URL.\n- Treat amended/restated filings or duplicate values for the same period as human-review triggers unless the parser can choose the correct accession deterministically.\n- SEC access should use a descriptive User-Agent and respect fair-access limits.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC XBRL numeric company facts.\n- Load this detail only for company financial statement metric claims.\n- Prefer this source over vendor fundamentals when the claim is about reported historical financials."
+              },
+              {
+                "source_id": "sec_recent_filings",
+                "name": "SEC Recent Filings",
+                "detail_file": "sec_recent_filings.md",
+                "detail_markdown": "# SEC Recent Filings\n\nSource id: sec_recent_filings\nOfficial docs: https://www.sec.gov/edgar/sec-api-documentation\nEndpoint family: https://data.sec.gov/submissions/CIK##########.json\nAuthority tier: T1 official primary\nLicense tag: public_official\n\nOfficial description summary:\n- SEC developer resources state that EDGAR provides comprehensive access to filings and that company submissions are available through RESTful JSON APIs on data.sec.gov.\n- Recent submissions expose filing history, form types, accession numbers, filing dates, and primary document references.\n- It is the default primary source for filing-context and disclosure-document claims.\n\nAPI playbook:\n- Auth/env: no API key. Set `SEC_USER_AGENT`; never use anonymous/default scraper headers in production.\n- Identity step: resolve ticker to CIK with `GET https://www.sec.gov/files/company_tickers.json`.\n- Data endpoint: `GET https://data.sec.gov/submissions/CIK{cik:010d}.json`.\n- Response schema: `filings.recent` contains parallel arrays including `form`, `filingDate`, `reportDate`, `accessionNumber`, `primaryDocument`, and `primaryDocDescription`.\n- Document URL rule: build archive URLs as `https://www.sec.gov/Archives/edgar/data/{cik}/{accession_without_dashes}/{primaryDocument}`.\n- Filtering rules: prefer 10-K/10-Q/8-K for current adapter output; apply `as_of_date` by excluding filings after the article/time context.\n- Adapter output: return filing type/date/link snippets. Use this for disclosure context and route to filing text/HTML parsing if the claim needs exact narrative wording.\n\nUse for:\n- Official filing history, filing dates, form types, accession numbers, and document links.\n- Finding relevant 10-K, 10-Q, 8-K, 20-F, 40-F, 6-K, and related disclosure context.\n- Narrative or event claims where the next step is to inspect filing text, exhibits, MD&A, risk factors, buyback tables, or management wording.\n\nDo not use for:\n- Macro series values, market prices, or legal-entity LEI resolution.\n- Numeric financial-statement checks when Company Facts already exposes the relevant XBRL fact.\n\nImportant metadata:\n- Preserve CIK, company name, ticker, exchange, form type, filing date, report date, accession number, primary document, and SEC archive URL.\n- Treat amended filings, missing document links, or ambiguous form selection as human-review triggers.\n- Combine with SEC Company Facts for numeric verification and with web search only as supplemental discovery.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers official SEC filing history and disclosure context.\n- Load this detail when a claim mentions filings, events, management explanation, buybacks, guidance, or a need for official document links."
+              },
+              {
+                "source_id": "fred",
+                "name": "FRED Macro Series",
+                "detail_file": "fred.md",
+                "detail_markdown": "# FRED / ALFRED\n\nSource id: fred\nOfficial docs: https://fred.stlouisfed.org/docs/api/fred/\nObservations docs: https://fred.stlouisfed.org/docs/api/fred/series_observations.html\nAuthority tier: T2 official/statistical primary for macro verification\nLicense tag: third_party_restricted\n\nOfficial description summary:\n- FRED API v1 lets programs retrieve economic data from FRED and ALFRED by source, release, category, series, tags, and observations.\n- FRED API v2 supports bulk retrieval for all series on a release and the entire release history.\n- ALFRED vintage/real-time-period fields are important for checking what was known at a historical date.\n\nAPI playbook:\n- Auth/env: requires `FRED_API_KEY`.\n- Observations endpoint: `GET https://api.stlouisfed.org/fred/series/observations`.\n- Required params: `series_id`, `api_key`, `file_type=json`. Current adapter also sends `sort_order=desc` and `limit=3`.\n- Time alignment: when article context has an as-of date, send `observation_end=YYYY-MM-DD`; for vintage checks add ALFRED real-time params in a future adapter expansion.\n- Response schema: top-level `observations[]` with `date`, `value`, `realtime_start`, and `realtime_end`.\n- Naming rules: map claim text to known `FRED_SERIES` IDs such as `SOFR`, `DGS2`, `DGS10`, `DGS30`, `FEDFUNDS`, `PCEPI`, `PCEPILFE`, `PAYEMS`, `UNRATE`, `BAMLH0A0HYM2`, `BAMLC0A0CM`, `DCOILWTICO`, `DCOILBRENTEU`, `GOLDAMGBD228NLBM`, `DEXUSEU`, `DEXJPUS`, `DEXUSUK`, `DEXCAUS`, `DEXCHUS`, `DEXUSAL`, and `DTWEXBGS`.\n- Adapter output: return the latest aligned observations and the FRED series page URL; prefer BLS/BEA/EIA direct APIs when the claim explicitly needs the original publishing agency.\n\nUse for:\n- US and global macroeconomic time-series checks available through FRED.\n- CPI, PCE/core PCE, GDP, payrolls, unemployment, SOFR, policy rates, Treasury yields, HY/IG OAS, WTI/Brent, gold, major FX, dollar-index proxy, monetary aggregates, and release-level economic data.\n- Vintage-aware checks through ALFRED-compatible real-time periods and vintage dates.\n\nDo not use for:\n- Company-specific financial statements, issuer identity, or SEC filing facts.\n- Claims whose exact official source is outside FRED and where a direct agency API is already available and required.\n\nImportant metadata:\n- Preserve series_id, observation date, realtime_start, realtime_end, vintage date if supplied, units, frequency, aggregation method, and source/release metadata.\n- If a claim is time-sensitive, ask whether current latest value or as-known-on vintage value is needed.\n- Treat missing API key, missing vintage date, or revised observations as uncertainty/human-review signals.\n\nProgressive-disclosure guidance:\n- First-pass card should only say this source covers macro time series and vintage-aware observations.\n- Load this detail for inflation, rates, GDP, unemployment, yields, and other economic series claims."
+              }
+            ],
+            "selected_sources": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ],
+            "selected_provider_names": [
+              "sec_company_facts",
+              "sec_recent_filings",
+              "fred"
+            ],
+            "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+            "confidence": 0.62,
+            "needs_cross_check": true,
+            "method": "deterministic_fallback+detail_loaded",
+            "policy_notes": []
+          }
+        ],
+        "selected_providers": [
+          "sec_company_facts",
+          "sec_recent_filings",
+          "fred"
+        ],
+        "source_routes": [
+          {
+            "claim_id": "claim_1",
+            "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_2",
+            "claim": "Operating income was $38.4 billion, up 20%",
+            "official_only": true,
+            "asset_classes": [],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          },
+          {
+            "claim_id": "claim_3",
+            "claim": "Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year",
+            "official_only": true,
+            "asset_classes": [
+              "single_name_equity"
+            ],
+            "routes": [
+              "sec_company_facts",
+              "sec_recent_filings"
+            ],
+            "reasons": [
+              "company financial statement claim"
+            ]
+          }
+        ],
+        "preprocessing": {
+          "changed": false,
+          "original_length": 252,
+          "cleaned_length": 252,
+          "original_line_count": 1,
+          "kept_line_count": 1,
+          "removed_line_count": 0,
+          "removed_examples": [],
+          "notes": [],
+          "cleaned_statement": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year."
+        },
+        "original_claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year.",
+        "agentic_search_plan": [
+          "MSFT \"Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year.\" SEC 10-Q 10-K",
+          "MSFT earnings release revenue EPS investor relations",
+          "MSFT company facts SEC revenue earnings",
+          "MSFT Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year. correction restatement contradiction",
+          "MSFT Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year. SEC filing official source"
+        ]
+      },
+      "evidence_provenance": [
+        {
+          "title": "SEC Company Facts for MSFT",
+          "domain": "data.sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-01-28",
+          "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+          "used_by_claims": [
+            "claim_1",
+            "claim_3"
+          ]
+        },
+        {
+          "title": "SEC 10-Q filing for MSFT",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-29",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "used_by_claims": []
+        },
+        {
+          "title": "SEC 8-K filing for MSFT",
+          "domain": "sec.gov",
+          "source_tier": "T1",
+          "is_official_primary": true,
+          "license_tag": "public_official",
+          "published_at": "2026-04-29",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+          "used_by_claims": []
+        },
+        {
+          "title": "FRED macro series FEDFUNDS",
+          "domain": "fred.stlouisfed.org",
+          "source_tier": "T2",
+          "is_official_primary": true,
+          "license_tag": "third_party_restricted",
+          "published_at": "2026-04-01",
+          "url": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "used_by_claims": []
+        }
+      ],
+      "claim_explanations": [
+        {
+          "claim_id": "claim_1",
+          "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+          "verdict": "partially_supported",
+          "confidence": 0.729,
+          "summary": "The claim is marked `partially_supported` based on SEC Company Facts for MSFT with confidence 0.73.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T1.",
+          "main_evidence": {
+            "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+            "title": "SEC Company Facts for MSFT",
+            "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-31: 81273000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 77673000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-06-30: 281724000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 70066000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-31: 69632000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 65585000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-06-30: 245122000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-31: 61858000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2010-12-31: 19953000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2010-09-30: 16195000000 (form 10-Q); Revenues (USD) for fiscal year ending 2010-06-30: 62484000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-06-30: 16039000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-03-31: 14503000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2009-12-31: 19022000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2009-09-30: 12920000000 (form 10-Q); Revenues (USD) for fiscal year ending 2009-06-30: 58437000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 26819000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 28918000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 24538000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-06-30: 89950000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 23317000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 23212000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-12-31: 25826000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-09-30: 21928000000 (form 10-Q)",
+            "source_type": "sec_filing",
+            "source_tier": "T1",
+            "domain": "data.sec.gov",
+            "published_at": "2026-01-28",
+            "license_tag": "public_official",
+            "is_official_primary": true,
+            "source_authority": 1.0,
+            "recency_score": 0.779,
+            "relevance_score": 0.459,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.25,
+            "support_label": "not_enough_info",
+            "support_score": 0.309,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "SEC filing/regulatory source",
+              "91 days old",
+              "claim numbers were not found in evidence",
+              "token overlap=0.07",
+              "weak lexical support",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text",
+              "different domains and title text",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim."
+          ]
+        },
+        {
+          "claim_id": "claim_2",
+          "claim": "Operating income was $38.4 billion, up 20%",
+          "verdict": "insufficient",
+          "confidence": 0.148,
+          "summary": "The claim is marked `insufficient` based on available evidence with confidence 0.15.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "No direct evidence was linked to this claim.",
+          "main_evidence": null,
+          "caveats": [
+            "Human review is recommended for this claim.",
+            "no_evidence",
+            "No claim-linked evidence was available."
+          ]
+        },
+        {
+          "claim_id": "claim_3",
+          "claim": "Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year",
+          "verdict": "partially_supported",
+          "confidence": 0.729,
+          "summary": "The claim is marked `partially_supported` based on SEC Company Facts for MSFT with confidence 0.73.",
+          "numeric_summary": "No deterministic numeric derivation was attached to this claim.",
+          "source_summary": "The main evidence is official primary evidence with source tier T1.",
+          "main_evidence": {
+            "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+            "title": "SEC Company Facts for MSFT",
+            "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-31: 81273000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 77673000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-06-30: 281724000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 70066000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-31: 69632000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 65585000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-06-30: 245122000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-03-31: 61858000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2010-12-31: 19953000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2010-09-30: 16195000000 (form 10-Q); Revenues (USD) for fiscal year ending 2010-06-30: 62484000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-06-30: 16039000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-03-31: 14503000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2009-12-31: 19022000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2009-09-30: 12920000000 (form 10-Q); Revenues (USD) for fiscal year ending 2009-06-30: 58437000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 26819000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 28918000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 24538000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-06-30: 89950000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 23317000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 23212000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-12-31: 25826000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-09-30: 21928000000 (form 10-Q)",
+            "source_type": "sec_filing",
+            "source_tier": "T1",
+            "domain": "data.sec.gov",
+            "published_at": "2026-01-28",
+            "license_tag": "public_official",
+            "is_official_primary": true,
+            "source_authority": 1.0,
+            "recency_score": 0.779,
+            "relevance_score": 0.459,
+            "entity_match_score": 0.9,
+            "numeric_consistency_score": 0.25,
+            "support_label": "not_enough_info",
+            "support_score": 0.309,
+            "reasoning_quality_score": 0.55,
+            "independence_score": 0.85,
+            "notes": [
+              "SEC filing/regulatory source",
+              "91 days old",
+              "claim numbers were not found in evidence",
+              "token overlap=0.07",
+              "weak lexical support",
+              "reasoning quality is secondary for factual claim type",
+              "different domains and title text",
+              "different domains and title text",
+              "different domains and title text"
+            ]
+          },
+          "caveats": [
+            "Human review is recommended for this claim."
+          ]
+        }
+      ],
+      "source_selection_debug": [
+        {
+          "claim_id": "claim_1",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_2",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        },
+        {
+          "claim_id": "claim_3",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings",
+            "fred"
+          ],
+          "rationale": "Selected top source-catalog candidates by keyword coverage and source policy.",
+          "method": "deterministic_fallback+detail_loaded",
+          "official_first_policy": "passed"
+        }
+      ],
+      "audit_export": {
+        "trace_id": "trace_a7c08e01f574",
+        "event_count": 5,
+        "failed_steps": [],
+        "download_ready": true
+      }
+    }
+  ],
+  "errors": [],
+  "coverage_summary": {
+    "entities": [
+      {
+        "label": "Microsoft Corporation (MSFT)",
+        "name": "Microsoft Corporation",
+        "ticker": "MSFT",
+        "symbol": "MSFT",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "fully_verified_entities": [
+      {
+        "label": "Microsoft Corporation (MSFT)",
+        "name": "Microsoft Corporation",
+        "ticker": "MSFT",
+        "symbol": "MSFT",
+        "asset_class": "single_name_equity",
+        "verification_status": "fully_verified",
+        "reason": "Public-company verification path was run for this entity."
+      }
+    ],
+    "detected_only_entities": [],
+    "unsupported_asset_classes": [],
+    "notes": []
+  },
+  "report_markdown": "# Credence Verification Report\n\n## Bottom Line\n\nChecked 3 fact-checkable claims across 1 entity. 3 claims need human review.\n\n## MSFT\n\n- **Partially consistent.** Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Evidence: T1 SEC Company Facts for MSFT (data.sec.gov). Needs human review: the unit, currency, or period is ambiguous.\n- **Insufficient evidence.** Operating income was $38.4 billion, up 20%. Reason: No direct evidence was linked to this claim. Needs human review: no official primary source was found, retrieved evidence is limited.\n- **Partially consistent.** Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year. Evidence: T1 SEC Company Facts for MSFT (data.sec.gov). Needs human review: the unit, currency, or period is ambiguous.\n",
+  "agent_trace": {
+    "run_id": "agent_1af2b30d2e74",
+    "created_at": "2026-05-28T17:00:47+00:00",
+    "provider": "none",
+    "model": null,
+    "tool_profile": "agent_core",
+    "instructions_hash": "7ec762e1afaf1f300d5c4bc4f7445b71992257f422694c1400a2cc37c1faea5b",
+    "tool_calls": [
+      {
+        "call_id": "fallback_0_690b069a",
+        "turn_index": 0,
+        "tool_name": "extract_entities",
+        "arguments": {
+          "memo": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 33,
+        "output_preview": "{\"asset_classes\": [\"single_name_equity\"], \"asset_groups\": {\"single_name_equity\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0000789019\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Microsoft Corporation\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"MSFT\", \"ticker\": \"MSFT\"}]}, \"entities\": [{\"asset_class\": \"single_name_equity\", \"cik\": \"0000789019\", \"confidence\": 0.86, \"entity_type\": \"public_company\", \"exchange\": \"Nasdaq\", \"name\": \"Microsoft Corporation\", \"reason\": \"\", \"source\": \"known_alias+sec_company_tickers_exchange\", \"symbol\": \"MSFT\", \"ticker\": \"MSFT\"}], \"method\": \"heuristic\", \"non_equity_entities\": [], \"notes\": [\"filtered_ambiguous_ticker:AI\", \"ticker_universe_source:.cache/financial_credibility/company_ticke",
+        "output_hash": "4f3755d71638fa38a7658170351afde7c90f319bb5d84d5ff1455633d5daa317"
+      },
+      {
+        "call_id": "fallback_1_3c75cfa2",
+        "turn_index": 1,
+        "tool_name": "decompose_claims",
+        "arguments": {
+          "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year. Operating income was $38.4 billion, up 20%. Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year."
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 0,
+        "output_preview": "{\"claims\": [{\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_2\", \"classification_confidence\": 0.66, \"signals\": [\"numeric change\"], \"text\": \"Operating income was $38.4 billion, up 20%\"}, {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_3\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"macro or market metric\", \"numeric change\", \"reported period\"], \"text\": \"Microsoft said its AI business surpassed a $37 billion annual revenue run rate, up 123% year over year\"}]}",
+        "output_hash": "466a2f3817fcbdc888eeef7c2e855cd656a5aa56258d1ec5871de794be10aefa"
+      },
+      {
+        "call_id": "fallback_2_e874c787",
+        "turn_index": 2,
+        "tool_name": "select_sources",
+        "arguments": {
+          "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year"
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 10,
+        "output_preview": "{\"selections\": [{\"candidates\": [{\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC extracted XBRL company facts for US public-company reported financial statement metrics.\", \"candidate_score\": 4.85, \"detail_available\": true, \"detected_asset_classes\": [\"single_name_equity\"], \"is_official_primary\": true, \"is_runtime_selectable\": true, \"license_tag\": \"public_official\", \"name\": \"SEC Company Facts\", \"required_inputs\": [\"ticker_or_cik\", \"metric_hint\"], \"source_id\": \"sec_company_facts\"}, {\"adapter_status\": \"implemented\", \"authority_tier\": \"T1\", \"brief_description\": \"Official SEC submissions feed and filing metadata for 10-K, 10-Q, 8-K, and related disclosure context.\", \"candidate_score\": 2.5, \"detail_available\": true, \"detected_asset_classes\": [\"single_na",
+        "output_hash": "e665577ea962ab0c4c83b569d92ee2425f31b355620470ec38b52986bc4d4a2a"
+      },
+      {
+        "call_id": "fallback_3_ddc91aea",
+        "turn_index": 3,
+        "tool_name": "retrieve_evidence",
+        "arguments": {
+          "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+          "ticker": "MSFT",
+          "as_of_date": "2026-04-29",
+          "selected_sources": [
+            "sec_company_facts",
+            "sec_recent_filings"
+          ],
+          "prefetched_results": null
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 950,
+        "output_preview": "{\"argument_type\": \"metric_fact\", \"classification\": {\"argument_type\": \"metric_fact\", \"confidence\": 0.95, \"needs_decomposition\": false, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"]}, \"evidence\": [{\"domain\": \"data.sec.gov\", \"entity_match_score\": 0.9, \"independence_score\": 0.0, \"is_official_primary\": true, \"license_tag\": \"public_official\", \"notes\": [\"SEC filing/regulatory source\", \"0 days old\", \"partially matched numeric values: 2026\"], \"numeric_consistency_score\": 0.72, \"published_at\": \"2026-04-29\", \"reasoning_quality_score\": 0.0, \"recency_score\": 0.98, \"relevance_score\": 0.521, \"source_authority\": 1.0, \"source_tier\": \"T1\", \"source_type\": \"sec_filing\", \"support_label\": \"not_enough_info\", \"support_score\": 0.0, \"text\": \"RevenueFromContractWithCustomerExcludingAssessedTax",
+        "output_hash": "3a2efa01010fccdc7b7f8f919d3f558ce5ff3c4990885bbbe93fd8b54cb34aa7"
+      },
+      {
+        "call_id": "fallback_4_5e66e378",
+        "turn_index": 4,
+        "tool_name": "get_canonical_facts",
+        "arguments": {
+          "ticker": "MSFT",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "title": "SEC Company Facts for MSFT",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2026-03-31: 82886000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-31: 81273000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 77673000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-06-30: 281724000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 70066000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-31: 69632000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 65585000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-06-30: 245122000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-12-31: 19953000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2010-09-30: 16195000000 (form 10-Q); Revenues (USD) for fiscal year ending 2010-06-30: 62484000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-06-30: 16039000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-03-31: 14503000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2009-12-31: 19022000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2009-09-30: 12920000000 (form 10-Q); Revenues (USD) for fiscal year ending 2009-06-30: 58437000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 26819000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 28918000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 24538000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-06-30: 89950000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 23317000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 23212000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-12-31: 25826000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-09-30: 21928000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-29",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.521,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+              "title": "SEC 10-Q filing for MSFT",
+              "text": "MSFT filed form 10-Q on 2026-04-29.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-29",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+              "title": "SEC 8-K filing for MSFT",
+              "text": "MSFT filed form 8-K on 2026-04-29.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-29",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 3,
+        "output_preview": "{\"canonical_facts\": [{\"authority_tier\": \"T1\", \"cik\": \"0000789019\", \"currency\": \"USD\", \"entity_id\": \"CIK0000789019\", \"fact_id\": \"fact_cce291106b3f\", \"fact_name\": \"RevenueFromContractWithCustomerExcludingAssessedTax\", \"filing_date\": \"2026-04-29\", \"lei\": null, \"license_tag\": \"public_official\", \"observation_date\": \"2026-03-31\", \"parser_confidence\": 0.88, \"provenance_locator\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json\", \"raw\": {\"form\": \"10-Q\", \"period_kind\": \"fiscal quarter\", \"provider\": \"sec_company_facts\"}, \"report_period\": \"2026-03-31\", \"source_type\": \"sec_filing\", \"ticker\": \"MSFT\", \"unit\": \"USD\", \"value\": 82886000000, \"vintage_date\": null}, {\"authority_tier\": \"T1\", \"cik\": \"0000789019\", \"currency\": \"USD\", \"entity_id\": \"CIK0000789019\", \"fact_id\": \"fact_d99260529314\", \"fac",
+        "output_hash": "f12c807d5dab305437d74323722d0997696256125e5a2d0c6efbea1df1b35b91"
+      },
+      {
+        "call_id": "fallback_5_d8be8bbb",
+        "turn_index": 5,
+        "tool_name": "verify_atomic_claim",
+        "arguments": {
+          "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+          "ticker": "MSFT",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "title": "SEC Company Facts for MSFT",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2026-03-31: 82886000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-31: 81273000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 77673000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-06-30: 281724000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 70066000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-31: 69632000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 65585000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-06-30: 245122000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-12-31: 19953000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2010-09-30: 16195000000 (form 10-Q); Revenues (USD) for fiscal year ending 2010-06-30: 62484000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-06-30: 16039000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-03-31: 14503000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2009-12-31: 19022000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2009-09-30: 12920000000 (form 10-Q); Revenues (USD) for fiscal year ending 2009-06-30: 58437000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 26819000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 28918000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 24538000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-06-30: 89950000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 23317000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 23212000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-12-31: 25826000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-09-30: 21928000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-29",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.521,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+              "title": "SEC 10-Q filing for MSFT",
+              "text": "MSFT filed form 10-Q on 2026-04-29.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-29",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+              "title": "SEC 8-K filing for MSFT",
+              "text": "MSFT filed form 8-K on 2026-04-29.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-29",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_cce291106b3f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2026-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2026-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 82886000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d99260529314",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2025-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2025-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 81273000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0226533154d3",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 77673000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a9d6d3f9e3fa",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 281724000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2225a5ecb4a2",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 70066000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_00239a1ecf1c",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2024-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2024-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 69632000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_4a69b2ec2f4a",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 65585000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ae3506200037",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 245122000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_7592103d397b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 19953000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_7a779417dd56",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 16195000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_10d1f56f1f84",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 62484000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_9876190a7636",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 16039000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1319d3d52186",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 14503000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_caff92542a53",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2009-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2009-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 19022000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_bca784d74e7e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2009-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2009-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 12920000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_e43f6110478a",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2009-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2009-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 58437000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_70df0582c945",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 26819000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_3494610566ce",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 28918000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0a15ff5ab8ab",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 24538000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_7a54d3c91571",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 89950000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0591abca8ede",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 23317000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_09a4014dd90d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 23212000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_39a1427cb748",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 25826000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_65dcb52eecd8",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2016-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2016-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 21928000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ac054161ff63",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-29",
+              "observation_date": "2026-04-29",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 10-Q filing for MSFT",
+              "value": "10",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_3306dbc1ac0f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-29",
+              "observation_date": "2026-04-29",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for MSFT",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 5,
+        "output_preview": "{\"atomic_claims\": [{\"atomic_claim\": {\"argument_type\": \"metric_fact\", \"claim_id\": \"claim_1\", \"classification_confidence\": 0.95, \"signals\": [\"financial metric\", \"numeric change\", \"reported period\"], \"text\": \"Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year\"}, \"canonical_fact_ids\": [\"fact_7592103d397b\", \"fact_7a779417dd56\", \"fact_10d1f56f1f84\", \"fact_9876190a7636\", \"fact_1319d3d52186\", \"fact_caff92542a53\", \"fact_bca784d74e7e\", \"fact_e43f6110478a\"], \"confidence_components\": {\"cross_source_consistency\": 0.55, \"entity_match\": 0.9, \"final_confidence\": 0.827, \"numeric_exactness\": 0.64, \"parser_confidence\": 0.88, \"retrieval_sufficiency\": 0.82, \"source_authority\": 1.0, \"time_alignment\": 0.98}, \"evidence_keys\": [\"T1:data.sec.gov:2026-04-29\"], \"ev",
+        "output_hash": "37a2cea8257a9b3bb3e1e8be496a54f5368d6f8021c4ebd79a90dd25b9969bdb"
+      },
+      {
+        "call_id": "fallback_6_9d83345a",
+        "turn_index": 6,
+        "tool_name": "build_audit_trace",
+        "arguments": {
+          "claim": "Microsoft reported revenue of $82.9 billion for the quarter ended March 31, 2026, up 18% year over year",
+          "ticker": "MSFT",
+          "as_of_date": "2026-04-29",
+          "evidence": [
+            {
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "title": "SEC Company Facts for MSFT",
+              "text": "RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2026-03-31: 82886000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-12-31: 81273000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-09-30: 77673000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2025-06-30: 281724000000 (form 10-K); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2025-03-31: 70066000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-12-31: 69632000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal quarter ending 2024-09-30: 65585000000 (form 10-Q); RevenueFromContractWithCustomerExcludingAssessedTax (USD) for fiscal year ending 2024-06-30: 245122000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-12-31: 19953000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2010-09-30: 16195000000 (form 10-Q); Revenues (USD) for fiscal year ending 2010-06-30: 62484000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-06-30: 16039000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2010-03-31: 14503000000 (form 10-K); Revenues (USD) for fiscal quarter ending 2009-12-31: 19022000000 (form 10-Q); Revenues (USD) for fiscal quarter ending 2009-09-30: 12920000000 (form 10-Q); Revenues (USD) for fiscal year ending 2009-06-30: 58437000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2018-03-31: 26819000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-12-31: 28918000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2017-09-30: 24538000000 (form 10-Q); SalesRevenueNet (USD) for fiscal year ending 2017-06-30: 89950000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-06-30: 23317000000 (form 10-K); SalesRevenueNet (USD) for fiscal quarter ending 2017-03-31: 23212000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-12-31: 25826000000 (form 10-Q); SalesRevenueNet (USD) for fiscal quarter ending 2016-09-30: 21928000000 (form 10-Q)",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "data.sec.gov",
+              "published_at": "2026-04-29",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.521,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+              "title": "SEC 10-Q filing for MSFT",
+              "text": "MSFT filed form 10-Q on 2026-04-29.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-29",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            },
+            {
+              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+              "title": "SEC 8-K filing for MSFT",
+              "text": "MSFT filed form 8-K on 2026-04-29.",
+              "source_type": "sec_filing",
+              "source_tier": "T1",
+              "domain": "sec.gov",
+              "published_at": "2026-04-29",
+              "license_tag": "public_official",
+              "is_official_primary": true,
+              "source_authority": 1.0,
+              "recency_score": 0.98,
+              "relevance_score": 0.4,
+              "entity_match_score": 0.9,
+              "numeric_consistency_score": 0.72,
+              "support_label": "not_enough_info",
+              "support_score": 0.0,
+              "reasoning_quality_score": 0.0,
+              "independence_score": 0.0,
+              "notes": [
+                "SEC filing/regulatory source",
+                "0 days old",
+                "partially matched numeric values: 2026"
+              ]
+            }
+          ],
+          "canonical_facts": [
+            {
+              "fact_id": "fact_cce291106b3f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2026-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2026-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 82886000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_d99260529314",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2025-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2025-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 81273000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0226533154d3",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2025-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2025-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 77673000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_a9d6d3f9e3fa",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2025-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2025-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 281724000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_2225a5ecb4a2",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2025-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2025-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 70066000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_00239a1ecf1c",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2024-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2024-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 69632000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_4a69b2ec2f4a",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2024-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2024-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 65585000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ae3506200037",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2024-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2024-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "RevenueFromContractWithCustomerExcludingAssessedTax",
+              "value": 245122000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_7592103d397b",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 19953000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_7a779417dd56",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 16195000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_10d1f56f1f84",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 62484000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_9876190a7636",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 16039000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_1319d3d52186",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2010-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2010-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 14503000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_caff92542a53",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2009-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2009-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 19022000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_bca784d74e7e",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2009-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2009-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 12920000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_e43f6110478a",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2009-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2009-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "Revenues",
+              "value": 58437000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_70df0582c945",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2018-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2018-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 26819000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_3494610566ce",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 28918000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0a15ff5ab8ab",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 24538000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_7a54d3c91571",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 89950000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal year",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_0591abca8ede",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-06-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-06-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 23317000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-K",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_09a4014dd90d",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2017-03-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2017-03-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 23212000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_39a1427cb748",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2016-12-31",
+              "filing_date": "2026-04-29",
+              "observation_date": "2016-12-31",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 25826000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_65dcb52eecd8",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": "2016-09-30",
+              "filing_date": "2026-04-29",
+              "observation_date": "2016-09-30",
+              "vintage_date": null,
+              "unit": "USD",
+              "currency": "USD",
+              "fact_name": "SalesRevenueNet",
+              "value": 21928000000,
+              "provenance_locator": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+              "parser_confidence": 0.88,
+              "raw": {
+                "form": "10-Q",
+                "period_kind": "fiscal quarter",
+                "provider": "sec_company_facts"
+              }
+            },
+            {
+              "fact_id": "fact_ac054161ff63",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-29",
+              "observation_date": "2026-04-29",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 10-Q filing for MSFT",
+              "value": "10",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            },
+            {
+              "fact_id": "fact_3306dbc1ac0f",
+              "source_type": "sec_filing",
+              "authority_tier": "T1",
+              "license_tag": "public_official",
+              "entity_id": "CIK0000789019",
+              "ticker": "MSFT",
+              "cik": "0000789019",
+              "lei": null,
+              "report_period": null,
+              "filing_date": "2026-04-29",
+              "observation_date": "2026-04-29",
+              "vintage_date": null,
+              "unit": null,
+              "currency": null,
+              "fact_name": "SEC 8-K filing for MSFT",
+              "value": "8",
+              "provenance_locator": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191457/msft-20260429.htm",
+              "parser_confidence": 0.55,
+              "raw": {
+                "domain": "sec.gov"
+              }
+            }
+          ]
+        },
+        "status": "ok",
+        "error": null,
+        "duration_ms": 2,
+        "output_preview": "{\"created_at\": \"2026-05-28T17:00:48+00:00\", \"events\": [{\"inputs\": {}, \"outputs\": {\"urls\": []}, \"status\": \"empty\", \"step\": \"retrieve\", \"summary\": \"Retrieved 0 candidate source(s).\"}, {\"inputs\": {}, \"outputs\": {\"domains\": [\"data.sec.gov\", \"sec.gov\"]}, \"status\": \"ok\", \"step\": \"extract_evidence\", \"summary\": \"Built 3 normalized evidence object(s).\"}, {\"inputs\": {}, \"outputs\": {\"cik\": \"0000789019\", \"confidence\": 0.85, \"issues\": [], \"lei\": null, \"ticker\": \"MSFT\"}, \"status\": \"ok\", \"step\": \"resolve_entity\", \"summary\": \"Resolved entity as CIK0000789019.\"}, {\"inputs\": {}, \"outputs\": {\"fact_ids\": [\"fact_cce291106b3f\", \"fact_d99260529314\", \"fact_0226533154d3\", \"fact_a9d6d3f9e3fa\", \"fact_2225a5ecb4a2\", \"fact_00239a1ecf1c\", \"fact_4a69b2ec2f4a\", \"fact_ae3506200037\", \"fact_7592103d397b\", \"fact_7a779417dd56",
+        "output_hash": "9b759f5c1a20dda0473c3c1c0664a031908331e5858179fb341efce80955457f"
+      }
+    ],
+    "termination_reason": "no_provider_fallback",
+    "notes": [
+      "Used deterministic fallback because no configured LLM provider was available."
+    ]
+  },
+  "audit_report": {
+    "run_id": "agent_1af2b30d2e74",
+    "created_at": "2026-05-28T17:00:51+00:00",
+    "verdict": "review",
+    "score": 0.86,
+    "summary": "Audit review: 1 finding(s) (major=1); score 0.86.",
+    "findings": [
+      {
+        "severity": "major",
+        "category": "coverage",
+        "summary": "Selected sources produced no displayable evidence for this claim.",
+        "affected": "claim_2",
+        "trace_refs": [
+          "sec_company_facts",
+          "sec_recent_filings"
+        ],
+        "recommendation": "Keep the human-review flag, and either add a compatible source/adapter or leave the claim unresolved instead of forcing a verdict."
+      }
+    ]
+  }
+}

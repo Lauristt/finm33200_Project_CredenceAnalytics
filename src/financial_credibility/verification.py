@@ -6,6 +6,7 @@ score in `aggregation.py` by separating the question into interpretable parts.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 import re
 from statistics import mean
 
@@ -19,12 +20,19 @@ from .models import (
     clamp,
 )
 from .rubrics import FACTUAL_TYPES
-from .sources import extract_numbers, extract_substantive_numbers
+from .sources import extract_numbers, extract_substantive_number_spans
+
+
+@dataclass(frozen=True)
+class _ClaimNumber:
+    value: str
+    role: str = "core"
 
 
 def verify_numeric_claim(claim: str, evidence: list[Evidence], judge=None) -> VerificationCheck:
     """Verify numeric claims with fuzzy local matching first, then optional LLM fallback."""
-    claim_numbers = _material_claim_numbers(claim)
+    claim_number_items = _material_claim_number_items(claim)
+    claim_numbers = [item.value for item in claim_number_items]
     if not claim_numbers:
         return VerificationCheck(
             check_type="numeric_check",
@@ -44,28 +52,42 @@ def verify_numeric_claim(claim: str, evidence: list[Evidence], judge=None) -> Ve
             method="fuzzy_local",
         )
 
+    core_numbers = [item.value for item in claim_number_items if item.role == "core"]
+    contextual_numbers = [item.value for item in claim_number_items if item.role != "core"]
     matches = _fuzzy_numeric_matches(claim_numbers, evidence)
-    if len(matches) == len(claim_numbers):
+    matched_claim_numbers = {claim_num for claim_num, _, _ in matches}
+    unmatched_core = [claim_num for claim_num in core_numbers if claim_num not in matched_claim_numbers]
+    unmatched_contextual = [claim_num for claim_num in contextual_numbers if claim_num not in matched_claim_numbers]
+    matched_core_count = len([value for value in core_numbers if value in matched_claim_numbers])
+    core_coverage = matched_core_count / max(len(core_numbers), 1)
+
+    if len(matches) == len(claim_numbers) or (core_numbers and not unmatched_core):
         urls = sorted({url for _, _, url in matches})
+        issues = [f"matched {claim_num} with {evidence_num}" for claim_num, evidence_num, _ in matches]
+        if unmatched_contextual:
+            issues.append(f"contextual forward-looking numbers not required for core verification: {', '.join(unmatched_contextual)}")
         return VerificationCheck(
             check_type="numeric_check",
             verdict=VerificationVerdict.VERIFIED.value,
-            confidence=0.90,
-            summary="All material numeric values in the claim were matched directly in the evidence.",
+            confidence=0.86 if unmatched_contextual else 0.90,
+            summary=(
+                "All core numeric values in the claim were matched directly in the evidence."
+                if contextual_numbers
+                else "All material numeric values in the claim were matched directly in the evidence."
+            ),
             evidence_urls=urls,
-            issues=[f"matched {claim_num} with {evidence_num}" for claim_num, evidence_num, _ in matches],
+            issues=issues,
             method="fuzzy_local",
         )
 
     if matches:
-        matched_claim_numbers = {claim_num for claim_num, _, _ in matches}
         unmatched = [claim_num for claim_num in claim_numbers if claim_num not in matched_claim_numbers]
         urls = sorted({url for _, _, url in matches})
         return VerificationCheck(
             check_type="numeric_check",
             verdict=VerificationVerdict.PARTIALLY_VERIFIED.value,
-            confidence=0.62,
-            summary="Only some material numeric values in the claim were matched directly in the evidence.",
+            confidence=round(clamp(0.56 + 0.24 * core_coverage + 0.04 * bool(contextual_numbers)), 3),
+            summary="Some core numeric values in the claim were matched directly in the evidence.",
             evidence_urls=urls,
             issues=[
                 *[f"matched {claim_num} with {evidence_num}" for claim_num, evidence_num, _ in matches],
@@ -245,17 +267,68 @@ def _fuzzy_numeric_matches(claim_numbers: list[str], evidence: list[Evidence]) -
     return matches
 
 
-def _material_claim_numbers(claim: str) -> list[str]:
-    """Keep amounts, percentages, and large values; drop period labels like Q1/FY2027."""
-    material = []
-    for value in extract_substantive_numbers(claim):
+def _material_claim_number_items(claim: str) -> list[_ClaimNumber]:
+    """Keep strict fact numbers separate from forward-looking context values."""
+    items = []
+    for value, start, end in extract_substantive_number_spans(claim):
+        if _is_asset_label_number(claim, value, start, end):
+            continue
+        if _is_calendar_date_component_number(claim, value, start, end):
+            continue
         if _is_period_marker_number(value):
             continue
-        material.append(value)
-    return material
+        role = "context" if _is_contextual_forward_number(claim, value) else "core"
+        items.append(_ClaimNumber(value=value, role=role))
+    return items
+
+
+def _material_claim_numbers(claim: str) -> list[str]:
+    """Keep amounts, percentages, and large values; drop period labels like Q1/FY2027."""
+    return [item.value for item in _material_claim_number_items(claim)]
+
+
+def _is_contextual_forward_number(claim: str, value: str) -> bool:
+    """Do not let forecast/guidance/target numbers veto reported-fact checks."""
+    lower = claim.lower()
+    needle = value.lower()
+    index = lower.find(needle)
+    if index >= 0:
+        start = max([0, *[match.end() for match in re.finditer(r"[;,.。；]|(?:\s+(?:and|while|whereas|but)\s+)", lower[:index])]])
+        following = lower[index + len(needle) :]
+        next_split = re.search(r"[;,.。；]|(?:\s+(?:and|while|whereas|but)\s+)", following)
+        end = index + len(needle) + (next_split.start() if next_split else min(len(following), 80))
+        window = lower[start:end]
+    else:
+        compact_needle = re.sub(r"[\s,$]", "", needle)
+        compact_claim = re.sub(r"[\s,$]", "", lower)
+        index = compact_claim.find(compact_needle)
+        if index < 0:
+            return False
+        window = compact_claim[max(0, index - 80) : index + len(compact_needle) + 80]
+    return bool(
+        re.search(
+            r"\b(expect|expects|expected|forecast|forecasts|project|projected|guidance|outlook|"
+            r"estimate|estimates|estimated|target|price target|consensus|will|would|could|should|next quarter|next year)\b",
+            window,
+        )
+    )
 
 
 def _is_period_marker_number(value: str) -> bool:
+    compact = re.sub(r"[\s,$,]", "", value.lower())
+    if re.search(r"(%|percent|bps|billion|million|trillion|bn|mn|亿|万|美元)", compact):
+        return False
+    if "." in compact:
+        return False
+    try:
+        numeric = int(float(compact))
+    except ValueError:
+        return False
+    return 1900 <= numeric <= 2100 or 1 <= numeric <= 4
+
+
+def _is_calendar_date_component_number(claim: str, value: str, start: int, end: int) -> bool:
+    """Drop day/month numbers that are only part of a reporting date."""
     compact = re.sub(r"[\s,$,]", "", value.lower())
     if re.search(r"(%|percent|bps|billion|million|trillion|bn|mn|亿|万|美元)", compact):
         return False
@@ -263,7 +336,53 @@ def _is_period_marker_number(value: str) -> bool:
         numeric = int(float(compact))
     except ValueError:
         return False
-    return 1900 <= numeric <= 2100 or 1 <= numeric <= 4
+    if not 1 <= numeric <= 31:
+        return False
+
+    lower = claim.lower()
+    left = lower[max(0, start - 24) : start]
+    right = lower[end : min(len(lower), end + 24)]
+    month = (
+        r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|"
+        r"jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?"
+    )
+    if re.search(rf"\b(?:{month})\s*$", left) and re.match(r"\s*,?\s*(?:19|20)?\d{2}\b", right):
+        return True
+    if re.match(rf"\s*(?:{month})\b", right):
+        return True
+    if (left.endswith(("/", "-")) or right.startswith(("/", "-"))) and re.search(r"(?:19|20)\d{2}", left + right):
+        return True
+    return False
+
+
+def _is_asset_label_number(claim: str, value: str, start: int, end: int) -> bool:
+    """Drop numbers that are part of instrument names, such as S&P 500."""
+    scalar = _numeric_scalar(value)
+    if not scalar:
+        return False
+    number, kind = scalar
+    if kind != "plain" or int(number) != number:
+        return False
+
+    lower = claim.lower()
+    left = lower[max(0, start - 36) : start]
+    right = lower[end : min(len(lower), end + 36)]
+    index_name_before = re.search(
+        r"(?:"
+        r"s\s*&\s*p|s\s+and\s+p|standard\s*&\s*poor'?s|standard\s+and\s+poor'?s|sp|"
+        r"russell|nasdaq|nikkei|ftse|stoxx|euro\s+stoxx|dax|cac|csi|asx|tsx|kospi|"
+        r"hang\s+seng|msci|wilshire|smallcap|midcap"
+        r")\s*$",
+        left,
+    )
+    if not index_name_before:
+        return False
+    return bool(
+        re.match(
+            r"\s*(?:index|composite|average|futures?|etf|fund|of\s+smaller\s+companies)?\b",
+            right,
+        )
+    )
 
 
 def _numbers_match(left: str, right: str) -> bool:
@@ -281,6 +400,11 @@ def _numbers_match(left: str, right: str) -> bool:
         return False
     if left_number == right_number:
         return True
+    if left_kind == right_kind == "percent":
+        pct_point_diff = abs(left_number - right_number)
+        return pct_point_diff <= max(0.15, 0.03 * max(abs(left_number), abs(right_number), 1.0))
+    if left_kind == right_kind == "bps":
+        return abs(left_number - right_number) <= max(1.0, 0.02 * max(abs(left_number), abs(right_number), 1.0))
     scale = max(abs(left_number), abs(right_number), 1.0)
     tolerance = 0.012 if scale >= 1_000_000 else 0.001
     return abs(left_number - right_number) / scale <= tolerance

@@ -12,6 +12,14 @@ Official description summary:
 - The API is useful for querying reports, facts, taxonomy metadata, dimensions, and filing attributes from SEC and FERC XBRL filings.
 - It should be treated as an enhanced access layer over filings, not as a replacement for preserving original SEC/FERC provenance.
 
+API playbook:
+- Auth/env: XBRL US access is credentialed/licensed. Add explicit env vars before production use, for example `XBRL_US_API_KEY` or the provider-approved auth pair required by the account.
+- Discovery endpoints: use XBRL US API docs/sample queries to identify report/fact endpoints for the relevant filing universe; keep report/fact query params in the trace.
+- Query shape: start from entity identifiers such as CIK/ticker plus concept/taxonomy hints, then constrain by form, fiscal period, filing date, and dimensions.
+- Response schema: preserve report identifiers, entity identifiers, concept, taxonomy, unit, period, value, dimensions, accession/report URL, and filing metadata.
+- Naming rules: only use after SEC Company Facts is insufficient, especially when the claim needs dimensions, taxonomy relationships, or FERC filings.
+- Adapter output: this source should return provenance-rich fact rows and the original filing URL; never present XBRL US rows as primary SEC evidence without SEC/FERC provenance.
+
 Use for:
 - High-granularity XBRL fact search when SEC Company Facts is too coarse.
 - Cross-company comparisons that need dimensions, taxonomy metadata, report IDs, accession numbers, or period metadata.
@@ -30,4 +38,3 @@ Important metadata:
 Progressive-disclosure guidance:
 - First-pass card should only say this source is a taxonomy-aware XBRL fact API over public filings.
 - Load this detail when a claim asks for dimensional XBRL, taxonomy-aware comparisons, FERC filings, or SEC facts not exposed cleanly by Company Facts.
-

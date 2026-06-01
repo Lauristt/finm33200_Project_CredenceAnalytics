@@ -12,18 +12,24 @@ from .demo_presets import available_demo_presets, load_demo_preset, normalize_de
 from .errors import error_payload
 from .modes.agentic import AgenticCredibilityRunner
 from .models import to_plain
-from .reporting import build_verification_report
+from .multi_tool_agent import MultiToolAgentRunner
+from .tool_profiles import tool_profile_names
 from .toolkit import FinancialCredibilityToolkit
 
 
 def main() -> None:
-    """Parse CLI args, run strict or agentic mode, and print JSON output."""
+    """Parse CLI args, run strict, agentic, or multi-tool mode, and print JSON output."""
     parser = argparse.ArgumentParser(description="Build a financial credibility evidence pack.")
     parser.add_argument("claim", nargs="?", help="Financial claim to assess.")
     parser.add_argument("--ticker", help="US equity ticker, e.g. AAPL.")
     parser.add_argument("--as-of-date", default=None, help="Assessment date, YYYY-MM-DD.")
     parser.add_argument("--max-sources", type=int, default=8)
-    parser.add_argument("--mode", choices=["strict", "agentic"], default="agentic")
+    parser.add_argument("--mode", choices=["strict", "agentic", "multi-tool", "multi_tool"], default="agentic")
+    parser.add_argument("--tool-profile", choices=tool_profile_names(), default="agent_core")
+    parser.add_argument("--agent-max-steps", type=int, default=12)
+    parser.add_argument("--audit", dest="audit", action="store_true", default=True, help="Attach an audit report in multi-tool mode.")
+    parser.add_argument("--no-audit", dest="audit", action="store_false", help="Disable the multi-tool audit report.")
+    parser.add_argument("--agent-trace-out", default=None, help="Write multi-tool agent trace JSON to this path.")
     parser.add_argument("--env-file", default=None)
     parser.add_argument("--prefetched-json", default=None, help="JSON file containing search results.")
     parser.add_argument("--demo-preset", choices=available_demo_presets(), default=None, help="Use a deterministic prefetched evidence preset.")
@@ -55,6 +61,8 @@ def main() -> None:
 
         if not args.claim:
             parser.error("claim is required unless --batch-input is provided")
+        if not args.ticker and args.mode not in {"multi-tool", "multi_tool"}:
+            parser.error("--ticker is required unless --batch-input or --mode multi-tool is provided")
 
         prefetched = _prefetched_results(args.prefetched_json, args.demo_preset)
         demo_preset = normalize_demo_preset(args.demo_preset)
@@ -78,6 +86,23 @@ def main() -> None:
                 "claim and --ticker are required for single-claim CLI mode; "
                 "use --auto-report to run memo-level entity extraction, or --batch-input for CSV batch mode"
             )
+
+        if args.mode in {"multi-tool", "multi_tool"}:
+            result = MultiToolAgentRunner(config).run(
+                memo=args.claim,
+                tickers=[args.ticker] if args.ticker else [],
+                as_of_date=args.as_of_date,
+                max_steps=args.agent_max_steps,
+                tool_profile=args.tool_profile,
+                audit=args.audit,
+                prefetched_results=prefetched,
+            )
+            if args.agent_trace_out:
+                _write_json(args.agent_trace_out, result.get("agent_trace", {}), indent)
+            if args.audit_out:
+                _write_json(args.audit_out, result.get("audit_report", {}), indent)
+            print(json.dumps(result, ensure_ascii=False, indent=indent))
+            return
 
         toolkit = FinancialCredibilityToolkit(config)
         if args.mode == "agentic":

@@ -194,6 +194,8 @@ class AtomicClaim:
     argument_type: ArgumentType
     classification_confidence: float
     signals: list[str] = field(default_factory=list)
+    context_window: str = ""
+    context_window_source: str = "claim"
 
 
 @dataclass(frozen=True)
@@ -306,6 +308,98 @@ class AuditTrace:
             trace_id=trace_id,
             created_at=datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
             replayable_inputs=replayable_inputs,
+        )
+
+
+@dataclass(frozen=True)
+class AgentToolCall:
+    """One model-selected or fallback tool execution in a multi-tool agent run."""
+
+    call_id: str
+    turn_index: int
+    tool_name: str
+    arguments: dict[str, Any] = field(default_factory=dict)
+    status: str = "ok"
+    error: str | None = None
+    duration_ms: int = 0
+    output_preview: str = ""
+    output_hash: str = ""
+
+
+@dataclass(frozen=True)
+class AgentTrace:
+    """Trace of model/tool behavior, separate from verification replay state."""
+
+    run_id: str
+    created_at: str
+    provider: str
+    model: str | None
+    tool_profile: str
+    instructions_hash: str
+    tool_calls: list[AgentToolCall] = field(default_factory=list)
+    termination_reason: str = ""
+    notes: list[str] = field(default_factory=list)
+
+    @classmethod
+    def create(
+        cls,
+        run_id: str,
+        provider: str,
+        model: str | None,
+        tool_profile: str,
+        instructions_hash: str,
+        notes: list[str] | None = None,
+    ) -> "AgentTrace":
+        return cls(
+            run_id=run_id,
+            created_at=datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            provider=provider,
+            model=model,
+            tool_profile=tool_profile,
+            instructions_hash=instructions_hash,
+            notes=notes or [],
+        )
+
+
+@dataclass(frozen=True)
+class AuditFinding:
+    """One audit finding produced by a verification-chain reviewer."""
+
+    severity: str
+    category: str
+    summary: str
+    affected: str = ""
+    trace_refs: list[str] = field(default_factory=list)
+    recommendation: str = ""
+
+
+@dataclass(frozen=True)
+class AuditReport:
+    """Audit report for a report payload, evidence pack, or agent trace."""
+
+    run_id: str
+    created_at: str
+    verdict: str
+    score: float
+    summary: str
+    findings: list[AuditFinding] = field(default_factory=list)
+
+    @classmethod
+    def create(
+        cls,
+        run_id: str,
+        verdict: str,
+        score: float,
+        summary: str,
+        findings: list[AuditFinding],
+    ) -> "AuditReport":
+        return cls(
+            run_id=run_id,
+            created_at=datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            verdict=verdict,
+            score=score,
+            summary=summary,
+            findings=findings,
         )
 
 

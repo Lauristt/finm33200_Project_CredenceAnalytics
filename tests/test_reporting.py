@@ -8,6 +8,12 @@ class ReportingTests(unittest.TestCase):
     def test_infer_tickers_from_memo(self):
         self.assertEqual(infer_tickers("Apple ($AAPL) and Microsoft (MSFT) revenue grew."), ["AAPL", "MSFT"])
 
+    def test_infer_tickers_ignores_pm_time_suffix(self):
+        self.assertEqual(infer_tickers("Published 05/20/2026, 04:26 PM"), [])
+
+    def test_infer_tickers_ignores_news_stopwords(self):
+        self.assertEqual(infer_tickers("How major US stock indexes fared Tuesday"), [])
+
     def test_build_report_payload_contains_markdown_and_runs(self):
         progress = []
         payload = build_verification_report(
@@ -38,8 +44,9 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(payload["summary"]["atomic_claim_count"], 1)
         self.assertEqual(payload["summary"]["skipped_claim_count"], 1)
         self.assertIn("Credence Verification Report", payload["report_markdown"])
-        self.assertIn("Not Fact-Checked", payload["report_markdown"])
-        self.assertIn("Agent Trace", payload["report_markdown"])
+        self.assertIn("Bottom Line", payload["report_markdown"])
+        self.assertIn("Not fact-checked", payload["report_markdown"])
+        self.assertNotIn("Agent Trace", payload["report_markdown"])
         self.assertNotIn("Audit trace:", payload["report_markdown"])
         self.assertNotIn("Entity:", payload["report_markdown"])
         self.assertEqual(payload["runs"][0]["ticker"], "AAPL")
@@ -67,16 +74,42 @@ class ReportingTests(unittest.TestCase):
 
         self.assertEqual(payload["input"]["tickers"], ["AAPL"])
         self.assertEqual(payload["input"]["entity_extraction"]["method"], "heuristic")
-        self.assertIn("Detected Asset Classes", payload["report_markdown"])
-        self.assertIn("Single-name equities", payload["report_markdown"])
         self.assertNotIn("Method:", payload["report_markdown"])
-        self.assertIn("Verification Coverage", payload["report_markdown"])
+        self.assertNotIn("Detected Asset Classes", payload["report_markdown"])
+        self.assertNotIn("Verification Coverage", payload["report_markdown"])
         self.assertEqual(payload["coverage_summary"]["fully_verified_entities"][0]["ticker"], "AAPL")
-        self.assertIn("Evidence Provenance", payload["report_markdown"])
-        self.assertIn("Claim Explanations", payload["report_markdown"])
-        self.assertIn("Source Selection Explanation", payload["report_markdown"])
+        self.assertNotIn("Evidence Provenance", payload["report_markdown"])
+        self.assertNotIn("Claim Explanations", payload["report_markdown"])
+        self.assertNotIn("Source Selection Explanation", payload["report_markdown"])
         self.assertTrue(payload["runs"][0]["source_selection_debug"])
         self.assertTrue(payload["runs"][0]["audit_export"]["download_ready"])
+
+    def test_build_report_uses_source_seed_without_replacing_live_retrieval_contract(self):
+        payload = build_verification_report(
+            memo=(
+                "Microsoft reported fiscal third-quarter revenue of $82.9 billion for the quarter ended "
+                "March 31, 2026, up 18% year over year."
+            ),
+            tickers=["MSFT"],
+            config=ToolkitConfig(enable_structured_sources=False),
+            as_of_date="2026-04-29",
+            source_results=[
+                {
+                    "title": "Microsoft Cloud and AI Strength Fuels Third Quarter Results",
+                    "url": "https://www.microsoft.com/en-us/investor/earnings/FY-2026-Q3/press-release-webcast",
+                    "snippet": (
+                        "Revenue was $82.9 billion and increased 18% for the quarter ended March 31, 2026."
+                    ),
+                    "published_at": "2026-04-29",
+                    "source": "Microsoft Investor Relations",
+                }
+            ],
+        )
+
+        markdown = payload["report_markdown"]
+        self.assertIn("Consistent", markdown)
+        self.assertIn("microsoft.com", markdown)
+        self.assertIn("The evidence directly matches $82.9 billion and 18%", markdown)
 
     def test_build_report_with_only_non_equity_entities_does_not_force_ticker_run(self):
         payload = build_verification_report(
@@ -87,17 +120,63 @@ class ReportingTests(unittest.TestCase):
             prefetched_results=[],
         )
 
+        # No equity tickers should be in the input.
         self.assertEqual(payload["input"]["tickers"], [])
-        self.assertEqual(payload["runs"], [])
+        # Macro entities (CPI, WTI, EUR/USD) now each get a macro verification
+        # run rather than being silently skipped — confirm at least one run exists
+        # and that all runs carry mode="macro" (no equity ticker runs were created).
+        self.assertTrue(len(payload["runs"]) > 0, "expected macro runs for CPI/WTI/EUR/USD entities")
+        for run in payload["runs"]:
+            self.assertEqual(run.get("mode"), "macro", f"run for {run.get('ticker')} should be mode=macro")
         self.assertEqual(payload["summary"]["asset_class_count"], 3)
         self.assertIn("Macro indicators", payload["report_markdown"])
         self.assertIn("Commodities", payload["report_markdown"])
         self.assertIn("FX", payload["report_markdown"])
-        self.assertIn("Verification Coverage", payload["report_markdown"])
-        self.assertEqual(
-            sorted(payload["coverage_summary"]["unsupported_asset_classes"]),
-            ["commodity", "fx", "macro_indicator"],
+
+    def test_build_report_runs_price_verification_targets_for_equity_indexes(self):
+        payload = build_verification_report(
+            memo=(
+                "How major US stock indexes fared Tuesday 5/26/2026. "
+                "The S&P 500 added 0.6% Tuesday. "
+                "The Nasdaq composite climbed 1.2%. "
+                "The Dow Jones Industrial Average slipped 0.2%. "
+                "The Russell 2000 index rose 1.8%."
+            ),
+            tickers=[],
+            config=ToolkitConfig(),
+            as_of_date="2026-05-27",
+            prefetched_results=[],
         )
+
+        self.assertEqual(payload["input"]["tickers"], ["SPX", "NDQ", "DJIA", "RUT"])
+        self.assertEqual([run["ticker"] for run in payload["runs"]], ["SPX", "NDQ", "DJIA", "RUT"])
+        self.assertNotIn("US", payload["input"]["tickers"])
+        self.assertNotIn("THE", payload["input"]["tickers"])
+        statuses = {
+            item["symbol"] or item["ticker"]: item["verification_status"]
+            for item in payload["coverage_summary"]["entities"]
+        }
+        self.assertEqual(statuses["SPX"], "fully_verified")
+        self.assertEqual(statuses["NDQ"], "fully_verified")
+        self.assertEqual(statuses["DJIA"], "fully_verified")
+        self.assertEqual(statuses["RUT"], "fully_verified")
+
+    def test_build_report_infers_event_date_as_retrieval_anchor(self):
+        payload = build_verification_report(
+            memo=(
+                "How major US stock indexes fared Tuesday 5/26/2026. "
+                "Published 05/27/2026, 04:26 PM. "
+                "The S&P 500 added 0.6% Tuesday."
+            ),
+            tickers=[],
+            config=ToolkitConfig(),
+            prefetched_results=[],
+        )
+
+        self.assertEqual(payload["input"]["as_of_date"], "2026-05-26")
+        self.assertEqual(payload["input"]["time_context"]["source"], "explicit_event_date")
+        self.assertTrue(payload["runs"])
+        self.assertEqual(payload["runs"][0]["as_of_date"], "2026-05-26")
 
     def test_auto_extracted_multi_entity_report_scopes_claims(self):
         payload = build_verification_report(
@@ -146,7 +225,7 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(statuses["AAPL"], "fully_verified")
         self.assertEqual(statuses["CPI"], "detected_only")
         self.assertEqual(statuses["WTI"], "detected_only")
-        self.assertIn("Detected-only assets", payload["report_markdown"])
+        self.assertIn("Detected but not fully checked", payload["report_markdown"])
 
     def test_report_renders_human_review_explanations(self):
         payload = build_verification_report(
@@ -165,8 +244,41 @@ class ReportingTests(unittest.TestCase):
             ],
         )
 
-        self.assertIn("Human Review Explanations", payload["report_markdown"])
-        self.assertIn("Recommended action", payload["report_markdown"])
+        self.assertNotIn("Human Review Explanations", payload["report_markdown"])
+        self.assertNotIn("Recommended action", payload["report_markdown"])
+
+    def test_report_explains_insufficient_result_with_linked_evidence(self):
+        markdown = render_markdown_report(
+            {
+                "summary": {"atomic_claim_count": 1, "entity_count": 1, "human_review_count": 1},
+                "runs": [
+                    {
+                        "ticker": "AAPL",
+                        "evidence": [
+                            {
+                                "title": "SEC Company Facts for AAPL",
+                                "url": "https://data.sec.gov/example",
+                                "domain": "data.sec.gov",
+                                "source_tier": "T1",
+                                "is_official_primary": True,
+                            }
+                        ],
+                        "atomic_claims": [
+                            {
+                                "atomic_claim": {"claim_id": "claim_1", "text": "Apple reported revenue of $111.2 billion."},
+                                "verdict": "insufficient",
+                                "evidence_urls": ["https://data.sec.gov/example"],
+                                "review_reasons": ["ambiguous_unit_currency_or_period"],
+                            }
+                        ],
+                        "claim_explanations": [],
+                    }
+                ],
+            }
+        )
+
+        self.assertIn("Evidence was retrieved, but the exact value, unit, or reporting period was not matched clearly.", markdown)
+        self.assertIn("Needs human review", markdown)
 
     def test_sec_evidence_provenance_marks_official_primary(self):
         payload = build_verification_report(
