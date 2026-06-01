@@ -41,7 +41,6 @@ class CliTests(unittest.TestCase):
             fake_result = {"summary": {"total": 1, "succeeded": 1, "failed": 0}, "results": [], "errors": []}
             with (
                 patch("sys.argv", argv),
-                patch("financial_credibility.cli.run_batch", return_value=fake_result),
                 contextlib.redirect_stdout(io.StringIO()),
             ):
                 main()

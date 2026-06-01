@@ -11,6 +11,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from .config import ToolkitConfig
+from .demo_presets import load_demo_preset, normalize_demo_preset
 from .errors import error_payload
 from .reporting import build_verification_report
 
@@ -130,19 +131,29 @@ def _handler(config: ToolkitConfig):
             payload: dict[str, Any],
             progress_callback=None,
         ) -> dict[str, Any]:
-            return build_verification_report(
+            demo_preset = normalize_demo_preset(payload.get("demo_preset") or None)
+            prefetched_results = payload.get("prefetched_results") or load_demo_preset(demo_preset)
+            report = build_verification_report(
                 memo=_statement_from_payload(payload),
                 tickers=_tickers_from_payload(payload),
                 config=config,
                 as_of_date=payload.get("as_of_date") or None,
                 max_sources=int(payload.get("max_sources") or 8),
                 mode=str(payload.get("mode") or "agentic"),
-                prefetched_results=payload.get("prefetched_results") or None,
+                prefetched_results=prefetched_results,
                 progress_callback=progress_callback,
                 tool_profile=str(payload.get("tool_profile") or "agent_core"),
                 agent_max_steps=int(payload.get("agent_max_steps") or 20),
                 audit=bool(payload.get("audit", True)),
             )
+            if demo_preset:
+                report["demo_mode"] = True
+                report["demo_preset"] = demo_preset
+                report["evidence_mode"] = "prefetched"
+                report.setdefault("input", {})["demo_mode"] = True
+                report["input"]["demo_preset"] = demo_preset
+                report["input"]["evidence_mode"] = "prefetched"
+            return report
 
     return CredenceHandler
 
