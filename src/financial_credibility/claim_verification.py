@@ -321,7 +321,10 @@ _RELEVANCE_ALIASES = {
 
 
 def _claim_relevance_tokens(text: str) -> set[str]:
-    tokens = re.findall(r"[a-zA-Z][a-zA-Z0-9]+", text.lower().replace("-", " "))
+    # Split CamelCase XBRL names (e.g. "RevenueFromContract..." → "Revenue From Contract...")
+    # before lowercasing, so long compound identifiers are decomposed into matchable words.
+    expanded = re.sub(r"([a-z])([A-Z])", r"\1 \2", text)
+    tokens = re.findall(r"[a-zA-Z][a-zA-Z0-9]+", expanded.lower().replace("-", " "))
     normalized = set()
     for token in tokens:
         token = _RELEVANCE_ALIASES.get(token, token)

@@ -105,7 +105,48 @@ def _derive_growth(claim: str, facts: list[CanonicalFact]) -> NumericDerivation 
     pairs = _candidate_growth_pairs(numeric_facts)
     if not pairs:
         return None
-    prior, current = pairs[-1]
+
+    # When the claim specifies year-over-year, prefer YoY pairs (~365 days).
+    # When it specifies quarter-over-quarter, prefer QoQ pairs (~91 days).
+    # Otherwise pick the pair whose computed growth is closest to the stated threshold.
+    is_yoy = bool(re.search(r"year[- ]over[- ]year|yoy|同比", claim, re.IGNORECASE))
+    is_qoq = bool(re.search(r"quarter[- ]over[- ]quarter|qoq|环比", claim, re.IGNORECASE))
+    threshold = _claim_threshold(claim, "ratio")
+
+    def _pair_gap_days(pair: tuple[CanonicalFact, CanonicalFact]) -> int:
+        from datetime import date as _date
+        def _pd(s: str | None) -> _date | None:
+            try: return _date.fromisoformat((s or "")[:10])
+            except ValueError: return None
+        p, c = pair
+        pd_ = _pd(p.report_period or p.observation_date)
+        cd_ = _pd(c.report_period or c.observation_date)
+        return (cd_ - pd_).days if pd_ and cd_ else 0
+
+    def _current_period(pair: tuple[CanonicalFact, CanonicalFact]) -> str:
+        return pair[1].report_period or pair[1].observation_date or ""
+
+    if is_yoy:
+        yoy_pairs = [p for p in pairs if 330 <= _pair_gap_days(p) <= 400]
+        if yoy_pairs:
+            yoy_pairs.sort(key=_current_period, reverse=True)  # most recent first
+        pairs = yoy_pairs or pairs
+    elif is_qoq:
+        qoq_pairs = [p for p in pairs if 75 <= _pair_gap_days(p) <= 105]
+        if qoq_pairs:
+            qoq_pairs.sort(key=_current_period, reverse=True)
+        pairs = qoq_pairs or pairs
+    elif threshold is not None:
+        # Pick the pair whose computed growth is closest to the claimed threshold.
+        def _growth(pair: tuple[CanonicalFact, CanonicalFact]) -> float:
+            p, c = pair
+            pv, cv = float(p.value), float(c.value)
+            return (cv - pv) / abs(pv) if pv != 0 else float("inf")
+        pairs = sorted(pairs, key=lambda pr: abs(_growth(pr) - threshold))
+    else:
+        pairs.sort(key=_current_period, reverse=True)  # default: most recent
+
+    prior, current = pairs[0]
     prior_value = float(prior.value)
     current_value = float(current.value)
     if prior_value == 0:
@@ -128,47 +169,126 @@ def _derive_growth(claim: str, facts: list[CanonicalFact]) -> NumericDerivation 
         expression="(current - prior) / abs(prior)",
         inputs={
             "current_fact_id": current.fact_id,
+            "current_period": current.report_period or current.observation_date,
             "current": current_value,
             "prior_fact_id": prior.fact_id,
+            "prior_period": prior.report_period or prior.observation_date,
             "prior": prior_value,
         },
         result=round(result, 6),
         comparator=comparator,
         threshold=round(target, 6) if isinstance(target, float) else 0,
         passed=passed,
-        tolerance=0.0,
-        notes=["growth claim derived from canonical facts"],
+        tolerance=round(_ratio_tolerance(target), 6),
+        notes=[
+            f"YoY/QoQ growth derived from SEC facts: "
+            f"{current_value:,.0f} vs {prior_value:,.0f} = {result*100:.1f}%"
+        ],
     )
 
 
 def _candidate_growth_pairs(facts: list[CanonicalFact]) -> list[tuple[CanonicalFact, CanonicalFact]]:
-    pairs = []
+    """Find (prior, current) pairs suitable for YoY/QoQ growth derivation.
+
+    Groups facts by (concept, period_kind) where period_kind comes from the
+    fact's raw metadata (reliable) or is inferred from the form type, then
+    finds pairs whose report periods are ~1 year apart (330-400 days) for YoY
+    or ~1 quarter apart (75-105 days) for QoQ.
+    """
+    from datetime import date as _date, timedelta as _td
+
+    def _parse_date(s: str | None) -> _date | None:
+        if not s:
+            return None
+        try:
+            return _date.fromisoformat(s[:10])
+        except ValueError:
+            return None
+
+    def _raw_period_kind(fact: CanonicalFact) -> str:
+        raw = fact.raw or {}
+        pk = str(raw.get("period_kind", "")).lower()
+        if "quarter" in pk:
+            return "quarter"
+        if "year" in pk or "annual" in pk:
+            return "annual"
+        form = str(raw.get("form", "")).upper()
+        if "10-Q" in form:
+            return "quarter"
+        if "10-K" in form or "20-F" in form:
+            return "annual"
+        # fall back to legacy Q1/Q2/FY marker scan on report_period
+        upper = (fact.report_period or "").upper()
+        for marker in ("Q1", "Q2", "Q3", "Q4"):
+            if marker in upper:
+                return "quarter"
+        if "FY" in upper:
+            return "annual"
+        return "unknown"
+
     by_concept: dict[tuple[str, str], list[CanonicalFact]] = {}
     for fact in facts:
-        kind = _period_kind(fact.report_period)
-        if not kind:
+        kind = _raw_period_kind(fact)
+        if kind == "unknown":
             continue
         key = (str(fact.fact_name), kind)
         by_concept.setdefault(key, []).append(fact)
+
+    pairs: list[tuple[CanonicalFact, CanonicalFact]] = []
     for grouped in by_concept.values():
-        ordered = sorted(grouped, key=lambda fact: (fact.filing_date or "", fact.report_period or ""))
-        for prior, current in zip(ordered, ordered[1:]):
-            if prior.report_period != current.report_period:
-                pairs.append((prior, current))
+        ordered = sorted(
+            grouped,
+            key=lambda f: (f.report_period or "", f.filing_date or ""),
+        )
+        # Collect YoY (~365 day) and QoQ (~91 day) pairs independently.
+        # We must NOT break on a QoQ hit when scanning for YoY pairs: for a
+        # quarterly series [Q1-25, Q2-25, Q3-25, Q4-25, Q1-26] the first
+        # candidate after Q1-25 is Q2-25 (91 days, QoQ) but Q1-26 (364 days,
+        # YoY) is the pair we actually want for a YoY growth claim.
+        yoy_seen: set[str] = set()   # prior fact_id already matched to a YoY current
+        qoq_seen: set[str] = set()   # prior fact_id already matched to a QoQ current
+        for i, prior in enumerate(ordered):
+            prior_date = _parse_date(prior.report_period or prior.observation_date)
+            if prior_date is None:
+                continue
+            for current in ordered[i + 1:]:
+                current_date = _parse_date(current.report_period or current.observation_date)
+                if current_date is None or current_date <= prior_date:
+                    continue
+                gap = (current_date - prior_date).days
+                if 330 <= gap <= 400 and prior.fact_id not in yoy_seen:
+                    pairs.append((prior, current))
+                    yoy_seen.add(prior.fact_id)
+                    break           # take the closest YoY match per prior
+                if 75 <= gap <= 105 and prior.fact_id not in qoq_seen:
+                    pairs.append((prior, current))
+                    qoq_seen.add(prior.fact_id)
+                    # do NOT break — keep scanning for a YoY match further out
     return pairs
 
 
 def _has_duplicate_period_values(facts: list[CanonicalFact]) -> bool:
-    seen: dict[tuple[str, str], set[float]] = {}
+    """Return True only when the same concept+period+period_kind has conflicting values.
+
+    SEC 10-K filings can report both an annual total and quarterly breakouts under the
+    same end date (e.g. Revenues for 2018-08-30 appears as both fiscal-year and
+    fiscal-quarter rows).  Including period_kind and form in the key prevents those
+    legitimate dual-granularity rows from being treated as ambiguous duplicates.
+    """
+    seen: dict[tuple, set[float]] = {}
     for fact in facts:
         if not fact.fact_name or not fact.report_period or not isinstance(fact.value, (int, float)):
             continue
-        key = (fact.fact_name, fact.report_period)
+        raw = fact.raw or {}
+        period_kind = str(raw.get("period_kind", "")).lower()
+        form = str(raw.get("form", "")).upper()
+        key = (fact.fact_name, fact.report_period, period_kind, form)
         seen.setdefault(key, set()).add(float(fact.value))
     return any(len(values) > 1 for values in seen.values())
 
 
 def _period_kind(period: str | None) -> str | None:
+    """Legacy helper kept for callers outside _candidate_growth_pairs."""
     if not period:
         return None
     upper = period.upper()
@@ -591,7 +711,11 @@ def _is_period_marker(value: str) -> bool:
 
 
 def _is_growth_claim(claim: str) -> bool:
-    return bool(re.search(r"\b(grew|growth|increased|decreased|declined|higher|lower|year over year|yoy|同比)\b", claim, re.IGNORECASE))
+    return bool(re.search(
+        r"\b(grew|growth|increased|decreased|declined|higher|lower|"
+        r"year[- ]over[- ]year|yoy|qoq|quarter[- ]over[- ]quarter|同比|环比)\b",
+        claim, re.IGNORECASE,
+    ))
 
 
 def _expects_positive_growth(claim: str) -> bool:
