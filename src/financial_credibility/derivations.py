@@ -447,8 +447,8 @@ def _extract_claim_anchor_date(claim: str) -> "date | None":
             return _date(year, month, 1)
         except ValueError:
             pass
-    # "Q2 2025" / "Q2FY2025"
-    q = re.search(r"\bq([1-4])\s*(?:fy\s*)?(20\d{2})\b", lower)
+    # "Q2 2025" / "Q2FY2025" / "Q1 fiscal 2025" / "Q1 FY 2025"
+    q = re.search(r"\bq([1-4])\s*(?:fy\s*|fiscal\s*)?(20\d{2})\b", lower)
     if q:
         quarter = int(q.group(1))
         year = int(q.group(2))
@@ -521,11 +521,15 @@ def _derive_ratio(
     result_kind: str,
     notes: list[str],
 ) -> NumericDerivation | None:
-    selected = _latest_complete_period(
+    # Anchor period selection to the date named in the claim (e.g. "Q1 FY2025")
+    # so we don't always fall back to the most recent filing period.
+    claim_anchor = _extract_claim_anchor_date(claim)
+    selected = _latest_complete_period_anchored(
         {
             "numerator": [fact for fact in facts if _fact_matches_aliases(fact, numerator_aliases)],
             "denominator": [fact for fact in facts if _fact_matches_aliases(fact, denominator_aliases)],
-        }
+        },
+        anchor=claim_anchor,
     )
     if not selected:
         return None
@@ -536,7 +540,9 @@ def _derive_ratio(
     if numerator_value is None or denominator_value in {None, 0}:
         return None
     result = numerator_value / denominator_value
-    threshold = _claim_threshold(claim, result_kind)
+    # Pick the threshold closest to the computed result to avoid picking
+    # a YoY-growth percentage (e.g. "4%") when the formula yields ~49%.
+    threshold = _claim_threshold_closest_to(claim, result_kind, result)
     comparator = _claim_comparator(claim) or ("~=" if threshold is not None else None)
     tolerance = _ratio_tolerance(threshold if threshold is not None else result)
     passed = _compare_result(result, threshold, comparator, tolerance) if threshold is not None else None
@@ -722,6 +728,57 @@ def _latest_complete_period(groups: dict[str, list[CanonicalFact]]) -> dict[str,
     return {role: _best_fact(grouped[period][role]) for role in groups}
 
 
+def _latest_complete_period_anchored(
+    groups: dict[str, list[CanonicalFact]],
+    anchor: "date | None" = None,
+) -> dict[str, CanonicalFact] | None:
+    """Like _latest_complete_period but prefers the period closest to `anchor`."""
+    from datetime import date as _date
+    grouped = _facts_by_period(groups)
+    complete_periods = [period for period, values in grouped.items() if all(values.get(role) for role in groups)]
+    if not complete_periods:
+        return None
+    if anchor:
+        def _dist(period_str: str) -> int:
+            try:
+                pd = _date.fromisoformat(period_str[:10])
+                return abs((pd - anchor).days)
+            except (ValueError, AttributeError):
+                return 9999
+        period = min(complete_periods, key=_dist)
+    else:
+        period = sorted(complete_periods, key=lambda item: _period_sort_key(item, grouped[item]), reverse=True)[0]
+    return {role: _best_fact(grouped[period][role]) for role in groups}
+
+
+def _claim_threshold_closest_to(claim: str, result_kind: str, result: float) -> float | None:
+    """Pick the claim percentage whose magnitude is closest to `result`.
+
+    Prevents a YoY-growth percentage like "4%" from being used as the threshold
+    for a GrossProfit/Revenue formula that returns ~49%.
+    """
+    candidates: list[float] = []
+    for raw in extract_substantive_numbers(claim):
+        if _is_period_marker(raw):
+            continue
+        parsed = _parse_number(raw)
+        if not parsed:
+            continue
+        value, number_kind = parsed
+        if result_kind in {"ratio", "plain_ratio"}:
+            if number_kind == "percent":
+                candidates.append(value / 100)
+            elif number_kind == "bps":
+                candidates.append(value / 10_000)
+            elif result_kind == "plain_ratio" and number_kind == "plain":
+                candidates.append(value)
+        elif result_kind == "amount" and number_kind in {"amount", "plain"}:
+            candidates.append(value)
+    if not candidates:
+        return None
+    return min(candidates, key=lambda c: abs(c - result))
+
+
 def _latest_period_with_groups(groups: dict[str, list[CanonicalFact]]) -> dict[str, list[CanonicalFact]] | None:
     grouped = _facts_by_period(groups)
     complete_periods = [period for period, values in grouped.items() if all(values.get(role) for role in groups)]
@@ -833,7 +890,14 @@ def _claim_threshold(claim: str, result_kind: str) -> float | None:
 
 
 def _claim_comparator(claim: str) -> str | None:
-    lower = claim.lower()
+    # Strip YoY/QoQ compound phrases so "year-over-year" doesn't match \bover\b.
+    stripped = re.sub(
+        r"\byear[- ]over[- ]year\b|\bquarter[- ]over[- ]quarter\b|\byoy\b|\bqoq\b",
+        "",
+        claim,
+        flags=re.IGNORECASE,
+    )
+    lower = stripped.lower()
     if re.search(r"\b(at least|more than|greater than|above|over|exceed(?:ed|s)?|higher than)\b|超过|高于|至少", lower):
         return ">="
     if re.search(r"\b(less than|below|under|lower than|no more than|at most)\b|低于|少于|不超过", lower):

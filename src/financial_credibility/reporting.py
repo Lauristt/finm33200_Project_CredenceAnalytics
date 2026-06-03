@@ -9,7 +9,7 @@ from .config import ToolkitConfig
 from .claims import decompose_claims
 from .entity_extraction import extract_entities_from_memo, is_contextual_non_ticker_token
 from .errors import UserFacingError
-from .explanations import build_claim_explanation, explain_review_reasons
+from .explanations import build_claim_explanation, explain_review_reasons, generate_llm_claim_summaries
 from .models import EvidencePack
 from .modes.agentic import AgenticCredibilityRunner
 from .price_history import PRICE_HISTORY_ASSET_CLASSES
@@ -136,7 +136,7 @@ def build_verification_report(
             "runs": [],
             "errors": [],
         }
-        _enhance_payload(payload)
+        _enhance_payload(payload, cfg)
         payload["report_markdown"] = render_markdown_report(payload)
         _emit_progress(
             progress_callback,
@@ -227,7 +227,7 @@ def build_verification_report(
         "runs": runs,
         "errors": errors,
     }
-    _enhance_payload(payload)
+    _enhance_payload(payload, cfg)
     payload["report_markdown"] = render_markdown_report(payload)
     _emit_progress(
         progress_callback,
@@ -296,7 +296,7 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
-def _enhance_payload(payload: dict[str, Any]) -> None:
+def _enhance_payload(payload: dict[str, Any], config: Any = None) -> None:
     """Attach report-layer explainability structures in place."""
     extraction = (payload.get("input") or {}).get("entity_extraction") or {}
     payload["coverage_summary"] = _build_coverage_summary(payload.get("runs", []), extraction)
@@ -310,6 +310,14 @@ def _enhance_payload(payload: dict[str, Any]) -> None:
         ]
         run["source_selection_debug"] = _build_source_selection_debug(run)
         run["audit_export"] = _build_audit_export_summary(run)
+        # Enrich each atomic claim with LLM-generated narrative summaries.
+        if config:
+            all_facts = run.get("canonical_facts") or []
+            for result in run.get("atomic_claims", []):
+                if _is_skipped_result(result):
+                    continue
+                summaries = generate_llm_claim_summaries(result, all_facts, config)
+                result.update(summaries)
 
 
 def _build_coverage_summary(

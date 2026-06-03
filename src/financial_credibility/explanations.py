@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+import urllib.request
 from typing import Any
 
 
@@ -202,3 +204,122 @@ def _user_facing_issue(issue: str) -> str:
     if text == "ticker_only_entity_resolution":
         return "Entity resolution is based mainly on the ticker symbol."
     return text
+
+
+# ---------------------------------------------------------------------------
+# LLM-generated per-claim narrative summaries
+# ---------------------------------------------------------------------------
+
+def generate_llm_claim_summaries(
+    result: dict[str, Any],
+    all_facts: list[dict[str, Any]],
+    config: Any,  # ToolkitConfig — avoid circular import
+) -> dict[str, str]:
+    """Call the LLM to generate natural-language summaries for one atomic claim.
+
+    Returns a dict with keys ``llm_source_summary`` and ``llm_match_summary``.
+    Falls back to empty strings on any error so the UI can fall through to
+    rule-based text.
+    """
+    api_key = getattr(config, "openai_api_key", None)
+    model = getattr(config, "openai_model", None) or "gpt-4o-mini"
+    if not api_key:
+        return {}
+
+    claim_text = (result.get("atomic_claim") or {}).get("text", "")
+    verdict = str(result.get("verdict") or "")
+    nd = result.get("numeric_derivation") or {}
+    issues = [
+        i for i in (result.get("issues") or [])
+        if i and "http error" not in str(i).lower() and "bad request" not in str(i).lower()
+    ]
+
+    # Summarise facts linked to this claim (up to 4)
+    fact_ids = set(result.get("canonical_fact_ids") or [])
+    linked_facts = [f for f in all_facts if f.get("fact_id") in fact_ids][:4]
+    facts_summary = [
+        {
+            "name": f.get("fact_name", ""),
+            "value": f.get("value"),
+            "unit": f.get("unit") or f.get("currency") or "",
+            "period": f.get("report_period") or f.get("observation_date") or "",
+        }
+        for f in linked_facts
+    ]
+
+    # Derivation summary
+    deriv_summary: dict[str, Any] = {}
+    if nd:
+        inp = nd.get("inputs") or {}
+        deriv_summary = {
+            "expression": nd.get("expression"),
+            "result": nd.get("result"),
+            "threshold": nd.get("threshold"),
+            "passed": nd.get("passed"),
+            "period": inp.get("period") or inp.get("fact_period"),
+            "numerator_name": inp.get("numerator_fact_name"),
+            "numerator_value": inp.get("numerator"),
+            "denominator_name": inp.get("denominator_fact_name"),
+            "denominator_value": inp.get("denominator"),
+            "prior": inp.get("prior"),
+            "prior_period": inp.get("prior_period"),
+            "current": inp.get("current"),
+            "current_period": inp.get("current_period"),
+        }
+
+    prompt = {
+        "task": "claim_narrative_summaries",
+        "claim": claim_text,
+        "verdict": verdict,
+        "facts_found": facts_summary,
+        "derivation": deriv_summary,
+        "issues": issues[:3],
+        "instruction": (
+            "Return JSON with two keys:\n"
+            "1. 'source_summary': 1-2 sentences describing what the data source found "
+            "(actual values, metric, period, source name). Be specific with numbers.\n"
+            "2. 'match_summary': 2-3 sentences explaining why the verdict is what it is. "
+            "Show your reasoning: compare actual vs claimed values, note any gaps. "
+            "Do not use generic phrases. Be concise and factual."
+        ),
+    }
+
+    try:
+        body = {
+            "model": model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a financial fact-checking assistant. "
+                        "Given structured verification data, write clear and specific "
+                        "natural-language summaries. Return only valid JSON."
+                    ),
+                },
+                {"role": "user", "content": json.dumps(prompt)},
+            ],
+            "temperature": 0,
+            "response_format": {"type": "json_object"},
+            "max_tokens": 300,
+        }
+        request = urllib.request.Request(
+            "https://api.openai.com/v1/chat/completions",
+            data=json.dumps(body).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        import ssl
+        ctx = ssl.create_default_context()
+        with urllib.request.urlopen(request, timeout=15, context=ctx) as resp:
+            raw = json.loads(resp.read().decode("utf-8"))
+        content = raw["choices"][0]["message"]["content"]
+        data = json.loads(content)
+        return {
+            "llm_source_summary": str(data.get("source_summary") or "").strip(),
+            "llm_match_summary": str(data.get("match_summary") or "").strip(),
+        }
+    except Exception:
+        return {}

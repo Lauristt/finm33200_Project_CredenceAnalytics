@@ -1901,6 +1901,20 @@ HTML = r"""<!doctype html>
     }
 
     function renderSourceSays(source, facts, result) {
+      // LLM-generated summary takes priority when available
+      const llmSummary = result && result.llm_source_summary;
+      if (llmSummary) {
+        const factLines = (facts || []).map(fact => {
+          const value = formatFactValue(fact.value, fact.unit || fact.currency);
+          const period = humanFactPeriod(fact.report_period || fact.observation_date);
+          return `${humanFactName(fact.fact_name || "Fact")}: ${value}${period ? " for " + period : ""}`;
+        });
+        const parts = [`<div>${escapeHtml(llmSummary)}</div>`];
+        if (factLines.length) {
+          parts.push(`<details class="raw-markdown"><summary>Structured values</summary><div>${factLines.map(escapeHtml).join("<br>")}</div></details>`);
+        }
+        return parts.join("<br>");
+      }
       const factLines = (facts || []).map(fact => {
         const value = formatFactValue(fact.value, fact.unit || fact.currency);
         const period = humanFactPeriod(fact.report_period || fact.observation_date);
@@ -2136,8 +2150,13 @@ HTML = r"""<!doctype html>
 
     function consistencySummary(result, allFacts) {
       const verdict = verdictLabel(result.verdict);
-      const issues = result.issues || [];
       const lines = [`<strong>${escapeHtml(verdict)}</strong>`];
+      // LLM-generated match summary takes priority when available
+      if (result.llm_match_summary) {
+        lines.push(escapeHtml(result.llm_match_summary));
+        return lines.join("<br>");
+      }
+      const issues = result.issues || [];
       const numericSummary = naturalNumericSummary(result.numeric_derivation, issues, allFacts);
       if (numericSummary) {
         lines.push(escapeHtml(numericSummary));
