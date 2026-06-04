@@ -238,6 +238,66 @@ def _relative_date_from_text(text: str, anchor: date | None) -> date | None:
     return None
 
 
+def resolve_date_window(
+    text: str,
+    memo_date: str | date | None = None,
+) -> tuple[str, str] | None:
+    """Resolve a relative time expression in *text* to a (start_date, end_date) pair.
+
+    The *memo_date* is the publication or reference date of the surrounding document.
+    Returns ISO strings ``(start_date, end_date)`` or ``None`` if no window is found.
+
+    Supported expressions (case-insensitive):
+      "last week" / "past week"          → 7 days ending on memo_date
+      "last month" / "past month"        → 30 days ending on memo_date
+      "last quarter" / "past quarter"    → 90 days ending on memo_date
+      "last year" / "past year"          → 365 days ending on memo_date
+      "past N days/weeks/months/years"   → N * unit ending on memo_date
+      "year to date" / "YTD"            → Jan 1 of memo_date's year to memo_date
+      "this year"                        → same as YTD
+    """
+    anchor = _parse_date_like(memo_date)
+    if anchor is None:
+        anchor = date.today()
+
+    lower = text.lower()
+
+    # "past / last N days/weeks/months/years"
+    m = re.search(
+        r"\b(?:past|last)\s+(\d+)\s+(day|week|month|year)s?\b",
+        lower,
+    )
+    if m:
+        n = int(m.group(1))
+        unit = m.group(2)
+        delta = {"day": 1, "week": 7, "month": 30, "year": 365}[unit]
+        start = anchor - timedelta(days=n * delta)
+        return start.isoformat(), anchor.isoformat()
+
+    # "last week" / "past week"
+    if re.search(r"\b(?:last|past)\s+week\b", lower):
+        return (anchor - timedelta(days=7)).isoformat(), anchor.isoformat()
+
+    # "last month" / "past month"
+    if re.search(r"\b(?:last|past)\s+month\b", lower):
+        return (anchor - timedelta(days=30)).isoformat(), anchor.isoformat()
+
+    # "last quarter" / "past quarter"
+    if re.search(r"\b(?:last|past)\s+quarter\b", lower):
+        return (anchor - timedelta(days=90)).isoformat(), anchor.isoformat()
+
+    # "last year" / "past year"
+    if re.search(r"\b(?:last|past)\s+year\b", lower):
+        return (anchor - timedelta(days=365)).isoformat(), anchor.isoformat()
+
+    # "year to date" / "YTD" / "this year"
+    if re.search(r"\byear[\s-]to[\s-]date\b|\bytd\b|\bthis year\b", lower):
+        start = date(anchor.year, 1, 1)
+        return start.isoformat(), anchor.isoformat()
+
+    return None
+
+
 def _normalize_year(year: int) -> int:
     if year < 100:
         return 2000 + year if year < 70 else 1900 + year

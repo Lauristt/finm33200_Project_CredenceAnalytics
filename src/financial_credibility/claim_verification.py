@@ -102,6 +102,8 @@ def _claim_verdict(
         VerificationVerdict.INSUFFICIENT.value,
     }:
         return VerificationVerdict.INSUFFICIENT
+    if derivation and derivation.expression == "numeric_match_summary" and derivation.passed is True:
+        return VerificationVerdict.SUPPORTED
     if derivation and derivation.expression == "numeric_match_summary" and derivation.passed is False:
         if logic_verdict == VerificationVerdict.CONTRADICTED.value:
             return VerificationVerdict.CONTRADICTED
@@ -161,11 +163,16 @@ def _numeric_check_with_derivation(
 def _relevant_evidence(atomic_claim: AtomicClaim, evidence: list[Evidence]) -> list[Evidence]:
     """Return only evidence whose text is topically connected to the atomic claim."""
     if needs_historical_price_data(atomic_claim.text):
-        return [
-            item
-            for item in evidence
-            if _is_price_history_evidence(item)
-        ]
+        price_history = [item for item in evidence if _is_price_history_evidence(item)]
+        if price_history:
+            return price_history
+        # No equity OHLC price-history evidence found.  Return only FRED/EIA/BLS
+        # time-series evidence (SourceType.REGULATOR_EXCHANGE) so that macro claims
+        # like "yield edged up" can be matched.  Return an empty list — NOT fall-through
+        # to the score-based path — so that SEC filings and other non-macro sources
+        # don't leak in for equity price claims that happen to have action verbs.
+        from .models import SourceType
+        return [item for item in evidence if getattr(item, "source_type", None) == SourceType.REGULATOR_EXCHANGE]
     metric_terms = _required_metric_terms_for_claim(atomic_claim.text)
     scored = [
         (_text_overlap_hint(atomic_claim.text, item.title + " " + item.text), item)
@@ -317,10 +324,16 @@ _RELEVANCE_ALIASES = {
     "cpus": "cpu",
     "shares": "share",
     "stockpiles": "inventory",
+    "sp500": "spx",
+    "sp1500": "spx",
 }
 
 
 def _claim_relevance_tokens(text: str) -> set[str]:
+    # Normalize compound ticker-like expressions before tokenizing so overlap works.
+    # "S&P 500" → "SP500", "S&P500" → "SP500" (otherwise "&" breaks the token)
+    text = re.sub(r"[Ss]&[Pp]\s*500\b", "SP500", text)
+    text = re.sub(r"[Ss]&[Pp]\s*1500\b", "SP1500", text)
     # Split CamelCase XBRL names (e.g. "RevenueFromContract..." → "Revenue From Contract...")
     # before lowercasing, so long compound identifiers are decomposed into matchable words.
     expanded = re.sub(r"([a-z])([A-Z])", r"\1 \2", text)

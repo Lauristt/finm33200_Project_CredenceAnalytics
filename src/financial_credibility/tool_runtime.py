@@ -44,7 +44,7 @@ from .rubrics import FACTUAL_TYPES
 from .search import SearchClient
 from .source_selection import selected_source_details, select_sources_for_claims as run_select_sources_for_claims
 from .sources import assess_source
-from .time_context import infer_time_context
+from .time_context import infer_time_context, resolve_date_window
 from .tool_registry import get_registered_tool
 from .toolkit import FinancialCredibilityToolkit
 from .verification import verify_logic_claim as run_logic_verification
@@ -110,6 +110,10 @@ def _executors() -> dict[str, ToolExecutor]:
         "summarize_evidence_pack": _execute_summarize_evidence_pack,
         "summarize_audit_report": _execute_summarize_audit_report,
         "review_tool_surface": _execute_review_tool_surface,
+        "resolve_time_window": _execute_resolve_time_window,
+        "fetch_fred_series": _execute_fetch_fred_series,
+        "fetch_macro_indicator": _execute_fetch_macro_indicator,
+        "fetch_index_performance": _execute_fetch_index_performance,
     }
     base.update(_DYNAMIC_EXECUTORS)
     return base
@@ -545,6 +549,168 @@ def _execute_summarize_audit_report(args: dict[str, Any], config: ToolkitConfig)
 
 def _execute_review_tool_surface(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
     return review_tool_surface(args.get("profile"))
+
+
+def _execute_resolve_time_window(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    claim_text = _required_str(args, "claim_text")
+    memo_date = args.get("memo_date")
+    window = resolve_date_window(claim_text, memo_date)
+    if window is None:
+        return {
+            "start_date": None,
+            "end_date": None,
+            "resolved": False,
+            "expression_found": "",
+        }
+    start, end = window
+    import re as _re
+    lower = claim_text.lower()
+    for pattern in [
+        r"\b(?:past|last)\s+\d+\s+(?:day|week|month|year)s?\b",
+        r"\b(?:last|past)\s+(?:week|month|quarter|year)\b",
+        r"\byear[\s-]to[\s-]date\b",
+        r"\bytd\b",
+        r"\bthis year\b",
+    ]:
+        m = _re.search(pattern, lower)
+        if m:
+            expression_found = m.group(0)
+            break
+    else:
+        expression_found = ""
+    return {
+        "start_date": start,
+        "end_date": end,
+        "resolved": True,
+        "expression_found": expression_found,
+    }
+
+
+def _execute_fetch_fred_series(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    series_id = _required_str(args, "series_id").upper()
+    start = _required_str(args, "start_date")
+    end = _required_str(args, "end_date")
+    client = FreeDataSourceClient(config)
+    results = client.fred_series_range(series_id, start_date=start, end_date=end)
+    if not results:
+        return {
+            "series_id": series_id,
+            "start_date": start,
+            "end_date": end,
+            "observation_count": 0,
+            "observations": [],
+            "snippet": "",
+            "source_url": f"https://fred.stlouisfed.org/series/{series_id}",
+            "notes": ["No observations returned. Check series_id and FRED_API_KEY."],
+        }
+    raw = results[0].raw or {}
+    observations = raw.get("observations") or []
+    return {
+        "series_id": series_id,
+        "start_date": start,
+        "end_date": end,
+        "observation_count": len(observations),
+        "observations": observations,
+        "snippet": results[0].snippet,
+        "source_url": results[0].url,
+        "notes": [],
+    }
+
+
+def _execute_fetch_macro_indicator(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    indicator_name = _required_str(args, "indicator_name")
+    start = _required_str(args, "start_date")
+    end = _required_str(args, "end_date")
+    client = FreeDataSourceClient(config)
+    results = client.macro_indicator_range(indicator_name, start_date=start, end_date=end)
+    if not results:
+        return {
+            "indicator_name": indicator_name,
+            "resolved_series_id": "",
+            "start_date": start,
+            "end_date": end,
+            "observation_count": 0,
+            "observations": [],
+            "snippet": "",
+            "source_url": "",
+            "notes": [f"Could not resolve '{indicator_name}' to a FRED series. Check indicator_name or FRED_API_KEY."],
+        }
+    raw = results[0].raw or {}
+    observations = raw.get("observations") or []
+    series_id = raw.get("series_id") or ""
+    return {
+        "indicator_name": indicator_name,
+        "resolved_series_id": series_id,
+        "start_date": start,
+        "end_date": end,
+        "observation_count": len(observations),
+        "observations": observations,
+        "snippet": results[0].snippet,
+        "source_url": results[0].url,
+        "notes": [],
+    }
+
+
+def _execute_fetch_index_performance(args: dict[str, Any], config: ToolkitConfig) -> dict[str, Any]:
+    from .data_sources import FRED_INDEX_PRICE_SERIES
+    index_symbol = _required_str(args, "index_symbol").upper()
+    start = _required_str(args, "start_date")
+    end = _required_str(args, "end_date")
+    mapping = FRED_INDEX_PRICE_SERIES.get(index_symbol)
+    if not mapping:
+        return {
+            "index_symbol": index_symbol,
+            "fred_series_id": "",
+            "start_date": start,
+            "end_date": end,
+            "return_pct": None,
+            "notes": [f"Unknown index symbol '{index_symbol}'. Supported: SPX, NDQ, DJIA."],
+        }
+    fred_series_id, label = mapping
+    client = FreeDataSourceClient(config)
+    results = client.fred_series_range(fred_series_id, start_date=start, end_date=end)
+    if not results:
+        return {
+            "index_symbol": index_symbol,
+            "fred_series_id": fred_series_id,
+            "start_date": start,
+            "end_date": end,
+            "return_pct": None,
+            "notes": [f"No data returned for {fred_series_id}. Check FRED_API_KEY."],
+        }
+    raw = results[0].raw or {}
+    observations = [
+        obs for obs in (raw.get("observations") or [])
+        if obs.get("value") not in (None, "", ".")
+    ]
+    if len(observations) < 2:
+        return {
+            "index_symbol": index_symbol,
+            "fred_series_id": fred_series_id,
+            "start_date": start,
+            "end_date": end,
+            "start_value": float(observations[0]["value"]) if observations else None,
+            "end_value": None,
+            "return_pct": None,
+            "observation_count": len(observations),
+            "source_url": results[0].url,
+            "notes": ["Insufficient observations to compute a return."],
+        }
+    start_val = float(observations[0]["value"])
+    end_val = float(observations[-1]["value"])
+    return_pct = round((end_val - start_val) / start_val * 100, 4) if start_val != 0 else None
+    return {
+        "index_symbol": index_symbol,
+        "fred_series_id": fred_series_id,
+        "start_date": observations[0]["date"],
+        "end_date": observations[-1]["date"],
+        "start_value": start_val,
+        "end_value": end_val,
+        "return_pct": return_pct,
+        "observation_count": len(observations),
+        "source_url": results[0].url,
+        "notes": [],
+    }
 
 
 def _historical_price_payload(

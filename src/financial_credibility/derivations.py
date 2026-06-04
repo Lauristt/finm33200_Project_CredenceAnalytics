@@ -18,13 +18,19 @@ def derive_numeric_check(claim: str, facts: list[CanonicalFact], numeric_check: 
         growth = _derive_growth(claim, facts)
         if growth:
             return growth
+    if not is_growth_claim:
+        # Level check from canonical facts takes priority over LLM fuzzy string-match.
+        # FRED/EIA observations (e.g. DGS10=4.43) are more reliable than the LLM
+        # trying to find "4.52%" literally in the evidence snippet.
+        level_check = _derive_level_check(claim, facts)
+        if level_check:
+            return level_check
     fuzzy = _derive_fuzzy_match(numeric_check)
     if fuzzy:
         return fuzzy
     if is_growth_claim:
         return None
-    # Level check: for macro/price claims with a stated numeric value,
-    # compare the most recent matching fact directly against the claim.
+    # Fallback level check for cases where we skipped above (growth claims, etc.)
     level_check = _derive_level_check(claim, facts)
     if level_check:
         return level_check
@@ -51,7 +57,8 @@ def _derive_level_check(claim: str, facts: list[CanonicalFact]) -> NumericDeriva
     claimed_pct_matches = re.findall(
         r"([\d,]+(?:\.\d+)?)\s*(?:%|percent|basis\s+points?\b|bps\b|pp\b)", claim, re.I
     )
-    claimed_plain = re.findall(r"(?<!\d)([\d,]+(?:\.\d+)?)(?!\d)", claim)
+    # Exclude numbers immediately followed by a hyphen (e.g. "10" in "10-year", "30" in "30-day")
+    claimed_plain = re.findall(r"(?<!\d)([\d,]+(?:\.\d+)?)(?![\d-])", claim)
 
     def _parse_num(s: str) -> float | None:
         try:
@@ -68,6 +75,9 @@ def _derive_level_check(claim: str, facts: list[CanonicalFact]) -> NumericDeriva
     for s in claimed_plain:
         v = _parse_num(s)
         if v is not None and v != 0 and v not in candidates:
+            # Skip 4-digit year numbers (1900-2099) — e.g. "March 2025" should not yield 2025 as metric
+            if 1900 <= v <= 2099 and v == int(v):
+                continue
             candidates.append(v)
 
     if not candidates:
@@ -104,9 +114,10 @@ def _derive_level_check(claim: str, facts: list[CanonicalFact]) -> NumericDeriva
     if target is None:
         return None
 
-    # Tolerance: 10% for "approximately"/"around" claims; 5% otherwise
+    # Tolerance: 5% for "approximately"/"around"/"roughly" claims; 3% otherwise.
+    # "Around $72" at $65 (9% off) should be inconsistent, so keep this tight.
     is_approx = bool(re.search(r"\bapprox|around|roughly|about|approximately\b", claim, re.I))
-    tolerance = 0.10 if is_approx else 0.05
+    tolerance = 0.05 if is_approx else 0.03
     diff_pct = abs(actual_value - target) / max(abs(target), 1e-9)
     passed = diff_pct <= tolerance
     comparator = f"≈ {target} ± {int(tolerance*100)}%"
@@ -231,18 +242,19 @@ def _derive_growth(claim: str, facts: list[CanonicalFact]) -> NumericDerivation 
         yoy_pairs = [p for p in pairs if 330 <= _pair_gap_days(p) <= 400]
         if yoy_pairs:
             if claim_anchor_date:
-                # When the claim names a specific date, prefer pairs whose current
-                # period is closest to that date (e.g. "January 2024" → Jan 2024).
+                # When the claim names a specific date, only use pairs whose current
+                # period is within 40 days of that date.  If nothing is that close,
+                # return None (INSUFFICIENT) rather than silently using the wrong quarter.
                 anchored = [
                     p for p in yoy_pairs
                     if _period_days_from_anchor(p[1], claim_anchor_date) <= 40
                 ]
-                pool = anchored if anchored else yoy_pairs
-                pool.sort(key=lambda p: _period_days_from_anchor(p[1], claim_anchor_date))
+                if not anchored:
+                    return None  # claimed period not in data → don't fabricate growth
+                anchored.sort(key=lambda p: _period_days_from_anchor(p[1], claim_anchor_date))
+                yoy_pairs = anchored
             else:
-                pool = yoy_pairs
-                pool.sort(key=_current_period, reverse=True)  # most recent first
-            yoy_pairs = pool
+                yoy_pairs.sort(key=_current_period, reverse=True)  # most recent first
         pairs = yoy_pairs or pairs
     elif is_qoq:
         qoq_pairs = [p for p in pairs if 75 <= _pair_gap_days(p) <= 105]
@@ -252,12 +264,12 @@ def _derive_growth(claim: str, facts: list[CanonicalFact]) -> NumericDerivation 
                     p for p in qoq_pairs
                     if _period_days_from_anchor(p[1], claim_anchor_date) <= 40
                 ]
-                pool = anchored if anchored else qoq_pairs
-                pool.sort(key=lambda p: _period_days_from_anchor(p[1], claim_anchor_date))
+                if not anchored:
+                    return None  # claimed period not in data → don't fabricate growth
+                anchored.sort(key=lambda p: _period_days_from_anchor(p[1], claim_anchor_date))
+                qoq_pairs = anchored
             else:
-                pool = qoq_pairs
-                pool.sort(key=_current_period, reverse=True)
-            qoq_pairs = pool
+                qoq_pairs.sort(key=_current_period, reverse=True)
         pairs = qoq_pairs or pairs
     elif threshold is not None:
         # Pick the pair whose computed growth is closest to the claimed threshold.
@@ -434,12 +446,15 @@ def _extract_claim_anchor_date(claim: str) -> "date | None":
     """Extract a specific month/year reference from a claim string."""
     from datetime import date as _date
     lower = claim.lower()
-    # "January 2024" / "jan 2024"
-    m = re.search(
-        r"\b(january|february|march|april|may|june|july|august|september|october|november|december"
-        r"|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)\s+(20\d{2})\b",
-        lower,
+
+    # "March 29, 2025" / "March 2025" / "jan 2024"
+    _MONTH_PAT = (
+        r"(january|february|march|april|may|june|july|august|"
+        r"september|october|november|december|jan|feb|mar|apr|"
+        r"jun|jul|aug|sep|sept|oct|nov|dec)"
     )
+    # With optional day between month and year
+    m = re.search(_MONTH_PAT + r"(?:\s+\d{1,2}[,\s]+|\s+)(20\d{2})\b", lower)
     if m:
         month = _MONTH_MAP.get(m.group(1), 1)
         year = int(m.group(2))
@@ -447,6 +462,7 @@ def _extract_claim_anchor_date(claim: str) -> "date | None":
             return _date(year, month, 1)
         except ValueError:
             pass
+
     # "Q2 2025" / "Q2FY2025" / "Q1 fiscal 2025" / "Q1 FY 2025"
     q = re.search(r"\bq([1-4])\s*(?:fy\s*|fiscal\s*)?(20\d{2})\b", lower)
     if q:
@@ -457,6 +473,21 @@ def _extract_claim_anchor_date(claim: str) -> "date | None":
             return _date(year, month, 1)
         except ValueError:
             pass
+
+    # "fiscal second/third/fourth/first quarter ... 2025" → map ordinal to Q number
+    _ORDINAL_Q = {"first": 1, "second": 2, "third": 3, "fourth": 4}
+    qo = re.search(
+        r"(?:fiscal\s+)?(first|second|third|fourth)\s+quarter.*?(20\d{2})", lower
+    )
+    if qo:
+        quarter = _ORDINAL_Q.get(qo.group(1), 1)
+        year = int(qo.group(2))
+        month = (quarter - 1) * 3 + 1
+        try:
+            return _date(year, month, 1)
+        except ValueError:
+            pass
+
     return None
 
 

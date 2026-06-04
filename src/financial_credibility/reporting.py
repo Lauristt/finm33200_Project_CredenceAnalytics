@@ -92,7 +92,12 @@ def build_verification_report(
         "Extracting financial entities and asset classes from the statement.",
     )
     entity_extraction = _manual_entity_extraction(manual_tickers) if manual_tickers else extract_entities_from_memo(memo, cfg)
-    clean_tickers = manual_tickers or _verification_targets(entity_extraction) or infer_tickers(memo)
+    # When manual tickers are given, use only the equity tickers from the extraction
+    # (macro symbols have been classified separately and will run through the macro pipeline).
+    if manual_tickers:
+        clean_tickers = entity_extraction.get("tickers") or []
+    else:
+        clean_tickers = _verification_targets(entity_extraction) or infer_tickers(memo)
     _emit_progress(
         progress_callback,
         "extract_entities",
@@ -105,11 +110,15 @@ def build_verification_report(
             "unresolved_entities": entity_extraction.get("unresolved_entities", []),
         },
     )
-    # Macro entities (CPI, GDP, PCE, etc.) have no SEC ticker but can be verified
-    # against FRED / BLS / BEA / EIA / ECB / BIS / IMF / WorldBank time-series.
+    # Macro entities (CPI, GDP, PCE, etc.) can be verified against FRED/BLS/EIA time-series.
+    # Exclude auto-extracted equity indices (entity_type="index", e.g. S&P 500 / DJIA) because
+    # those are better handled by the price-history pipeline — they run through both pipelines
+    # otherwise and produce duplicate runs.
     macro_entities = [
         e for e in entity_extraction.get("entities", [])
-        if e.get("asset_class") in _MACRO_ASSET_CLASSES and not e.get("ticker")
+        if e.get("asset_class") in _MACRO_ASSET_CLASSES
+        and not e.get("ticker")
+        and e.get("entity_type") != "index"
     ]
 
     if not clean_tickers and not macro_entities:
@@ -663,10 +672,26 @@ def infer_tickers(text: str) -> list[str]:
 
 
 def _manual_entity_extraction(tickers: list[str]) -> dict[str, Any]:
-    return {
-        "method": "manual_input",
-        "entities": [
-            {
+    entities: list[dict[str, Any]] = []
+    equity_tickers: list[str] = []
+    for ticker in tickers:
+        macro_info = _KNOWN_MACRO_SYMBOLS.get(ticker.upper())
+        if macro_info:
+            asset_class, aliases = macro_info
+            entities.append({
+                "name": aliases[0] if aliases else ticker,
+                "ticker": None,           # no equity ticker — routes to macro pipeline
+                "symbol": ticker,
+                "entity_type": "macro_series",
+                "asset_class": asset_class,
+                "aliases": aliases,
+                "confidence": 1.0,
+                "source": "manual_input",
+                "reason": "User supplied macro symbol.",
+            })
+        else:
+            equity_tickers.append(ticker)
+            entities.append({
                 "name": ticker,
                 "ticker": ticker,
                 "symbol": ticker,
@@ -675,30 +700,18 @@ def _manual_entity_extraction(tickers: list[str]) -> dict[str, Any]:
                 "confidence": 1.0,
                 "source": "manual_input",
                 "reason": "User supplied entity hint.",
-            }
-            for ticker in tickers
-        ],
-        "tickers": tickers,
-        "asset_classes": ["single_name_equity"] if tickers else [],
+            })
+    asset_classes = list({e["asset_class"] for e in entities}) if entities else []
+    return {
+        "method": "manual_input",
+        "entities": entities,
+        "tickers": equity_tickers,      # only equity tickers go into clean_tickers
+        "asset_classes": asset_classes,
         "asset_groups": {
-            "single_name_equity": [
-                {
-                    "name": ticker,
-                    "ticker": ticker,
-                    "symbol": ticker,
-                    "entity_type": "public_company",
-                    "asset_class": "single_name_equity",
-                    "confidence": 1.0,
-                    "source": "manual_input",
-                    "reason": "User supplied entity hint.",
-                }
-                for ticker in tickers
-            ]
-        }
-        if tickers
-        else {},
+            "single_name_equity": [e for e in entities if e.get("asset_class") == "single_name_equity"]
+        },
         "unresolved_entities": [],
-        "non_equity_entities": [],
+        "non_equity_entities": [e for e in entities if e.get("asset_class") != "single_name_equity"],
         "notes": [],
     }
 
@@ -828,6 +841,49 @@ _MACRO_ASSET_CLASSES = {
     "crypto",
     "credit",
     "fixed_income",
+    "equity_index",       # major indexes (S&P 500, Nasdaq, DJIA) verified via FRED
+}
+
+# Maps well-known macro symbol → (asset_class, human-readable aliases).
+# Used by _manual_entity_extraction so that manually-specified tickers like
+# "DGS10" or "FEDFUNDS" are routed through the macro verification pipeline
+# instead of the equity pipeline, and so _run_macro_verification can scope
+# the memo to the relevant claims.
+_KNOWN_MACRO_SYMBOLS: dict[str, tuple[str, list[str]]] = {
+    # US Treasury rates
+    "DGS10": ("rates", ["10-year treasury yield", "10-year yield", "10yr yield", "10 year treasury", "10yr treasury"]),
+    "DGS2":  ("rates", ["2-year treasury yield", "2-year yield", "2yr yield", "2 year treasury"]),
+    "DGS30": ("rates", ["30-year treasury yield", "30-year yield", "30 year treasury"]),
+    "SOFR":  ("rates", ["SOFR", "secured overnight financing rate"]),
+    # Fed policy rate
+    "FEDFUNDS": ("rates", ["federal funds rate", "fed funds rate", "fed funds", "policy rate", "funds rate"]),
+    # Inflation / macro indicators
+    "CPI":      ("macro_indicator", ["CPI", "consumer price index", "consumer price", "consumer prices", "inflation"]),
+    "CPIAUCSL": ("macro_indicator", ["CPI", "consumer price index", "consumer price", "consumer prices", "inflation"]),
+    "PCE":      ("macro_indicator", ["PCE", "personal consumption expenditures"]),
+    "PCEPI":    ("macro_indicator", ["PCE inflation", "PCE price"]),
+    "PCEPILFE": ("macro_indicator", ["core PCE", "core inflation"]),
+    "GDP":      ("macro_indicator", ["GDP", "gross domestic product"]),
+    "UNRATE":   ("macro_indicator", ["unemployment rate", "unemployment"]),
+    "NFP":      ("macro_indicator", ["nonfarm payrolls", "payrolls", "NFP"]),
+    "PAYEMS":   ("macro_indicator", ["nonfarm payrolls", "payrolls", "employment"]),
+    # Commodities
+    "WTI":    ("commodity", ["WTI crude oil", "WTI oil", "crude oil", "wti"]),
+    "BRENT":  ("commodity", ["Brent crude", "brent crude oil", "brent"]),
+    "XAU":    ("commodity", ["gold", "gold price"]),
+    "NATGAS": ("commodity", ["natural gas", "henry hub", "natgas"]),
+    # FX
+    "EURUSD":  ("fx", ["EUR/USD", "euro dollar", "euro exchange rate"]),
+    "EUR/USD": ("fx", ["EUR/USD", "euro dollar", "euro"]),
+    "USDJPY":  ("fx", ["USD/JPY", "yen", "dollar yen"]),
+    "USD/JPY": ("fx", ["USD/JPY", "yen"]),
+    "GBPUSD":  ("fx", ["GBP/USD", "sterling", "pound"]),
+    "GBP/USD": ("fx", ["GBP/USD", "sterling", "pound"]),
+    # Equity indexes (have FRED price data)
+    "SPX":  ("equity_index", ["S&P 500", "S&P500", "SPX", "S and P 500"]),
+    "NDQ":  ("equity_index", ["Nasdaq", "NASDAQ Composite", "nasdaq composite"]),
+    "DJIA": ("equity_index", ["Dow Jones", "DJIA", "dow jones industrial"]),
+    "DXY":  ("equity_index", ["dollar index", "trade weighted dollar", "DXY"]),
 }
 
 _MACRO_PROVIDERS = [
@@ -859,22 +915,111 @@ def _bls_period_to_iso(date_str: str) -> str | None:
     return None
 
 
+def _scope_memo_for_macro_entity(memo: str, symbol: str, aliases: list[str]) -> str:
+    """Return only the atomic claims that mention this macro entity.
+
+    Falls back to the full memo if no claims match, so verification still runs.
+    Matching is case-insensitive substring search against the symbol and all
+    human-readable aliases (e.g. 'DGS10' → '10-year treasury yield').
+    """
+    search_terms = [symbol.lower()] + [a.lower() for a in aliases]
+    matched: list[str] = []
+    for atom in decompose_claims(memo):
+        text_lower = atom.text.lower()
+        if any(term in text_lower for term in search_terms):
+            matched.append(atom.text)
+    return "; ".join(matched) if matched else memo
+
+
+def _macro_results_to_evidence(
+    results: list[Any],
+    symbol: str,
+    entity_name: str | None = None,
+    aliases: list[str] | None = None,
+) -> list[Any]:
+    """Convert macro provider SearchResult objects into Evidence objects.
+
+    This gives the confidence calibrator real source records so it can produce
+    'consistent' or 'inconsistent' verdicts instead of always 'insufficient'.
+    The entity_name / aliases are prepended to the Evidence title so that
+    _relevant_evidence() token-overlap matching connects evidence to claims.
+    E.g. "10-year treasury yield (FRED DGS10)" overlaps with the claim text.
+    """
+    from .models import Evidence, SourceType, SourceTier, LicenseTag, SupportLabel
+    from .sources import assess_source
+
+    # Build a prefix that contains the human-readable name and its first alias
+    name_tokens: list[str] = []
+    if entity_name and entity_name.lower() != symbol.lower():
+        name_tokens.append(entity_name)
+    if aliases:
+        for a in aliases[:2]:
+            if a.lower() not in {t.lower() for t in name_tokens}:
+                name_tokens.append(a)
+    name_prefix = " / ".join(name_tokens)  # e.g. "10-year treasury yield / 10yr yield"
+
+    evidence_objects: list[Any] = []
+    for result in results:
+        url = getattr(result, "url", "") or ""
+        raw_title = getattr(result, "title", "") or ""
+        # Enrich title with entity name so token overlap with the claim is > 0
+        title = f"{name_prefix} ({raw_title})" if name_prefix and name_prefix.lower() not in raw_title.lower() else raw_title
+        snippet = getattr(result, "snippet", "") or ""
+        published_at = getattr(result, "published_at", None)
+        source = assess_source(url, title)
+        evidence_objects.append(Evidence(
+            url=url,
+            title=title,
+            text=snippet,
+            source_type=SourceType.REGULATOR_EXCHANGE,
+            source_tier=SourceTier.T1,
+            domain=source.domain,
+            published_at=published_at,
+            license_tag=LicenseTag.PUBLIC_OFFICIAL,
+            is_official_primary=True,
+            source_authority=1.0,
+            recency_score=0.85,
+            relevance_score=0.8,
+            entity_match_score=0.9,
+            numeric_consistency_score=0.0,
+            support_label=SupportLabel.NOT_ENOUGH_INFO,
+            support_score=0.0,
+            reasoning_quality_score=0.0,
+            independence_score=0.0,
+            notes=[f"provider:{(getattr(result, 'raw', {}) or {}).get('provider', 'macro')}"],
+        ))
+    return evidence_objects
+
+
 def _macro_canonical_facts(
     results: list[Any],
     symbol: str,
+    entity_name: str | None = None,
+    aliases: list[str] | None = None,
 ) -> list[Any]:
     """Convert SearchResult objects from macro providers into CanonicalFact objects."""
     from .models import CanonicalFact, SourceType, SourceTier, LicenseTag
+
+    # Build a human-readable label that overlaps with claim tokens.
+    # "10-year treasury yield" overlaps with "the 10-year Treasury yield edged up to 4.52%"
+    # whereas the raw FRED title "FRED macro series DGS10" has zero overlap.
+    name_parts: list[str] = []
+    if entity_name and entity_name.lower() != symbol.lower():
+        name_parts.append(entity_name)
+    if aliases:
+        for a in aliases[:1]:
+            if a.lower() not in {p.lower() for p in name_parts}:
+                name_parts.append(a)
+    entity_label = " ".join(name_parts) if name_parts else None  # e.g. "10-year treasury yield"
 
     facts: list[Any] = []
     for result in results:
         raw = result.raw if hasattr(result, "raw") else (result.get("raw") or {})
         provider = raw.get("provider", "")
         series_id = raw.get("series_id", symbol)
-        # Use the result title as fact_name so token overlap with the claim works.
-        # E.g. "BLS CPI for all urban consumers (CUSR0000SA0)" → contains "cpi"
+        # Prefer human-readable entity_label; fall back to result title then series_id.
         result_title = (getattr(result, "title", "") or "").strip()
-        fact_label = result_title if result_title else series_id
+        fact_label = entity_label or (result_title if result_title else series_id)
         result_url = getattr(result, "url", "") or ""
 
         if provider == "fred":
@@ -975,8 +1120,13 @@ def _run_macro_verification(
 
     symbol = str(entity.get("symbol") or entity.get("name") or "MACRO")
     name = str(entity.get("name") or symbol)
+    aliases = list(entity.get("aliases") or [])
 
     _emit_progress(trace_callback, "run_entity", "running", f"Starting macro verification for {symbol}.")
+
+    # Scope the memo to only atomic claims that mention this entity.
+    # This prevents DGS10 entity from verifying Brent or CPI claims.
+    memo = _scope_memo_for_macro_entity(memo, symbol, aliases)
 
     # Anchor the fetch window to the year mentioned in the claim so BLS/FRED
     # include the right historical period (e.g. "January 2024" → end=2024-12-31).
@@ -1010,7 +1160,7 @@ def _run_macro_verification(
         except Exception:
             pass
 
-    canonical_facts = _macro_canonical_facts(results, symbol)
+    canonical_facts = _macro_canonical_facts(results, symbol, entity_name=name, aliases=aliases)
 
     _emit_progress(
         trace_callback, "canonicalize_facts", "ok",
@@ -1022,10 +1172,16 @@ def _run_macro_verification(
     fact_checkable = [c for c in atomic_claims if c.argument_type in FACTUAL_TYPES]
     judge = toolkit.judge
 
+    # Convert SearchResult objects from macro providers into Evidence objects so
+    # the confidence calibrator has actual source records to score.  Without this
+    # evidence=[] causes the calibrator to emit "insufficient" regardless of what
+    # the numeric derivation shows.
+    macro_evidence = _macro_results_to_evidence(results, symbol, entity_name=name, aliases=aliases)
+
     macro_entity_resolution = EntityResolution(ticker=symbol, entity_id=symbol, confidence=0.85)
     claim_results = verify_atomic_claims(
         claim=memo,
-        evidence=[],
+        evidence=macro_evidence,
         canonical_facts=canonical_facts,
         entity_resolution=macro_entity_resolution,
         judge=judge,

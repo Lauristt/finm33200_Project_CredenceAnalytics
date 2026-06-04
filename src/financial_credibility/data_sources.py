@@ -225,15 +225,29 @@ SYMBOL_TO_FRED_SERIES: dict[str, str] = {
     "IG_CREDIT": "BAMLC0A0CM",
     "CREDIT_DERIVATIVES": "BAMLH0A0HYM2",
     "EUR/USD": "DEXUSEU",
+    "EURUSD":  "DEXUSEU",
     "GBP/USD": "DEXUSUK",
+    "GBPUSD":  "DEXUSUK",
     "USD/JPY": "DEXJPUS",
+    "USDJPY":  "DEXJPUS",
     "AUD/USD": "DEXUSAL",
+    "AUDUSD":  "DEXUSAL",
     "USD/CAD": "DEXCAUS",
+    "USDCAD":  "DEXCAUS",
     "USD/CHF": "DEXCHUS",
+    "USDCHF":  "DEXCHUS",
+    "CPIAUCSL": "CPIAUCSL",
+    "PAYEMS": "PAYEMS",
+    "DGS2": "DGS2",
     "CPI": "CPIAUCSL",
     "UNRATE": "UNRATE",
     "NFP": "PAYEMS",
     "GDP": "GDP",
+    # Equity indexes — FRED carries price levels for these
+    "SPX": "SP500",
+    "NDQ": "NASDAQCOM",
+    "DJIA": "DJIA",
+    "DXY": "DTWEXBGS",
 }
 
 # Direct entity symbol → EIA route + series ID, used when the entity is known.
@@ -764,6 +778,72 @@ class FreeDataSourceClient:
                 raw={"provider": "fred", "series_id": series_id, "observations": observations},
             )
         ]
+
+    def fred_series_range(
+        self,
+        series_id: str,
+        start_date: "str | date | None" = None,
+        end_date: "str | date | None" = None,
+        limit: int = 500,
+    ) -> list[SearchResult]:
+        """Fetch FRED observations for a specific series_id and explicit date window."""
+        key = self.config.fred_api_key
+        if not key:
+            return []
+        params: dict[str, Any] = {
+            "series_id": series_id,
+            "api_key": key,
+            "file_type": "json",
+            "sort_order": "asc",
+            "limit": limit,
+        }
+        if start_date:
+            params["observation_start"] = str(start_date)[:10]
+        if end_date:
+            params["observation_end"] = str(end_date)[:10]
+        url = "https://api.stlouisfed.org/fred/series/observations?" + urllib.parse.urlencode(params)
+        data = self._get_json(url)
+        observations = data.get("observations", []) if isinstance(data, dict) else []
+        if not observations:
+            return []
+        start_label = str(start_date)[:10] if start_date else "?"
+        end_label = str(end_date)[:10] if end_date else "?"
+        snippet = "; ".join(f"{obs.get('date')}: {obs.get('value')}" for obs in observations[:20])
+        return [
+            SearchResult(
+                title=f"FRED {series_id} ({start_label} to {end_label})",
+                url=f"https://fred.stlouisfed.org/series/{series_id}",
+                snippet=snippet,
+                published_at=observations[-1].get("date"),
+                source="FRED",
+                raw={"provider": "fred", "series_id": series_id, "observations": observations},
+            )
+        ]
+
+    def macro_indicator_range(
+        self,
+        indicator_name: str,
+        start_date: "str | date | None" = None,
+        end_date: "str | date | None" = None,
+    ) -> list[SearchResult]:
+        """Fetch a macro indicator by human name for an explicit date window.
+
+        Resolves indicator_name via SYMBOL_TO_FRED_SERIES then FRED_SERIES keyword
+        search, then delegates to fred_series_range.
+        """
+        lower = (indicator_name or "").lower().strip()
+        series_id = (
+            SYMBOL_TO_FRED_SERIES.get(indicator_name.upper())
+            or SYMBOL_TO_FRED_SERIES.get(lower.upper())
+        )
+        if not series_id:
+            for keyword, sid in FRED_SERIES.items():
+                if keyword in lower or lower in keyword:
+                    series_id = sid
+                    break
+        if not series_id:
+            return []
+        return self.fred_series_range(series_id, start_date=start_date, end_date=end_date)
 
     def bls_api(self, claim: str, as_of_date: str | None = None) -> list[SearchResult]:
         """Return BLS public data API observations for labor and price-stat claims."""

@@ -33,6 +33,13 @@ FINANCIAL_STATEMENT_TOOLS = [
     "get_company_fundamentals",
 ]
 
+MACRO_DATA_TOOLS = [
+    "resolve_time_window",
+    "fetch_fred_series",
+    "fetch_macro_indicator",
+    "fetch_index_performance",
+]
+
 TOOL_PROFILES: dict[str, list[str]] = {
     "one_shot": ["build_evidence_pack"],
     "agent_core": CORE_TOOLS,
@@ -43,8 +50,10 @@ TOOL_PROFILES: dict[str, list[str]] = {
         "get_historical_prices",
         "compare_stock_performance",
         "get_company_fundamentals",
-    ],
+    ]
+    + MACRO_DATA_TOOLS,
     "financial_statements": CORE_TOOLS + FINANCIAL_STATEMENT_TOOLS,
+    "macro_data": CORE_TOOLS + MACRO_DATA_TOOLS,
     "audit": ["audit_verification_chain"],
     "review": ["summarize_evidence_pack", "summarize_audit_report", "review_tool_surface"],
 }

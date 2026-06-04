@@ -115,6 +115,10 @@ def all_registered_tools() -> list[RegisteredTool]:
         _summarize_evidence_pack_tool(),
         _summarize_audit_report_tool(),
         _review_tool_surface_tool(),
+        _resolve_time_window_tool(),
+        _fetch_fred_series_tool(),
+        _fetch_macro_indicator_tool(),
+        _fetch_index_performance_tool(),
     ]
     return static + list(_DYNAMIC_REGISTRY.values())
 
@@ -934,6 +938,192 @@ def _review_tool_surface_tool() -> RegisteredTool:
     )
 
 
+def _resolve_time_window_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="resolve_time_window",
+        description=(
+            "Compute a concrete (start_date, end_date) window from a relative time expression and a memo publication date. "
+            "Supports 'last week', 'last month', 'last quarter', 'last year', 'YTD', 'this year', and 'past N days/weeks/months/years'."
+        ),
+        when_to_use=(
+            "Use this BEFORE any date-range data retrieval tool whenever the claim contains a relative time expression "
+            "such as 'last week', 'past 30 days', or 'YTD'. Pass the memo or article publication date as memo_date. "
+            "The returned start_date and end_date should then be passed verbatim to fetch_fred_series, "
+            "fetch_macro_indicator, fetch_index_performance, get_historical_prices, or compare_stock_performance."
+        ),
+        data_sources=[],
+        requires_keys=[],
+        limitations=[
+            "Resolves only relative window expressions; it does not parse absolute dates or named periods like 'Q1 FY2025'.",
+            "Month/quarter/year approximations use fixed day counts (30/90/365); calendar-exact variants are not supported.",
+        ],
+        input_schema=_object_schema(
+            {
+                "claim_text": {
+                    "type": "string",
+                    "description": "The claim or sentence containing the relative time expression.",
+                },
+                "memo_date": {
+                    "type": "string",
+                    "description": "Publication or reference date of the surrounding document (YYYY-MM-DD). Defaults to today.",
+                },
+            },
+            ["claim_text"],
+        ),
+        output_schema=_object_schema(
+            {
+                "start_date": {"type": "string", "description": "YYYY-MM-DD start of the window, or null if no window found."},
+                "end_date": {"type": "string", "description": "YYYY-MM-DD end of the window, or null if no window found."},
+                "resolved": {"type": "boolean"},
+                "expression_found": {"type": "string"},
+            }
+        ),
+    )
+
+
+def _fetch_fred_series_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="fetch_fred_series",
+        description=(
+            "Fetch FRED time-series observations for a specific FRED series ID over an explicit date window. "
+            "Returns raw observations and a text snippet suitable for claim verification."
+        ),
+        when_to_use=(
+            "Use when you already know the FRED series ID (e.g. 'CPIAUCSL', 'DGS10', 'FEDFUNDS', 'DCOILWTICO') "
+            "and have a concrete start_date and end_date (obtain from resolve_time_window if the claim uses relative language). "
+            "Prefer fetch_macro_indicator when the series ID is not known."
+        ),
+        data_sources=["FRED (Federal Reserve Bank of St. Louis)"],
+        requires_keys=["FRED_API_KEY"],
+        limitations=[
+            "Requires FRED_API_KEY in the environment.",
+            "Series frequency varies (daily, monthly, quarterly); narrow windows on monthly/quarterly series may return zero observations.",
+            "Values of '.' indicate missing data for that date in FRED.",
+        ],
+        input_schema=_object_schema(
+            {
+                "series_id": {
+                    "type": "string",
+                    "description": "FRED series ID, e.g. 'CPIAUCSL', 'DGS10', 'FEDFUNDS', 'DCOILWTICO', 'SP500'.",
+                },
+                "start_date": {"type": "string", "description": "YYYY-MM-DD start of the observation window."},
+                "end_date": {"type": "string", "description": "YYYY-MM-DD end of the observation window."},
+            },
+            ["series_id", "start_date", "end_date"],
+        ),
+        output_schema=_object_schema(
+            {
+                "series_id": {"type": "string"},
+                "start_date": {"type": "string"},
+                "end_date": {"type": "string"},
+                "observation_count": {"type": "integer"},
+                "observations": {"type": "array", "items": {"type": "object"}},
+                "snippet": {"type": "string"},
+                "source_url": {"type": "string"},
+                "notes": {"type": "array", "items": {"type": "string"}},
+            }
+        ),
+    )
+
+
+def _fetch_macro_indicator_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="fetch_macro_indicator",
+        description=(
+            "Fetch a macro-economic indicator by human-readable name (e.g. 'CPI', 'GDP', '10-year treasury yield', "
+            "'unemployment rate', 'WTI crude oil', 'EUR/USD') for an explicit date window. "
+            "Resolves the name to the best available FRED series and returns observations."
+        ),
+        when_to_use=(
+            "Use when a claim references a macro indicator by name and you have a concrete start_date / end_date. "
+            "Call resolve_time_window first if the claim uses relative language such as 'last month' or 'YTD'. "
+            "Prefer fetch_fred_series when the FRED series ID is already known."
+        ),
+        data_sources=["FRED (Federal Reserve Bank of St. Louis)"],
+        requires_keys=["FRED_API_KEY"],
+        limitations=[
+            "Resolution is keyword-based; unusual indicator names may not match. Check resolved_series_id in the output.",
+            "Only FRED-mapped indicators are supported; BLS/EIA/BEA indicators require retrieve_evidence.",
+        ],
+        input_schema=_object_schema(
+            {
+                "indicator_name": {
+                    "type": "string",
+                    "description": (
+                        "Human-readable indicator name. Examples: 'CPI', 'inflation', 'GDP', 'unemployment rate', "
+                        "'10-year treasury yield', 'fed funds rate', 'WTI crude oil', 'EUR/USD', 'S&P 500', 'gold'."
+                    ),
+                },
+                "start_date": {"type": "string", "description": "YYYY-MM-DD start of the observation window."},
+                "end_date": {"type": "string", "description": "YYYY-MM-DD end of the observation window."},
+            },
+            ["indicator_name", "start_date", "end_date"],
+        ),
+        output_schema=_object_schema(
+            {
+                "indicator_name": {"type": "string"},
+                "resolved_series_id": {"type": "string"},
+                "start_date": {"type": "string"},
+                "end_date": {"type": "string"},
+                "observation_count": {"type": "integer"},
+                "observations": {"type": "array", "items": {"type": "object"}},
+                "snippet": {"type": "string"},
+                "source_url": {"type": "string"},
+                "notes": {"type": "array", "items": {"type": "string"}},
+            }
+        ),
+    )
+
+
+def _fetch_index_performance_tool() -> RegisteredTool:
+    return RegisteredTool(
+        name="fetch_index_performance",
+        description=(
+            "Compute the percentage return of a major equity or bond index over an explicit date window. "
+            "Supports S&P 500 (SPX), Nasdaq Composite (NDQ), Dow Jones (DJIA). "
+            "Uses FRED daily index-level data."
+        ),
+        when_to_use=(
+            "Use when a claim asserts 'the S&P 500 rose X% last week' or similar index-level performance over a time window. "
+            "Call resolve_time_window first to obtain start_date / end_date from relative language. "
+            "For single-stock performance use get_historical_prices; for stock-vs-benchmark use compare_stock_performance."
+        ),
+        data_sources=["FRED (SP500, NASDAQCOM, DJIA series)"],
+        requires_keys=["FRED_API_KEY"],
+        limitations=[
+            "FRED SP500/NASDAQCOM are price-return series; dividends are excluded.",
+            "Data may have a 1-day lag relative to real-time market data.",
+            "Requires FRED_API_KEY.",
+        ],
+        input_schema=_object_schema(
+            {
+                "index_symbol": {
+                    "type": "string",
+                    "enum": ["SPX", "NDQ", "DJIA"],
+                    "description": "Index symbol: SPX for S&P 500, NDQ for Nasdaq Composite, DJIA for Dow Jones.",
+                },
+                "start_date": {"type": "string", "description": "YYYY-MM-DD start of the window."},
+                "end_date": {"type": "string", "description": "YYYY-MM-DD end of the window."},
+            },
+            ["index_symbol", "start_date", "end_date"],
+        ),
+        output_schema=_object_schema(
+            {
+                "index_symbol": {"type": "string"},
+                "fred_series_id": {"type": "string"},
+                "start_date": {"type": "string"},
+                "end_date": {"type": "string"},
+                "start_value": {"type": "number"},
+                "end_value": {"type": "number"},
+                "return_pct": {"type": "number"},
+                "observation_count": {"type": "integer"},
+                "source_url": {"type": "string"},
+                "notes": {"type": "array", "items": {"type": "string"}},
+            }
+        ),
+    )
+
+
 def _required_prior_state(name: str) -> str:
     if name == "preprocess_statement":
         return "Raw user-pasted statement, article, webpage text, transcript, or financial statement."
@@ -943,6 +1133,12 @@ def _required_prior_state(name: str) -> str:
         return "Selected source ids from map_asset_sources/select_sources, or a claim so the tool can infer likely source ids."
     if name in {"get_income_statement", "get_balance_sheet", "get_cash_flow_statement", "get_earnings_history"}:
         return "A resolved ticker; optionally the period (annual/quarterly) and limit."
+    if name == "resolve_time_window":
+        return "A claim or sentence containing a relative time expression. Optionally the memo/article publication date."
+    if name in {"fetch_fred_series"}:
+        return "A known FRED series ID plus start_date and end_date (call resolve_time_window first if relative language is present)."
+    if name in {"fetch_macro_indicator", "fetch_index_performance"}:
+        return "An indicator name or index symbol plus start_date and end_date (call resolve_time_window first if relative language is present)."
     if name in {"retrieve_evidence", "select_sources", "route_sources"}:
         return "A specific claim plus detected entities or asset_classes when available; for retrieval, a resolved ticker or explicit ticker hint and the inferred event/release/trading date when available."
     if name in {"get_canonical_facts", "verify_atomic_claim", "verify_numeric_claim", "verify_logic_claim", "verify_source_quality", "aggregate_credibility"}:
@@ -967,6 +1163,10 @@ def _do_not_use_when(name: str) -> str:
         return "the agent needs fine-grained multi-step control or must inspect intermediate evidence before deciding."
     if name in {"get_income_statement", "get_balance_sheet", "get_cash_flow_statement", "get_earnings_history"}:
         return "the claim does not assert a specific financial statement figure, or the data for that period is already available from a prior retrieval."
+    if name == "resolve_time_window":
+        return "the claim uses an absolute date (YYYY-MM-DD or 'January 15, 2025') — use infer_time_context or pass the date directly instead."
+    if name in {"fetch_fred_series", "fetch_macro_indicator", "fetch_index_performance"}:
+        return "FRED_API_KEY is not configured, or the same date-range data was already retrieved in a prior tool call."
     if name.startswith("get_"):
         return "the needed evidence is already available in prior tool output and still matches the claim/time window."
     if name.startswith("verify_"):
@@ -989,6 +1189,10 @@ def _output_means(name: str) -> str:
         return "source-specific API playbooks with endpoint schemas, auth env vars, naming rules, response fields, and caveats."
     if name in {"get_income_statement", "get_balance_sheet", "get_cash_flow_statement", "get_earnings_history"}:
         return "structured financial statement rows with period-end dates and line-item values; pass results to get_canonical_facts or verify_numeric_claim."
+    if name == "resolve_time_window":
+        return "start_date and end_date strings (YYYY-MM-DD) bounding the time window; pass them to a data-retrieval tool. resolved=False means no relative expression was found."
+    if name in {"fetch_fred_series", "fetch_macro_indicator", "fetch_index_performance"}:
+        return "raw observations plus a text snippet and source URL; use for numeric comparison against the claim's stated value."
     if name in {"retrieve_evidence", "get_sec_company_facts", "get_recent_filings", "get_company_fundamentals"}:
         return "candidate source records that still need canonicalization or verification before final claims."
     if name == "get_canonical_facts":
@@ -1006,6 +1210,10 @@ def _output_means(name: str) -> str:
 
 def _recommended_next_tools(name: str) -> str:
     mapping = {
+        "resolve_time_window": "fetch_fred_series, fetch_macro_indicator, fetch_index_performance, get_historical_prices, or compare_stock_performance — pass the returned start_date and end_date.",
+        "fetch_fred_series": "verify_numeric_claim or verify_logic_claim using the observations snippet as evidence.",
+        "fetch_macro_indicator": "verify_numeric_claim or verify_logic_claim using the observations snippet as evidence.",
+        "fetch_index_performance": "verify_numeric_claim comparing return_pct against the claimed return percentage.",
         "preprocess_statement": "extract_entities and decompose_claims using cleaned_statement.",
         "extract_entities": "map_asset_sources, then decompose_claims and select_sources or retrieve_evidence for each verifiable claim.",
         "map_asset_sources": "load_source_documentation or select_sources, then retrieve_evidence or source-specific retrieval tools.",
